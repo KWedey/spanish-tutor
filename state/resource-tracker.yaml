@@ -1,0 +1,6 @@
+# Resource Tracker — which external resources are in active rotation
+# Updated when resources are added, swapped, or engagement changes.
+
+active_resources: []
+
+retired_resources: []
