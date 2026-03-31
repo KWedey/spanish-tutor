@@ -1,0 +1,250 @@
+# Resource Catalog — structured catalog of external tools
+# Used by the tutor's resource selection algorithm when assigning homework.
+# Detailed descriptions in docs/resource-ecosystem.md.
+
+resources:
+
+  # --- Spaced Repetition / Vocabulary ---
+
+  - name: Anki
+    type: srs
+    cost: free
+    essential: true
+    phase_range: [A, B, C, D]
+    skill_targets: [vocabulary, grammar-reinforcement]
+    setup_session: 1-2
+    daily_time_minutes: 10-15
+    assignment_template: "Add these {count} words to Anki with personal example sentences: {word_list}. Review your full deck (~{review_minutes} min)."
+    notes: "Non-negotiable daily habit. Max 10 new cards per session. Monitor deck health."
+
+  - name: Clozemaster
+    type: srs
+    cost: "free tier; Pro $8/month"
+    essential: false
+    phase_range: [A, B, C]
+    skill_targets: [vocabulary]
+    assignment_template: "Do 20 Clozemaster sentences in the {topic} category."
+    notes: "Gap-fill with real-world sentences. Good for vocabulary in 'practicing' stage."
+
+  # --- Pronunciation ---
+
+  - name: Speechling
+    type: pronunciation
+    cost: "free tier (10 recordings/month); Unlimited $20/month"
+    essential: true
+    phase_range: [A, B, C, D]
+    skill_targets: [pronunciation]
+    setup_session: 7-8
+    assignment_template: "Record yourself saying these {count} sentences on Speechling: {sentences}"
+    notes: "Only tool with human pronunciation feedback. Assign 2-3x per week."
+
+  - name: Forvo
+    type: pronunciation
+    cost: free
+    essential: true
+    phase_range: [A, B, C, D]
+    skill_targets: [pronunciation, vocabulary]
+    assignment_template: "Listen to these {count} words on Forvo, practice each one 3 times: {word_list}"
+    notes: "Reference tool for hearing correct pronunciation."
+
+  - name: Pimsleur
+    type: pronunciation
+    cost: "$15-21/month"
+    essential: false
+    phase_range: [A, B]
+    skill_targets: [pronunciation, listening]
+    assignment_template: "Complete Pimsleur lesson {lesson_number}."
+    notes: "Good for commute/walk time. Fixed curriculum — supplement only."
+
+  - name: Local Whisper Transcription
+    type: pronunciation
+    cost: free
+    essential: false
+    phase_range: [A, B, C, D]
+    skill_targets: [pronunciation]
+    setup_session: 9-10
+    assignment_template: "Record yourself describing {topic}, paste the transcription."
+    notes: "Quick daily pronunciation self-check."
+
+  # --- Listening ---
+
+  - name: Dreaming Spanish
+    type: listening
+    cost: "free (YouTube); Premium $8/month"
+    essential: true
+    phase_range: [A, B, C]
+    skill_targets: [listening, vocabulary]
+    setup_session: 3-4
+    levels: [superbeginner, beginner, intermediate, advanced]
+    assignment_template: "Watch {minutes} minutes of Dreaming Spanish at {level} level. Don't pause, don't look things up."
+    verification: "What were the videos about? Tell me in Spanish."
+    comprehension_targets:
+      step_down: "<75%"
+      target: "85%"
+      step_up: ">90%"
+    notes: "Best comprehensible input for Spanish. Assign daily in Phases A-C."
+
+  - name: Language Transfer
+    type: listening
+    cost: free
+    essential: true
+    phase_range: [A, B]
+    skill_targets: [grammar, listening]
+    setup_session: 5-6
+    total_episodes: 90
+    assignment_template: "Listen to Language Transfer episodes {episode_range}. Pause when prompted and try to answer before the student does."
+    notes: "Exceptional for building grammatical intuition. 2-3 episodes per week."
+
+  - name: News in Slow Spanish
+    type: listening
+    cost: "free tier; Premium $12/month"
+    essential: false
+    phase_range: [B, C]
+    skill_targets: [listening, vocabulary]
+    assignment_template: "Listen to this episode about {topic}. Write a 3-sentence summary in Spanish."
+    notes: "Bridge between graded content and native speed."
+
+  - name: Radio Ambulante
+    type: listening
+    cost: free
+    essential: false
+    phase_range: [C, D]
+    skill_targets: [listening, cultural_awareness]
+    assignment_template: "Listen to the Radio Ambulante episode about {topic}. What was the main story? What surprised you?"
+    notes: "NPR's Spanish-language narrative journalism."
+
+  # --- Reading ---
+
+  - name: Olly Richards Graded Readers
+    type: reading
+    cost: "$10-15 per book"
+    essential: true
+    phase_range: [A, B, C]
+    skill_targets: [reading, vocabulary]
+    setup_session: 5-6
+    levels:
+      A1-A2: "Short Stories in Spanish for Beginners"
+      B1: "Short Stories in Spanish for Intermediate Learners"
+      B2: "Short Stories in Spanish for Advanced Learners"
+    assignment_template: "Read story {story_number}. Write down 5 words you didn't know and try to guess meaning from context."
+    notes: "Natural storytelling at controlled difficulty."
+
+  - name: Beelinguapp
+    type: reading
+    cost: "free tier; Premium $3/month"
+    essential: false
+    phase_range: [A]
+    skill_targets: [reading]
+    assignment_template: "Read this text on Beelinguapp. Try the Spanish side first, only glance at English if truly stuck."
+    notes: "Training wheels for reading. Transition to graded readers in Phase B."
+
+  - name: LingQ
+    type: reading
+    cost: "free tier; Premium $13/month"
+    essential: false
+    phase_range: [C, D]
+    skill_targets: [reading, vocabulary]
+    assignment_template: "Import this article into LingQ and read it. Mark unknown words."
+    notes: "Makes any text into a learning tool. For Phase C+."
+
+  # --- Writing ---
+
+  - name: Journal
+    type: writing
+    cost: free
+    essential: true
+    phase_range: [B, C, D]
+    skill_targets: [writing, grammar, vocabulary]
+    assignment_template: "Write {sentence_count} sentences about {topic} in your journal (journal/{date}.md)."
+    notes: "Built into the system. Highest-signal assessment tool."
+
+  - name: LanguageTool
+    type: writing
+    cost: "free; Premium $5/month"
+    essential: false
+    phase_range: [B, C, D]
+    skill_targets: [writing]
+    notes: "Suggest using while writing journal entries for immediate self-correction."
+
+  # --- Speaking ---
+
+  - name: italki
+    type: speaking
+    cost: "$5-25/hour"
+    essential: false
+    phase_range: [B, C, D]
+    skill_targets: [speaking, listening, fluency]
+    assignment_template: "In your italki session, try to use {grammar_concept} at least 3 times. Tell your tutor about {topic}."
+    notes: "Real human conversation practice. 1-2x per week starting Phase B."
+
+  - name: Tandem
+    type: speaking
+    cost: free
+    essential: false
+    phase_range: [A, B, C, D]
+    skill_targets: [speaking, writing]
+    assignment_template: "On Tandem, have a conversation about {topic}."
+    notes: "Language exchange app. Text chat from Phase A, voice from Phase B."
+
+  - name: Self-Narration
+    type: speaking
+    cost: free
+    essential: true
+    phase_range: [A, B, C, D]
+    skill_targets: [fluency, vocabulary]
+    assignment_template: "{narration_prompt}"
+    narration_prompts:
+      - "While making breakfast tomorrow, narrate what you're doing in Spanish out loud."
+      - "On your commute, describe what you see around you in Spanish."
+      - "Before bed, mentally replay your day in Spanish."
+    notes: "Most underrated practice method. Zero friction, unlimited time."
+
+  # --- Grammar Reference ---
+
+  - name: SpanishDict
+    type: grammar-reference
+    cost: free
+    essential: true
+    phase_range: [A, B, C, D]
+    skill_targets: [grammar, vocabulary]
+    setup_session: 3-4
+    notes: "Go-to dictionary and conjugation reference. Not homework — a tool to bookmark."
+
+  - name: StudySpanish.com
+    type: grammar-reference
+    cost: free
+    essential: false
+    phase_range: [A, B, C]
+    skill_targets: [grammar]
+    assignment_template: "Review the {topic} page on StudySpanish.com and try the quiz."
+    notes: "Good for reinforcing concepts from a different angle."
+
+  - name: Kwiziq
+    type: grammar-reference
+    cost: "free tier; Premium $10/month"
+    essential: false
+    phase_range: [B, C, D]
+    skill_targets: [grammar]
+    assignment_template: "Take the Kwiziq {level} quiz. Share your results."
+    notes: "Objective grammar assessment by CEFR level. Assign at phase transitions."
+
+  # --- Immersion ---
+
+  - name: Language Reactor
+    type: immersion
+    cost: "free tier; Pro $6/month"
+    essential: false
+    phase_range: [B, C, D]
+    skill_targets: [listening, vocabulary]
+    notes: "Browser extension for dual subtitles on Netflix/YouTube."
+
+# Resource selection priority:
+# 1. Narrow topic alignment
+# 2. Skill match (passive gap = input; production gap = output)
+# 3. Level match (target 85% comprehension)
+# 4. Dialect match
+# 5. Already set up (minimize friction)
+# 6. Engagement history (swap if completion <50% over 2 weeks)
+# 7. Time fit
+# 8. Variety
+# 9. Energy match
