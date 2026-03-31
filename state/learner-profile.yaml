@@ -1,0 +1,58 @@
+# Learner Profile — slow-changing facts about the learner
+# Updated rarely, typically during first session and at phase transitions.
+# Schema defined in docs/system-design.md
+
+# Learner identity
+name: ""
+native_language: English
+target_dialect: ""  # mexican, colombian, castilian, argentinian — chosen in first session
+started: ""         # date of first session (YYYY-MM-DD)
+
+# Goals
+primary_goal: ""    # e.g., "conversational fluency for travel and social situations"
+target_level: ""    # e.g., B2, C1
+milestone_goals: []
+graduation_criteria: ""  # what "done" looks like for this learner
+
+# Schedule and capacity
+typical_weekday_minutes: 0    # total learning time including homework
+typical_weekend_minutes: 0
+preferred_session_time: ""    # morning, afternoon, evening
+max_new_concepts_per_week: 2  # adjusted over time based on absorption rate
+weekly_review_day: ""         # e.g., Sunday
+
+# Learning style (discovered over time, updated by tutor)
+grammar_preference: ""        # rules-first, examples-first, or mixed
+error_correction_preference: "" # inline, batched-at-end, or gentle-inline
+vocabulary_retention_method: "" # visual, contextual, auditory, kinesthetic
+motivation_style: ""          # challenge-driven, encouragement-driven, data-driven
+energy_pattern: ""            # e.g., "high energy Mon-Wed, lower Thu-Fri"
+
+# Calibration — how much to trust self-reports
+calibration:
+  self_report_accuracy: null   # correlation between self-reports and observed performance
+  tendency: ""                 # overestimates, accurate, underestimates
+  trust_weight: 0.5           # 0.0-1.0, how much to weight self-reports in decisions
+
+# Motivation tracking
+motivation:
+  current_level: ""            # high, medium, low, at-risk
+  streak_days: 0               # consecutive days with a session
+  longest_streak: 0
+  total_sessions: 0
+  days_since_last_milestone: 0 # how long since something felt like "progress"
+  plateau_risk: false          # true if no advancement in 3+ weeks
+  high_motivation_triggers: [] # what energizes this learner (discovered over time)
+  low_motivation_triggers: []  # what deflates them
+  preferred_recovery: ""       # what helps when motivation dips
+
+# External tools in use
+tools:
+  srs: ""                    # e.g., Anki
+  pronunciation: ""          # e.g., Speechling
+  conversation_partner: ""   # e.g., italki tutor named Carlos, meets Thursdays
+  listening_primary: ""      # e.g., Dreaming Spanish
+  reading_current: ""        # e.g., "Short Stories in Spanish (Olly Richards) - ch 5"
+
+# Notes
+notes: ""
