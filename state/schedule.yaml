@@ -1,0 +1,43 @@
+# Schedule — the tutor's current plan
+# Updated at the end of each session.
+# Schema defined in docs/system-design.md
+
+current_phase: A-foundation
+current_week: 1
+onboarding_complete: false
+autonomy_level: guided
+
+active_grammar:
+  primary: ""
+  secondary: ""
+  maintenance: []
+
+active_vocabulary:
+  primary: ""
+  review: []
+
+active_pronunciation:
+  focus: ""
+
+active_writing:
+  current_level: ""
+  journal_active: false
+
+weekly_topic:
+  topic: ""
+  vocabulary_cluster: ""
+  grammar_reinforcement: ""
+  started: ""
+
+fluency_accuracy_balance: accuracy-leaning
+
+grammar_queue: []
+vocabulary_queue: []
+
+sprint:
+  active: false
+  goal: ""
+  target_date: ""
+  focus_areas: []
+
+adjustment_log: []
