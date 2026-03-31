@@ -1,0 +1,105 @@
+# Dialect Notes — vocabulary, grammar, and pronunciation differences by dialect
+# The tutor reads target_dialect from learner-profile.yaml and applies these.
+
+vocabulary_differences:
+  - context: "car"
+    mexican: "carro"
+    castilian: "coche"
+    argentinian: "auto"
+    colombian: "carro"
+
+  - context: "computer"
+    mexican: "computadora"
+    castilian: "ordenador"
+    argentinian: "computadora"
+    colombian: "computador"
+
+  - context: "apartment"
+    mexican: "departamento"
+    castilian: "piso"
+    argentinian: "departamento"
+    colombian: "apartamento"
+
+  - context: "bus"
+    mexican: "camion"
+    castilian: "autobus"
+    argentinian: "colectivo"
+    colombian: "bus"
+
+  - context: "cell phone"
+    mexican: "celular"
+    castilian: "movil"
+    argentinian: "celular"
+    colombian: "celular"
+
+  - context: "juice"
+    mexican: "jugo"
+    castilian: "zumo"
+    argentinian: "jugo"
+    colombian: "jugo"
+
+  - context: "beans"
+    mexican: "frijoles"
+    castilian: "judias"
+    argentinian: "porotos"
+    colombian: "frijoles"
+
+  - context: "banana"
+    mexican: "platano"
+    castilian: "platano"
+    argentinian: "banana"
+    colombian: "banano"
+
+  - context: "glasses"
+    mexican: "lentes"
+    castilian: "gafas"
+    argentinian: "anteojos"
+    colombian: "gafas"
+
+  - context: "ticket"
+    mexican: "boleto"
+    castilian: "billete"
+    argentinian: "boleto"
+    colombian: "tiquete"
+
+grammar_differences:
+  - feature: "voseo"
+    regions: [argentina, uruguay, parts of central america]
+    introduce_at: Phase C
+    description: "Replace tu conjugation with vos forms (vos tenes, vos queres)"
+    notes: "Teach recognition in Phase B, production in Phase C for target dialects"
+
+  - feature: "leismo"
+    regions: [spain]
+    introduce_at: Phase D
+    description: "Using 'le' where Latin America uses 'lo' for masculine direct objects"
+
+  - feature: "ustedes vs vosotros"
+    regions_vosotros: [spain]
+    regions_ustedes: [all of Latin America]
+    introduce_at: Phase A
+    description: "In Latin American Spanish, skip vosotros entirely. In Castilian, teach both."
+
+  - feature: "preterite vs present perfect"
+    regions_preterite_preference: [mexico, most of Latin America]
+    regions_present_perfect_preference: [spain]
+    introduce_at: Phase B
+    description: "Spain uses present perfect for recent past, Latin America uses preterite"
+
+pronunciation_differences:
+  - feature: "seseo vs distincion"
+    castilian: "Distinguish between s/z/c sounds (zapato with 'th' sound)"
+    latin_america: "All pronounced as 's' (seseo)"
+    introduce_at: Phase A
+    notes: "Affects pronunciation model from day 1"
+
+  - feature: "yeismo"
+    most_dialects: "ll and y pronounced the same (as 'y')"
+    rioplatense: "ll/y pronounced as 'sh' (Argentine Spanish)"
+    introduce_at: Phase B
+
+  - feature: "aspiration of s"
+    caribbean: "Final 's' often weakened or dropped"
+    highland: "Final 's' clearly pronounced"
+    introduce_at: Phase C
+    notes: "Important for understanding Caribbean Spanish speakers"

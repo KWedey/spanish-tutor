@@ -1,0 +1,140 @@
+# Topic Bank — available weekly narrow topics
+# The tutor selects one per week during weekly review.
+# Don't repeat a topic within 4 weeks.
+
+topics:
+  # Phase A topics
+  - name: "Greetings and introductions"
+    grammar_alignment: [A-01-present-regular, A-02-ser-vs-estar]
+    vocabulary_alignment: [tier1-greetings-introductions]
+    cefr_range: [A1]
+    tags: [social, basics]
+
+  - name: "My daily routine"
+    grammar_alignment: [A-01-present-regular, A-05-basic-questions]
+    vocabulary_alignment: [tier1-numbers-time-dates]
+    cefr_range: [A1, A2]
+    tags: [daily-life, routines]
+
+  - name: "Food and eating out"
+    grammar_alignment: [A-01-present-regular, A-06-present-irregular-common]
+    vocabulary_alignment: [tier1-food-restaurant]
+    cefr_range: [A1, A2]
+    tags: [food, travel, practical]
+
+  - name: "Getting around town"
+    grammar_alignment: [A-04-articles-prepositions, A-05-basic-questions]
+    vocabulary_alignment: [tier1-directions-transportation]
+    cefr_range: [A1, A2]
+    tags: [travel, practical]
+
+  - name: "Describing people and things"
+    grammar_alignment: [A-02-ser-vs-estar, A-03-gender-agreement]
+    vocabulary_alignment: [tier1-basic-descriptions]
+    cefr_range: [A1, A2]
+    tags: [descriptions, basics]
+
+  # Phase B topics
+  - name: "Childhood and family"
+    grammar_alignment: [B-03-imperfect, B-04-preterite-vs-imperfect]
+    vocabulary_alignment: [tier2-family-relationships]
+    cefr_range: [A2, B1]
+    tags: [family, nostalgia, personal]
+
+  - name: "My home and neighborhood"
+    grammar_alignment: [B-01-preterite-regular, A-02-ser-vs-estar]
+    vocabulary_alignment: [tier2-home-household]
+    cefr_range: [A2, B1]
+    tags: [daily-life, descriptions]
+
+  - name: "Work and career"
+    grammar_alignment: [B-01-preterite-regular, B-08-future-ir-a]
+    vocabulary_alignment: [tier2-work-office]
+    cefr_range: [A2, B1]
+    tags: [professional, daily-life]
+
+  - name: "Shopping and money"
+    grammar_alignment: [B-06-direct-object-pronouns, A-06-present-irregular-common]
+    vocabulary_alignment: [tier2-shopping-money]
+    cefr_range: [A2, B1]
+    tags: [practical, daily-life]
+
+  - name: "Weather and seasons"
+    grammar_alignment: [B-03-imperfect, B-04-preterite-vs-imperfect]
+    vocabulary_alignment: [tier2-weather-seasons]
+    cefr_range: [A2, B1]
+    tags: [nature, descriptions]
+
+  - name: "Health and the body"
+    grammar_alignment: [B-05-reflexive-verbs, A-02-ser-vs-estar]
+    vocabulary_alignment: [tier2-health-body]
+    cefr_range: [A2, B1]
+    tags: [health, practical]
+
+  - name: "Weekend plans and activities"
+    grammar_alignment: [B-08-future-ir-a, B-01-preterite-regular]
+    vocabulary_alignment: [tier3-plans-future, tier3-hobbies-interests]
+    cefr_range: [A2, B1]
+    tags: [social, plans, personal]
+
+  - name: "A memorable trip"
+    grammar_alignment: [B-01-preterite-regular, B-04-preterite-vs-imperfect]
+    vocabulary_alignment: [tier3-travel-culture]
+    cefr_range: [A2, B1]
+    tags: [travel, storytelling, personal]
+
+  # Phase C topics
+  - name: "Opinions and debate"
+    grammar_alignment: [C-01-present-subjunctive, C-02-subjunctive-triggers]
+    vocabulary_alignment: [tier3-opinions-agreement]
+    cefr_range: [B1, B2]
+    tags: [opinions, abstract, social]
+
+  - name: "Emotions and relationships"
+    grammar_alignment: [C-01-present-subjunctive, C-02-subjunctive-triggers]
+    vocabulary_alignment: [tier3-emotions-feelings]
+    cefr_range: [B1, B2]
+    tags: [emotions, personal, social]
+
+  - name: "Telling stories"
+    grammar_alignment: [B-04-preterite-vs-imperfect, C-07-relative-clauses]
+    vocabulary_alignment: [tier3-storytelling-narration]
+    cefr_range: [B1, B2]
+    tags: [storytelling, narrative, creative]
+
+  - name: "Travel and culture"
+    grammar_alignment: [C-04-conditional, C-05-por-vs-para]
+    vocabulary_alignment: [tier3-travel-culture]
+    cefr_range: [B1, B2]
+    tags: [travel, culture, personal]
+
+  - name: "If I could change one thing..."
+    grammar_alignment: [C-04-conditional, C-01-present-subjunctive]
+    vocabulary_alignment: [tier4-hypotheticals-debate]
+    cefr_range: [B1, B2]
+    tags: [hypothetical, abstract, personal]
+
+  # Phase D topics
+  - name: "Current events and society"
+    grammar_alignment: [D-04-passive-voice, D-06-nuanced-connectors]
+    vocabulary_alignment: [tier4-politics-society]
+    cefr_range: [B2, C1]
+    tags: [news, society, formal]
+
+  - name: "Philosophy and big ideas"
+    grammar_alignment: [D-02-si-clauses, D-03-subjunctive-all-tenses]
+    vocabulary_alignment: [tier4-philosophy-ideas]
+    cefr_range: [B2, C1]
+    tags: [abstract, intellectual]
+
+  - name: "Humor, idioms, and slang"
+    grammar_alignment: [D-05-register-shifting]
+    vocabulary_alignment: [tier4-humor-idioms]
+    cefr_range: [B2, C1]
+    tags: [fun, culture, informal]
+
+  - name: "Professional communication"
+    grammar_alignment: [D-05-register-shifting, D-06-nuanced-connectors]
+    vocabulary_alignment: [tier4-professional-specialized]
+    cefr_range: [B2, C1]
+    tags: [professional, formal]

@@ -1,0 +1,119 @@
+# L1 Interference Map — Predicted English-Spanish transfer errors
+# Referenced by tutor during new concept introduction.
+# See curriculum/tutor-guides/l1-interference-protocol.md for usage protocol.
+
+interference_patterns:
+  - id: ser-estar-confusion
+    english_cause: "English has one verb 'to be'"
+    common_errors:
+      - wrong: "Soy cansado"
+        right: "Estoy cansado"
+        explanation: "Temporary states use estar"
+      - wrong: "Esta un profesor"
+        right: "Es un profesor"
+        explanation: "Identity/profession uses ser"
+    preempt_at: A-02-ser-vs-estar
+    severity: high
+    persistence: "Can fossilize permanently if not caught early"
+
+  - id: adjective-placement
+    english_cause: "English puts adjectives before nouns"
+    common_errors:
+      - wrong: "una roja casa"
+        right: "una casa roja"
+    preempt_at: A-03-gender-agreement
+    severity: medium
+    persistence: "Usually self-corrects with enough input"
+
+  - id: subject-pronoun-overuse
+    english_cause: "English requires subject pronouns"
+    common_errors:
+      - wrong: "Yo voy al mercado y yo compro..."
+        right: "Voy al mercado y compro..."
+        explanation: "Spanish drops subject pronouns when clear from conjugation"
+    preempt_at: A-01-present-regular
+    severity: medium
+    persistence: "Common for months, resolves with immersion"
+
+  - id: false-cognates
+    english_cause: "Words that look similar but mean different things"
+    common_errors:
+      - wrong: "Estoy embarazada"
+        intended: "I'm embarrassed"
+        right: "Estoy avergonzada"
+        explanation: "embarazada = pregnant"
+      - wrong: "Quiero introducir mi amigo"
+        intended: "I want to introduce my friend"
+        right: "Quiero presentar a mi amigo"
+        explanation: "introducir = to insert"
+      - wrong: "Estoy constipado"
+        intended: "I'm constipated"
+        right: "Estoy estreñido"
+        explanation: "constipado = having a cold"
+    preempt_at: vocabulary-introduction
+    severity: high
+    persistence: "Memorable once learned, but embarrassing if not"
+
+  - id: preposition-mapping
+    english_cause: "Prepositions don't map 1:1"
+    common_errors:
+      - wrong: "pensar sobre"
+        right: "pensar en"
+        explanation: "think about = pensar en"
+      - wrong: "sonar sobre"
+        right: "sonar con"
+        explanation: "dream about = sonar con"
+      - wrong: "depende en"
+        right: "depende de"
+        explanation: "depend on = depender de"
+    preempt_at: A-04-articles-prepositions
+    severity: medium
+    persistence: "Long-lasting — requires memorization per verb"
+
+  - id: hacer-for-weather
+    english_cause: "English uses 'it is' for weather"
+    common_errors:
+      - wrong: "Es caliente afuera"
+        right: "Hace calor afuera"
+    preempt_at: tier2-weather-seasons
+    severity: low
+    persistence: "Corrects quickly once taught"
+
+  - id: negative-double-negative
+    english_cause: "English avoids double negatives"
+    common_errors:
+      - wrong: "No tengo algo"
+        right: "No tengo nada"
+        explanation: "Spanish requires double negative"
+    preempt_at: A-05-basic-questions
+    severity: medium
+    persistence: "Moderate — feels wrong to English speakers"
+
+  - id: gustar-construction
+    english_cause: "English 'I like X' vs Spanish 'X pleases me'"
+    common_errors:
+      - wrong: "Yo gusto el cafe"
+        right: "Me gusta el cafe"
+    preempt_at: A-06-present-irregular-common
+    severity: high
+    persistence: "Fossilizes quickly if not addressed immediately"
+
+  - id: preterite-imperfect-overuse
+    english_cause: "English past tense doesn't distinguish aspect"
+    common_errors:
+      - wrong: "Cuando fui nino..."
+        right: "Cuando era nino..."
+        explanation: "Habitual/background past = imperfect"
+    preempt_at: B-04-preterite-vs-imperfect
+    severity: high
+    persistence: "The hardest B1 concept — takes months to internalize"
+
+  - id: subjunctive-avoidance
+    english_cause: "English rarely uses subjunctive"
+    common_errors:
+      - wrong: "Quiero que tu vienes"
+        right: "Quiero que tu vengas"
+        explanation: "Desire/wish + que = subjunctive"
+    preempt_at: C-01-present-subjunctive
+    severity: high
+    persistence: "Very persistent — the biggest C1 hurdle"
