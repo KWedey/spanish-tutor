@@ -137,7 +137,28 @@ Concepts not meeting "acquired" enter `schedule.carryover_concepts` and continue
 - A-06 (gustar-type)
 - A-07 (irregular present)
 
-### 3.4 Carryover Concept Rules
+### 3.4 Phase B to C: Specific Requirements
+
+**Must be acquired (prerequisites for Phase C concepts):**
+- B-01 (preterite regular) — prerequisite for C-06
+- B-04 (preterite vs imperfect) — prerequisite for C-08
+
+**May carry over as "practicing":**
+- B-02, B-03, B-05, B-06, B-07, B-08, B-09, B-10, B-11
+
+### 3.5 Phase C to D: Specific Requirements
+
+**Must be acquired (prerequisites for Phase D concepts):**
+- C-01 (present subjunctive) — prerequisite for D-01
+- C-04 (conditional) — prerequisite for D-02
+- C-06 (compound tenses) — prerequisite for D-03
+
+**May carry over as "practicing":**
+- C-02, C-03, C-05, C-07, C-08, C-09
+
+Note: B-01 and B-03 should already be acquired from the B→C transition.
+
+### 3.6 Carryover Concept Rules
 
 - Carryover concepts are prioritized over new-phase concepts in the decision engine (unfinished business is more urgent unless a new concept is needed for communication)
 - The "max 2 concepts in practicing simultaneously" guardrail expands to **max 3** when carryover concepts are present, ensuring at least one new-phase concept can always be introduced
@@ -738,8 +759,41 @@ Every curriculum file is verified against authoritative sources during creation:
 The implementation plan (separate document) should follow this order:
 
 1. **Infrastructure first:** Modify state schemas, CLAUDE.md, system-design.md, supporting YAML files
-2. **Phase A + Onboarding:** Grammar A concepts, tier-1 vocabulary, onboarding sessions, core activity templates — makes the system usable
-3. **Phase B:** Grammar B concepts, tier-2 vocabulary, pronunciation guides for Phase A-B sounds
-4. **Phases C-D:** Grammar C-D concepts, tier-3/4 vocabulary, remaining pronunciation guides, remaining activity templates
+2. **Phase A + Onboarding:** Grammar A concepts (8), tier-1 vocabulary (5), onboarding sessions (10), core activity templates, Phase A pronunciation guides (vowel-sounds, stress-rules) — makes the system usable
+3. **Phase B:** Grammar B concepts (11), tier-2 vocabulary (6), Phase B pronunciation guides (rr-trill, r-single, b-v-equivalence, d-soft, linking)
+4. **Phases C-D:** Grammar C-D concepts (15), tier-3/4 vocabulary (11), Phase C pronunciation guides (g-soft, j-sound, ny-sound, ll-y-sound, intonation), remaining activity templates
 
 Each phase is independently valuable. Phase A completion makes the system functional for a new learner. Later phases can be built as the learner approaches them.
+
+### 14.1 Pronunciation Files (12)
+
+| File | Phase | Sound |
+|------|-------|-------|
+| vowel-sounds.md | A | Pure Spanish vowels (a, e, i, o, u) |
+| stress-rules.md | A | Stress patterns, accent marks, syllable emphasis |
+| rr-trill.md | B | Alveolar trill (perro, carro) |
+| r-single.md | B | Single tap r (pero, caro) |
+| b-v-equivalence.md | B | B and V are the same sound in Spanish |
+| d-soft.md | B | Soft/fricative d between vowels (dado, nada) |
+| linking.md | B | Connected speech between words |
+| g-soft.md | C | Soft g before e/i (gente, girar) |
+| j-sound.md | C | Jota sound (jugar, gente) |
+| ny-sound.md | C | Palatal nasal (espanol, nino) |
+| ll-y-sound.md | C | Lateral/palatal merger and regional variation |
+| intonation.md | C | Question, statement, and exclamation patterns |
+
+### 14.2 Activity Templates (11)
+
+| File | Purpose |
+|------|---------|
+| conversation-prompts.md | Guided and free conversation formats |
+| translation-exercises.md | English-to-Spanish and Spanish-to-English drills |
+| listening-comprehension.md | Formats for processing audio/video homework |
+| reading-exercises.md | Comprehension, discussion, and vocabulary extraction |
+| writing-exercises.md | Journal, composition, and structured writing formats |
+| fluency-drills.md | Timed monologues, speed translation, shadowing, retelling |
+| dictation.md | Listening and transcription exercises |
+| storytelling.md | Narrative production in past tenses |
+| role-play-scenarios.md | Situational practice (restaurant, directions, shopping) |
+| error-correction.md | How to structure error review during and after activities |
+| grammar-in-context.md | Integration exercises combining multiple grammar concepts |
