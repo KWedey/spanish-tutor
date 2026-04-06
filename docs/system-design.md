@@ -58,7 +58,8 @@ language/
 │   │   │   ├── 03-gender-agreement.md
 │   │   │   ├── 04-articles-prepositions.md
 │   │   │   ├── 05-basic-questions.md
-│   │   │   └── 06-present-irregular-common.md
+│   │   │   ├── 06-gustar-type-verbs.md
+│   │   │   └── 07-present-irregular-common.md
 │   │   ├── B-conversational/
 │   │   │   ├── 01-preterite-regular.md
 │   │   │   ├── 02-preterite-irregular.md
@@ -67,7 +68,10 @@ language/
 │   │   │   ├── 05-reflexive-verbs.md
 │   │   │   ├── 06-direct-object-pronouns.md
 │   │   │   ├── 07-indirect-object-pronouns.md
-│   │   │   └── 08-future-ir-a.md
+│   │   │   ├── 08-estar-gerund-progressive.md
+│   │   │   ├── 09-imperatives.md
+│   │   │   ├── 10-comparatives-superlatives.md
+│   │   │   └── 11-future-ir-a.md
 │   │   ├── C-intermediate/
 │   │   │   ├── 01-present-subjunctive.md
 │   │   │   ├── 02-subjunctive-triggers.md
@@ -75,7 +79,9 @@ language/
 │   │   │   ├── 04-conditional.md
 │   │   │   ├── 05-por-vs-para.md
 │   │   │   ├── 06-compound-tenses.md
-│   │   │   └── 07-relative-clauses.md
+│   │   │   ├── 07-relative-clauses.md
+│   │   │   ├── 08-indirect-speech.md
+│   │   │   └── 09-diminutives-augmentatives.md
 │   │   └── D-advanced/
 │   │       ├── 01-past-subjunctive.md
 │   │       ├── 02-si-clauses.md
@@ -754,7 +760,7 @@ interference_patterns:
     common_errors:
       - wrong: "Yo gusto el café"
         right: "Me gusta el café"
-    preempt_at: A-06-present-irregular-common
+    preempt_at: A-06-gustar-type-verbs
     severity: high
     persistence: "Fossilizes quickly if not addressed immediately"
 
@@ -1185,7 +1191,7 @@ The tutor evaluates during natural interaction. For every error or success in co
 | Correct verb conjugation in free speech | Grammar concept is moving toward "acquired" | Positive data point for that concept |
 | Self-correction ("wait, no, it's...") | Awareness is ahead of automaticity — good sign | Note: concept is in late "practicing" stage |
 | Same error repeated across sessions | Concept is stuck — needs different approach | Error trend: "stable" or "declining" |
-| Correct in drill, wrong in conversation | Context gap — knows the rule but can't apply under cognitive load | `context_gap: true` in skill-map |
+| Correct in drill, wrong in conversation | Context gap — knows the rule but can't apply under cognitive load | Update `performance_scaffolded` and `performance_unscaffolded` — scaffolded competent but unscaffolded struggling indicates a transfer gap. |
 | Uses a concept not yet formally taught | Natural acquisition happening — adjust curriculum | May skip formal introduction, confirm and move on |
 | Avoids a structure (talks around it) | Learner doesn't trust their ability with it — needs more practice | Note avoidance pattern, assign targeted practice |
 | Comprehends but can't produce | Typical comprehension-production gap | Weight output practice higher |

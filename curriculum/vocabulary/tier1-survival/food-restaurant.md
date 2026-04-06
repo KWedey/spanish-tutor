@@ -81,7 +81,7 @@
 | la entrada | appetizer / starter | In some countries: **el aperitivo** |
 | el postre | dessert | |
 | la receta | recipe | False cognate: not "receipt" (= el recibo) |
-| el mariscos | seafood | Always plural in this sense: **los mariscos** |
+| los mariscos | seafood | Always plural in this sense: **los mariscos** |
 | la verdura | vegetable | More common than **vegetal** for food |
 | el camarero / la camarera | waiter / waitress | Spain. See Dialect Variations. |
 | el desayuno | breakfast | |

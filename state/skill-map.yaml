@@ -43,7 +43,7 @@ grammar:
     performance_unscaffolded: null
     integration_tested: false
     prerequisites: []
-    notes: "Includes hay (there is/there are) as key irregular form"
+    notes: "Introduces hay briefly; full treatment in A-07"
 
   A-02-ser-vs-estar:
     status: unseen

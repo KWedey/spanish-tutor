@@ -27,11 +27,11 @@ Load `curriculum/grammar/A-foundation/00-communication-repair.md`.
 
 Introduce 6 core phrases as memorized chunks — do NOT explain grammar:
 1. "No entiendo" (I don't understand)
-2. "Mas despacio, por favor" (More slowly, please)
+2. "Más despacio, por favor" (More slowly, please)
 3. "¿Puedes repetir, por favor?" (Can you repeat?)
-4. "¿Que significa [word]?" (What does [word] mean?)
-5. "¿Como se dice [English word]?" (How do you say [word]?)
-6. "¿Puedes hablar mas lento?" (Can you speak slower?)
+4. "¿Qué significa [word]?" (What does [word] mean?)
+5. "¿Cómo se dice [English word]?" (How do you say [word]?)
+6. "¿Puedes hablar más lento?" (Can you speak slower?)
 
 Teaching method: Say each phrase, have learner repeat 2-3 times. After all 6, do rapid-fire drills: tutor describes a scenario ("You didn't catch what I said"), learner responds with the appropriate phrase.
 
@@ -55,7 +55,7 @@ Introduce 5 basic greetings during practice: hola, buenos dias, adios, gracias, 
 - Listen to the repair phrases again and repeat after each one (5 min)
 
 ## Vocabulary Focus
-Begin `curriculum/vocabulary/tier1-survival/greetings-introductions.md` — introduce only: hola, buenos dias, buenos tardes, buenos noches, adios, gracias, por favor. Full cluster work starts session 2.
+Begin `curriculum/vocabulary/tier1-survival/greetings-introductions.md` — introduce only: hola, buenos dias, buenas tardes, buenas noches, adios, gracias, por favor. Full cluster work starts session 2.
 
 ## Learner Observation Targets
 - **Prior knowledge:** How much Spanish do they already know? Any words or phrases?
