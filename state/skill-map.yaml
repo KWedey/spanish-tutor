@@ -798,25 +798,55 @@ writing:
     last_practiced: null
     notes: ""
 
+receptive_skills:
+  listening:
+    current_level: null
+    comprehension_quality: null
+    speed_tolerance: null
+    last_level_change: null
+    notes: ""
+
+  reading:
+    current_level: null
+    comprehension_quality: null
+    lookup_frequency: null
+    last_level_change: null
+    notes: ""
+
 cultural_awareness:
   register_shifting:
     status: unseen
-    notes: ""
+    introduced_at_phase: D
+    assessed_through: "conversation behavior, role-play scenarios"
+    signs_of_acquisition: "Shifts registers appropriately without prompting in role-play"
+    notes: "Pragmatic judgment (when to shift). Grammar forms tracked in D-05-register-shifting."
 
   politeness_formulas:
     status: unseen
+    introduced_at_phase: B
+    assessed_through: "request formulation, disagreement handling in conversation"
+    signs_of_acquisition: "Softens requests and disagreements naturally without prompting"
     notes: ""
 
   conversational_rhythm:
     status: unseen
+    introduced_at_phase: C
+    assessed_through: "conversation flow, back-channeling, turn-taking"
+    signs_of_acquisition: "Natural turn-taking, appropriate back-channeling (ah si, claro, ya)"
     notes: ""
 
   regional_awareness:
     status: unseen
+    introduced_at_phase: B
+    assessed_through: "recognition of dialect differences, adaptation in conversation"
+    signs_of_acquisition: "Recognizes dialect variants and adapts vocabulary to context"
     notes: ""
 
   humor_and_idioms:
     status: unseen
+    introduced_at_phase: C
+    assessed_through: "comprehension and use of idioms, humor response"
+    signs_of_acquisition: "Uses common idioms naturally, understands humor in context"
     notes: ""
 
 fluency_metrics:
