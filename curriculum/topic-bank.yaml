@@ -17,7 +17,7 @@ topics:
     tags: [daily-life, routines]
 
   - name: "Food and eating out"
-    grammar_alignment: [A-01-present-regular, A-06-present-irregular-common]
+    grammar_alignment: [A-01-present-regular, A-07-present-irregular-common]
     vocabulary_alignment: [tier1-food-restaurant]
     cefr_range: [A1, A2]
     tags: [food, travel, practical]
@@ -48,13 +48,13 @@ topics:
     tags: [daily-life, descriptions]
 
   - name: "Work and career"
-    grammar_alignment: [B-01-preterite-regular, B-08-future-ir-a]
+    grammar_alignment: [B-01-preterite-regular, B-11-future-ir-a]
     vocabulary_alignment: [tier2-work-office]
     cefr_range: [A2, B1]
     tags: [professional, daily-life]
 
   - name: "Shopping and money"
-    grammar_alignment: [B-06-direct-object-pronouns, A-06-present-irregular-common]
+    grammar_alignment: [B-06-direct-object-pronouns, A-07-present-irregular-common]
     vocabulary_alignment: [tier2-shopping-money]
     cefr_range: [A2, B1]
     tags: [practical, daily-life]
@@ -72,7 +72,7 @@ topics:
     tags: [health, practical]
 
   - name: "Weekend plans and activities"
-    grammar_alignment: [B-08-future-ir-a, B-01-preterite-regular]
+    grammar_alignment: [B-11-future-ir-a, B-01-preterite-regular]
     vocabulary_alignment: [tier3-plans-future, tier3-hobbies-interests]
     cefr_range: [A2, B1]
     tags: [social, plans, personal]
@@ -138,3 +138,33 @@ topics:
     vocabulary_alignment: [tier4-professional-specialized]
     cefr_range: [B2, C1]
     tags: [professional, formal]
+
+  - name: "Giving directions"
+    grammar_alignment: [B-09-imperatives]
+    vocabulary_alignment: [tier1-directions-transportation]
+    cefr_range: [A2, B1]
+    tags: [practical, travel, commands]
+
+  - name: "Comparing cities and countries"
+    grammar_alignment: [B-10-comparatives-superlatives]
+    vocabulary_alignment: [tier3-travel-culture]
+    cefr_range: [A2, B1]
+    tags: [travel, descriptions, opinions]
+
+  - name: "What are you doing right now?"
+    grammar_alignment: [B-08-estar-gerund-progressive]
+    vocabulary_alignment: [tier2-home-household]
+    cefr_range: [A2, B1]
+    tags: [daily-life, present-moment]
+
+  - name: "Retelling a friend's story"
+    grammar_alignment: [C-08-indirect-speech]
+    vocabulary_alignment: [tier3-storytelling-narration]
+    cefr_range: [B1, B2]
+    tags: [storytelling, narrative, social]
+
+  - name: "Terms of endearment and affection"
+    grammar_alignment: [C-09-diminutives-augmentatives]
+    vocabulary_alignment: [tier2-family-relationships]
+    cefr_range: [B1, B2]
+    tags: [family, culture, informal]
