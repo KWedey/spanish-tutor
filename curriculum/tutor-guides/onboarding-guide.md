@@ -20,12 +20,13 @@ This period accomplishes:
 3. Log everything in the session file — this data will feed the decision engine at session 11
 4. Introduce one new external tool every 2-3 sessions:
    - Sessions 1-2: Anki installed and first deck created
-   - Sessions 3-4: Dreaming Spanish bookmarked, SpanishDict bookmarked
-   - Sessions 5-6: Language Transfer queued (episodes 1-5), graded reader obtained
-   - Sessions 7-8: Speechling account created
-   - Sessions 9-10: Whisper transcription script set up (optional, if learner is technical)
+   - Sessions 2-3: SpanishDict bookmarked, Dreaming Spanish bookmarked
+   - Sessions 4-5: Language Transfer queued, graded reader obtained
+   - Session 7: Speechling account created
+   - Session 9: Whisper transcription script set up (optional, if learner is technical)
+5. Sessions 6 and 10 are consolidation sessions (no new grammar concept). Use session 6 for midpoint review of sessions 2-5. If the learner has already been consolidating due to pacing adjustments, use the consolidation session for the next planned concept instead.
 
-## At Session 10
+## At Session 10 (Final Consolidation)
 
 - Set `onboarding_complete: true` in schedule.yaml
 - Write a summary of what you've learned about this learner's style, speed, and preferences
