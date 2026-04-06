@@ -2,6 +2,22 @@
 # Updated every session. The single source of truth for what has been taught and how well it's retained.
 # Schema defined in docs/system-design.md
 
+# Status values:
+#   unseen     — not yet introduced
+#   introduced — seen once, not yet practiced
+#   practicing — actively working on it, error rate > 15%
+#   acquired   — consistent in drills AND free production, error rate < 10%
+#   automatic  — used without thinking, only spot-checked periodically
+#   regressed  — was acquired/automatic, but errors resurfaced
+#
+# Context performance values:
+#   null       — untested in this context
+#   struggling — frequent errors in this context
+#   competent  — reliable performance in this context
+#
+# Acquisition requirement: status cannot be "acquired" unless
+# performance_unscaffolded is "competent"
+
 grammar:
   A-00-communication-repair:
     status: unseen
@@ -10,7 +26,9 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: []
     notes: "FIRST concept — survival phrases for when learner is stuck"
 
@@ -21,9 +39,11 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: []
-    notes: ""
+    notes: "Includes hay (there is/there are) as key irregular form"
 
   A-02-ser-vs-estar:
     status: unseen
@@ -32,7 +52,9 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [A-01-present-regular]
     notes: ""
 
@@ -43,9 +65,11 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: []
-    notes: ""
+    notes: "Expanded: includes demonstratives (este/ese/aquel) and unstressed possessives (mi/tu/su)"
 
   A-04-articles-prepositions:
     status: unseen
@@ -54,9 +78,11 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [A-03-gender-agreement]
-    notes: ""
+    notes: "Expanded: includes personal 'a' as dedicated section"
 
   A-05-basic-questions:
     status: unseen
@@ -65,20 +91,37 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [A-01-present-regular]
     notes: ""
 
-  A-06-present-irregular-common:
+  A-06-gustar-type-verbs:
     status: unseen
     introduced_date: null
     last_practiced: null
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [A-01-present-regular]
-    notes: ""
+    notes: "Reversed sentence structure: gustar, encantar, molestar, importar, interesar, doler"
+
+  A-07-present-irregular-common:
+    status: unseen
+    introduced_date: null
+    last_practiced: null
+    practice_count: 0
+    error_rate_recent: null
+    error_trend: null
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
+    prerequisites: [A-01-present-regular]
+    notes: "ir, tener, querer, poder, hacer, decir, saber/conocer, hay"
 
   B-01-preterite-regular:
     status: unseen
@@ -87,7 +130,9 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [A-01-present-regular]
     notes: ""
 
@@ -98,7 +143,9 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [B-01-preterite-regular]
     notes: ""
 
@@ -109,7 +156,9 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [A-01-present-regular]
     notes: ""
 
@@ -120,7 +169,9 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [B-01-preterite-regular, B-02-preterite-irregular, B-03-imperfect]
     notes: ""
 
@@ -131,7 +182,9 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [A-01-present-regular, B-01-preterite-regular]
     notes: ""
 
@@ -142,9 +195,11 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
-    prerequisites: [A-01-present-regular]
-    notes: ""
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
+    prerequisites: [A-01-present-regular, A-04-articles-prepositions]
+    notes: "Prerequisite includes A-04 for personal 'a' knowledge"
 
   B-07-indirect-object-pronouns:
     status: unseen
@@ -153,18 +208,61 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [B-06-direct-object-pronouns]
     notes: ""
 
-  B-08-future-ir-a:
+  B-08-estar-gerund-progressive:
     status: unseen
     introduced_date: null
     last_practiced: null
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
+    prerequisites: [A-01-present-regular, A-02-ser-vs-estar]
+    notes: "Estar + gerund (-ando/-iendo). Reinforces estar usage."
+
+  B-09-imperatives:
+    status: unseen
+    introduced_date: null
+    last_practiced: null
+    practice_count: 0
+    error_rate_recent: null
+    error_trend: null
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
+    prerequisites: [A-01-present-regular, A-07-present-irregular-common]
+    notes: "tu/usted commands. Irregular tu forms. Pronoun placement."
+
+  B-10-comparatives-superlatives:
+    status: unseen
+    introduced_date: null
+    last_practiced: null
+    practice_count: 0
+    error_rate_recent: null
+    error_trend: null
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
+    prerequisites: [A-03-gender-agreement]
+    notes: "mas...que, menos...que, tan...como. Irregulars: mejor, peor, mayor, menor."
+
+  B-11-future-ir-a:
+    status: unseen
+    introduced_date: null
+    last_practiced: null
+    practice_count: 0
+    error_rate_recent: null
+    error_trend: null
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [A-01-present-regular]
     notes: ""
 
@@ -175,8 +273,10 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
-    prerequisites: [A-01-present-regular, A-06-present-irregular-common]
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
+    prerequisites: [A-01-present-regular, A-07-present-irregular-common]
     notes: ""
 
   C-02-subjunctive-triggers:
@@ -186,7 +286,9 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [C-01-present-subjunctive]
     notes: ""
 
@@ -197,7 +299,9 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [A-01-present-regular]
     notes: ""
 
@@ -208,7 +312,9 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [C-03-formal-future]
     notes: ""
 
@@ -219,7 +325,9 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [A-04-articles-prepositions]
     notes: ""
 
@@ -230,7 +338,9 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [B-01-preterite-regular]
     notes: ""
 
@@ -241,9 +351,37 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [C-01-present-subjunctive]
     notes: ""
+
+  C-08-indirect-speech:
+    status: unseen
+    introduced_date: null
+    last_practiced: null
+    practice_count: 0
+    error_rate_recent: null
+    error_trend: null
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
+    prerequisites: [C-01-present-subjunctive, C-02-subjunctive-triggers, B-04-preterite-vs-imperfect]
+    notes: "Me dijo que..., queria saber si... Requires subjunctive/indicative distinction."
+
+  C-09-diminutives-augmentatives:
+    status: unseen
+    introduced_date: null
+    last_practiced: null
+    practice_count: 0
+    error_rate_recent: null
+    error_trend: null
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
+    prerequisites: [A-03-gender-agreement]
+    notes: "-ito/-ita, -ote/-ota. Essential for natural speech, especially Mexican Spanish."
 
   D-01-past-subjunctive:
     status: unseen
@@ -252,7 +390,9 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [C-01-present-subjunctive, B-03-imperfect]
     notes: ""
 
@@ -263,7 +403,9 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [C-04-conditional, D-01-past-subjunctive]
     notes: ""
 
@@ -274,7 +416,9 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [D-01-past-subjunctive, C-06-compound-tenses]
     notes: ""
 
@@ -285,7 +429,9 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: [B-01-preterite-regular]
     notes: ""
 
@@ -296,9 +442,11 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: []
-    notes: ""
+    notes: "Grammar forms for tu/usted/vos. Cultural judgment tracked separately in cultural_awareness."
 
   D-06-nuanced-connectors:
     status: unseen
@@ -307,7 +455,9 @@ grammar:
     practice_count: 0
     error_rate_recent: null
     error_trend: null
-    context_gap: false
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
     prerequisites: []
     notes: ""
 
