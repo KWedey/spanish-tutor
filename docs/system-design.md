@@ -783,12 +783,31 @@ interference_patterns:
 
 ### Onboarding Period (Sessions 1-10)
 
-During the first 10 sessions, the decision engine is **not active**. Instead, the tutor follows a fixed onboarding sequence defined in `curriculum/onboarding/`. This period:
+During the first 10 sessions, the decision engine is **not active**. Instead, the tutor follows a fixed onboarding sequence defined in `curriculum/onboarding/`. The sequence is structured as 1 discovery session + 7 concept introductions + 2 consolidation sessions (midpoint at session 6, final at session 10).
+
+**Concept sequence:**
+
+| Session | Grammar Concept | Notes |
+|---------|----------------|-------|
+| 1 | A-00 communication repair phrases | Discovery session |
+| 2 | A-01 present tense regular | |
+| 3 | A-03 gender, agreement, demonstratives, possessives | |
+| 4 | A-04 articles, prepositions, personal 'a' | |
+| 5 | A-02 ser vs estar | Delayed to build implicit intuition from sessions 1-4 |
+| 6 | **Midpoint consolidation** | Review sessions 2-5, collect baseline data |
+| 7 | A-05 questions and negation | |
+| 8 | A-06 gustar-type verbs | |
+| 9 | A-07 common irregular present (including hay) | |
+| 10 | **Final consolidation** | All-concept review, transition assessment, set `onboarding_complete` |
+
+**Pacing escape valve:** If the learner is struggling, consolidate instead of introducing the next concept. Remaining concepts get introduced post-onboarding via the decision engine.
+
+This period:
 
 - Establishes the learner profile through observation
-- Introduces core Phase A concepts in a tested order
+- Introduces core Phase A concepts in a dependency-aware order
 - Collects baseline performance data (error rates, learning speed, energy patterns)
-- Sets up external tools (Anki, Speechling, etc.)
+- Sets up external tools (Anki, Speechling, etc.) distributed across sessions
 - Discovers the learner's preferences (grammar approach, correction style, etc.)
 
 At session 11, the decision engine activates with ~10 data points per concept. The learner shouldn't notice the transition — sessions just gradually become more tailored.
@@ -809,6 +828,13 @@ For each candidate concept/activity:
     "practicing" with high error rate = high gap.
     "acquired" with no recent practice = moderate gap (decay risk).
     "unseen" with met prerequisites = opportunity.
+
+    Considers context performance:
+    - Regressed: highest urgency
+    - Scaffolded struggling: high gap (fundamental issue)
+    - Scaffolded competent, unscaffolded struggling: moderate gap (transfer gap)
+    - Both competent, integration untested: low gap (needs testing)
+    - Fully competent and integration tested: maintenance only
 
   DECAY (0-10)
     How long since last practiced?
@@ -855,6 +881,12 @@ For each candidate concept/activity:
   (filtered by READINESS, modified by ENERGY, MOTIVATION, FLUENCY_BALANCE)
 ```
 
+After selecting the focus concept, route to activity type:
+- Scaffolded struggling → controlled practice (concept file Stage 2)
+- Scaffolded competent, unscaffolded struggling → communicative practice (Stages 3-4)
+- Integration untested → combined exercises (activities/grammar-in-context.md)
+- All competent → spot-check only, move to next priority
+
 The top 1-2 concepts become the session focus. The tutor doesn't mechanically expose this scoring — it presents the session naturally.
 
 ### Advancement Rules
@@ -867,7 +899,7 @@ The top 1-2 concepts become the session focus. The tutor doesn't mechanically ex
 **When to consolidate instead of advancing:**
 - Error rate trend is "declining" on any active concept
 - The learner self-reports feeling overwhelmed
-- More than 2 concepts are currently in "practicing" status simultaneously
+- More than 2 concepts (3 when carryover exists) are currently in "practicing" status simultaneously
 - Context gap detected (correct in drills, errors in free speech)
 
 **When to flag a regression:**
@@ -875,9 +907,26 @@ The top 1-2 concepts become the session focus. The tutor doesn't mechanically ex
 - Status changes to "regressed" and it re-enters active practice
 
 **When to phase transition (A → B → C → D):**
-- All concepts in the current phase are at "acquired" or "automatic"
-- The learner passes a phase-transition assessment (a longer, integrated exercise that tests all phase concepts together)
-- The tutor explicitly marks the phase transition in the schedule, session log, and creates a milestone record
+
+Phase transition requires ALL of:
+1. Every concept that is a prerequisite for any next-phase concept must have status "acquired"
+2. All remaining concepts must have status "practicing" with error_trend "stable" or "improving"
+3. No concept in the current phase has status "regressed"
+4. The learner passes a phase-transition assessment
+
+Concepts not meeting "acquired" enter `schedule.carryover_concepts` and continue receiving active practice in the new phase.
+
+Phase A → B specific requirements:
+- Must be acquired: A-01, A-02, A-04 (prerequisites for Phase B concepts)
+- May carry over: A-03, A-05, A-06, A-07
+
+Phase B → C specific requirements:
+- Must be acquired: B-01, B-04
+- May carry over: B-02, B-03, B-05, B-06, B-07, B-08, B-09, B-10, B-11
+
+Phase C → D specific requirements:
+- Must be acquired: C-01, C-04, C-06
+- May carry over: C-02, C-03, C-05, C-07, C-08, C-09
 
 ### Homework Assignment Logic
 
@@ -1351,93 +1400,126 @@ language learning behavior: asking for help is a skill, not a weakness.
 Ordered by frequency of use, prerequisite dependencies, and learner impact.
 
 **Phase A — Foundation** (target: A1-A2)
-Core sentence construction. The learner can form basic sentences about present situations.
+Core sentence construction. The learner can form basic sentences about present situations. 8 concepts.
 
 | # | Concept | Prerequisites | Key Challenge | L1 Interference |
 |---|---------|--------------|---------------|-----------------|
 | 0 | Communication repair phrases | None | Memorization, overcoming embarrassment | — |
 | 1 | Present tense (regular -ar, -er, -ir) | None | Memorizing conjugation patterns | Subject pronoun overuse |
-| 2 | Ser vs Estar | Present tense | Conceptual — English has one "to be" | Ser/estar confusion |
-| 3 | Gender and number agreement | None | No English equivalent, must build habit | Adjective placement |
-| 4 | Articles, prepositions, contractions (al, del) | Gender | Memorization + gender dependency | Preposition mapping |
-| 5 | Question formation | Present tense | Inversion, question words | Double negative avoidance |
-| 6 | Common irregular present (ir, tener, querer, poder, hacer, decir, saber, conocer) | Present tense | High-frequency, must memorize individually | Gustar construction |
+| 2 | Ser vs Estar | A-01 | Conceptual — English has one "to be" | Ser/estar confusion |
+| 3 | Gender, number, agreement + demonstratives + possessives | None | No English equivalent, must build habit | Adjective placement |
+| 4 | Articles, prepositions, personal 'a' | A-03 | Memorization + gender dependency | Preposition mapping |
+| 5 | Basic questions and negation | A-01 | Inversion, question words | Double negative avoidance |
+| 6 | Gustar-type verbs (gustar, encantar, molestar, importar, interesar, doler) | A-01 | Reversed sentence structure | Gustar construction |
+| 7 | Common irregular present (ir, tener, querer, poder, hacer, decir, saber/conocer, hay) | A-01 | High-frequency, must memorize individually | — |
 
 **Phase B — Conversational** (target: A2-B1)
-The learner can talk about the past and future, handle daily interactions.
+The learner can talk about the past and future, handle daily interactions. 11 concepts.
 
 | # | Concept | Prerequisites | Key Challenge | L1 Interference |
 |---|---------|--------------|---------------|-----------------|
-| 1 | Preterite (regular) | Present tense | New conjugation set | — |
-| 2 | Preterite (irregular) | Preterite regular | Memorization-heavy | — |
-| 3 | Imperfect | Present tense | New tense concept | — |
-| 4 | Preterite vs Imperfect | Both above | The hardest A2-B1 concept | English doesn't distinguish aspect |
-| 5 | Reflexive verbs | Present, preterite | Pronoun placement | — |
-| 6 | Direct object pronouns | Present tense | Word order changes | — |
-| 7 | Indirect object pronouns | Direct objects | Stacking pronouns (se lo dije) | — |
-| 8 | Future with ir + a | Present tense | Easy win — builds confidence | — |
+| 1 | Preterite (regular) | A-01 | New conjugation set | — |
+| 2 | Preterite (irregular) | B-01 | Memorization-heavy | — |
+| 3 | Imperfect | A-01 | New tense concept | — |
+| 4 | Preterite vs Imperfect | B-01, B-02, B-03 | The hardest A2-B1 concept | English doesn't distinguish aspect |
+| 5 | Reflexive verbs | A-01 | Pronoun placement | — |
+| 6 | Direct object pronouns | A-01, A-04 | Word order changes | — |
+| 7 | Indirect object pronouns | B-06 | Stacking pronouns (se lo dije) | — |
+| 8 | Estar + gerund (progressive) | A-01, A-02 | Progressive formation | Progressive overuse for habitual actions |
+| 9 | Imperatives (tu/usted commands) | A-01, A-07 | Irregular forms, pronoun attachment | Pronoun placement with commands |
+| 10 | Comparatives and superlatives | A-03 | Irregular forms (mejor, peor) | de vs que distinction |
+| 11 | Future with ir + a | A-01 | Easy win — builds confidence | — |
 
 **Phase C — Intermediate** (target: B1-B2)
-The learner can express opinions, hypotheticals, and complex ideas.
+The learner can express opinions, hypotheticals, and complex ideas. 9 concepts.
 
 | # | Concept | Prerequisites | Key Challenge | L1 Interference |
 |---|---------|--------------|---------------|-----------------|
-| 1 | Present subjunctive (forms) | Present tense, irregulars | New paradigm | Subjunctive avoidance |
-| 2 | Subjunctive triggers | Subjunctive forms | Knowing WHEN to use it | — |
-| 3 | Formal future tense | Present tense | Easy forms, nuance vs ir + a | — |
-| 4 | Conditional | Future tense | Same stems, different endings | — |
-| 5 | Por vs Para | All basic prepositions | Notoriously difficult, many rules | — |
-| 6 | Present perfect (he hablado) | Past participles | Relatively easy if preterite is solid | — |
-| 7 | Relative clauses (que, quien, donde, lo que) | All above | Sentence complexity jumps | — |
+| 1 | Present subjunctive (forms) | A-01, A-07 | New paradigm | Subjunctive avoidance |
+| 2 | Subjunctive triggers | C-01 | Knowing WHEN to use it | — |
+| 3 | Formal future tense | A-01 | Easy forms, nuance vs ir + a | — |
+| 4 | Conditional | C-03 | Same stems, different endings | — |
+| 5 | Por vs Para | A-04 | Notoriously difficult, many rules | — |
+| 6 | Present perfect and compound tenses | B-01 | Relatively easy if preterite is solid | — |
+| 7 | Relative clauses (que, quien, donde, lo que) | C-01 | Sentence complexity jumps | — |
+| 8 | Indirect speech (me dijo que..., queria saber si...) | C-01, C-02, B-04 | Tense shifting with subjunctive | Tense shifting with subjunctive |
+| 9 | Diminutives and augmentatives (-ito/-ita, -ote/-ota) | A-03 | Regional variation, register awareness | Diminutive underuse |
 
 **Phase D — Advanced** (target: B2-C1)
-The learner can handle nuanced expression, formal contexts, and complex narration.
+The learner can handle nuanced expression, formal contexts, and complex narration. 6 concepts.
 
 | # | Concept | Prerequisites | Key Challenge |
 |---|---------|--------------|---------------|
-| 1 | Past subjunctive (imperfect subjunctive) | Present subjunctive, imperfect | Two forms (-ra, -se) |
-| 2 | Si clauses (if...then) | Conditional, past subjunctive | Three types with different tense combos |
-| 3 | Subjunctive across all tenses | All subjunctive + all tenses | Integration challenge |
-| 4 | Passive voice and se constructions | All above | Multiple uses of "se" |
-| 5 | Register shifting (tú/usted/vos, formal/informal) | All above | Social/cultural knowledge |
-| 6 | Nuanced connectors (sin embargo, no obstante, a pesar de que) | All above | Elevates speech from functional to fluent |
+| 1 | Past subjunctive (imperfect subjunctive) | C-01, B-03 | Two forms (-ra, -se) |
+| 2 | Si clauses (if...then) | C-04, D-01 | Three types with different tense combos |
+| 3 | Subjunctive across all tenses | D-01, C-06 | Integration challenge |
+| 4 | Passive voice and se constructions | B-01 | Multiple uses of "se" |
+| 5 | Register shifting (tú/usted/vos) | — | Social/cultural knowledge |
+| 6 | Nuanced connectors (sin embargo, no obstante, a pesar de que) | — | Elevates speech from functional to fluent |
 
 ### Grammar Concept File Format
 
-Each grammar concept markdown file contains:
+Each grammar concept markdown file follows this template (~2 pages per concept). The teaching sequence encodes the SHAPE of the lesson; the tutor provides the specific content.
 
 ```markdown
-# Concept Name
+# [Concept Name]
 
 ## Overview
-Brief explanation of what this concept is and why it matters.
+1-2 sentences: what this concept is and why it matters for communication.
 
-## Pattern
-The grammatical pattern with examples. Show, don't just tell.
+## When to Teach
+- Phase: [A/B/C/D]
+- Prerequisites: [list]
+- L1 interference to preempt: [reference l1-interference.yaml IDs]
+
+## The Pattern
+Clear grammatical explanation with paradigm tables as needed.
+Show the pattern before explaining the rule.
 
 ## Examples in Context
-5-10 example sentences showing the concept in natural use.
-Bolded target structures.
+8-10 sentences using the concept naturally.
+**Bolded** target structures.
+Dialect-appropriate vocabulary.
+Graduated: simple to complex.
+
+## L1 Interference
+English habits that cause errors with this concept.
+Contrast pairs: English instinct vs correct Spanish.
+Preemption script: what to say BEFORE the learner makes the error.
 
 ## Common Errors
-Typical mistakes learners make with this concept.
-Include L1 interference patterns from l1-interference.yaml.
+3-5 most frequent errors with corrections.
+Each classified: developmental, L1 interference, or overgeneralization.
 
-## Drill Templates
-2-3 exercise formats the tutor can use:
-- Fill-in-the-blank
-- Translation prompts
-- Conversation starters that elicit this structure
+## Teaching Sequence
 
-## Cultural Notes
-Any cultural or pragmatic context (e.g., conditional for politeness).
+### Stage 1: Noticing
+1-2 activities where the learner discovers the pattern before explicit instruction.
+"Look at these sentences. What do you notice about...?"
 
-## Prerequisites
-What must be acquired before introducing this concept.
+### Stage 2: Controlled Practice
+1-2 drill formats with concept-specific items.
+References activity templates by name for reusable formats.
+
+### Stage 3: Guided Production
+1-2 structured conversation prompts requiring the concept.
+Scaffolding strategies and how to reduce them.
+
+### Stage 4: Communicative Practice
+1-2 open-ended tasks where the concept is needed but focus is on meaning.
+Topic suggestions that naturally elicit this structure.
+
+## Dialect Notes
+Relevant dialect differences. Cross-references dialect-notes.yaml.
 
 ## Signs of Acquisition
-What does it look like when the learner has truly acquired this?
-(e.g., "Uses correct form in free speech without pausing to think")
+- Scaffolded: [what competence looks like in drills]
+- Unscaffolded: [what competence looks like in free conversation]
+- Integrated: [what competence looks like when combined with other concepts]
+
+## Connection Points
+How this relates to other concepts. What it enables, what it builds on.
+Common regression triggers when later concepts are introduced.
 ```
 
 ### Vocabulary Progression
@@ -1451,13 +1533,16 @@ Vocabulary clusters are paired with grammar phases so that new words reinforce n
 | C | Tier 3: Social | 2,000-3,000 active words |
 | D | Tier 4: Abstract | 4,000-5,000+ active words |
 
-Each vocabulary cluster file contains:
-- 20-40 words/phrases grouped by subtopic
-- Example sentences using current-phase grammar
+Each vocabulary cluster file contains 40-60 words (30 core + 20 exposure). Core words become Anki cards with personal example sentences; exposure words are for passive recognition only.
+
+Cluster contents:
+- Core and exposure words grouped by subtopic
+- Example sentences using current-phase grammar (for core words with non-obvious usage)
 - Common collocations (words that go together)
 - False cognates and tricky translations
 - Cultural and pragmatic notes where relevant
 - Pronunciation notes for tricky words
+- Dialect variations for key vocabulary
 
 ### Pronunciation Progression
 
@@ -1638,6 +1723,31 @@ without switching to English once. That's a first. 🎯
 ```
 
 **The tutor generates this during weekly review and writes it to `progress-reports/`.** The learner can read it anytime. Over months, the collection of reports becomes a motivating record of the journey.
+
+---
+
+## Known Limitations
+
+### Text-Based Tutoring Constraints
+
+The tutor interacts through text. This means:
+
+- **Fluency metrics** (speaking_pace, hesitation_frequency, self_correction_rate) are estimated from external tool reports and typed interaction patterns, not direct observation. They are lower-confidence than grammar error rates.
+- **"Free conversation"** in sessions is typed. The learner has more processing time than real speech. The system has a built-in optimism bias for unscaffolded performance assessment.
+- **Pronunciation** is entirely outsourced to Speechling, Forvo, and Whisper. The tutor assigns and tracks, but does not directly teach or assess.
+
+### Mitigations
+
+- italki/Tandem recommended from Phase B specifically because the tutor cannot assess spoken fluency
+- Self-narration homework provides spoken practice the tutor cannot directly offer
+- Speechling provides human pronunciation feedback the tutor cannot give
+- The system is most accurate for grammar and vocabulary assessment, less accurate for pronunciation and spoken fluency
+
+### Minimum Viable Commitment
+
+- **Light:** 15-minute micro-session + 10 minutes Anki = 25 minutes/day
+- **Typical:** 30-minute session + 20-30 minutes homework = 50-60 minutes/day
+- **Full:** 45-minute session + 45-60 minutes homework = 90-105 minutes/day
 
 ---
 
