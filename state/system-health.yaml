@@ -22,9 +22,6 @@ sessions_rated_too_hard_30d: 0
 
 anki_estimated_deck_size: 0
 anki_estimated_daily_review_minutes: 0
-anki_new_cards_per_session: 8
-anki_retirement_threshold_days: 60
-anki_last_deck_audit: null
 
 last_validation_issues: []
 last_system_review: null

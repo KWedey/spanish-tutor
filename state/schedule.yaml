@@ -40,4 +40,10 @@ sprint:
   target_date: ""
   focus_areas: []
 
+carryover_concepts: []  # concepts from prior phase still in active practice
+
+# SRS configuration (moved from system-health.yaml)
+anki_new_cards_per_session: 8
+anki_retirement_threshold_days: 60
+
 adjustment_log: []
