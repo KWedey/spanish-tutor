@@ -185,7 +185,7 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-01-present-regular, B-01-preterite-regular]
+    prerequisites: [A-01-present-regular]
     notes: ""
 
   B-06-direct-object-pronouns:
