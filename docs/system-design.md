@@ -110,6 +110,10 @@ language/
 │   │       ├── hypotheticals-debate.md
 │   │       ├── humor-idioms.md
 │   │       └── professional-specialized.md
+│   ├── pronunciation/               # Pronunciation guide files by target sound
+│   │   ├── vowel-sounds.md
+│   │   ├── stress-rules.md
+│   │   └── ...12 files total
 │   ├── l1-interference.yaml         # Predicted English→Spanish transfer errors
 │   ├── dialect-notes.yaml           # Vocabulary, grammar, pronunciation by dialect
 │   ├── topic-bank.yaml              # Available weekly narrow topics with tags
@@ -131,7 +135,7 @@ language/
 │   ├── schedule.yaml                # Current plan, active tracks, upcoming
 │   ├── resource-tracker.yaml        # Which external resources are in rotation
 │   ├── system-health.yaml           # Meta-metrics on system effectiveness
-│   ├── sessions/                    # Daily session logs (kept 30 days)
+│   ├── sessions/                    # Daily session logs (kept 60 days)
 │   │   └── YYYY-MM-DD.yaml
 │   ├── summaries/                   # Weekly compressed summaries (kept 6 months)
 │   │   └── YYYY-WNN.yaml
@@ -144,13 +148,7 @@ language/
 ├── progress-reports/                # Human-readable weekly progress summaries
 │   └── YYYY-WNN.md
 └── resources/
-    ├── listening.yaml               # Podcasts, videos, audio sources by level
-    ├── reading.yaml                 # Books, articles, readers by level
-    ├── pronunciation.yaml           # Tools and exercises by target sound
-    ├── speaking.yaml                # Conversation platforms, prompts
-    ├── writing.yaml                 # Writing tools and correction resources
-    ├── grammar-references.yaml      # External grammar explanations by concept
-    └── vocabulary-tools.yaml        # SRS tools, word lists, frequency data
+    └── resource-catalog.yaml        # Structured catalog of all external tools
 ```
 
 ---
@@ -262,6 +260,14 @@ The core tracking document. Every grammar concept, vocabulary cluster, and skill
 #   acquired   — consistent in drills AND free production, error rate < 10%
 #   automatic  — used without thinking, only spot-checked periodically
 #   regressed  — was acquired/automatic, but errors resurfaced
+#
+# Context performance values (per grammar concept):
+#   null       — untested in this context
+#   struggling — errors frequent, needs more practice
+#   competent  — consistent correct usage
+#
+# Acquisition requirement: status cannot be 'acquired' unless
+# performance_unscaffolded is 'competent'.
 
 grammar:
   present-tense-regular:
@@ -271,7 +277,9 @@ grammar:
     practice_count: 0           # total times actively practiced
     error_rate_recent: null     # rolling average over last 5 sessions where tested
     error_trend: null           # improving, stable, declining
-    context_gap: false          # true if correct in drills but not in free speech
+    performance_scaffolded: null    # null (untested), struggling, competent
+    performance_unscaffolded: null  # null (untested), struggling, competent
+    integration_tested: false       # tested in combination with other active concepts?
     prerequisites: []
     notes: ""
 
@@ -323,22 +331,51 @@ writing:
     last_practiced: null
     notes: ""
 
+receptive_skills:
+  listening:
+    current_level: null           # superbeginner, beginner, intermediate, advanced, native
+    comprehension_quality: null   # gist, main-ideas, detailed, near-native
+    speed_tolerance: null         # slow, moderate, natural
+    last_level_change: null
+    notes: ""
+  reading:
+    current_level: null           # graded-A1, graded-A2, graded-B1, adapted, authentic-simple, authentic
+    comprehension_quality: null   # gist, main-ideas, detailed, near-native
+    lookup_frequency: null        # constant, frequent, occasional, rare
+    last_level_change: null
+    notes: ""
+
 # Cultural and pragmatic competence
 cultural_awareness:
   register_shifting:            # tú/usted/vos appropriateness
     status: unseen
+    introduced_at_phase: D
+    assessed_through: "conversation behavior, role-play scenarios"
+    signs_of_acquisition: "Shifts registers appropriately without prompting in role-play"
     notes: ""
   politeness_formulas:          # softening requests, disagreeing politely
     status: unseen
+    introduced_at_phase: B
+    assessed_through: "request formulation in conversation, role-play"
+    signs_of_acquisition: "Uses softeners naturally without prompting"
     notes: ""
   conversational_rhythm:        # interrupting norms, back-channeling, silence
     status: unseen
+    introduced_at_phase: C
+    assessed_through: "conversation flow, back-channel usage"
+    signs_of_acquisition: "Uses fillers and back-channels naturally in conversation"
     notes: ""
   regional_awareness:           # knowing that Spanish varies and adapting
     status: unseen
+    introduced_at_phase: B
+    assessed_through: "recognition of dialect differences, vocabulary choices"
+    signs_of_acquisition: "Identifies regional variants and adapts vocabulary to target dialect"
     notes: ""
   humor_and_idioms:             # understanding and using humor appropriately
     status: unseen
+    introduced_at_phase: C
+    assessed_through: "comprehension of humor, appropriate idiom usage"
+    signs_of_acquisition: "Uses idioms in context and recognizes humor in authentic content"
     notes: ""
 
 # Fluency metrics (separate from accuracy)
@@ -401,6 +438,13 @@ fluency_accuracy_balance: accuracy-leaning  # accuracy-leaning, balanced, fluenc
 grammar_queue: []
 vocabulary_queue: []
 
+# Carryover — concepts from prior phase still in active practice
+carryover_concepts: []
+
+# SRS tuning (moved from system-health — these are config knobs, not health metrics)
+anki_new_cards_per_session: 8
+anki_retirement_threshold_days: 60
+
 # Sprint mode — temporary reprioritization for a deadline
 sprint:
   active: false
@@ -417,7 +461,7 @@ adjustment_log:
 
 ### 5. Session Logs (`state/sessions/YYYY-MM-DD.yaml`)
 
-Written at the end of every session. The primary handoff mechanism between agents. Kept for 30 days, then compressed into weekly summaries.
+Written at the end of every session. The primary handoff mechanism between agents. Kept for 60 days, then compressed into weekly summaries.
 
 ```yaml
 date: ""
@@ -449,6 +493,12 @@ session_activities:
         category: ""            # grammar, vocabulary, pronunciation, gender, fluency, cultural
         concept: ""             # which skill-map entry this maps to
         error_type: ""          # developmental, l1-interference, fossilized, slip
+    observations:
+      - concept: ""
+        context: ""           # scaffolded or unscaffolded
+        attempts: 0           # only for scaffolded
+        errors: 0             # only for scaffolded
+        assessment: ""        # only for unscaffolded: struggling or competent
     highlights: ""              # things they did well
     l1_interference_noted: []   # specific English transfer errors observed
     fluency_observations: ""    # pace, hesitation, risk-taking notes
@@ -602,11 +652,9 @@ sessions_rated_too_easy_30d: 0
 sessions_rated_too_hard_30d: 0
 
 # SRS health
+# Note: anki_new_cards_per_session and anki_retirement_threshold_days moved to schedule.yaml
 anki_estimated_deck_size: 0
 anki_estimated_daily_review_minutes: 0
-anki_new_cards_per_session: 8            # tutor adjusts this
-anki_retirement_threshold_days: 60
-anki_last_deck_audit: null
 
 # Last reviewed
 last_system_review: null
@@ -939,7 +987,7 @@ For days when time is short. The tutor should detect this ("I only have 10 minut
 ├── System health review: check meta-metrics, adjust approach if needed
 ├── Schedule adjustment: set next week's narrow topic, plan focus areas
 ├── Motivation check: what's feeling good, what's feeling tedious?
-├── Archive daily logs older than 30 days
+├── Archive daily logs older than 60 days
 ├── Milestone celebration if any achievements this week
 └── One fun, low-pressure activity (music, a game, casual conversation)
 ```
@@ -1472,7 +1520,7 @@ Not a separate phase — woven in throughout, with specific focus areas:
 | **Over-reliance on English** | Learner answers in English when they could use Spanish | Tutor gradually increases Spanish usage expectations. Phase A: mostly English. Phase C+: sessions primarily in Spanish. |
 | **L1 errors fossilizing** | Same English transfer error persists across 5+ sessions despite correction | Change approach: different explanation, visual aid, explicit L1 contrast, dedicated drill. Escalate in l1-interference tracking. |
 | **SRS deck overwhelming** | Anki daily review exceeds 20 minutes, learner reports burnout | Retire mature cards, reduce new card rate, audit deck with learner. |
-| **Session log bloat** | 30+ daily logs accumulating | Weekly summarization protocol compresses old logs. Archive after 30 days. |
+| **Session log bloat** | 60+ daily logs accumulating | Weekly summarization protocol compresses old logs. Archive after 60 days. |
 | **System effectiveness declining** | system-health metrics trending wrong direction | Weekly review includes system self-assessment. Tutor adjusts its own approach, not just the learner's plan. |
 
 ---
