@@ -62,6 +62,10 @@ Words with V that English speakers commonly mispronounce (by applying labiodenta
 **Self-narration target words:**
 Flag V-initial words and between-vowel B/V words during self-narration: `vivir`, `volver`, `verde`, `abuelo`, `trabajo`, `hablar`.
 
+## Minimal Pairs
+
+Not applicable — B and V are identical sounds in Spanish. There are no minimal pairs that distinguish them. Words like "vaca" (cow) and "baca" (roof rack) are homophones, not minimal pairs — they are pronounced the same and only differ in spelling.
+
 ## Signs of Acquisition
 - Speechling coach confirms no labiodental V in 3 consecutive sessions.
 - Between-vowel B/V consistently produces the soft /β/ rather than a hard stop.

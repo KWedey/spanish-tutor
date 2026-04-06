@@ -57,6 +57,8 @@
 | barrer | to sweep | | |
 | lavar | to wash | Hay que lavar los platos. | **Lavar los platos** = to wash the dishes (standard collocation) |
 | mudarse | to move (residence) | Nos mudamos a esta casa el año pasado. | Reflexive — always used with reflexive pronoun. **Mover** = to physically move an object. |
+| ordenar / arreglar | to tidy up, to organize | Voy a ordenar mi cuarto esta tarde. | **Ordenar** = to put in order; **arreglar** = to fix/tidy. Both used for tidying up. |
+| decorar | to decorate | Vamos a decorar la sala para la fiesta. | |
 
 ## Exposure Vocabulary
 | Spanish | English | Notes |

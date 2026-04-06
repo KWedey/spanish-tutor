@@ -85,6 +85,14 @@ Pick a 30-second clip of a native speaker from Dreaming Spanish or a Spanish pod
 **Self-narration:**
 When narrating daily activities, pay attention to phrase-level linking. Flag any phrase where you notice you are pausing between words.
 
+## Minimal Pairs
+
+Not applicable — linking is a suprasegmental feature that operates across word boundaries, not a segmental phoneme. It cannot be isolated as a single sound that contrasts with another sound to distinguish meaning.
+
+## IPA
+
+Not applicable at this level of detail — linking involves resyllabification and boundary effects across multiple phonemes rather than a single phoneme that warrants a dedicated IPA symbol. Individual linked sounds retain their standard IPA values; what changes is syllable structure, not the identity of the sounds themselves.
+
 ## Signs of Acquisition
 - Speechling recordings of multi-word phrases show natural resyllabification rather than word-by-word pronunciation.
 - During conversation practice, speech rhythm is continuous within phrases (no choppy word-by-word delivery).

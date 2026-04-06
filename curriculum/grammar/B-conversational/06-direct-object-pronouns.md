@@ -74,7 +74,7 @@ The personal 'a' is only needed with the full noun. The pronoun carries the same
 ## Examples in Context
 
 1. ¿El café? **Lo** tomo todas las mañanas sin azúcar. (The coffee? I drink it every morning without sugar.)
-2. Mi hermana necesita las llaves. Voy a dár**selas**... no, primero: Voy a buscar**las**. (My sister needs the keys. I'm going to look for them.)
+2. Mi hermana necesita las llaves. Voy a buscar**las** en la cocina. (My sister needs the keys. I'm going to look for them in the kitchen.)
 3. ¿Conoces **a** mi primo? -- Sí, **lo** conozco. Trabaja conmigo. (Do you know my cousin? -- Yes, I know him. He works with me.)
 4. La tarea es difícil, pero **la** estoy terminando. (The homework is hard, but I'm finishing it.)
 5. Estos libros son muy buenos. **Los** recomiendo. (These books are very good. I recommend them.)
