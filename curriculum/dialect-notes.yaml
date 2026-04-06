@@ -62,6 +62,13 @@ vocabulary_differences:
     argentinian: "boleto"
     colombian: "tiquete"
 
+  - context: "diminutive suffix"
+    mexican: "-ito/-ita (standard)"
+    castilian: "-ito/-ita or -illo/-illa"
+    argentinian: "-ito/-ita"
+    colombian: "-ito/-ita or -ico/-ica"
+    notes: "Regional diminutive preferences. Teach target dialect form first."
+
 grammar_differences:
   - feature: "voseo"
     regions: [argentina, uruguay, parts of central america]
@@ -85,6 +92,19 @@ grammar_differences:
     regions_present_perfect_preference: [spain]
     introduce_at: Phase B
     description: "Spain uses present perfect for recent past, Latin America uses preterite"
+
+  - feature: "voseo imperatives"
+    regions: [argentina, uruguay, parts of central america]
+    introduce_at: Phase C
+    description: "Vos imperative forms differ: habla (vos), come (vos), vivi (vos)"
+    notes: "Teach alongside B-09 imperatives for recognition, production in Phase C for target dialects"
+
+  - feature: "progressive frequency"
+    regions_higher: [caribbean, coastal]
+    regions_lower: [highland, mexican standard]
+    introduce_at: Phase B
+    description: "Caribbean Spanish uses progressive more frequently for ongoing states"
+    notes: "Awareness only — don't overuse progressive regardless of dialect"
 
 pronunciation_differences:
   - feature: "seseo vs distincion"
