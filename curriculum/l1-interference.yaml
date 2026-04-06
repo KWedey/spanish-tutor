@@ -94,7 +94,7 @@ interference_patterns:
     common_errors:
       - wrong: "Yo gusto el cafe"
         right: "Me gusta el cafe"
-    preempt_at: A-06-present-irregular-common
+    preempt_at: A-06-gustar-type-verbs
     severity: high
     persistence: "Fossilizes quickly if not addressed immediately"
 
@@ -117,3 +117,55 @@ interference_patterns:
     preempt_at: C-01-present-subjunctive
     severity: high
     persistence: "Very persistent — the biggest C1 hurdle"
+
+  - id: progressive-overuse
+    english_cause: "English overuses progressive for habitual actions"
+    common_errors:
+      - wrong: "Estoy comiendo mucho (for habitual)"
+        right: "Como mucho (present simple for habits)"
+        explanation: "Spanish progressive is for actions happening right now, not habitual actions"
+    preempt_at: B-08-estar-gerund-progressive
+    severity: medium
+    persistence: "Moderate — resolves with exposure to natural Spanish input"
+
+  - id: imperative-pronoun-placement
+    english_cause: "English always puts pronouns before verbs"
+    common_errors:
+      - wrong: "Me di (pronoun before affirmative command)"
+        right: "Dime (pronoun attaches to affirmative command)"
+      - wrong: "No dime (pronoun attached to negative command)"
+        right: "No me digas (pronoun precedes negative command)"
+        explanation: "Affirmative commands: pronoun attaches. Negative commands: pronoun precedes."
+    preempt_at: B-09-imperatives
+    severity: medium
+    persistence: "Takes several weeks of practice to automatize"
+
+  - id: comparative-de-vs-que
+    english_cause: "English uses 'than' for all comparisons"
+    common_errors:
+      - wrong: "Mas que cinco personas"
+        right: "Mas de cinco personas"
+        explanation: "Use 'de' before numbers, 'que' before nouns/clauses"
+    preempt_at: B-10-comparatives-superlatives
+    severity: low
+    persistence: "Corrects quickly once the rule is explained"
+
+  - id: indirect-speech-subjunctive
+    english_cause: "English rarely changes mood in reported speech"
+    common_errors:
+      - wrong: "Me dijo que viene manana"
+        right: "Me dijo que viniera manana"
+        explanation: "Reported requests/desires require subjunctive in Spanish"
+    preempt_at: C-08-indirect-speech
+    severity: medium
+    persistence: "Persistent — tied to broader subjunctive acquisition"
+
+  - id: diminutive-underuse
+    english_cause: "English has no productive diminutive morphology"
+    common_errors:
+      - observation: "Learner never uses -ito/-ita forms in casual speech"
+        impact: "Sounds overly formal or distant, especially in Mexican Spanish"
+        guidance: "Encourage use in affectionate and casual contexts"
+    preempt_at: C-09-diminutives-augmentatives
+    severity: low
+    persistence: "Resolves with exposure and encouragement to try"
