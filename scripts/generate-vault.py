@@ -621,6 +621,7 @@ Welcome to your Spanish learning vault. This Obsidian vault is auto-generated fr
    - **Dataview** -- powers all dashboards, progress tables, and filtered views
    - **Homepage** -- opens Home.md automatically when you launch the vault (set to `vault/Home.md`)
 5. **Install recommended plugins:**
+   - **Terminal** (by polyipseity) -- embedded terminal panel so you can run tutoring sessions inside Obsidian. Open it with `Ctrl+`` `, type `claude`, and your tutor session runs alongside your vault notes in one window.
    - **Calendar** -- visual calendar in the sidebar showing session days. Set daily notes folder to `vault/Daily`.
    - **Templater** -- templates for journal entries. Set template folder to `vault/Templates`.
 

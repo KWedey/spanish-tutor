@@ -47,7 +47,9 @@ Optional tools (the tutor will suggest these when you're ready):
 
 ## Your Study Companion (Obsidian Vault)
 
-After your first session, you'll set up **Obsidian** — a note-taking app that shows you a visual dashboard of your progress. Open it and you'll see:
+After your first session, you'll set up **Obsidian** — a note-taking app that shows you a visual dashboard of your progress. With the **Terminal** plugin installed, you can also run your tutoring sessions right inside Obsidian — your vault notes on one side, your tutor conversation on the other, all in one window.
+
+Open Obsidian and you'll see:
 
 - **Home** — your dashboard with active concepts and today's homework
 - **Roadmap** — a visual map of everything you'll learn, with flowcharts showing how concepts connect
