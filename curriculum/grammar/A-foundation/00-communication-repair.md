@@ -101,3 +101,41 @@ During conversation on any topic, the tutor deliberately uses 2-3 words the lear
 
 ## Connection Points
 This is the safety net that enables all future learning. A learner who can ask for help stays in Spanish longer, gets more input, and progresses faster. These phrases must be automatic by session 5 — if the learner is still hesitating to use them, prioritize drilling before advancing other concepts. Every subsequent grammar concept, vocabulary cluster, and conversation activity depends on the learner being able to signal confusion and ask for help without breaking into English.
+
+## Repair & Flow Kit Checklist
+
+These phrases must be automatic by session 5. The tutor verifies acquisition through deliberate comprehension gaps.
+
+### Comprehension Repair
+- ¿Qué significa ___?
+- No entiendo. ¿Puede repetir?
+- Más despacio, por favor.
+- ¿Puede explicar de otra manera?
+
+### Production Repair
+- ¿Cómo se dice ___ en español?
+- ¿Está bien si digo ___?
+
+### Time-Buying Fillers
+- Un momento, estoy pensando...
+- A ver...
+- Pues...
+- Es que...
+- O sea...
+
+### Dialect Variants
+- **Mexican:** ¿Mande? (polite "what?"), Órale (acknowledgment)
+- **Castilian:** ¿Cómo? preferred over ¿Mande?
+- **Argentine:** Dale (acknowledgment/agreement)
+
+### Verification Protocol (Session 5+)
+
+**Method:** Tutor deliberately uses an unfamiliar word or speaks at natural speed. Observe learner's response.
+
+| Result | Classification | Action |
+|--------|---------------|--------|
+| Deploys repair phrase without hesitation | Automatic | Mark acquired |
+| Pauses, then uses repair phrase | Emerging | Continue drilling |
+| Switches to English or freezes | Not yet automatic | Targeted practice |
+
+**Escalation:** If not automatic by session 7, dedicate a full practice segment. Assign self-monitoring homework: "Count how many times you used a repair phrase during Anki review."
