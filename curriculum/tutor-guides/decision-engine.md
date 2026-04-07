@@ -34,6 +34,7 @@ PRIORITY = NEED + GAP + DECAY + TOPIC_BOOST - VARIETY_PENALTY
 | Regressed | 10 |
 | Practicing, production error >30% | 8 |
 | Practicing, drill/production mismatch (transfer gap) | 7 |
+| Practicing, error rate null (unassessed) | 7 |
 | Practicing, production error 15-30% | 5 |
 | Practicing, production error <15% | 3 |
 | Acquired, not integration-tested | 2 |
