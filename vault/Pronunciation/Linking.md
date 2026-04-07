@@ -1,7 +1,7 @@
 ---
 generated: true
 source: "curriculum/pronunciation/linking.md"
-last_generated: "2026-04-06"
+last_generated: "2026-04-07"
 sound_id: "linking"
 title: "Linking"
 status: "unseen"

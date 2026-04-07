@@ -1,7 +1,7 @@
 ---
 generated: true
 source: "curriculum/grammar/B-conversational/07-indirect-object-pronouns.md"
-last_generated: "2026-04-06"
+last_generated: "2026-04-07"
 concept_id: "B-07-indirect-object-pronouns"
 title: "Indirect Object Pronouns"
 phase: "B"

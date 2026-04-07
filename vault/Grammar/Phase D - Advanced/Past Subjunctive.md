@@ -1,7 +1,7 @@
 ---
 generated: true
 source: "curriculum/grammar/D-advanced/01-past-subjunctive.md"
-last_generated: "2026-04-06"
+last_generated: "2026-04-07"
 concept_id: "D-01-past-subjunctive"
 title: "Past Subjunctive"
 phase: "D"

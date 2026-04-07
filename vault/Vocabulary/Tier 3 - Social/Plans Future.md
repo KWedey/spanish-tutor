@@ -1,7 +1,7 @@
 ---
 generated: true
 source: "curriculum/vocabulary/tier3-social/plans-future.md"
-last_generated: "2026-04-06"
+last_generated: "2026-04-07"
 cluster_id: "tier3-plans-future"
 title: "Plans Future"
 tier: 3

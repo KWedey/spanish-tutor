@@ -1,7 +1,7 @@
 ---
 generated: true
 source: "curriculum/grammar/B-conversational/02-preterite-irregular.md"
-last_generated: "2026-04-06"
+last_generated: "2026-04-07"
 concept_id: "B-02-preterite-irregular"
 title: "Preterite Irregular"
 phase: "B"

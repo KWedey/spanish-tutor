@@ -1,7 +1,7 @@
 ---
 generated: true
 source: "curriculum/pronunciation/ny-sound.md"
-last_generated: "2026-04-06"
+last_generated: "2026-04-07"
 sound_id: "ny-sound"
 title: "Ny Sound"
 status: "unseen"

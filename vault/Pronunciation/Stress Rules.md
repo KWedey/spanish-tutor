@@ -1,7 +1,7 @@
 ---
 generated: true
 source: "curriculum/pronunciation/stress-rules.md"
-last_generated: "2026-04-06"
+last_generated: "2026-04-07"
 sound_id: "stress-rules"
 title: "Stress Rules"
 status: "unseen"

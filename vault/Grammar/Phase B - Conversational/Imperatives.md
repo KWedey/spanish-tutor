@@ -1,7 +1,7 @@
 ---
 generated: true
 source: "curriculum/grammar/B-conversational/09-imperatives.md"
-last_generated: "2026-04-06"
+last_generated: "2026-04-07"
 concept_id: "B-09-imperatives"
 title: "Imperatives"
 phase: "B"

@@ -1,7 +1,7 @@
 ---
 generated: true
 source: "curriculum/vocabulary/tier4-abstract/politics-society.md"
-last_generated: "2026-04-06"
+last_generated: "2026-04-07"
 cluster_id: "tier4-politics-society"
 title: "Politics Society"
 tier: 4

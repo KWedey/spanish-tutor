@@ -1,7 +1,7 @@
 ---
 generated: true
 source: "curriculum/vocabulary/tier3-social/opinions-agreement.md"
-last_generated: "2026-04-06"
+last_generated: "2026-04-07"
 cluster_id: "tier3-opinions-agreement"
 title: "Opinions Agreement"
 tier: 3

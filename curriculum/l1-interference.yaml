@@ -160,6 +160,30 @@ interference_patterns:
     severity: medium
     persistence: "Persistent — tied to broader subjunctive acquisition"
 
+  - id: age-with-ser
+    english_cause: "English uses 'to be' for age: 'I am 20 years old'"
+    common_errors:
+      - wrong: "Soy 20 años"
+        right: "Tengo 20 años"
+        explanation: "Spanish uses tener (to have) for age, not ser (to be)"
+      - wrong: "Es caliente (he/she is hot — temperature)"
+        right: "Tiene calor"
+        explanation: "Physical states use tener, not ser/estar"
+    preempt_at: A-08-numbers-quantifiers
+    severity: high
+    persistence: "Fossilizes quickly if not caught early — one of the first errors English speakers make"
+
+  - id: english-stress-patterns
+    english_cause: "English stress is unpredictable; Spanish stress follows clear rules"
+    common_errors:
+      - wrong: "Pronouncing 'teléfono' with English stress: te-LE-fo-no"
+        right: "te-LÉ-fo-no (accent mark shows stress)"
+      - wrong: "Ignoring accent marks when reading aloud"
+        right: "Accent marks always override default stress rules"
+    preempt_at: A-09-accent-stress-rules
+    severity: medium
+    persistence: "Improves with listening input but requires explicit awareness to fully resolve"
+
   - id: diminutive-underuse
     english_cause: "English has no productive diminutive morphology"
     common_errors:

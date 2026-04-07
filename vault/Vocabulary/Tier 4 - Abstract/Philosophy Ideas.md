@@ -1,7 +1,7 @@
 ---
 generated: true
 source: "curriculum/vocabulary/tier4-abstract/philosophy-ideas.md"
-last_generated: "2026-04-06"
+last_generated: "2026-04-07"
 cluster_id: "tier4-philosophy-ideas"
 title: "Philosophy Ideas"
 tier: 4

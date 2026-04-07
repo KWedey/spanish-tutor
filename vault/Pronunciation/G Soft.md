@@ -1,7 +1,7 @@
 ---
 generated: true
 source: "curriculum/pronunciation/g-soft.md"
-last_generated: "2026-04-06"
+last_generated: "2026-04-07"
 sound_id: "g-soft"
 title: "G Soft"
 status: "unseen"

@@ -1,7 +1,7 @@
 ---
 generated: true
 source: "curriculum/grammar/B-conversational/06-direct-object-pronouns.md"
-last_generated: "2026-04-06"
+last_generated: "2026-04-07"
 concept_id: "B-06-direct-object-pronouns"
 title: "Direct Object Pronouns"
 phase: "B"

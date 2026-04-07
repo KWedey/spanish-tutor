@@ -1,7 +1,7 @@
 ---
 generated: true
 source: "curriculum/grammar/A-foundation/02-ser-vs-estar.md"
-last_generated: "2026-04-06"
+last_generated: "2026-04-07"
 concept_id: "A-02-ser-vs-estar"
 title: "Ser Vs Estar"
 phase: "A"

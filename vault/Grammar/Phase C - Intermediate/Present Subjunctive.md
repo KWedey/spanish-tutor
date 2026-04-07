@@ -1,7 +1,7 @@
 ---
 generated: true
 source: "curriculum/grammar/C-intermediate/01-present-subjunctive.md"
-last_generated: "2026-04-06"
+last_generated: "2026-04-07"
 concept_id: "C-01-present-subjunctive"
 title: "Present Subjunctive"
 phase: "C"

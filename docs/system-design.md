@@ -845,6 +845,8 @@ During the first 10 sessions, the decision engine is **not active**. Instead, th
 | 9 | A-07 common irregular present (including hay) | |
 | 10 | **Final consolidation** | All-concept review, transition assessment, set `onboarding_complete` |
 
+**Post-onboarding Phase A concepts:** A-08 (numbers/quantifiers) and A-09 (accent/stress rules) are not part of the onboarding sequence. They are introduced post-onboarding via the decision engine, typically in sessions 11-15. Numbers are encountered naturally during onboarding (telling time, counting) but formalized later. Accent rules are reinforced throughout all phases.
+
 **Pacing escape valve:** If the learner is struggling, consolidate instead of introducing the next concept. Remaining concepts get introduced post-onboarding via the decision engine.
 
 This period:
@@ -1012,7 +1014,7 @@ Concepts not meeting "acquired" enter `schedule.carryover_concepts` and continue
 
 Phase A → B specific requirements:
 - Must be acquired: A-01, A-02, A-04 (prerequisites for Phase B concepts)
-- May carry over: A-03, A-05, A-06, A-07
+- May carry over: A-03, A-05, A-06, A-07, A-08, A-09
 
 Phase B → C specific requirements:
 - Must be acquired: B-01, B-04

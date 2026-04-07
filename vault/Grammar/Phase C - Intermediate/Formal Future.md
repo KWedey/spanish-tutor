@@ -1,7 +1,7 @@
 ---
 generated: true
 source: "curriculum/grammar/C-intermediate/03-formal-future.md"
-last_generated: "2026-04-06"
+last_generated: "2026-04-07"
 concept_id: "C-03-formal-future"
 title: "Formal Future"
 phase: "C"

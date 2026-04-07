@@ -1,6 +1,6 @@
 ---
 generated: true
-last_generated: "2026-04-06"
+last_generated: "2026-04-07"
 tags: ["roadmap"]
 ---
 %%Auto-generated from tutor state. Edits will be overwritten.%%
@@ -8,7 +8,7 @@ tags: ["roadmap"]
 # Roadmap
 
 ## Phase A - Foundation
-**Progress:** 0/8
+**Progress:** 0/10
 
 - ○ [[Communication Repair]] *(unseen)*
 - ○ [[Present Regular]] *(unseen)*
@@ -18,6 +18,8 @@ tags: ["roadmap"]
 - ○ [[Basic Questions]] *(unseen)*
 - ○ [[Gustar Type Verbs]] *(unseen)*
 - ○ [[Present Irregular Common]] *(unseen)*
+- ○ [[Numbers Quantifiers]] *(unseen)*
+- ○ [[Accent Stress Rules]] *(unseen)*
 
 ```mermaid
 flowchart LR
@@ -29,11 +31,14 @@ flowchart LR
     A_05_basic_questions["Basic Questions"]
     A_06_gustar_type_verbs["Gustar Type Verbs"]
     A_07_present_irregular_common["Present Irregular Common"]
+    A_08_numbers_quantifiers["Numbers Quantifiers"]
+    A_09_accent_stress_rules["Accent Stress Rules"]
     A_01_present_regular --> A_02_ser_vs_estar
     A_03_gender_agreement --> A_04_articles_prepositions
     A_01_present_regular --> A_05_basic_questions
     A_01_present_regular --> A_06_gustar_type_verbs
     A_01_present_regular --> A_07_present_irregular_common
+    A_03_gender_agreement --> A_08_numbers_quantifiers
 ```
 
 ## Phase B - Conversational
