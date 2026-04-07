@@ -281,8 +281,9 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0           # total times actively practiced
-    error_rate_recent: null     # rolling average over last 5 sessions where tested
-    error_trend: null           # improving, stable, declining
+    error_rate_drills: null     # rolling avg over last 5 drill instances
+    error_rate_production: null # rolling avg over last 5 free production instances
+    error_trend: null           # improving, stable, declining (based on production rate)
     performance_scaffolded: null    # null (untested), struggling, competent
     performance_unscaffolded: null  # null (untested), struggling, competent
     integration_tested: false       # tested in combination with other active concepts?
@@ -290,6 +291,21 @@ grammar:
     notes: ""
 
   # ... (one entry per grammar concept in curriculum/grammar/)
+
+**Error rate calculation rules:**
+- Rates are rolling averages over the last 5 practice instances per context (drill or production)
+- If `practice_count < 3`, rates remain `null` — use `performance_scaffolded` / `performance_unscaffolded` qualitative assessments instead
+- `error_trend` is derived from `error_rate_production` trajectory over last 3 sessions
+
+**Decision engine usage of error rates:**
+| Drills | Production | Interpretation | Activity Route |
+|--------|-----------|----------------|-------|
+| High | High | Early learning | Stage 2 (controlled practice) |
+| Low | High | Transfer gap | Stage 3-4 (communicative practice) |
+| Low | Low | Near-acquired | Spot-check only |
+| High | Low | Unusual — investigate | Review methodology |
+
+**Updated advancement rule:** "Acquired" requires `error_rate_production < 0.10` AND `error_rate_drills < 0.10` AND `performance_unscaffolded = "competent"` AND demonstrated in 3+ separate sessions.
 
 vocabulary:
   tier1-greetings-introductions:
@@ -304,6 +320,14 @@ vocabulary:
     notes: ""
 
   # ... (one entry per vocabulary cluster in curriculum/vocabulary/)
+
+**Vocabulary ID to file path mapping:**
+| Key prefix | Directory |
+|-----------|-----------|
+| tier1-* | curriculum/vocabulary/tier1-survival/ |
+| tier2-* | curriculum/vocabulary/tier2-daily-life/ |
+| tier3-* | curriculum/vocabulary/tier3-social/ |
+| tier4-* | curriculum/vocabulary/tier4-abstract/ |
 
 pronunciation:
   vowel-sounds:
@@ -476,6 +500,7 @@ duration_minutes: 0
 learner_energy: ""              # high, medium, low (self-reported or inferred)
 session_type: ""                # standard, micro, weekly-review, phase-transition, return
 session_status: complete        # complete, partial, aborted — partial if session was cut short
+gap_days: 0                     # days since last session (0 if consecutive)
 
 # Assignment review — how did yesterday's homework go?
 assignment_review:
@@ -513,7 +538,7 @@ session_activities:
 # Assessment updates to apply to skill-map
 skill_map_updates:
   - concept: ""
-    field: ""                   # status, error_rate_recent, error_trend, etc.
+    field: ""                   # status, error_rate_drills, error_rate_production, error_trend, etc.
     old_value: ""
     new_value: ""
     evidence: ""                # why this change
@@ -602,32 +627,42 @@ system_health_snapshot:
   session_frequency: 0.0        # sessions per 7 days
 ```
 
-### 7. Phase Milestones (`state/milestones/phase-X-completion.yaml`)
+### 7. Milestones (`state/milestones/YYYY-MM-DD-milestone-id.yaml`)
 
-Permanent records of major transitions. Useful for long-term progress review.
+Permanent records of achievements and major transitions. Useful for long-term progress review and motivation.
 
 ```yaml
-phase: ""                       # e.g., A-foundation
-started: ""
-completed: ""
-total_sessions: 0
-total_days: 0
+type: ""                        # phase-transition | first-real-world | first-self-correction | vocabulary-milestone | streak-milestone | fluency-milestone | cultural-milestone | first-dream-in-spanish
+date: ""
+session_number: 0
+title: ""                       # short human-readable label
+description: ""                 # what happened, in plain language
+evidence: ""                    # what the tutor observed that triggered this
 
-# Snapshot of learner state at completion
-cefr_estimate_at_completion: ""
-active_vocabulary_at_completion: 0
-grammar_concepts_acquired: []
-notable_achievements: []
+# Populated only when type: phase-transition
+phase_transition:
+  from_phase: ""
+  to_phase: ""
+  started: ""
+  completed: ""
+  total_sessions: 0
+  total_days: 0
+  assessment:
+    production_task: ""         # e.g., "Tell a story about a trip using past tenses"
+    receptive_task: ""          # e.g., "Summarize this audio clip"
+    performance_summary: ""
+    gaps_identified: []
+    decision: ""                # advanced, extended
+  carryover_concepts: []        # concepts entering the new phase still in "practicing"
+  learner_reflection: ""
 
-# Transition assessment results
-transition_assessment:
-  task_given: ""                # e.g., "Tell a story about a trip using past tenses"
-  performance_summary: ""
-  gaps_identified: []
-  decision: ""                  # advanced, extended
-
-# Learner reflection (if provided)
-learner_reflection: ""
+# Snapshot of learner state at the time of this milestone
+snapshot:
+  cefr_estimate: ""
+  active_vocabulary: 0
+  grammar_acquired: []
+  total_sessions: 0
+  days_since_start: 0
 ```
 
 ### 8. System Health (`state/system-health.yaml`)
@@ -856,9 +891,13 @@ For each candidate concept/activity:
     Are all prerequisites met?
     If not, this concept is excluded from candidates entirely.
 
-  VARIETY (0-5 penalty)
+  VARIETY_PENALTY (0-5)
     Has the learner done this activity TYPE too many times recently?
     3 consecutive grammar-heavy days → penalize grammar, boost listening/speaking.
+
+  TOPIC_BOOST (0-3)
+    Does this concept align with the current weekly narrow topic?
+    Strong alignment: +3. Partial alignment: +1. No alignment: 0.
 
   ENERGY (modifier)
     If learner reports low energy or the tutor infers fatigue:
@@ -883,9 +922,54 @@ For each candidate concept/activity:
     If "fluency-leaning" (Phase D):
       Boost timed speaking, free conversation, spontaneous production.
 
-  PRIORITY = NEED + GAP + DECAY - VARIETY_PENALTY
-  (filtered by READINESS, modified by ENERGY, MOTIVATION, FLUENCY_BALANCE)
+  PARKING_LOT (modifier)
+    If parking-lot.md contains an item directly related to this concept:
+      +2 priority. Real learner need — address it.
+
+  SPRINT_OVERRIDE (gate)
+    If sprint.active is true in schedule.yaml:
+      Only sprint-tagged concepts are eligible for selection.
+      All other scoring is suspended for non-sprint items.
+
+  MAINTENANCE_DECAY (modifier)
+    If concept status is "automatic" and last_practiced > 30 days:
+      Add +3 to DECAY to trigger a spot-check.
+      Do not treat as a primary focus — embed in conversation or warm-up.
+
+  PRIORITY = NEED + GAP + DECAY + TOPIC_BOOST - VARIETY_PENALTY
+  (filtered by READINESS and SPRINT_OVERRIDE, modified by ENERGY, MOTIVATION, FLUENCY_BALANCE, PARKING_LOT, MAINTENANCE_DECAY)
 ```
+
+### Weekly Topic Selection
+
+Each week the tutor selects a narrow input topic to anchor all homework assignments. Score each candidate topic from `curriculum/topic-bank.yaml`:
+
+```
+For each candidate topic:
+
+  GRAMMAR_FIT (0-5)
+    How well does this topic create natural practice opportunities
+    for the current primary grammar focus?
+    e.g., "Childhood memories" + imperfect tense = 5.
+
+  VOCABULARY_FIT (0-5)
+    Does this topic overlap with the current active vocabulary cluster?
+    High overlap = less dead weight, more reinforcement.
+
+  LEARNER_INTEREST (0-5)
+    Has the learner expressed interest in this topic?
+    Check: learner-profile.yaml interests, parking-lot.md, recent session notes.
+    Unknown interest = 2 (neutral), known interest = 4-5, known dislike = 0.
+
+  FRESHNESS (0-5)
+    How long since this topic was last used?
+    Used this month: 0. Used last month: 2. Not used in 60+ days: 5.
+    Never used: 4 (slight preference for fresh material over untested).
+
+  TOPIC_SCORE = GRAMMAR_FIT + VOCABULARY_FIT + LEARNER_INTEREST + FRESHNESS
+```
+
+Select the highest-scoring topic. Log the selection in `state/schedule.yaml` under `weekly_topic`. Record effectiveness in the weekly summary.
 
 After selecting the focus concept, route to activity type:
 - Scaffolded struggling → controlled practice (concept file Stage 2)
@@ -953,6 +1037,36 @@ If the learner consistently doesn't complete all assignments, the tutor reduces 
 - Reduce new card additions to 3-5 per session
 - Suggest retiring mature cards (interval > 60 days, no recent errors)
 - Spot-check retired vocabulary during sessions periodically
+
+**Homework time estimation:**
+
+| Assignment Type | Estimated Minutes |
+|----------------|------------------|
+| Anki review (existing cards) | 10–20 |
+| Anki new cards | 5–10 |
+| Dreaming Spanish (comprehensible input video) | 5–15 |
+| Podcast (News in Slow Spanish, etc.) | 15–25 |
+| Reading (graded reader or article) | 10–20 |
+| Journal entry | 10–20 |
+| Speechling pronunciation practice | 10–15 |
+| Grammar worksheet / drill | 10–15 |
+| Conversation partner (italki, etc.) | 30–60 (external, not tutor time) |
+| Self-narration (speaking homework) | 5–10 |
+
+**Budget calculation:** Sum estimated minutes for all assigned tasks. Total must not exceed `learner_profile.available_time_daily - session_duration`. When time is tight, prioritize: (1) Anki review, (2) skill-targeted assignment, (3) immersion.
+
+**External learning load note:** Conversation partner sessions and long podcast episodes count against the daily time budget even though they happen outside the tutor session. Factor them in when they are assigned.
+
+---
+
+## Correction Mode by Activity Type
+
+| Activity Stage | Correction Style | Timing | Limit |
+|---------------|-----------------|--------|-------|
+| Stage 1–2 (controlled drills) | Explicit, direct | Immediate | No limit — accuracy is the point |
+| Stage 3 (guided production) | Recast (model the correct form) | Immediate | No hard limit |
+| Stage 4 (communicative practice) | Recast | Batched at end | Max 3 per segment |
+| Fluency activities (timed monologue, free conversation) | Zero in-the-moment | Batch for post-activity review | Max 3 total |
 
 ---
 
@@ -1091,6 +1205,15 @@ Protocol:
 ├── Record as milestone if it's a first (first restaurant order, first phone call, etc.)
 └── Detailed protocol in curriculum/tutor-guides/real-world-debrief.md
 ```
+
+### Post-Session Vault Generation
+
+After writing state files and committing, the tutor should note whether an Obsidian vault export is due. The vault mirrors key state and curriculum files into a human-browsable format for offline review.
+
+- Vault generation runs via `scripts/generate-vault.sh` (see `docs/vault-design.md` when available)
+- Trigger: after every session where `skill-map.yaml` or `milestones/` were updated
+- Output: `vault/` directory (git-ignored; regenerated on demand)
+- The learner can open `vault/` in Obsidian to browse their progress, grammar notes, and milestone history without needing Claude
 
 ---
 
@@ -1262,6 +1385,8 @@ The system tracks and develops both dimensions, but the emphasis shifts by phase
 - **Retelling:** Listen to a story, then retell it. First attempt is rough; second is smoother. Track the delta.
 - **Self-narration:** Describe daily activities in Spanish in real-time (assigned as homework).
 
+**Typed vs. oral fluency:** These are distinct skills and must be tracked separately. A learner may write fluently but hesitate severely in speech (common with introverts and grammar-focused learners), or speak fluidly but struggle with written structure (common with immersion learners). The fluency balance table above applies primarily to oral production. Written fluency is developed through the writing track (journal, composition) and assessed separately via the writing rubric. Do not conflate the two when adjusting the fluency-accuracy balance.
+
 ---
 
 ## Writing Track
@@ -1278,6 +1403,17 @@ Writing develops alongside other skills, with escalating complexity:
 **Journal system:** The `journal/` directory contains dated markdown files. The learner writes 3-7 sentences daily in Spanish. The tutor reviews entries at the start of the next session — correcting errors, noting improvement, and extracting grammar/vocabulary data.
 
 Writing is high-signal for assessment: the learner has time to think, so errors reveal genuine gaps (not just performance pressure under conversational speed).
+
+**Writing rubric — 4 dimensions tracked in `state/skill-map.yaml` under `writing:`:**
+
+| Dimension | Introduced | Practicing | Acquired |
+|-----------|-----------|-----------|---------|
+| **Sentence Construction** | Attempts complete sentences; frequent agreement/verb errors | Mostly correct simple sentences; errors on complex structures | Consistently correct sentences including subordinate clauses |
+| **Paragraph Coherence** | Ideas present but loosely connected; no clear structure | Uses some connectors (pero, porque, también); paragraphs have a point | Ideas flow logically; topic sentence + support + conclusion evident |
+| **Formal Register** | Uses only casual/spoken forms in all contexts | Attempts register shifts when prompted; some errors | Selects register appropriately for context without prompting |
+| **Creative Expression** | Translates directly from English; formulaic | Occasionally uses Spanish-native phrasing or idioms | Writes with natural Spanish rhythm; uses idiomatic expressions spontaneously |
+
+Update writing dimension status in `skill-map.yaml` after reviewing journal entries. A dimension moves from `practicing` to `acquired` when it meets the "Acquired" criteria across 3+ consecutive journal entries without regression.
 
 ---
 
