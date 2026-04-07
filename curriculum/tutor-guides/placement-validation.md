@@ -121,3 +121,19 @@ Close validation after session 3 (skip session 4) if ALL of:
 - "Let me check if you actually know this"
 - "Your placement might have been wrong"
 - "We need to go back to basics"
+
+## Tool Introduction Schedule
+
+Non-beginners who skip onboarding still need external tools introduced. Anki, Dreaming Spanish, and SpanishDict are set up in session 1 (see first-session.md Section 6). Introduce the remaining tools during the validation period:
+
+- **Session 3:** Speechling — by now you've heard the learner in conversation and know their pronunciation gaps. Set up their account and assign a first exercise targeting a specific sound.
+- **Session 3-4:** Graded reader — suggest one at the reading level established by the session 1 reading comprehension check.
+- **Language Transfer:** Only introduce if validation reveals significant grammar foundation gaps. It's audio-based grammar instruction — a placed B+ learner with solid foundations doesn't need it.
+
+## Weekly Review Interaction
+
+If a validation session falls on the learner's weekly review day, both this guide and the weekly review guide will be loaded. To avoid redundancy:
+
+- Integrate your 2-3 validation spot-checks into the Skill Map Audit step (step 4) of the weekly review rather than running them separately.
+- This session still counts toward `placement_validation.sessions_completed`.
+- Report validation findings so far as part of the Progress Summary (step 1).

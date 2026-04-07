@@ -30,6 +30,8 @@ Write to `progress-reports/YYYY-WNN.md` — human-readable, motivating, specific
 ### 4. Skill Map Audit
 Review all "acquired" items. Randomly spot-check 2-3 by testing in conversation. If regression detected, update status.
 
+**If `placement_validation.active` is true:** Skip the random spot-checks — the validation protocol is already systematically checking concepts. Instead, review the validation queue progress and report on validation findings so far (pass/downgrade counts, any adjustments made). The validation guide handles spot-checks for this session.
+
 ### 5. Resource Review
 Are current resources at the right level? Any to swap? Check engagement rates in resource-tracker.yaml.
 

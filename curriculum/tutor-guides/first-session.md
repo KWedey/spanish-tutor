@@ -197,10 +197,24 @@ Vocabulary is domain-specific — grammar-to-vocabulary inference is weak. Use t
 Record the choice in `learner-profile.yaml` under `target_dialect` — this drives conditional content in grammar files and dialect-notes.yaml throughout the program.
 
 ### 6. First Assignment (3 min)
-End with something achievable that builds momentum:
+End with something achievable that builds momentum. Calibrate to placement level:
+
+**True beginner / Early A:**
 - Walk them through setting up Anki if they don't have it.
 - Give them their first 10 vocabulary cards to create (greetings and survival phrases).
 - Assign one short Dreaming Spanish video at Superbeginner level.
+- Mention SpanishDict as a reference tool.
+
+**Late A:**
+- Set up Anki. Give them 10 cards from the vocabulary cluster currently in focus (per pre-population).
+- Assign a Dreaming Spanish video at Superbeginner level.
+- Mention SpanishDict as a reference tool.
+
+**Early B+:**
+- Set up Anki. Give them 8 cards from the vocabulary cluster marked `practicing` in skill-map.
+- Assign a Dreaming Spanish video at Beginner level (or Intermediate for Mid B+). This establishes the listening baseline reviewed in session 2.
+- Suggest a graded reader at the reading level established by the reading comprehension check (A2 for Early B, B1 for Mid B+).
+- Mention SpanishDict as a reference tool.
 
 ### 7. State Initialization
 
