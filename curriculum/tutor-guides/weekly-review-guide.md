@@ -56,3 +56,12 @@ What's feeling good? What's feeling tedious? Check for plateau risk.
 
 ### 11. Fun Activity
 End with something enjoyable — a song, a short video, a game, casual conversation about something they care about. Weekly review should feel like a celebration, not an audit.
+
+## Session Archive
+
+During weekly review, archive session logs older than 60 days:
+
+1. Move files from `state/sessions/` to `state/sessions/archive/`.
+2. Archive = move, don't delete. Archived sessions are still accessible but not loaded at startup.
+3. The 60-day window provides buffer for monthly reviews and regression analysis.
+4. The tutor's startup protocol reads only the "3 most recent" sessions, so archiving adds no cognitive load.
