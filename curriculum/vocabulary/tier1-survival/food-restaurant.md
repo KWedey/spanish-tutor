@@ -4,7 +4,7 @@
 - Phase alignment: A
 - Core words: 44
 - Exposure words: 20
-- Grammar reinforcement: [A-01, A-06]
+- Grammar reinforcement: [A-01-present-regular, A-06-gustar-type-verbs]
 - Topic bank alignment: ["Food and eating out"]
 
 ## Core Vocabulary

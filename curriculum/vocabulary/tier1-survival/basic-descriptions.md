@@ -4,7 +4,7 @@
 - Phase alignment: A
 - Core words: 44
 - Exposure words: 16
-- Grammar reinforcement: [A-02, A-03]
+- Grammar reinforcement: [A-02-ser-vs-estar, A-03-gender-agreement]
 - Topic bank alignment: ["Describing people and things"]
 
 ## Core Vocabulary

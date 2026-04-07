@@ -4,7 +4,7 @@
 - Phase alignment: A
 - Core words: 34
 - Exposure words: 15
-- Grammar reinforcement: [A-00, A-01, A-02]
+- Grammar reinforcement: [A-00-communication-repair, A-01-present-regular, A-02-ser-vs-estar]
 - Topic bank alignment: ["Greetings and introductions"]
 
 ## Core Vocabulary

@@ -4,7 +4,7 @@
 - Phase alignment: A
 - Core words: 33
 - Exposure words: 16
-- Grammar reinforcement: [A-04, A-05]
+- Grammar reinforcement: [A-04-articles-prepositions, A-05-basic-questions]
 - Topic bank alignment: ["Getting around town"]
 
 ## Core Vocabulary

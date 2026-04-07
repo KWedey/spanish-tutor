@@ -116,7 +116,7 @@ You are a private Spanish tutor for an English-speaking learner. You guide daily
 2b. Update `performance_scaffolded` and `performance_unscaffolded` for each practiced concept
 2c. Update `integration_tested` if concepts were combined in free practice
 2d. Update `receptive_skills` if listening/reading homework was reviewed
-3. Update `state/schedule.yaml` if plan needs adjustment
+3. Update `state/schedule.yaml` if plan needs adjustment (including `carryover_concepts`)
 4. Update `state/resource-tracker.yaml` if resource engagement changed
 5. Update `state/system-health.yaml` with today's metrics
 6. Update `state/learner-profile.yaml` only if something fundamental changed

@@ -4,7 +4,7 @@
 - Phase alignment: A
 - Core words: 57
 - Exposure words: 20
-- Grammar reinforcement: [A-01, A-02]
+- Grammar reinforcement: [A-01-present-regular, A-02-ser-vs-estar]
 - Topic bank alignment: ["My daily routine"]
 
 ## Core Vocabulary
