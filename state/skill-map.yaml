@@ -281,6 +281,7 @@ grammar:
     prerequisites:
     - A-01-present-regular
     - A-07-present-irregular-common
+    - B-05-reflexive-verbs
     notes: tu/usted commands. Irregular tu forms. Pronoun placement.
   B-10-comparatives-superlatives:
     status: unseen

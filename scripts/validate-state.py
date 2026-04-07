@@ -165,6 +165,39 @@ def check_session_filenames() -> None:
         pass_(f"All {n} session files have valid date filenames" if n else "No session files yet")
 
 
+def check_carryover_concepts(sched: dict, sm: dict) -> None:
+    carryover = sched.get("carryover_concepts") or []
+    if not carryover:
+        pass_("No carryover concepts to check")
+        return
+    grammar = sm.get("grammar", {})
+    vocabulary = sm.get("vocabulary", {})
+    all_concepts = set(grammar.keys()) | set(vocabulary.keys())
+    for cid in carryover:
+        if cid not in all_concepts:
+            fail(f"Carryover concept '{cid}' not found in skill-map")
+        else:
+            entry = grammar.get(cid) or vocabulary.get(cid) or {}
+            if isinstance(entry, dict) and entry.get("status") == "acquired":
+                warn(f"Carryover concept '{cid}' has status 'acquired' — should be removed from carryover")
+    pass_(f"Checked {len(carryover)} carryover concepts")
+
+
+def check_schedule_enums(sched: dict) -> None:
+    valid_phases = {"A-foundation", "B-conversational", "C-intermediate", "D-advanced"}
+    phase = sched.get("current_phase", "")
+    if phase and phase not in valid_phases:
+        fail(f"schedule.current_phase='{phase}' is not a valid phase")
+    valid_balance = {"accuracy-leaning", "balanced", "fluency-leaning"}
+    balance = sched.get("fluency_accuracy_balance", "")
+    if balance and balance not in valid_balance:
+        fail(f"schedule.fluency_accuracy_balance='{balance}' is not valid")
+    week = sched.get("current_week", 0)
+    if isinstance(week, int) and week < 0:
+        fail(f"schedule.current_week={week} is negative")
+    pass_("Schedule enum values are valid")
+
+
 # --- Main ---------------------------------------------------------------------
 
 def main() -> None:
@@ -194,6 +227,10 @@ def main() -> None:
     if skill_map is not None: check_acquired_consistency(skill_map)
     if skill_map is not None: check_performance_enums(skill_map)
     check_session_filenames()
+    if schedule is not None:
+        check_schedule_enums(schedule)
+    if schedule is not None and skill_map is not None:
+        check_carryover_concepts(schedule, skill_map)
 
     for lvl, msg in results:
         if lvl == "PASS" and not args.verbose: continue

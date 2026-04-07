@@ -8,7 +8,7 @@ All concepts in current phase with status: introduced, practicing, regressed, or
 
 **Cultural concepts:** Also gather `cultural_awareness` concepts from skill-map whose `introduced_at_phase` matches the current phase or earlier. Score them using the same formula but with NEED capped at 5 (cultural concepts are secondary to grammar). Cultural concepts are never the primary focus — they supplement grammar work during conversation practice or as a secondary concept.
 
-**Filter:** Exclude any concept where prerequisites are not met.
+**Filter:** Exclude any concept where prerequisites are not met. A prerequisite is "met" when its status is "acquired" or "automatic". Status "practicing" or below means the prerequisite is not met and the dependent concept cannot be introduced.
 
 ## Step 2 — Score Each Candidate
 

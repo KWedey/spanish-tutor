@@ -27,6 +27,8 @@ Loaded when: All prerequisites for the next phase show "acquired" for 2+ consecu
 
 **Borderline:** Extend 1-2 weeks, focus on weakest prerequisite.
 
+**Critical dependency note:** While A-03 (Gender Agreement) is not a hard prerequisite for Phase B entry, it IS a prerequisite for B-06 (Direct Object Pronouns) and B-10 (Comparatives/Superlatives). If A-03 is carried over, it must reach "acquired" status before B-06 is introduced. The decision engine enforces this via prerequisite filtering, but the tutor should prioritize A-03 consolidation in early Phase B sessions.
+
 ## B → C Assessment (20-25 min)
 
 **Production (12 min):** "Tell me about something that happened last week, and what you're planning for this weekend."

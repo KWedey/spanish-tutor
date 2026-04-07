@@ -41,6 +41,14 @@ If the learner mentions real-world Spanish use during the break, switch to `real
 7. If motivation is fragile → also load `emotional-intelligence.md`.
 8. If gap > 60 days → also check `state/sessions/archive/` for the last pre-gap session.
 
+### Extended Absence (90+ days)
+1. Treat as a major break PLUS: run a 20-minute diagnostic (conversation only, no new material) to assess broad skill decay.
+2. Update `error_rate_production` for all concepts that were "acquired" but last practiced >90 days ago — expect regression.
+3. If >50% of previously acquired concepts show regression, consider reverting to the previous phase with a consolidation focus.
+4. Homework for the first week: SRS review only (rebuild vocabulary recognition before production practice).
+5. Do NOT introduce any new concepts for the first 3 sessions — focus exclusively on recovery.
+6. Flag in system-health.yaml: `extended_absence: true`, `absence_days: N`, `concepts_regressed: N`.
+
 ## All Tiers — Common Protocol
 
 - Read last 3 session logs to remember where things stood.

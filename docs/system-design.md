@@ -294,6 +294,7 @@ grammar:
     performance_scaffolded: null    # null (untested), struggling, competent
     performance_unscaffolded: null  # null (untested), struggling, competent
     integration_tested: false       # tested in combination with other active concepts?
+                                    # Resets to false if the concept regresses. Otherwise persists until 'automatic'.
     prerequisites: []
     notes: ""
 
@@ -306,6 +307,7 @@ grammar:
   - `improving`: error_rate_production decreased by ≥5 percentage points over last 3 sessions
   - `declining`: error_rate_production increased by ≥5 percentage points over last 3 sessions
   - `stable`: change < 5 percentage points, or fewer than 3 practice instances available
+- If `last_practiced` is more than 60 days ago, consider stored error rates **stale** — collect fresh data before using them for advancement decisions. Note staleness in the session log.
 
 **Decision engine usage of error rates:**
 | Drills | Production | Interpretation | Activity Route |
@@ -1032,8 +1034,11 @@ Phase transition requires ALL of:
 2. All non-prerequisite concepts in the current phase must have status "practicing" (not "unseen", "introduced", or "regressed") with error_trend "stable" or "improving"
 3. No concept in the current phase has status "regressed"
 4. The learner passes a phase-transition assessment
+   - Assessment minimum: at least 10 instances of the target structure in natural conversation, with ≥ 80% accuracy. Include at least one extended narrative (for past tense transitions) or one role-play scenario (for subjunctive/conditional transitions).
 
 Concepts not meeting "acquired" enter `schedule.carryover_concepts` during the phase transition session and begin receiving active practice in session 1 of the new phase. They persist in carryover until acquired or until 3 weeks pass without acquisition (at which point flag in system-health.yaml).
+
+Carryover scaffolding: practice carryover concepts at their current performance level (do not re-scaffold from Stage 1). In sessions that combine carryover and new-phase work, allocate approximately 60% of practice time to the new-phase concept and 40% to carryover consolidation.
 
 Phase A → B specific requirements:
 - Must be acquired: A-01, A-02, A-04 (prerequisites for Phase B concepts)
@@ -1046,6 +1051,15 @@ Phase B → C specific requirements:
 Phase C → D specific requirements:
 - Must be acquired: C-01, C-04, C-06
 - May carry over: C-02, C-03, C-05, C-07, C-08, C-09
+
+**Phase D → Graduation/Maintenance:**
+When the learner meets their stated `graduation_criteria` from learner-profile.yaml:
+1. Conduct a comprehensive fluency assessment covering all four skills (speaking, listening, reading, writing)
+2. If the learner meets their target level: transition `autonomy_level` to "maintenance" in schedule.yaml
+3. Maintenance mode: sessions shift to weekly, then biweekly, then on-demand as confidence grows
+4. Focus shifts entirely to fluency activities, real-world debriefs, and interest-driven conversation
+5. Record a graduation milestone in `state/milestones/`
+6. If gaps remain: create a targeted sprint for specific weak areas rather than continuing the full Phase D curriculum
 
 ### Homework Assignment Logic
 
