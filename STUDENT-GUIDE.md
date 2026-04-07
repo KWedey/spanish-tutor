@@ -37,7 +37,7 @@ These are introduced gradually — you won't set them all up on day 1.
 | **SpanishDict** | Online dictionary and conjugation reference — bookmark it | Session 3 |
 | **Language Transfer** | Free audio course that builds grammar intuition | Session 5 |
 | **Graded readers** | Short stories written at controlled difficulty levels | Session 5 |
-| **Speechling** | You record yourself speaking, a real human gives pronunciation feedback | Session 7 |
+| **Speechling** | You record yourself speaking, a real human gives pronunciation feedback | Sessions 7-8 |
 
 Optional tools (the tutor will suggest these when you're ready):
 - **italki** — video calls with native Spanish speakers for real conversation practice
@@ -47,7 +47,7 @@ Optional tools (the tutor will suggest these when you're ready):
 
 ## Your Study Companion (Obsidian Vault)
 
-After your first session, you'll set up **Obsidian** — a note-taking app that shows you a visual dashboard of your progress. With the **Terminal** plugin installed, you can also run your tutoring sessions right inside Obsidian — your vault notes on one side, your tutor conversation on the other, all in one window.
+After your first session, you'll set up **Obsidian** — a note-taking app that shows you a visual dashboard of your progress. With the optional **Terminal** plugin, you can also run your tutoring sessions inside Obsidian — your vault notes on one side, your tutor conversation on the other, all in one window. You can also run sessions in your regular terminal.
 
 Open Obsidian and you'll see:
 
@@ -88,6 +88,8 @@ You can express opinions, hypotheticals, and complex ideas. Sessions are mostly 
 
 ### Phase D — Advanced (weeks 31+)
 You're refining. Sessions are almost entirely in Spanish. The focus shifts from accuracy to fluency — speaking naturally, using idioms, shifting registers. The tutor gradually hands control to you.
+
+*These timelines are approximate — some learners move faster or slower depending on practice frequency and prior language experience.*
 
 ### Graduation
 The system defines "done" based on your personal goals. When you consistently operate at your target level with minimal tutor intervention, sessions become weekly, then monthly, then on-demand.

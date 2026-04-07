@@ -140,6 +140,18 @@ def check_acquired_consistency(sm: dict) -> None:
     else:        pass_("No acquired concepts to check (all unseen/practicing)")
 
 
+def check_performance_enums(sm: dict) -> None:
+    valid_perf = {None, "struggling", "competent"}
+    grammar = sm.get("grammar", {})
+    for cid, e in grammar.items():
+        if not isinstance(e, dict): continue
+        for field in ("performance_scaffolded", "performance_unscaffolded"):
+            val = e.get(field)
+            if val not in valid_perf:
+                fail(f"Grammar '{cid}': {field}='{val}' is not a valid value (expected: null, struggling, or competent)")
+    pass_("Performance enum values are valid")
+
+
 def check_session_filenames() -> None:
     sdir = STATE / "sessions"
     if not sdir.exists():
@@ -180,6 +192,7 @@ def main() -> None:
         check_schedule_refs(schedule, skill_map)
 
     if skill_map is not None: check_acquired_consistency(skill_map)
+    if skill_map is not None: check_performance_enums(skill_map)
     check_session_filenames()
 
     for lvl, msg in results:

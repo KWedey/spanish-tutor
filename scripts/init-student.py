@@ -126,13 +126,17 @@ def reset_skill_map() -> None:
         print(red(f"  MISSING: {path.relative_to(ROOT)}")); return
     data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     for entry in (data.get("grammar") or {}).values():
-        entry.update({k: v for k, v in ZERO_GRAMMAR.items()})
+        if isinstance(entry, dict):
+            entry.update({k: v for k, v in ZERO_GRAMMAR.items()})
     for entry in (data.get("vocabulary") or {}).values():
-        entry.update({k: (list(v) if isinstance(v, list) else v) for k, v in ZERO_VOCAB.items()})
+        if isinstance(entry, dict):
+            entry.update({k: (list(v) if isinstance(v, list) else v) for k, v in ZERO_VOCAB.items()})
     for entry in (data.get("pronunciation") or {}).values():
-        entry.update(ZERO_PRONUN)
+        if isinstance(entry, dict):
+            entry.update(ZERO_PRONUN)
     for entry in (data.get("writing") or {}).values():
-        entry["status"], entry["last_practiced"] = "unseen", None
+        if isinstance(entry, dict):
+            entry["status"], entry["last_practiced"] = "unseen", None
     for key in ("listening", "reading"):
         if key in (data.get("receptive_skills") or {}):
             data["receptive_skills"][key] = {f: (None if f != "notes" else "") for f in data["receptive_skills"][key]}
@@ -154,7 +158,10 @@ def clear_directory(rel_path: str) -> int:
     dirpath = ROOT / rel_path
     if not dirpath.exists():
         print(yellow(f"  SKIP: {rel_path}/ (does not exist)")); return 0
-    count = sum(1 for f in dirpath.iterdir() if f.name != ".gitkeep" and not f.is_dir() and not f.unlink())
+    files = [f for f in dirpath.iterdir() if f.name != ".gitkeep" and not f.is_dir()]
+    for f in files:
+        f.unlink()
+    count = len(files)
     print(green(f"  CLEARED: {rel_path}/ ({count} files)") if count else f"  CLEAN: {rel_path}/")
     return count
 

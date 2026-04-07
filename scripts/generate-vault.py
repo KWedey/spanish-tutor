@@ -192,11 +192,11 @@ def _yaml_value(value) -> str:
     if isinstance(value, (int, float)):
         return str(value)
     if isinstance(value, str):
-        # Quote strings that might be misinterpreted
+        # Only quote strings that might be misinterpreted by YAML parsers
         if value in ("true", "false", "null", "yes", "no", "") or \
            any(c in value for c in (":", "#", "[", "]", "{", "}", ",")):
             return f'"{value}"'
-        return f'"{value}"'
+        return value
     if isinstance(value, list):
         if not value:
             return "[]"
@@ -447,14 +447,16 @@ def generate_roadmap(skill_map: dict) -> tuple[Path, str]:
             node_label = concept_id_to_title(cid)
             safe_id = cid.replace("-", "_")
             lines.append(f'    {safe_id}["{node_label}"]')
+        # Collect all defined node IDs for this flowchart
+        defined_nodes = {cid.replace("-", "_") for cid, _ in concepts}
         for cid, data in concepts:
             prereqs = data.get("prerequisites") or []
             for prereq in prereqs:
-                # Only include arrows for prerequisites within the same phase
-                # or from earlier phases (which are valid cross-phase deps)
                 src = prereq.replace("-", "_")
                 dst = cid.replace("-", "_")
-                lines.append(f"    {src} --> {dst}")
+                # Only add arrow if source node is defined in this chart
+                if src in defined_nodes:
+                    lines.append(f"    {src} --> {dst}")
         lines.append("```")
         lines.append("")
 

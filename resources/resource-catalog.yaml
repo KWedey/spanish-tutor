@@ -8,7 +8,7 @@ resources:
 
   - name: Anki
     type: srs
-    cost: free
+    cost: "free (desktop/Android); $25 one-time on iOS"
     essential: true
     phase_range: [A, B, C, D]
     skill_targets: [vocabulary, grammar-reinforcement]

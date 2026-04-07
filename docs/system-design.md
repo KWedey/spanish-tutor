@@ -249,6 +249,12 @@ tools:
   listening_primary: ""      # e.g., Dreaming Spanish
   reading_current: ""        # e.g., "Short Stories in Spanish (Olly Richards) - ch 5"
 
+# Comprehensible input tracking
+input_hours:
+  listening_total: 0.0         # cumulative hours of Spanish listening
+  reading_total: 0.0           # cumulative hours of Spanish reading
+  last_updated: null           # date of last update
+
 # Notes
 notes: ""                    # anything else relevant
 ```
@@ -261,6 +267,8 @@ The core tracking document. Every grammar concept, vocabulary cluster, and skill
 # Status values:
 #   unseen     — not yet introduced
 #   introduced — seen once, not yet practiced
+#                (transitions to 'practicing' when the tutor conducts structured practice:
+#                 drills, exercises, or scaffolded production — not incidental exposure)
 #   practicing — actively working on it, error rate > 15%
 #   acquired   — consistent in drills AND free production, error rate < 10%
 #   automatic  — used without thinking, only spot-checked periodically
@@ -295,6 +303,9 @@ grammar:
 - Rates are rolling averages over the last 5 practice instances per context (drill or production)
 - If `practice_count < 3`, rates remain `null` — use `performance_scaffolded` / `performance_unscaffolded` qualitative assessments instead
 - `error_trend` is derived from `error_rate_production` trajectory over last 3 sessions
+  - `improving`: error_rate_production decreased by ≥5 percentage points over last 3 sessions
+  - `declining`: error_rate_production increased by ≥5 percentage points over last 3 sessions
+  - `stable`: change < 5 percentage points, or fewer than 3 practice instances available
 
 **Decision engine usage of error rates:**
 | Drills | Production | Interpretation | Activity Route |
@@ -303,6 +314,8 @@ grammar:
 | Low | High | Transfer gap | Stage 3-4 (communicative practice) |
 | Low | Low | Near-acquired | Spot-check only |
 | High | Low | Unusual — investigate | Review methodology |
+
+**Spot-check definition:** A brief (< 2 minute), low-pressure assessment of a near-acquired or automatic concept, embedded within another activity (e.g., "By the way, how would you say X?"). Goal: detect regression without disrupting flow. If error rate > 20% during spot-check, escalate to Stage 3 practice in the next session.
 
 **Updated advancement rule:** "Acquired" requires `error_rate_production < 0.10` AND `error_rate_drills < 0.10` AND `performance_unscaffolded = "competent"` AND demonstrated in 3+ separate sessions.
 
@@ -416,6 +429,9 @@ fluency_metrics:
   willingness_to_risk: ""       # avoids unfamiliar structures vs tries and fails
   thinking_language: ""         # still translating from English, or starting to think in Spanish
 
+# Quantitative fluency benchmarks are defined in curriculum/tutor-guides/fluency-activities.md
+# (oral WPM targets, typed production benchmarks, self-correction rate interpretation)
+
 overall_estimates:
   cefr_estimate: A0
   estimated_active_vocabulary: 0    # words the learner can produce
@@ -468,6 +484,12 @@ fluency_accuracy_balance: accuracy-leaning  # accuracy-leaning, balanced, fluenc
 fluency_days_this_week: 0
 last_fluency_day: null
 
+# Fluency day determination algorithm (checked during startup):
+#   expected_this_week: 0 if Phase A, 1 if Phase B, 2 if Phase C, every session if Phase D
+#   is_fluency_day: fluency_days_this_week < expected_this_week
+#                   AND last_fluency_day != today
+#                   AND (Phase D, OR enough non-fluency days remain this week for grammar work)
+
 # Upcoming queue — what's next when current items are acquired
 grammar_queue: []
 vocabulary_queue: []
@@ -502,6 +524,9 @@ date: ""
 session_number: 0
 duration_minutes: 0
 learner_energy: ""              # high, medium, low (self-reported or inferred)
+                                        # Inference signals: explicit self-report ("I'm tired"), slow response pace,
+                                        # increased error rate vs recent sessions, request for shorter session.
+                                        # When uncertain, ask: "How's your energy today?"
 session_type: ""                # standard, micro, weekly-review, phase-transition, return
 session_status: complete        # complete, partial, aborted — partial if session was cut short
 gap_days: 0                     # days since last session (0 if consecutive)
@@ -528,14 +553,9 @@ session_activities:
         category: ""            # grammar, vocabulary, pronunciation, gender, fluency, cultural
         concept: ""             # which skill-map entry this maps to
         error_type: ""          # developmental, l1-interference, fossilized, slip
-    observations:
-      - concept: ""
-        context: ""           # scaffolded or unscaffolded
-        attempts: 0           # only for scaffolded
-        errors: 0             # only for scaffolded
-        assessment: ""        # only for unscaffolded: struggling or competent
+    observations: ""            # free-text summary of what the tutor observed (detailed data is in errors_noted)
     highlights: ""              # things they did well
-    l1_interference_noted: []   # specific English transfer errors observed
+    l1_interference_noted: false  # were any L1 interference errors observed? (specifics captured in errors_noted[].error_type)
     fluency_observations: ""    # pace, hesitation, risk-taking notes
     notes: ""
 
@@ -990,8 +1010,7 @@ The top 1-2 concepts become the session focus. The tutor doesn't mechanically ex
 ### Advancement Rules
 
 **When to advance to a new concept:**
-- Current primary concept is at "acquired" status (error rate < 10% in both drills and free production)
-- The learner has demonstrated the concept in at least 3 separate sessions
+- Current primary concept is at "acquired" status (error rate < 10% in both drills and free production, `performance_unscaffolded` = "competent", and demonstrated in 3+ separate sessions)
 - No regression in prerequisite concepts
 
 **When to consolidate instead of advancing:**
@@ -999,6 +1018,8 @@ The top 1-2 concepts become the session focus. The tutor doesn't mechanically ex
 - The learner self-reports feeling overwhelmed
 - More than 2 concepts (3 when carryover exists) are currently in "practicing" status simultaneously
 - Context gap detected (correct in drills, errors in free speech)
+
+**Concurrent concept gate (enforced by decision engine):** Before scoring any "unseen" concept for introduction, count concepts currently in "practicing" status. If count ≥ 3 (or ≥ 4 with carryover), exclude all unseen concepts from candidates. This gate is checked before PRIORITY scoring.
 
 **When to flag a regression:**
 - A concept previously at "acquired" or "automatic" shows error rate > 15% in a session
@@ -1008,11 +1029,11 @@ The top 1-2 concepts become the session focus. The tutor doesn't mechanically ex
 
 Phase transition requires ALL of:
 1. Every concept that is a prerequisite for any next-phase concept must have status "acquired"
-2. All remaining concepts must have status "practicing" with error_trend "stable" or "improving"
+2. All non-prerequisite concepts in the current phase must have status "practicing" (not "unseen", "introduced", or "regressed") with error_trend "stable" or "improving"
 3. No concept in the current phase has status "regressed"
 4. The learner passes a phase-transition assessment
 
-Concepts not meeting "acquired" enter `schedule.carryover_concepts` and continue receiving active practice in the new phase.
+Concepts not meeting "acquired" enter `schedule.carryover_concepts` during the phase transition session and begin receiving active practice in session 1 of the new phase. They persist in carryover until acquired or until 3 weeks pass without acquisition (at which point flag in system-health.yaml).
 
 Phase A → B specific requirements:
 - Must be acquired: A-01, A-02, A-04 (prerequisites for Phase B concepts)
@@ -1074,7 +1095,7 @@ If the learner consistently doesn't complete all assignments, the tutor reduces 
 | Stage 1–2 (controlled drills) | Explicit, direct | Immediate | No limit — accuracy is the point |
 | Stage 3 (guided production) | Recast (model the correct form) | Immediate | No hard limit |
 | Stage 4 (communicative practice) | Recast | Batched at end | Max 3 per segment |
-| Fluency activities (timed monologue, free conversation) | Zero in-the-moment | Batch for post-activity review | Max 3 total |
+| Fluency activities (timed monologue, free conversation) | Meaning-impeding only | Immediate for meaning-impeding; batch all others for post-activity review | Max 3 total |
 
 ---
 
@@ -1182,6 +1203,8 @@ next_session:
   recommended_focus: ""
   reason: ""
 ```
+
+**Micro session recording policy:** Micro sessions record what's available but skip full-detail sections. Specifically: `skill_map_updates` and `learner_observations` are omitted — any concept status changes observed are noted in `activity_summary` and applied to skill-map during the next full session. If homework was reviewed, note it in `activity_summary` rather than the full `assignment_review` structure.
 
 ### Weekly Review Session (once per week, replaces normal session)
 

@@ -16,7 +16,7 @@ If the learner mentions real-world Spanish use during the break, switch to `real
 
 1. Welcome back warmly. Zero guilt.
 2. Quick diagnostic: revisit the 2 most recently active concepts (from `schedule.yaml` `active_grammar.primary` and `active_grammar.secondary`) via casual conversation — not drills.
-3. If performance matches pre-break levels → resume normal schedule.
+3. If performance matches pre-break levels (error_rate_production within 5 percentage points of pre-break) → resume normal schedule.
 4. If regression detected → mark concepts as regressed in skill-map, reduce to 1 active concept + the regressed one.
 5. Homework: reduce by 50% for this session only. Resume normal load next session.
 
@@ -24,7 +24,7 @@ If the learner mentions real-world Spanish use during the break, switch to `real
 
 1. Welcome back, acknowledge the gap without judgment.
 2. Diagnostic: revisit all "practicing" concepts and the most recently "acquired" concepts (up to 4 concepts total).
-3. Expect 1-2 regressions — this is normal, tell the learner so.
+3. Expect 1-2 regressions — this is normal, tell the learner so. (A regression = error_rate_production increases by >10 percentage points vs pre-break levels, or performance_unscaffolded drops from "competent" to "struggling".)
 4. Update skill-map with any status changes.
 5. Homework: reduce by 50% for 2 sessions.
 6. No new concepts this session — consolidation only.

@@ -18,13 +18,13 @@ This period accomplishes:
 1. Read the corresponding `curriculum/onboarding/session-NN.md` for today's plan
 2. Follow the plan, but adapt pacing if the learner is faster or slower than expected
 3. Log everything in the session file — this data will feed the decision engine at session 11
-4. Introduce one new external tool every 2-3 sessions:
-   - Sessions 1-2: Anki installed and first deck created
-   - Sessions 2-3: SpanishDict bookmarked, Dreaming Spanish bookmarked
-   - Sessions 4-5: Language Transfer queued, graded reader obtained
-   - Session 7: Speechling account created
-   - Session 9: Whisper transcription script set up (optional, if learner is technical)
-5. Sessions 6 and 10 are consolidation sessions (no new grammar concept). Use session 6 for midpoint review of sessions 2-5. If the learner has already been consolidating due to pacing adjustments, use the consolidation session for the next planned concept instead.
+4. Introduce one new external tool every 2-3 sessions (absolute session numbers):
+   - Sessions 2-3: Anki installed and first deck created
+   - Sessions 3-4: SpanishDict bookmarked, Dreaming Spanish bookmarked
+   - Sessions 5-6: Language Transfer queued, graded reader obtained
+   - Sessions 7-8: Speechling account created
+   - Session 10: Whisper transcription script set up (optional, if learner is technical)
+5. Sessions 7 and 11 are consolidation sessions (no new grammar concept). Use session 7 for midpoint review of sessions 2-6. If the learner has already been consolidating due to pacing adjustments, use the consolidation session for the next planned concept instead.
 
 ## At Session 10 (Final Consolidation)
 
@@ -55,6 +55,8 @@ Before assuming concept difficulty, check:
 
 1. Never repeat the exact same session — reteach with a different approach (examples-first if rules-first failed, or vice versa).
 2. Insert an unscheduled consolidation session before advancing.
+   - **Consolidation sessions** are scheduled (sessions 7 and 11) or inserted ad-hoc when a concept needs more time. They review existing concepts with no new grammar.
+   - **Extended onboarding** (sessions 12-15) is a last resort when multiple concepts remain at "introduced" status after session 11.
 3. Maximum 2 inserted consolidation sessions per concept — if still struggling, note as "slow acquisition" in skill-map and continue forward (concept resurfaces via decision engine post-onboarding).
 4. Extend onboarding beyond session 10 if:
    - 3+ A-phase concepts are still "introduced" (not "practicing")

@@ -39,6 +39,6 @@ SORT status ASC
 ## Quick Links
 
 - [[Roadmap]]
-- [[Parking Lot]]
+- [[parking-lot|Parking Lot]]
 - [[Progress/Grammar Progress|Grammar Progress]]
 - [[Progress/Vocabulary Progress|Vocabulary Progress]]

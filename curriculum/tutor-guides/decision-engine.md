@@ -85,7 +85,7 @@ Highest score = primary focus. Second highest = secondary (if time allows and no
 | Both low | → | Spot-check via conversation, move to secondary |
 | Integration untested | → | Combined exercise with another acquired concept |
 
-**New concept introduction:** Only if ≤2 concepts in "practicing" status (≤3 with carryover). Route to Stage 1 (noticing) from concept file.
+**New concept introduction (concurrent concept gate):** Before scoring any unseen concept, count concepts currently in "practicing" status. If count ≥ 3 (or ≥ 4 with carryover), exclude all unseen concepts from candidates — consolidate first. Otherwise, route new concept to Stage 1 (noticing) from concept file.
 
 ## Step 6 — Weekly Topic Selection (during weekly review)
 
