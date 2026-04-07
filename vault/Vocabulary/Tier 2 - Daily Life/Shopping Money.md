@@ -7,7 +7,7 @@ title: "Shopping Money"
 tier: 2
 category: "daily-life"
 status: "unseen"
-words_total: 0
+words_total: 44
 words_introduced: 0
 passive_known: 0
 active_known: 0
@@ -20,7 +20,7 @@ tags: ["vocabulary", "tier-2", "daily-life", "unseen"]
 
 ## Cluster Meta
 - Phase alignment: B
-- Core words: 30
+- Core words: 29
 - Exposure words: 15
 - Grammar reinforcement: [B-06-direct-object-pronouns, A-07-present-irregular-common]
 - Topic bank alignment: ["Shopping and money"]

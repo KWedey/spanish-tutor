@@ -7,7 +7,7 @@ title: "Work Office"
 tier: 2
 category: "daily-life"
 status: "unseen"
-words_total: 0
+words_total: 47
 words_introduced: 0
 passive_known: 0
 active_known: 0
@@ -20,7 +20,7 @@ tags: ["vocabulary", "tier-2", "daily-life", "unseen"]
 
 ## Cluster Meta
 - Phase alignment: B
-- Core words: 31
+- Core words: 27
 - Exposure words: 20
 - Grammar reinforcement: [B-01-preterite-regular, B-11-future-ir-a]
 - Topic bank alignment: ["Work and career"]

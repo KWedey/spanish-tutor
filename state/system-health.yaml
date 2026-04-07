@@ -2,6 +2,8 @@
 # Updated at end of each session. Reviewed in detail during weekly reviews.
 # Schema defined in docs/system-design.md
 
+schema_version: 1
+
 concepts_requiring_reteach_total: 0
 average_sessions_to_acquire: 0
 reteach_rate_30d: 0.0

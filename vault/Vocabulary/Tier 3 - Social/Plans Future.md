@@ -7,7 +7,7 @@ title: "Plans Future"
 tier: 3
 category: "social"
 status: "unseen"
-words_total: 0
+words_total: 45
 words_introduced: 0
 passive_known: 0
 active_known: 0
@@ -20,7 +20,7 @@ tags: ["vocabulary", "tier-3", "social", "unseen"]
 
 ## Cluster Meta
 - Phase alignment: C
-- Core words: 30
+- Core words: 28
 - Exposure words: 17
 - Grammar reinforcement: [C-03-formal-future, C-04-conditional]
 - Topic bank alignment: ["If I could change one thing..."]

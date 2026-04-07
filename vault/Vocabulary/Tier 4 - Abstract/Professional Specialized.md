@@ -7,7 +7,7 @@ title: "Professional Specialized"
 tier: 4
 category: "abstract"
 status: "unseen"
-words_total: 0
+words_total: 48
 words_introduced: 0
 passive_known: 0
 active_known: 0

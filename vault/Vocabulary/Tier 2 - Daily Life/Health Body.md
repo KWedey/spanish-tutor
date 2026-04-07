@@ -7,7 +7,7 @@ title: "Health Body"
 tier: 2
 category: "daily-life"
 status: "unseen"
-words_total: 0
+words_total: 51
 words_introduced: 0
 passive_known: 0
 active_known: 0
@@ -20,7 +20,7 @@ tags: ["vocabulary", "tier-2", "daily-life", "unseen"]
 
 ## Cluster Meta
 - Phase alignment: B
-- Core words: 30
+- Core words: 31
 - Exposure words: 20
 - Grammar reinforcement: [B-05-reflexive-verbs, A-02-ser-vs-estar]
 - Topic bank alignment: ["Health and the body"]

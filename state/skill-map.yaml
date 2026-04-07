@@ -1,23 +1,16 @@
 # Skill Map — learner's current mastery state across all skill dimensions
 # Updated every session. The single source of truth for what has been taught and how well it's retained.
 # Schema defined in docs/system-design.md
-
+#
 # Status values:
-#   unseen     — not yet introduced
-#   introduced — seen once, not yet practiced
-#   practicing — actively working on it, error rate > 15%
-#   acquired   — consistent in drills AND free production, error rate < 10%
-#   automatic  — used without thinking, only spot-checked periodically
-#   regressed  — was acquired/automatic, but errors resurfaced
+#   unseen — not yet introduced | introduced — seen once, not yet practiced
+#   practicing — error rate > 15% | acquired — error rate < 10%
+#   automatic — spot-checked only | regressed — errors resurfaced
 #
-# Context performance values:
-#   null       — untested in this context
-#   struggling — frequent errors in this context
-#   competent  — reliable performance in this context
-#
-# Acquisition requirement: status cannot be "acquired" unless
-# performance_unscaffolded is "competent"
+# Context performance: null | struggling | competent
+# Acquisition requires performance_unscaffolded = competent
 
+schema_version: 1
 grammar:
   A-00-communication-repair:
     status: unseen
@@ -31,8 +24,7 @@ grammar:
     performance_unscaffolded: null
     integration_tested: false
     prerequisites: []
-    notes: "FIRST concept — survival phrases for when learner is stuck"
-
+    notes: FIRST concept — survival phrases for when learner is stuck
   A-01-present-regular:
     status: unseen
     introduced_date: null
@@ -45,8 +37,7 @@ grammar:
     performance_unscaffolded: null
     integration_tested: false
     prerequisites: []
-    notes: "Introduces hay briefly; full treatment in A-07"
-
+    notes: Introduces hay briefly; full treatment in A-07
   A-02-ser-vs-estar:
     status: unseen
     introduced_date: null
@@ -58,9 +49,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-01-present-regular]
-    notes: ""
-
+    prerequisites:
+    - A-01-present-regular
+    notes: ''
   A-03-gender-agreement:
     status: unseen
     introduced_date: null
@@ -73,8 +64,8 @@ grammar:
     performance_unscaffolded: null
     integration_tested: false
     prerequisites: []
-    notes: "Expanded: includes demonstratives (este/ese/aquel) and unstressed possessives (mi/tu/su)"
-
+    notes: 'Expanded: includes demonstratives (este/ese/aquel) and unstressed possessives
+      (mi/tu/su)'
   A-04-articles-prepositions:
     status: unseen
     introduced_date: null
@@ -86,9 +77,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-03-gender-agreement]
-    notes: "Expanded: includes personal 'a' as dedicated section"
-
+    prerequisites:
+    - A-03-gender-agreement
+    notes: 'Expanded: includes personal ''a'' as dedicated section'
   A-05-basic-questions:
     status: unseen
     introduced_date: null
@@ -100,9 +91,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-01-present-regular]
-    notes: ""
-
+    prerequisites:
+    - A-01-present-regular
+    notes: ''
   A-06-gustar-type-verbs:
     status: unseen
     introduced_date: null
@@ -114,9 +105,10 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-01-present-regular]
-    notes: "Reversed sentence structure: gustar, encantar, molestar, importar, interesar, doler"
-
+    prerequisites:
+    - A-01-present-regular
+    notes: 'Reversed sentence structure: gustar, encantar, molestar, importar, interesar,
+      doler'
   A-07-present-irregular-common:
     status: unseen
     introduced_date: null
@@ -128,9 +120,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-01-present-regular]
-    notes: "ir, tener, querer, poder, hacer, decir, saber/conocer, hay"
-
+    prerequisites:
+    - A-01-present-regular
+    notes: ir, tener, querer, poder, hacer, decir, saber/conocer, hay
   A-08-numbers-quantifiers:
     status: unseen
     introduced_date: null
@@ -142,9 +134,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-03-gender-agreement]
-    notes: "Cardinals, ordinals, quantifier agreement, tener-for-age expressions"
-
+    prerequisites:
+    - A-03-gender-agreement
+    notes: Cardinals, ordinals, quantifier agreement, tener-for-age expressions
   A-09-accent-stress-rules:
     status: unseen
     introduced_date: null
@@ -157,8 +149,8 @@ grammar:
     performance_unscaffolded: null
     integration_tested: false
     prerequisites: []
-    notes: "3 stress rules, meaning-changing accents, verb tense accents. Reinforced every phase."
-
+    notes: 3 stress rules, meaning-changing accents, verb tense accents. Reinforced
+      every phase.
   B-01-preterite-regular:
     status: unseen
     introduced_date: null
@@ -170,9 +162,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-01-present-regular]
-    notes: ""
-
+    prerequisites:
+    - A-01-present-regular
+    notes: ''
   B-02-preterite-irregular:
     status: unseen
     introduced_date: null
@@ -184,9 +176,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [B-01-preterite-regular]
-    notes: ""
-
+    prerequisites:
+    - B-01-preterite-regular
+    notes: ''
   B-03-imperfect:
     status: unseen
     introduced_date: null
@@ -198,9 +190,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-01-present-regular]
-    notes: ""
-
+    prerequisites:
+    - A-01-present-regular
+    notes: ''
   B-04-preterite-vs-imperfect:
     status: unseen
     introduced_date: null
@@ -212,9 +204,11 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [B-01-preterite-regular, B-02-preterite-irregular, B-03-imperfect]
-    notes: ""
-
+    prerequisites:
+    - B-01-preterite-regular
+    - B-02-preterite-irregular
+    - B-03-imperfect
+    notes: ''
   B-05-reflexive-verbs:
     status: unseen
     introduced_date: null
@@ -226,9 +220,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-01-present-regular]
-    notes: ""
-
+    prerequisites:
+    - A-01-present-regular
+    notes: ''
   B-06-direct-object-pronouns:
     status: unseen
     introduced_date: null
@@ -240,9 +234,10 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-01-present-regular, A-04-articles-prepositions]
-    notes: "Prerequisite includes A-04 for personal 'a' knowledge"
-
+    prerequisites:
+    - A-01-present-regular
+    - A-04-articles-prepositions
+    notes: Prerequisite includes A-04 for personal 'a' knowledge
   B-07-indirect-object-pronouns:
     status: unseen
     introduced_date: null
@@ -254,9 +249,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [B-06-direct-object-pronouns]
-    notes: ""
-
+    prerequisites:
+    - B-06-direct-object-pronouns
+    notes: ''
   B-08-estar-gerund-progressive:
     status: unseen
     introduced_date: null
@@ -268,9 +263,10 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-01-present-regular, A-02-ser-vs-estar]
-    notes: "Estar + gerund (-ando/-iendo). Reinforces estar usage."
-
+    prerequisites:
+    - A-01-present-regular
+    - A-02-ser-vs-estar
+    notes: Estar + gerund (-ando/-iendo). Reinforces estar usage.
   B-09-imperatives:
     status: unseen
     introduced_date: null
@@ -282,9 +278,10 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-01-present-regular, A-07-present-irregular-common]
-    notes: "tu/usted commands. Irregular tu forms. Pronoun placement."
-
+    prerequisites:
+    - A-01-present-regular
+    - A-07-present-irregular-common
+    notes: tu/usted commands. Irregular tu forms. Pronoun placement.
   B-10-comparatives-superlatives:
     status: unseen
     introduced_date: null
@@ -296,9 +293,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-03-gender-agreement]
-    notes: "mas...que, menos...que, tan...como. Irregulars: mejor, peor, mayor, menor."
-
+    prerequisites:
+    - A-03-gender-agreement
+    notes: 'mas...que, menos...que, tan...como. Irregulars: mejor, peor, mayor, menor.'
   B-11-future-ir-a:
     status: unseen
     introduced_date: null
@@ -310,9 +307,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-01-present-regular]
-    notes: ""
-
+    prerequisites:
+    - A-01-present-regular
+    notes: ''
   C-01-present-subjunctive:
     status: unseen
     introduced_date: null
@@ -324,9 +321,10 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-01-present-regular, A-07-present-irregular-common]
-    notes: ""
-
+    prerequisites:
+    - A-01-present-regular
+    - A-07-present-irregular-common
+    notes: ''
   C-02-subjunctive-triggers:
     status: unseen
     introduced_date: null
@@ -338,9 +336,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [C-01-present-subjunctive]
-    notes: ""
-
+    prerequisites:
+    - C-01-present-subjunctive
+    notes: ''
   C-03-formal-future:
     status: unseen
     introduced_date: null
@@ -352,9 +350,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-01-present-regular]
-    notes: ""
-
+    prerequisites:
+    - A-01-present-regular
+    notes: ''
   C-04-conditional:
     status: unseen
     introduced_date: null
@@ -366,9 +364,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [C-03-formal-future]
-    notes: ""
-
+    prerequisites:
+    - C-03-formal-future
+    notes: ''
   C-05-por-vs-para:
     status: unseen
     introduced_date: null
@@ -380,9 +378,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-04-articles-prepositions]
-    notes: ""
-
+    prerequisites:
+    - A-04-articles-prepositions
+    notes: ''
   C-06-compound-tenses:
     status: unseen
     introduced_date: null
@@ -394,9 +392,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [B-01-preterite-regular]
-    notes: ""
-
+    prerequisites:
+    - B-01-preterite-regular
+    notes: ''
   C-07-relative-clauses:
     status: unseen
     introduced_date: null
@@ -408,9 +406,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [C-01-present-subjunctive]
-    notes: ""
-
+    prerequisites:
+    - C-01-present-subjunctive
+    notes: ''
   C-08-indirect-speech:
     status: unseen
     introduced_date: null
@@ -422,9 +420,11 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [C-01-present-subjunctive, C-02-subjunctive-triggers, B-04-preterite-vs-imperfect]
-    notes: "Me dijo que..., queria saber si... Requires subjunctive/indicative distinction."
-
+    prerequisites:
+    - C-01-present-subjunctive
+    - C-02-subjunctive-triggers
+    - B-04-preterite-vs-imperfect
+    notes: Me dijo que..., queria saber si... Requires subjunctive/indicative distinction.
   C-09-diminutives-augmentatives:
     status: unseen
     introduced_date: null
@@ -436,9 +436,10 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [A-03-gender-agreement]
-    notes: "-ito/-ita, -ote/-ota. Essential for natural speech, especially Mexican Spanish."
-
+    prerequisites:
+    - A-03-gender-agreement
+    notes: -ito/-ita, -ote/-ota. Essential for natural speech, especially Mexican
+      Spanish.
   D-01-past-subjunctive:
     status: unseen
     introduced_date: null
@@ -450,9 +451,10 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [C-01-present-subjunctive, B-03-imperfect]
-    notes: ""
-
+    prerequisites:
+    - C-01-present-subjunctive
+    - B-03-imperfect
+    notes: ''
   D-02-si-clauses:
     status: unseen
     introduced_date: null
@@ -464,9 +466,10 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [C-04-conditional, D-01-past-subjunctive]
-    notes: ""
-
+    prerequisites:
+    - C-04-conditional
+    - D-01-past-subjunctive
+    notes: ''
   D-03-subjunctive-all-tenses:
     status: unseen
     introduced_date: null
@@ -478,9 +481,10 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [D-01-past-subjunctive, C-06-compound-tenses]
-    notes: ""
-
+    prerequisites:
+    - D-01-past-subjunctive
+    - C-06-compound-tenses
+    notes: ''
   D-04-passive-voice:
     status: unseen
     introduced_date: null
@@ -492,9 +496,9 @@ grammar:
     performance_scaffolded: null
     performance_unscaffolded: null
     integration_tested: false
-    prerequisites: [B-01-preterite-regular]
-    notes: ""
-
+    prerequisites:
+    - B-01-preterite-regular
+    notes: ''
   D-05-register-shifting:
     status: unseen
     introduced_date: null
@@ -507,8 +511,8 @@ grammar:
     performance_unscaffolded: null
     integration_tested: false
     prerequisites: []
-    notes: "Grammar forms for tu/usted/vos. Cultural judgment tracked separately in cultural_awareness."
-
+    notes: Grammar forms for tu/usted/vos. Cultural judgment tracked separately in
+      cultural_awareness.
   D-06-nuanced-connectors:
     status: unseen
     introduced_date: null
@@ -521,8 +525,7 @@ grammar:
     performance_unscaffolded: null
     integration_tested: false
     prerequisites: []
-    notes: ""
-
+    notes: ''
 vocabulary:
   tier1-greetings-introductions:
     status: unseen
@@ -533,8 +536,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier1-numbers-time-dates:
     status: unseen
     words_total: 77
@@ -544,8 +546,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier1-food-restaurant:
     status: unseen
     words_total: 64
@@ -555,8 +556,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier1-directions-transportation:
     status: unseen
     words_total: 49
@@ -566,8 +566,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier1-basic-descriptions:
     status: unseen
     words_total: 60
@@ -577,8 +576,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier2-home-household:
     status: unseen
     words_total: 55
@@ -588,8 +586,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier2-work-office:
     status: unseen
     words_total: 47
@@ -599,8 +596,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier2-family-relationships:
     status: unseen
     words_total: 44
@@ -610,8 +606,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier2-shopping-money:
     status: unseen
     words_total: 44
@@ -621,8 +616,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier2-weather-seasons:
     status: unseen
     words_total: 40
@@ -632,8 +626,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier2-health-body:
     status: unseen
     words_total: 51
@@ -643,8 +636,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier3-opinions-agreement:
     status: unseen
     words_total: 47
@@ -654,8 +646,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier3-emotions-feelings:
     status: unseen
     words_total: 49
@@ -665,8 +656,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier3-plans-future:
     status: unseen
     words_total: 45
@@ -676,8 +666,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier3-storytelling-narration:
     status: unseen
     words_total: 46
@@ -687,8 +676,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier3-hobbies-interests:
     status: unseen
     words_total: 49
@@ -698,8 +686,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier3-travel-culture:
     status: unseen
     words_total: 50
@@ -709,8 +696,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier4-politics-society:
     status: unseen
     words_total: 48
@@ -720,8 +706,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier4-philosophy-ideas:
     status: unseen
     words_total: 47
@@ -731,8 +716,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier4-hypotheticals-debate:
     status: unseen
     words_total: 47
@@ -742,8 +726,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier4-humor-idioms:
     status: unseen
     words_total: 49
@@ -753,8 +736,7 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
   tier4-professional-specialized:
     status: unseen
     words_total: 48
@@ -764,161 +746,137 @@ vocabulary:
     weak_production: []
     weak_recognition: []
     last_practiced: null
-    notes: ""
-
+    notes: ''
 pronunciation:
   vowel-sounds:
     status: unseen
     last_practiced: null
-    external_feedback: ""
-    notes: ""
-
+    external_feedback: ''
+    notes: ''
   rr-trill:
     status: unseen
     last_practiced: null
-    external_feedback: ""
-    notes: ""
-
+    external_feedback: ''
+    notes: ''
   r-single:
     status: unseen
     last_practiced: null
-    external_feedback: ""
-    notes: ""
-
+    external_feedback: ''
+    notes: ''
   b-v-equivalence:
     status: unseen
     last_practiced: null
-    external_feedback: ""
-    notes: ""
-
+    external_feedback: ''
+    notes: ''
   d-soft:
     status: unseen
     last_practiced: null
-    external_feedback: ""
-    notes: ""
-
+    external_feedback: ''
+    notes: ''
   g-soft:
     status: unseen
     last_practiced: null
-    external_feedback: ""
-    notes: ""
-
+    external_feedback: ''
+    notes: ''
   j-sound:
     status: unseen
     last_practiced: null
-    external_feedback: ""
-    notes: ""
-
+    external_feedback: ''
+    notes: ''
   ny-sound:
     status: unseen
     last_practiced: null
-    external_feedback: ""
-    notes: ""
-
+    external_feedback: ''
+    notes: ''
   ll-y-sound:
     status: unseen
     last_practiced: null
-    external_feedback: ""
-    notes: ""
-
+    external_feedback: ''
+    notes: ''
   linking:
     status: unseen
     last_practiced: null
-    external_feedback: ""
-    notes: ""
-
+    external_feedback: ''
+    notes: ''
   intonation:
     status: unseen
     last_practiced: null
-    external_feedback: ""
-    notes: ""
-
+    external_feedback: ''
+    notes: ''
   stress-rules:
     status: unseen
     last_practiced: null
-    external_feedback: ""
-    notes: ""
-
+    external_feedback: ''
+    notes: ''
 writing:
   sentence_construction:
     status: unseen
     last_practiced: null
-    notes: ""
-
+    notes: ''
   paragraph_coherence:
     status: unseen
     last_practiced: null
-    notes: ""
-
+    notes: ''
   formal_register:
     status: unseen
     last_practiced: null
-    notes: ""
-
+    notes: ''
   creative_expression:
     status: unseen
     last_practiced: null
-    notes: ""
-
+    notes: ''
 receptive_skills:
   listening:
     current_level: null
     comprehension_quality: null
     speed_tolerance: null
     last_level_change: null
-    notes: ""
-
+    notes: ''
   reading:
     current_level: null
     comprehension_quality: null
     lookup_frequency: null
     last_level_change: null
-    notes: ""
-
+    notes: ''
 cultural_awareness:
   register_shifting:
     status: unseen
     introduced_at_phase: D
-    assessed_through: "conversation behavior, role-play scenarios"
-    signs_of_acquisition: "Shifts registers appropriately without prompting in role-play"
-    notes: "Pragmatic judgment (when to shift). Grammar forms tracked in D-05-register-shifting."
-
+    assessed_through: conversation behavior, role-play scenarios
+    signs_of_acquisition: Shifts registers appropriately without prompting in role-play
+    notes: Pragmatic judgment (when to shift). Grammar forms tracked in D-05-register-shifting.
   politeness_formulas:
     status: unseen
     introduced_at_phase: B
-    assessed_through: "request formulation, disagreement handling in conversation"
-    signs_of_acquisition: "Softens requests and disagreements naturally without prompting"
-    notes: ""
-
+    assessed_through: request formulation, disagreement handling in conversation
+    signs_of_acquisition: Softens requests and disagreements naturally without prompting
+    notes: ''
   conversational_rhythm:
     status: unseen
     introduced_at_phase: C
-    assessed_through: "conversation flow, back-channeling, turn-taking"
-    signs_of_acquisition: "Natural turn-taking, appropriate back-channeling (ah si, claro, ya)"
-    notes: ""
-
+    assessed_through: conversation flow, back-channeling, turn-taking
+    signs_of_acquisition: Natural turn-taking, appropriate back-channeling (ah si,
+      claro, ya)
+    notes: ''
   regional_awareness:
     status: unseen
     introduced_at_phase: B
-    assessed_through: "recognition of dialect differences, adaptation in conversation"
-    signs_of_acquisition: "Recognizes dialect variants and adapts vocabulary to context"
-    notes: ""
-
+    assessed_through: recognition of dialect differences, adaptation in conversation
+    signs_of_acquisition: Recognizes dialect variants and adapts vocabulary to context
+    notes: ''
   humor_and_idioms:
     status: unseen
     introduced_at_phase: C
-    assessed_through: "comprehension and use of idioms, humor response"
-    signs_of_acquisition: "Uses common idioms naturally, understands humor in context"
-    notes: ""
-
+    assessed_through: comprehension and use of idioms, humor response
+    signs_of_acquisition: Uses common idioms naturally, understands humor in context
+    notes: ''
 fluency_metrics:
-  speaking_pace: ""
-  hesitation_frequency: ""
-  self_correction_rate: ""
-  circumlocution: ""
-  willingness_to_risk: ""
-  thinking_language: ""
-
+  speaking_pace: ''
+  hesitation_frequency: ''
+  self_correction_rate: ''
+  circumlocution: ''
+  willingness_to_risk: ''
+  thinking_language: ''
 overall_estimates:
   cefr_estimate: A0
   estimated_active_vocabulary: 0

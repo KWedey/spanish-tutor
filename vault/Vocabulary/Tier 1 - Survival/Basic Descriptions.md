@@ -7,7 +7,7 @@ title: "Basic Descriptions"
 tier: 1
 category: "survival"
 status: "unseen"
-words_total: 0
+words_total: 60
 words_introduced: 0
 passive_known: 0
 active_known: 0

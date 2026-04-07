@@ -2,6 +2,8 @@
 # Updated at the end of each session.
 # Schema defined in docs/system-design.md
 
+schema_version: 1
+
 current_phase: A-foundation
 current_week: 1
 onboarding_complete: false
@@ -31,8 +33,6 @@ weekly_topic:
 
 fluency_accuracy_balance: accuracy-leaning
 
-# Fluency day tracking (Phase B+)
-# Phase B: 1x/week, Phase C: 2x/week, Phase D: every session
 fluency_days_this_week: 0
 last_fluency_day: null
 
@@ -45,9 +45,8 @@ sprint:
   target_date: ""
   focus_areas: []
 
-carryover_concepts: []  # concepts from prior phase still in active practice
+carryover_concepts: []
 
-# SRS configuration (moved from system-health.yaml)
 anki_new_cards_per_session: 8
 anki_retirement_threshold_days: 60
 

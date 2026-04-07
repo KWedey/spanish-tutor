@@ -9,8 +9,6 @@ tags: ["guide"]
 
 Welcome to your Spanish learning vault. This Obsidian vault is auto-generated from your tutoring system's curriculum and progress data.
 
-> For a complete overview of the program — daily workflow, tools, what to expect — see **[[STUDENT-GUIDE]]** in the project root.
-
 ## Setup
 
 1. **Install Obsidian** from [obsidian.md](https://obsidian.md/) if you haven't already.
