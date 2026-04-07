@@ -40,47 +40,143 @@ Ask about their goals:
 - Is there a target date for any of these?
 - What does "success" look like for them?
 
-### 3. Experience Assessment (5 min)
+### 3. Experience Assessment & Placement (~8 min for non-beginners)
+
 Ask about their experience:
 - Complete beginner, or some prior exposure?
 - Any formal classes? Apps used? Time living in a Spanish-speaking country?
 
-If they have any prior Spanish, do a quick informal assessment. Don't frame these as tests — make it conversational:
-- "Can you introduce yourself in Spanish?" (tests basic present tense)
-- "Tell me about your day yesterday." (tests if they know past tense)
-- "What would you do if you won the lottery?" (tests conditional/subjunctive)
+**If they say "complete beginner, never studied":** skip the entire assessment below. Proceed to section 4 (Schedule & Preferences). They enter normal onboarding from session 1. No placement needed.
 
-Note what they can and can't do. This determines their starting phase.
+**If they have any prior exposure:** run the full assessment below.
 
-### Placement Protocol (for learners with prior Spanish)
+#### Self-Assessment Calibration
 
-If the learner has any prior exposure, use the three graded prompts above as a structured diagnostic. Score each:
+Before the grammar prompts, ask one question: "Before we try some Spanish — how would you rate your level? Beginner, intermediate, advanced?"
 
-| Prompt | Tests | Can't attempt | Attempts with many errors | Mostly correct |
-|--------|-------|---------------|---------------------------|----------------|
-| "Introduce yourself" | Basic present tense | Below A | Practicing A-01 | Acquired A-01 |
-| "Tell me about yesterday" | Past tenses | Below B | Practicing B-01/B-03 | Acquired B-01 through B-04 |
-| "What would you do if..." | Conditional/subjunctive | Below C | Practicing C-01/C-04 | Acquired through C |
+Record their answer. After assessment, compare self-report to actual performance to initialize the `calibration` fields in learner-profile.yaml:
 
-**Placement mapping:**
+| Self-report vs actual | calibration fields |
+|---|---|
+| Matches | self_report_accuracy: `reliable`, tendency: `accurate`, trust_weight: 0.7 |
+| Self-report higher | self_report_accuracy: `unreliable`, tendency: `over-estimates`, trust_weight: 0.3 |
+| Self-report lower | self_report_accuracy: `unreliable`, tendency: `under-estimates`, trust_weight: 0.5 |
 
-| Result | Starting Point | Action |
-|--------|---------------|--------|
-| Can't introduce self | True beginner | Follow normal onboarding from session 1 |
-| Basic present tense only | Late A | Skip to onboarding session 5; mark A-00, A-01 as `practicing` |
-| Present + some past tense | Early B | Set `onboarding_complete: true`, enter decision engine |
-| Past tense + subjunctive attempts | Mid C | Set `onboarding_complete: true`, enter decision engine |
+Under-estimators get higher trust weight — "I'm worse than I think" is less dangerous for placement than "I'm better than I think."
 
-**Skill-map pre-population by placement level:**
+#### Grammar Production — 3 Graded Prompts
 
-- **Late A** — Set A-00 (communication-repair), A-01 (present-regular) to `practicing`. Set tier1-greetings-introductions to `practicing`. All other concepts remain `unseen`. Onboarding resumes at session 5 (ser-vs-estar).
-- **Early B** — Set all A-xx grammar concepts to `acquired` (performance_unscaffolded: competent). Set tier1 vocabulary clusters to `acquired`. Set B-01 through B-04 to `practicing`. Set tier2 vocabulary clusters to `practicing` as demonstrated.
-- **Mid C** — Set all A-xx and B-xx grammar concepts to `acquired`. Set tier1 and tier2 vocabulary to `acquired`. Set C-01 (present-subjunctive), C-02 (subjunctive-triggers), C-04 (conditional) to `practicing`. Set tier3 vocabulary clusters to `practicing` as demonstrated.
+These are conversational, not tests. Frame naturally:
 
-**Onboarding skip rules:**
-- If placing at Late A: set `onboarding_complete: false`, log skipped sessions (01-04) in the session file under `placement_skipped_sessions`.
-- If placing at Early B or above: set `onboarding_complete: true` in schedule.yaml. The decision engine handles all subsequent session planning. Log all 10 onboarding sessions as skipped.
-- Always note placement level and evidence in the session log and learner-profile.yaml under `initial_placement`.
+1. "Can you introduce yourself in Spanish?"
+2. "Tell me about your day yesterday."
+3. "What would you do if you won the lottery?"
+
+Score each with this 4-column rubric:
+
+| Prompt | Can't attempt | Fragments / heavy errors | Gets point across with errors | Mostly correct, minor errors |
+|--------|--------------|------------------------|-------------------------------|------------------------------|
+| "Introduce yourself" | Pre-A | Early A | Late A | Acquired A-01 |
+| "Tell me about yesterday" | Below B | Early B (knows some forms, can't sustain) | Mid B (past tense functional but messy) | Acquired B-01–B-04 |
+| "What would you do if..." | Below C | Early C (recognizes structure, can't produce) | Mid C (attempts with errors) | Acquired through C |
+
+The two middle columns distinguish "has seen this" from "can use this."
+
+#### Embedded Vocabulary Observation (No Extra Time)
+
+No standalone vocabulary prompt. During the grammar prompts, actively note:
+
+- **Introduce yourself:** Do they name their job, city, hobbies? "Me llamo" (formulaic) vs constructed sentences with adjectives? How many domains — just name and origin, or family, work, interests?
+- **Tell me about yesterday:** What verbs — just "fui" and "comí," or a range? Can they name times, places, activities? Do they circumlocute or just stop?
+- **What would you do if:** Abstract vocabulary — wishes, reasons, opinions? Or only concrete nouns?
+
+After the grammar prompts, one natural follow-up: take something they mentioned and ask them to expand. "You mentioned you like cooking — tell me more about that in Spanish. Use English for any words you don't know." The English fallback words reveal the vocabulary ceiling.
+
+Log a vocabulary observation at one of four levels:
+
+| Observation | Level |
+|---|---|
+| Only formulaic phrases (me llamo, buenos días) | Minimal |
+| Functional within 1-2 familiar topics | Narrow |
+| Can discuss varied topics, reaches for specific words | Broad |
+| Uses nuanced vocabulary, near-synonyms, low-frequency words | Deep |
+
+Also log: domains demonstrated, and production gap indicators (topics where they understood the concept but lacked the Spanish word).
+
+#### Reading Comprehension Check (~2 min)
+
+After the grammar prompts, transition: "Let me try something — I'm going to write you a short passage in Spanish. Don't worry about responding in Spanish, just tell me what it says."
+
+Calibrate the passage one half-step above demonstrated production:
+- **Placed at A:** 2-3 simple present tense sentences with some unfamiliar vocabulary
+- **Placed at B:** Short paragraph mixing past tenses, some B-level structures they didn't produce
+- **Placed at C+:** Passage with subjunctive, conditional, or compound tenses
+
+Score:
+
+| Comprehension | Signal |
+|---|---|
+| Gets the gist, misses details | Reception ≈ production (typical) |
+| Understands nearly everything | Reception ahead of production — assign ambitious reading/listening homework |
+| Understands less than expected | Possible over-placement — flag for heavier validation |
+
+**This tests reading, not listening.** Listening baseline is deferred: assign a Dreaming Spanish video at estimated level, review comprehension in session 2.
+
+### Placement Protocol
+
+#### Placement Level Determination
+
+Grammar production is the primary signal. Vocabulary and reading are secondary — they adjust confidence and vocabulary pre-population but do not override grammar-based phase placement.
+
+| Grammar result | Secondary signals | Placement | Confidence |
+|---|---|---|---|
+| Can't attempt prompt 1 | (skipped) | True beginner — enter onboarding | N/A |
+| Early A | Any | Early A — onboarding from session 2 | N/A (onboarding calibrates) |
+| Late A | Any | Late A — onboarding from session 5 | N/A (onboarding calibrates) |
+| Early B+ | Vocab Broad/Deep, reading at or above expected | Phase as assessed | High |
+| Early B+ | Vocab Narrow, reading at expected | Phase as assessed | Medium |
+| Early B+ | Vocab Minimal, or reading below expected | Phase as assessed | Low — front-load validation |
+
+#### Grammar Concept Pre-Population
+
+**Below placement level:** `acquired` with `performance_unscaffolded: competent`. Grammar is hierarchical — producing above a level implies mastery of that level. If the inference is wrong, the validation protocol catches it.
+
+**Guardrail exception:** Placement-acquired concepts are exempt from the "practiced in 3+ separate sessions" acquisition requirement. The validation protocol serves as verification in lieu of observed practice sessions.
+
+**At placement level:**
+- Concepts directly demonstrated (even with errors) → `practicing`, error rates estimated from the sample
+- Concepts at the same phase level but not directly demonstrated → `practicing`, error rates `null` (signals "needs assessment, not introduction")
+
+**Above placement level:** `unseen`.
+
+#### Vocabulary Cluster Pre-Population
+
+Vocabulary is domain-specific — grammar-to-vocabulary inference is weak. Use the vocabulary observation:
+
+| Vocab observation | Clusters below placement | Clusters at placement |
+|---|---|---|
+| Minimal | Demonstrated → `acquired`, undemonstrated → `practicing` | `unseen` |
+| Narrow | Demonstrated → `acquired`, undemonstrated → `acquired` | Demonstrated → `practicing`, undemonstrated → `unseen` |
+| Broad / Deep | `acquired` | `practicing` |
+
+**Concurrent concept gate:** If Minimal observation at B+ placement creates more than 2-3 vocabulary clusters in "practicing," limit to the 2-3 clusters most likely weakest (topics the learner avoided) and leave the rest `acquired`.
+
+#### Receptive Skills Initialization
+
+| Reading check result | `receptive_skills.reading.current_level` |
+|---|---|
+| Below expected | One sub-level below grammar placement (e.g., Early B → Late A) |
+| Gets the gist | Matches grammar placement |
+| Understands nearly everything | One sub-level above grammar placement |
+
+`receptive_skills.listening`: null until session 2 Dreaming Spanish review.
+
+#### Onboarding Skip Rules
+
+- **True beginner or Early A:** `onboarding_complete: false`. Normal onboarding from session 1 or 2.
+- **Late A:** `onboarding_complete: false`. Onboarding from session 5. Set A-00, A-01 to `practicing`. Log skipped sessions (01-04) under `placement_skipped_sessions` in session log.
+- **Early B or above:** `onboarding_complete: true`. Log all 10 onboarding sessions as skipped. Initialize `placement_validation` in schedule.yaml (see State Initialization below).
+- **Always:** Note placement level and evidence in both the session log (`assessment` block) and `learner-profile.yaml` (`initial_placement` block).
 
 ### 4. Schedule & Preferences (3 min)
 - How much time per day can they realistically commit? (including homework)
@@ -107,13 +203,26 @@ End with something achievable that builds momentum:
 - Assign one short Dreaming Spanish video at Superbeginner level.
 
 ### 7. State Initialization
+
 After the session, create and populate:
-- `state/learner-profile.yaml` — all identity, goals, and schedule fields
-- `state/skill-map.yaml` — mark any demonstrated concepts as appropriate status
-- `state/schedule.yaml` — set initial phase, `onboarding_complete: false`
+- `state/learner-profile.yaml` — all identity, goals, schedule fields, calibration, and initial_placement
+- `state/skill-map.yaml` — mark concepts per placement rules above
+- `state/schedule.yaml` — set initial phase, onboarding_complete
 - `state/system-health.yaml` — initialize all counters
 - `state/resource-tracker.yaml` — add Anki as first resource
-- Commit: `session YYYY-MM-DD: first session — learner profile established`
+
+**For Early B+ placements (onboarding skipped), also initialize placement validation:**
+- Set `placement_validation.active: true` in schedule.yaml
+- Set `placement_validation.confidence` to the confidence level from placement determination
+- Build `placement_validation.queue` with concepts to validate, ordered by priority:
+  1. Highest-level acquired concepts first (top-down: if B-04 is solid, B-01/B-02/B-03 are likely solid too)
+  2. Prerequisites for current work
+  3. Concepts at placement level with null error rates (undemonstrated)
+  4. Remaining acquired concepts, low confidence first
+- Queue entry format: `{concept_id, priority, status: pending, checked_in_session: null, notes: ""}`
+- More concepts queued for low confidence; fewer for high confidence
+
+Commit: `session YYYY-MM-DD: first session — learner profile established`
 
 ### 8. Vault Setup
 After state initialization, set up the learner's Obsidian vault:
