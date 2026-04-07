@@ -840,7 +840,7 @@ Sections (powered by Dataview queries against frontmatter):
 **Per phase (A through D):**
 - Phase title + description + estimated duration
 - Concept list with status indicators: ○ unseen, ◐ introduced, ◑ practicing, ● acquired, ★ automatic
-- Prerequisite arrows showing what unlocks what
+- Prerequisite dependency tree rendered as Mermaid flowchart (Obsidian supports Mermaid natively, no plugin needed)
 - Phase transition requirements summary
 - Progress bar: `Phase A: ●●●●◑◑○○ (5/8)`
 
@@ -894,6 +894,7 @@ Pre-configured in `.obsidian/` (committed to repo). Learner installs plugins man
 - Daily notes folder: `vault/Daily`
 - Date format: `YYYY-MM-DD` (matches daily note filenames)
 - Click a day → opens that session's daily note
+- If learner clicks a non-session day, Calendar may create an empty note — this is acceptable (learner can use it for personal notes; no `generated: true` flag means generator won't touch it)
 
 **Templater (recommended):**
 - Template folder: `vault/Templates`
@@ -970,15 +971,17 @@ All behavioral changes from this spec must be reflected in CLAUDE.md:
 
 1. **Session Startup Protocol:** Add vault existence check — if `vault/` doesn't exist, note for first-session setup
 2. **Step 3 routing table:** Add condition for "Phase B+ fluency day" → load `fluency-activities.md`
-3. **Step 4 conditional loads:** Update fluency condition from "Phase C+" to "Phase B+ and today is a fluency day"
-4. **Step 4 conditional loads:** Add "Standard session (post-onboarding)" → load `curriculum/tutor-guides/decision-engine.md`
-5. **New section:** Correction Mode by Activity table (Stage 1-2 explicit, Stage 3 recast, Stage 4 batched max-3, Fluency zero-correction)
-6. **State Updates:** Add step — vault generation (generate/update daily note, update frontmatter on changed concept notes, update Roadmap if status changed)
-7. **State Updates:** Add step — include `vault/` files in session commit
-8. **State Updates:** Add "During weekly review, archive session logs older than 60 days to `state/sessions/archive/`"
-9. **Guardrails:** Add "Never overwrite vault files without `generated: true` frontmatter flag"
-10. **Guardrails:** Add "On fluency days, still run decision engine for concept selection — skip activity routing only"
-11. **First session guide reference:** Note vault setup as Step 8
+3. **Step 3 routing table:** Update "Gap of 3+ days" row to load `curriculum/tutor-guides/return-session.md` instead of inline handling
+4. **Step 4 conditional loads:** Update fluency condition from "Phase C+" to "Phase B+ and today is a fluency day"
+5. **Step 4 conditional loads:** Add "Standard session (post-onboarding)" → load `curriculum/tutor-guides/decision-engine.md`
+6. **Step 4 conditional loads:** Add "All prerequisites for next phase show 'acquired' for 2+ consecutive sessions" → load `curriculum/tutor-guides/phase-transition-guide.md`
+7. **New section:** Correction Mode by Activity table (Stage 1-2 explicit, Stage 3 recast, Stage 4 batched max-3, Fluency zero-correction)
+8. **State Updates:** Add step — vault generation (generate/update daily note, update frontmatter on changed concept notes, update Roadmap if status changed)
+9. **State Updates:** Add step — include `vault/` files in session commit
+10. **State Updates:** Add "During weekly review, archive session logs older than 60 days to `state/sessions/archive/`"
+11. **Guardrails:** Add "Never overwrite vault files without `generated: true` frontmatter flag"
+12. **Guardrails:** Add "On fluency days, still run decision engine for concept selection — skip activity routing only"
+13. **First session guide reference:** Note vault setup as Step 8
 
 # system-design.md Changes Required
 
