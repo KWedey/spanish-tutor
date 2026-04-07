@@ -24,7 +24,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -37,7 +38,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -50,7 +52,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -63,7 +66,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -76,7 +80,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -89,7 +94,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -102,7 +108,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -115,7 +122,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -128,7 +136,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -141,7 +150,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -154,7 +164,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -167,7 +178,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -180,7 +192,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -193,7 +206,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -206,7 +220,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -219,7 +234,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -232,7 +248,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -245,7 +262,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -258,7 +276,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -271,7 +290,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -284,7 +304,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -297,7 +318,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -310,7 +332,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -323,7 +346,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -336,7 +360,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -349,7 +374,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -362,7 +388,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -375,7 +402,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -388,7 +416,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -401,7 +430,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -414,7 +444,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -427,7 +458,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -440,7 +472,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
@@ -453,7 +486,8 @@ grammar:
     introduced_date: null
     last_practiced: null
     practice_count: 0
-    error_rate_recent: null
+    error_rate_drills: null
+    error_rate_production: null
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
