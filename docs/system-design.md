@@ -1582,7 +1582,7 @@ language learning behavior: asking for help is a skill, not a weakness.
 Ordered by frequency of use, prerequisite dependencies, and learner impact.
 
 **Phase A — Foundation** (target: A1-A2)
-Core sentence construction. The learner can form basic sentences about present situations. 8 concepts.
+Core sentence construction. The learner can form basic sentences about present situations. 10 concepts (8 in onboarding + 2 post-onboarding).
 
 | # | Concept | Prerequisites | Key Challenge | L1 Interference |
 |---|---------|--------------|---------------|-----------------|
@@ -1594,6 +1594,10 @@ Core sentence construction. The learner can form basic sentences about present s
 | 5 | Basic questions and negation | A-01 | Inversion, question words | Double negative avoidance |
 | 6 | Gustar-type verbs (gustar, encantar, molestar, importar, interesar, doler) | A-01 | Reversed sentence structure | Gustar construction |
 | 7 | Common irregular present (ir, tener, querer, poder, hacer, decir, saber/conocer, hay) | A-01 | High-frequency, must memorize individually | — |
+| 8 | Numbers, quantifiers, tener expressions | A-03 | Gender agreement on quantifiers, tener for age/states | Age with ser instead of tener |
+| 9 | Accent and stress rules | None | Systematic understanding, not piecemeal | English stress patterns applied to Spanish |
+
+**Note:** A-08 and A-09 are introduced post-onboarding via the decision engine (sessions 11+). See onboarding section.
 
 **Phase B — Conversational** (target: A2-B1)
 The learner can talk about the past and future, handle daily interactions. 11 concepts.

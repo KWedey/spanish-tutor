@@ -6,6 +6,8 @@ Loaded when: Standard session (post-onboarding). Used to select today's focus co
 
 All concepts in current phase with status: introduced, practicing, regressed, or acquired (for maintenance). Plus `carryover_concepts` from `schedule.yaml`. Plus maintenance from all previous phases (with decaying priority).
 
+**Cultural concepts:** Also gather `cultural_awareness` concepts from skill-map whose `introduced_at_phase` matches the current phase or earlier. Score them using the same formula but with NEED capped at 5 (cultural concepts are secondary to grammar). Cultural concepts are never the primary focus — they supplement grammar work during conversation practice or as a secondary concept.
+
 **Filter:** Exclude any concept where prerequisites are not met.
 
 ## Step 2 — Score Each Candidate
@@ -101,6 +103,17 @@ Score each candidate from `curriculum/topic-bank.yaml`:
 Highest score wins. Tie-break: prefer higher LEARNER_INTEREST.
 
 Sprint override: if `sprint.active` is true, topic = sprint scenario theme. Skip scoring.
+
+## Step 7 — Session Format (occasional)
+
+Most sessions use the standard 4-phase flow. Occasionally consider an alternative format from `curriculum/tutor-guides/session-variety.md`. Triggers:
+- Motivation dipping or routine fatigue → Game Day
+- Grammar consolidation phase with 3+ acquired concepts → Story Building or Teach-Back
+- Weekly topic has strong media options → Media Reaction
+- Phase transition approaching → Immersion-Only
+- Sprint mode or upcoming real-world event → Real-World Simulation
+
+Frequency: no more than 1 alternative format per week. The standard session is the default.
 
 ## Quick Reference — Common Scenarios
 

@@ -52,6 +52,9 @@ What's feeling good? What's feeling tedious? Check for plateau risk.
 
 ### 10. Maintenance
 - Archive daily session logs older than 60 days to `state/sessions/archive/` (see Session Archive section below)
+- Reset `fluency_days_this_week: 0` in schedule.yaml
+- Update `input_hours` in learner-profile.yaml (sum listening/reading minutes from this week's assignments)
+- Run `python3 scripts/validate-state.py` to catch any data inconsistencies
 - Update schedule.yaml with next week's plan
 
 ### 11. Fun Activity
