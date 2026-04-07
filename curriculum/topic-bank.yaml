@@ -9,30 +9,53 @@ topics:
     vocabulary_alignment: [tier1-greetings-introductions]
     cefr_range: [A1]
     tags: [social, basics]
+    subtopics:
+      - "Meeting someone at a party — names, where you're from, what you do"
+      - "Greeting a neighbor — casual vs. formal hellos, asking how they are"
+      - "Starting a conversation with a stranger — small talk openers, polite interest"
 
   - name: "My daily routine"
     grammar_alignment: [A-01-present-regular, A-05-basic-questions]
     vocabulary_alignment: [tier1-numbers-time-dates]
     cefr_range: [A1, A2]
     tags: [daily-life, routines]
+    subtopics:
+      - "Morning routine — what time you wake up, breakfast habits, getting ready"
+      - "Weekday vs. weekend — how your schedule changes, what you do differently"
+      - "Evening wind-down — dinner time, relaxing activities, when you go to bed"
+      - "A typical workday — commute, lunch breaks, what time things happen"
 
   - name: "Food and eating out"
     grammar_alignment: [A-01-present-regular, A-07-present-irregular-common]
     vocabulary_alignment: [tier1-food-restaurant]
     cefr_range: [A1, A2]
     tags: [food, travel, practical]
+    subtopics:
+      - "Ordering at a restaurant — reading the menu, special requests, paying the bill"
+      - "Cooking at home — recipes, ingredients, what you like to make"
+      - "Food preferences and dietary restrictions — likes, dislikes, allergies"
+      - "Food culture — regional dishes, meal times, eating customs in Latin America"
 
   - name: "Getting around town"
     grammar_alignment: [A-04-articles-prepositions, A-05-basic-questions]
     vocabulary_alignment: [tier1-directions-transportation]
     cefr_range: [A1, A2]
     tags: [travel, practical]
+    subtopics:
+      - "Taking a taxi or rideshare — asking for a ride, giving an address, paying"
+      - "Using public transit — buying tickets, asking which bus or train to take"
+      - "Asking for directions on the street — where is the bank, how far is it"
+      - "Navigating an airport — check-in, gates, customs, finding your way"
 
   - name: "Describing people and things"
     grammar_alignment: [A-02-ser-vs-estar, A-03-gender-agreement]
     vocabulary_alignment: [tier1-basic-descriptions]
     cefr_range: [A1, A2]
     tags: [descriptions, basics]
+    subtopics:
+      - "Describing a friend or family member — appearance, personality, what they're like"
+      - "Describing your home — rooms, furniture, what it looks like"
+      - "Describing an object you lost — color, size, shape, where you last saw it"
 
   # Phase B topics
   - name: "Childhood and family"
@@ -40,48 +63,87 @@ topics:
     vocabulary_alignment: [tier2-family-relationships]
     cefr_range: [A2, B1]
     tags: [family, nostalgia, personal]
+    subtopics:
+      - "What you used to do as a kid — games, habits, summer vacations"
+      - "Family traditions — holidays, meals, things your family always did"
+      - "A specific childhood memory — the day something happened that you still remember"
+      - "Comparing childhood and adulthood — what changed, what stayed the same"
 
   - name: "My home and neighborhood"
     grammar_alignment: [B-01-preterite-regular, A-02-ser-vs-estar]
     vocabulary_alignment: [tier2-home-household]
     cefr_range: [A2, B1]
     tags: [daily-life, descriptions]
+    subtopics:
+      - "Describing where you live — your apartment or house, what's in each room"
+      - "Your neighborhood — shops, parks, what's nearby, what you like about it"
+      - "Moving to a new place — why you moved, what was different, first impressions"
+      - "The ideal home — what you'd want in a dream house, location, features"
 
   - name: "Work and career"
     grammar_alignment: [B-01-preterite-regular, B-11-future-ir-a]
     vocabulary_alignment: [tier2-work-office]
     cefr_range: [A2, B1]
     tags: [professional, daily-life]
+    subtopics:
+      - "Talking about your job — what you do, who you work with, daily tasks"
+      - "A job interview — questions they asked, how it went, what happened next"
+      - "Career goals — what you want to do next, plans for the future"
+      - "A difficult day at work — what went wrong, how you handled it"
 
   - name: "Shopping and money"
     grammar_alignment: [B-06-direct-object-pronouns, A-07-present-irregular-common]
     vocabulary_alignment: [tier2-shopping-money]
     cefr_range: [A2, B1]
     tags: [practical, daily-life]
+    subtopics:
+      - "At a clothing store — sizes, trying things on, asking for a different color"
+      - "Bargaining at a market — prices, negotiating, deciding what to buy"
+      - "Returning or exchanging something — explaining the problem, asking for a refund"
+      - "Budgeting and spending habits — what you spend money on, saving vs. splurging"
 
   - name: "Weather and seasons"
     grammar_alignment: [B-03-imperfect, B-04-preterite-vs-imperfect]
     vocabulary_alignment: [tier2-weather-seasons]
     cefr_range: [A2, B1]
     tags: [nature, descriptions]
+    subtopics:
+      - "Your favorite season — what the weather is like, what you do during it"
+      - "A time the weather ruined your plans — what happened, what you did instead"
+      - "Climate where you grew up vs. now — how it used to be, how it's different"
 
   - name: "Health and the body"
     grammar_alignment: [B-05-reflexive-verbs, A-02-ser-vs-estar]
     vocabulary_alignment: [tier2-health-body]
     cefr_range: [A2, B1]
     tags: [health, practical]
+    subtopics:
+      - "At the doctor's office — explaining symptoms, understanding instructions"
+      - "Daily self-care routines — exercise, skincare, how you take care of yourself"
+      - "Feeling sick — describing how you feel, what you do when you're unwell"
+      - "At the pharmacy — asking for medicine, reading labels, home remedies"
 
   - name: "Weekend plans and activities"
     grammar_alignment: [B-11-future-ir-a, B-01-preterite-regular]
     vocabulary_alignment: [tier3-plans-future, tier3-hobbies-interests]
     cefr_range: [A2, B1]
     tags: [social, plans, personal]
+    subtopics:
+      - "Making plans with a friend — suggesting activities, picking a time and place"
+      - "How last weekend went — what you did, who you saw, highlights"
+      - "A perfect day off — what you'd do if you had no obligations"
+      - "Hobbies and free time — what you enjoy doing, how you got into it"
 
   - name: "A memorable trip"
     grammar_alignment: [B-01-preterite-regular, B-04-preterite-vs-imperfect]
     vocabulary_alignment: [tier3-travel-culture]
     cefr_range: [A2, B1]
     tags: [travel, storytelling, personal]
+    subtopics:
+      - "The best vacation you ever took — where you went, what made it special"
+      - "A trip that went wrong — missed flights, lost luggage, unexpected problems"
+      - "Traveling with family vs. friends — different experiences, funny moments"
+      - "A place you visited that surprised you — expectations vs. reality"
 
   # Phase C topics
   - name: "Opinions and debate"
@@ -89,30 +151,55 @@ topics:
     vocabulary_alignment: [tier3-opinions-agreement]
     cefr_range: [B1, B2]
     tags: [opinions, abstract, social]
+    subtopics:
+      - "Technology in daily life — is it good that we're always connected?"
+      - "Education debates — what makes a good school, homework, learning styles"
+      - "Agreeing and disagreeing politely — navigating a conversation with different views"
+      - "A controversial topic you feel strongly about — making your case respectfully"
 
   - name: "Emotions and relationships"
     grammar_alignment: [C-01-present-subjunctive, C-02-subjunctive-triggers]
     vocabulary_alignment: [tier3-emotions-feelings]
     cefr_range: [B1, B2]
     tags: [emotions, personal, social]
+    subtopics:
+      - "Friendships — what makes a good friend, a time a friend helped you"
+      - "Dealing with conflict — disagreements, misunderstandings, making up"
+      - "Expressing how you feel — happiness, frustration, nervousness in daily situations"
+      - "Relationships across cultures — differences in how people show affection or respect"
 
   - name: "Telling stories"
     grammar_alignment: [B-04-preterite-vs-imperfect, C-07-relative-clauses]
     vocabulary_alignment: [tier3-storytelling-narration]
     cefr_range: [B1, B2]
     tags: [storytelling, narrative, creative]
+    subtopics:
+      - "An embarrassing moment — what happened, who was there, the aftermath"
+      - "Retelling a movie or book plot — characters, twists, how it ended"
+      - "A time you got lost — where you were, what you did, how it turned out"
+      - "A story someone told you that stuck with you — who told it, why it mattered"
 
   - name: "Travel and culture"
     grammar_alignment: [C-04-conditional, C-05-por-vs-para]
     vocabulary_alignment: [tier3-travel-culture]
     cefr_range: [B1, B2]
     tags: [travel, culture, personal]
+    subtopics:
+      - "Culture shock — things that surprised you in another country or culture"
+      - "Planning a dream trip — where you'd go, what you'd do, who you'd bring"
+      - "Living abroad — what it would be like, challenges, what you'd miss from home"
+      - "Local customs and etiquette — greetings, tipping, table manners in different places"
 
   - name: "If I could change one thing..."
     grammar_alignment: [C-04-conditional, C-01-present-subjunctive]
     vocabulary_alignment: [tier4-hypotheticals-debate]
     cefr_range: [B1, B2]
     tags: [hypothetical, abstract, personal]
+    subtopics:
+      - "If you could live in any time period — when, why, what you'd do"
+      - "If you could have any superpower — what you'd pick and how you'd use it"
+      - "One thing you'd change about your city — what and why"
+      - "Advice to your younger self — what you wish you had known"
 
   # Phase D topics
   - name: "Current events and society"
@@ -120,51 +207,94 @@ topics:
     vocabulary_alignment: [tier4-politics-society]
     cefr_range: [B2, C1]
     tags: [news, society, formal]
+    subtopics:
+      - "Summarizing a news story — what happened, who's involved, why it matters"
+      - "Social media and its effects — how it shapes opinions, benefits and risks"
+      - "Environmental issues — climate change, pollution, what's being done about it"
+      - "Inequality and access — education, healthcare, economic opportunity"
 
   - name: "Philosophy and big ideas"
     grammar_alignment: [D-02-si-clauses, D-03-subjunctive-all-tenses]
     vocabulary_alignment: [tier4-philosophy-ideas]
     cefr_range: [B2, C1]
     tags: [abstract, intellectual]
+    subtopics:
+      - "Free will vs. destiny — do we choose our path or is it chosen for us?"
+      - "What makes a good life — money, relationships, purpose, freedom"
+      - "Ethical dilemmas — trolley problems, white lies, tough moral choices"
+      - "The meaning of success — how different cultures define it"
 
   - name: "Humor, idioms, and slang"
     grammar_alignment: [D-05-register-shifting]
     vocabulary_alignment: [tier4-humor-idioms]
     cefr_range: [B2, C1]
     tags: [fun, culture, informal]
+    subtopics:
+      - "Telling a joke in Spanish — setup, punchline, wordplay that doesn't translate"
+      - "Idioms that exist in both languages — same idea, totally different image"
+      - "Slang across regions — how the same word means different things in different countries"
+      - "Funny misunderstandings — times a word or phrase meant something you didn't expect"
 
   - name: "Professional communication"
     grammar_alignment: [D-05-register-shifting, D-06-nuanced-connectors]
     vocabulary_alignment: [tier4-professional-specialized]
     cefr_range: [B2, C1]
     tags: [professional, formal]
+    subtopics:
+      - "Writing a formal email — requesting information, following up, professional tone"
+      - "Giving a presentation — structuring ideas, transitions, handling questions"
+      - "Navigating a business meeting — agenda, proposals, agreeing on next steps"
+      - "Networking at a conference — introducing yourself, exchanging contact info, small talk"
 
   - name: "Giving directions"
     grammar_alignment: [B-09-imperatives]
     vocabulary_alignment: [tier1-directions-transportation]
     cefr_range: [A2, B1]
     tags: [practical, travel, commands]
+    subtopics:
+      - "Guiding someone to your house — landmarks, turns, what to look for"
+      - "Explaining a route through a city — streets, blocks, public transit stops"
+      - "Giving instructions for a task — step-by-step directions, do this then that"
 
   - name: "Comparing cities and countries"
     grammar_alignment: [B-10-comparatives-superlatives]
     vocabulary_alignment: [tier3-travel-culture]
     cefr_range: [A2, B1]
     tags: [travel, descriptions, opinions]
+    subtopics:
+      - "Your city vs. another city — size, pace of life, things to do"
+      - "Cost of living — which place is more expensive, what's cheaper where"
+      - "Best and worst places you've been — what made them stand out"
+      - "Urban vs. rural life — advantages, disadvantages, which you prefer"
 
   - name: "What are you doing right now?"
     grammar_alignment: [B-08-estar-gerund-progressive]
     vocabulary_alignment: [tier2-home-household]
     cefr_range: [A2, B1]
     tags: [daily-life, present-moment]
+    subtopics:
+      - "Describing a scene — what people around you are doing right now"
+      - "A phone call interruption — explaining what you're in the middle of"
+      - "Live-narrating an event — what's happening at a party, game, or gathering"
 
   - name: "Retelling a friend's story"
     grammar_alignment: [C-08-indirect-speech]
     vocabulary_alignment: [tier3-storytelling-narration]
     cefr_range: [B1, B2]
     tags: [storytelling, narrative, social]
+    subtopics:
+      - "Passing along gossip — what someone told you about someone else"
+      - "Reporting what the doctor or boss said — relaying instructions or advice"
+      - "Recounting a conversation — he said, she said, then I said"
+      - "Summarizing a podcast or interview — what the speaker talked about, key points"
 
   - name: "Terms of endearment and affection"
     grammar_alignment: [C-09-diminutives-augmentatives]
     vocabulary_alignment: [tier2-family-relationships]
     cefr_range: [B1, B2]
     tags: [family, culture, informal]
+    subtopics:
+      - "Nicknames in your family — what people call each other, where the names came from"
+      - "How affection differs across cultures — what's normal here vs. there"
+      - "Talking to kids and pets — playful language, softening words, baby talk"
+      - "Expressing closeness with friends — terms you use, inside jokes, how warmth shows up"

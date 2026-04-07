@@ -46,6 +46,12 @@ motivation:
   low_motivation_triggers: []  # what deflates them
   preferred_recovery: ""       # what helps when motivation dips
 
+# Input exposure tracking (cumulative)
+input_hours:
+  listening_total: 0.0          # total hours of Spanish listening input
+  reading_total: 0.0            # total hours of Spanish reading input
+  last_updated: null
+
 # External tools in use
 tools:
   srs: ""                    # e.g., Anki

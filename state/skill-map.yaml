@@ -526,7 +526,7 @@ grammar:
 vocabulary:
   tier1-greetings-introductions:
     status: unseen
-    words_total: 0
+    words_total: 49
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -537,7 +537,7 @@ vocabulary:
 
   tier1-numbers-time-dates:
     status: unseen
-    words_total: 0
+    words_total: 77
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -548,7 +548,7 @@ vocabulary:
 
   tier1-food-restaurant:
     status: unseen
-    words_total: 0
+    words_total: 64
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -559,7 +559,7 @@ vocabulary:
 
   tier1-directions-transportation:
     status: unseen
-    words_total: 0
+    words_total: 49
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -570,7 +570,7 @@ vocabulary:
 
   tier1-basic-descriptions:
     status: unseen
-    words_total: 0
+    words_total: 60
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -581,7 +581,7 @@ vocabulary:
 
   tier2-home-household:
     status: unseen
-    words_total: 0
+    words_total: 55
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -592,7 +592,7 @@ vocabulary:
 
   tier2-work-office:
     status: unseen
-    words_total: 0
+    words_total: 47
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -603,7 +603,7 @@ vocabulary:
 
   tier2-family-relationships:
     status: unseen
-    words_total: 0
+    words_total: 44
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -614,7 +614,7 @@ vocabulary:
 
   tier2-shopping-money:
     status: unseen
-    words_total: 0
+    words_total: 44
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -625,7 +625,7 @@ vocabulary:
 
   tier2-weather-seasons:
     status: unseen
-    words_total: 0
+    words_total: 40
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -636,7 +636,7 @@ vocabulary:
 
   tier2-health-body:
     status: unseen
-    words_total: 0
+    words_total: 51
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -647,7 +647,7 @@ vocabulary:
 
   tier3-opinions-agreement:
     status: unseen
-    words_total: 0
+    words_total: 47
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -658,7 +658,7 @@ vocabulary:
 
   tier3-emotions-feelings:
     status: unseen
-    words_total: 0
+    words_total: 49
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -669,7 +669,7 @@ vocabulary:
 
   tier3-plans-future:
     status: unseen
-    words_total: 0
+    words_total: 45
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -680,7 +680,7 @@ vocabulary:
 
   tier3-storytelling-narration:
     status: unseen
-    words_total: 0
+    words_total: 46
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -691,7 +691,7 @@ vocabulary:
 
   tier3-hobbies-interests:
     status: unseen
-    words_total: 0
+    words_total: 49
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -702,7 +702,7 @@ vocabulary:
 
   tier3-travel-culture:
     status: unseen
-    words_total: 0
+    words_total: 50
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -713,7 +713,7 @@ vocabulary:
 
   tier4-politics-society:
     status: unseen
-    words_total: 0
+    words_total: 48
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -724,7 +724,7 @@ vocabulary:
 
   tier4-philosophy-ideas:
     status: unseen
-    words_total: 0
+    words_total: 47
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -735,7 +735,7 @@ vocabulary:
 
   tier4-hypotheticals-debate:
     status: unseen
-    words_total: 0
+    words_total: 47
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -746,7 +746,7 @@ vocabulary:
 
   tier4-humor-idioms:
     status: unseen
-    words_total: 0
+    words_total: 49
     words_introduced: 0
     passive_known: 0
     active_known: 0
@@ -757,7 +757,7 @@ vocabulary:
 
   tier4-professional-specialized:
     status: unseen
-    words_total: 0
+    words_total: 48
     words_introduced: 0
     passive_known: 0
     active_known: 0

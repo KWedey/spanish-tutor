@@ -32,6 +32,36 @@ If they have any prior Spanish, do a quick informal assessment. Don't frame thes
 
 Note what they can and can't do. This determines their starting phase.
 
+### Placement Protocol (for learners with prior Spanish)
+
+If the learner has any prior exposure, use the three graded prompts above as a structured diagnostic. Score each:
+
+| Prompt | Tests | Can't attempt | Attempts with many errors | Mostly correct |
+|--------|-------|---------------|---------------------------|----------------|
+| "Introduce yourself" | Basic present tense | Below A | Practicing A-01 | Acquired A-01 |
+| "Tell me about yesterday" | Past tenses | Below B | Practicing B-01/B-03 | Acquired B-01 through B-04 |
+| "What would you do if..." | Conditional/subjunctive | Below C | Practicing C-01/C-04 | Acquired through C |
+
+**Placement mapping:**
+
+| Result | Starting Point | Action |
+|--------|---------------|--------|
+| Can't introduce self | True beginner | Follow normal onboarding from session 1 |
+| Basic present tense only | Late A | Skip to onboarding session 5; mark A-00, A-01 as `practicing` |
+| Present + some past tense | Early B | Set `onboarding_complete: true`, enter decision engine |
+| Past tense + subjunctive attempts | Mid C | Set `onboarding_complete: true`, enter decision engine |
+
+**Skill-map pre-population by placement level:**
+
+- **Late A** — Set A-00 (communication-repair), A-01 (present-regular) to `practicing`. Set tier1-greetings-introductions to `practicing`. All other concepts remain `unseen`. Onboarding resumes at session 5 (ser-vs-estar).
+- **Early B** — Set all A-xx grammar concepts to `acquired` (performance_unscaffolded: competent). Set tier1 vocabulary clusters to `acquired`. Set B-01 through B-04 to `practicing`. Set tier2 vocabulary clusters to `practicing` as demonstrated.
+- **Mid C** — Set all A-xx and B-xx grammar concepts to `acquired`. Set tier1 and tier2 vocabulary to `acquired`. Set C-01 (present-subjunctive), C-02 (subjunctive-triggers), C-04 (conditional) to `practicing`. Set tier3 vocabulary clusters to `practicing` as demonstrated.
+
+**Onboarding skip rules:**
+- If placing at Late A: set `onboarding_complete: false`, log skipped sessions (01-04) in the session file under `placement_skipped_sessions`.
+- If placing at Early B or above: set `onboarding_complete: true` in schedule.yaml. The decision engine handles all subsequent session planning. Log all 10 onboarding sessions as skipped.
+- Always note placement level and evidence in the session log and learner-profile.yaml under `initial_placement`.
+
 ### 4. Schedule & Preferences (3 min)
 - How much time per day can they realistically commit? (including homework)
 - Morning, afternoon, or evening preference?

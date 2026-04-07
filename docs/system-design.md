@@ -556,6 +556,8 @@ assignments:
     estimated_minutes: 0
     priority: ""                # required, recommended, bonus
     narrow_topic_aligned: false # true if this assignment is part of the weekly topic block
+    retrieval_target: ""        # prior concept to revisit in this assignment (e.g., "include 2 ser/estar sentences")
+    input_minutes: 0            # listening or reading minutes for input tracking
     notes: ""
 
 # Journal entry review (if applicable)
@@ -1148,7 +1150,37 @@ For days when time is short. The tutor should detect this ("I only have 10 minut
 ├── Skip homework review (note: will review tomorrow)
 ├── One focused activity: SRS hard cards + 5 min conversation
 ├── One assignment: the single most valuable thing to do before tomorrow
+└── Use micro session log (abbreviated schema — see below)
 └── Quick state update
+```
+
+**Micro Session Log Schema:**
+
+For sessions under 15 minutes, use this abbreviated log instead of the full session log schema:
+
+```yaml
+date: ""
+session_number: 0
+duration_minutes: 0
+session_type: micro
+session_status: complete
+learner_energy: ""
+
+activity_summary: ""              # one line: what you did
+concepts_practiced: []            # list of concept IDs touched
+errors_noted:                     # max 3 most important
+  - error: ""
+    correction: ""
+    concept: ""
+
+assignments:
+  - task: ""
+    resource: ""
+    estimated_minutes: 0
+
+next_session:
+  recommended_focus: ""
+  reason: ""
 ```
 
 ### Weekly Review Session (once per week, replaces normal session)
