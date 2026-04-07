@@ -43,6 +43,7 @@ language/
 │   │   ├── fluency-activities.md    # Read in Phase C+
 │   │   ├── sprint-mode.md           # Read when sprint is active
 │   │   ├── real-world-debrief.md    # Read when learner reports real-world encounter
+│   │   ├── placement-validation.md  # Read during placement validation (sessions 2-4, Early B+)
 │   │   └── error-recovery.md        # Read when state validation fails
 │   ├── onboarding/                  # Fixed starter sequence (sessions 1-10)
 │   │   ├── session-01-discovery.md
@@ -184,6 +185,7 @@ Detailed protocols live in `curriculum/tutor-guides/` and are loaded conditional
 | `fluency-activities.md` | Phase C+ and today includes a fluency activity |
 | `sprint-mode.md` | `sprint.active` is true in schedule.yaml |
 | `real-world-debrief.md` | Learner mentions a real-world Spanish encounter |
+| `placement-validation.md` | `placement_validation.active` is true (sessions 2-4, Early B+ placement) |
 | `error-recovery.md` | State validation fails during startup |
 
 This split means a standard session loads CLAUDE.md (~150 lines) + relevant state files. Only on special session types does the agent load additional protocol docs.
