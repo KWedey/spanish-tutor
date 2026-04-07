@@ -56,3 +56,10 @@ After the session, create and populate:
 - `state/system-health.yaml` — initialize all counters
 - `state/resource-tracker.yaml` — add Anki as first resource
 - Commit: `session YYYY-MM-DD: first session — learner profile established`
+
+### 8. Vault Setup
+After state initialization, set up the learner's Obsidian vault:
+1. Run the generation script: `python3 scripts/generate-vault.py --full`
+2. Tell the learner: "I've set up your study companion. Open Obsidian, point it at this project folder, and install the community plugins listed in vault/Getting Started.md. This is where you'll find your homework, track progress, and write your journal."
+3. Commit vault/ alongside initial state files.
+4. The first session's daily note will be generated as part of normal post-session vault updates.
