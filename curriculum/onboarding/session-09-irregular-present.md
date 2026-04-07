@@ -38,7 +38,7 @@ Load `curriculum/grammar/A-foundation/07-present-irregular-common.md`.
 - Pattern: only the yo form is truly irregular. The rest follow regular or stem-changing patterns.
 
 **Saber vs conocer distinction (3 min):**
-- Saber = know facts, know how to do something. "Se hablar espanol." "Se donde vives."
+- Saber = know facts, know how to do something. "Sé hablar español." "Sé donde vives."
 - Conocer = know/be familiar with people, places, things. "Conozco a tu hermano." "Conozco Madrid."
 - "Saber is head knowledge. Conocer is experience knowledge. You 'saber' that Paris is in France. You 'conocer' Paris because you've been there."
 

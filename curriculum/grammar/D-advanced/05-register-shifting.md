@@ -61,7 +61,7 @@ Spanish register operates on a spectrum, not a binary:
 | Level | Pronoun | Vocabulary | Verb forms | Context |
 |-------|---------|-----------|------------|---------|
 | Very formal | usted | specialized, technical | subjunctive politeness (quisiera) | legal, academic, ceremony |
-| Formal | usted | standard, neutral | conditional politeness (podria) | business, strangers, service |
+| Formal | usted | standard, neutral | conditional politeness (podría) | business, strangers, service |
 | Neutral | tu or usted | everyday, clear | standard indicative | acquaintances, colleagues |
 | Informal | tu | colloquial, slang | commands (ven, dime) | friends, family, peers |
 | Very informal | tu (or vos) | slang, diminutives | abbreviated forms | close friends, youth |
@@ -75,10 +75,10 @@ The same concept often has formal and informal vocabulary:
 | casa | domicilio, residencia | home/residence |
 | trabajo | empleo, puesto | job/position |
 | plata / lana | dinero | money |
-| carro / coche | vehiculo, automovil | car/vehicle |
+| carro / coche | vehículo, automóvil | car/vehicle |
 | jefe | superior, director | boss |
 | mandar | enviar | to send |
-| chido / padre (Mexican) | excelente, magnifico | great |
+| chido / padre (Mexican) | excelente, magnífico | great |
 | ahorita | en este momento | right now |
 | neta | la verdad | the truth |
 
@@ -89,7 +89,7 @@ Beyond tu/usted pronoun choice, verb forms shift with register:
 | Function | Informal | Formal |
 |----------|----------|--------|
 | Request | ¿Me **pasas** la sal? | ¿**Podria** pasarme la sal? |
-| Want | **Quiero** un cafe. | **Quisiera** un cafe, por favor. |
+| Want | **Quiero** un café. | **Quisiera** un café, por favor. |
 | Need | **Necesito** hablar contigo. | **Necesitaria** hablar con usted. |
 | Suggest | **Ven** a mi casa. | Le **invito** a que venga a mi oficina. |
 | Apologize | **Perdon**, fue mi culpa. | Le **pido disculpas** por la molestia. |
@@ -100,21 +100,21 @@ Written Spanish has its own formality conventions:
 
 | Feature | Informal (text/email to friend) | Formal (business letter) |
 |---------|--------------------------------|-------------------------|
-| Greeting | Hola, ¿que onda? | Estimado/a Sr./Sra. [nombre]: |
+| Greeting | Hola, ¿qué onda? | Estimado/a Sr./Sra. [nombre]: |
 | Body | direct, short sentences | longer sentences, connectors (D-06) |
 | Closing | Nos vemos / Bye | Le saluda atentamente / Quedo a su disposicion |
 | Register markers | abbreviations, emojis | complete sentences, subjunctive politeness |
 
 ## Examples in Context
 
-1. **Tu, ¿como estas?** vs **Usted, ¿como esta?** (How are you? -- informal vs formal)
-2. **Ven** a mi fiesta. vs **Lo/La invito** a la recepcion. (Come to my party. vs I invite you to the reception.)
-3. **¿Me prestas** tu telefono? vs **¿Seria posible** que me prestara su telefono? (Can I borrow your phone? -- casual vs very formal)
-4. **Oye**, ¿**tienes** un momento? vs **Disculpe**, ¿**tendria** un momento? (Hey, do you have a second? vs Excuse me, would you have a moment?)
-5. **Guey**, estuvo **padre** la fiesta. vs La celebracion **resulto** muy agradable. (Dude, the party was awesome. vs The celebration turned out very pleasant.)
-6. **Dime** lo que piensas. vs Le **agradeceria** que me **diera** su opinion. (Tell me what you think. vs I would appreciate if you gave me your opinion.)
+1. **Tú, ¿cómo estás?** vs **Usted, ¿cómo está?** (How are you? -- informal vs formal)
+2. **Ven** a mi fiesta. vs **Lo/La invito** a la recepción. (Come to my party. vs I invite you to the reception.)
+3. **¿Me prestas** tu teléfono? vs **¿Sería posible** que me prestara su teléfono? (Can I borrow your phone? -- casual vs very formal)
+4. **Oye**, ¿**tienes** un momento? vs **Disculpe**, ¿**tendría** un momento? (Hey, do you have a second? vs Excuse me, would you have a moment?)
+5. **Guey**, estuvo **padre** la fiesta. vs La celebración **resultó** muy agradable. (Dude, the party was awesome. vs The celebration turned out very pleasant.)
+6. **Dime** lo que piensas. vs Le **agradecería** que me **diera** su opinión. (Tell me what you think. vs I would appreciate if you gave me your opinion.)
 7. No **te preocupes**. vs No **se preocupe**, lo resolveremos. (Don't worry. -- informal vs formal)
-8. **Sientate** donde quieras. vs Por favor, **tome asiento**. (Sit down wherever. vs Please, take a seat.)
+8. **Siéntate** donde quieras. vs Por favor, **tome asiento**. (Sit down wherever. vs Please, take a seat.)
 9. Fue **mi culpa**, **perdon**. vs Le **pido disculpas** por el inconveniente. (My bad, sorry. vs I apologize for the inconvenience.)
 10. **Hablamos** luego. vs **Quedo a su disposicion** para cualquier consulta. (Talk later. vs I remain at your disposal for any questions.)
 
@@ -126,9 +126,9 @@ Written Spanish has its own formality conventions:
 
 | Situation | Instinct (wrong) | Correct | Why |
 |-----------|------------------|---------|-----|
-| Meeting a friend's grandmother | ¿Como **estas**? (tu) | ¿Como **esta** (usted)? | Elders receive usted in most Latin American cultures |
+| Meeting a friend's grandmother | ¿Cómo **estás**? (tu) | ¿Cómo **está** (usted)? | Elders receive usted in most Latin American cultures |
 | Job interview | Tu, ¿**tienes** preguntas? | Usted, ¿**tiene** preguntas? | Professional contexts require usted |
-| Waiter in restaurant | **Dame** un cafe. | **Quisiera** un cafe, por favor. | Service contexts expect politeness markers |
+| Waiter in restaurant | **Dame** un café. | **Quisiera** un café, por favor. | Service contexts expect politeness markers |
 | Text to close friend | Estimado amigo... | Oye, ¿que onda? | Overly formal with friends sounds cold |
 
 **Preemption script:** "English gives you one 'you' for everyone -- your best friend, your boss, the president. Spanish doesn't work that way. Every time you say 'you,' you're making a social choice: tu (close/casual), usted (respectful/formal), or vos (in some countries). Getting the grammar right but the register wrong can actually offend people. We're going to practice reading social situations and choosing the right level."
@@ -137,7 +137,7 @@ Written Spanish has its own formality conventions:
 
 1. **Using tu with everyone.** The learner defaults to tu because it was learned first and is simpler. Using tu with a stranger, elder, or authority figure is socially inappropriate in most Latin American contexts. -- L1 interference. Practice identifying usted-required situations.
 2. **Using usted with close friends.** Overcorrection: the learner switches to usted for everyone and sounds distant or cold with peers. Friends and family expect tu (or vos). -- overgeneralization. Practice identifying tu-appropriate situations.
-3. **Mixing tu and usted forms in one sentence.** "Tu, ¿como esta?" or "Usted, ¿como estas?" The pronoun and verb form must match consistently. -- developmental. Drill complete exchanges in one register before mixing.
+3. **Mixing tu and usted forms in one sentence.** "Tú, ¿cómo está?" or "Usted, ¿cómo estás?" The pronoun and verb form must match consistently. -- developmental. Drill complete exchanges in one register before mixing.
 4. **Only shifting pronouns, not vocabulary or tone.** The learner uses usted but with informal vocabulary: "Usted, ¿que onda?" Register involves the full package -- pronouns, vocabulary, verb forms, and expressions. -- developmental. Practice complete register-appropriate exchanges.
 5. **Not recognizing when to shift mid-conversation.** The other person switches from usted to tu (signaling increased closeness), and the learner misses the cue. -- pragmatic awareness. Discuss the social meaning of register shifts and practice recognizing them.
 
@@ -146,21 +146,21 @@ Written Spanish has its own formality conventions:
 ### Stage 1: Noticing
 Present two versions of the same conversation -- one entirely in tu register, one in usted register. Ask the learner to identify every difference (pronouns, verb forms, vocabulary, greetings, closings):
 
-**Version 1 (tu):** "Oye, ¿como estas? Ven a mi casa manana, vamos a hacer una carne asada. Dime si puedes."
+**Version 1 (tu):** "Oye, ¿cómo estás? Ven a mi casa mañana, vamos a hacer una carne asada. Dime si puedes."
 
-**Version 2 (usted):** "Buenos dias, ¿como esta? Lo invito a una recepcion en mi domicilio manana. ¿Seria posible que asistiera? Quedamos en contacto."
+**Version 2 (usted):** "Buenos días, ¿cómo está? Lo invito a una recepción en mi domicilio mañana. ¿Sería posible que asistiera? Quedamos en contacto."
 
 Ask: "Who is speaking to whom in each version? How do you know? What changed besides the pronouns?"
 
 ### Stage 2: Controlled Practice
 Register transformation drill: give a sentence in one register, learner converts to the other:
 
-1. "¿Como estas?" --> "¿Como esta?"
+1. "¿Cómo estás?" --> "¿Cómo está?"
 2. "Ven aca." --> "Venga, por favor."
 3. "¿Me prestas tu pluma?" --> "¿Podria prestarme su pluma?"
 4. "Perdon, fue mi culpa." --> "Le pido disculpas por el inconveniente."
-5. "Quiero un cafe." --> "Quisiera un cafe, por favor."
-6. "Dime tu opinion." --> "Le agradeceria que me diera su opinion."
+5. "Quiero un café." --> "Quisiera un café, por favor."
+6. "Dime tu opinión." --> "Le agradecería que me diera su opinión."
 
 Then social judgment drill: describe a situation, learner chooses tu or usted:
 - "Your friend's 5-year-old daughter" --> tu
@@ -176,8 +176,8 @@ Listen for consistent register within each exchange. If the learner mixes tu and
 ### Stage 4: Communicative Practice
 Three-scene role-play requiring rapid register shifts:
 
-1. **Scene 1:** You're ordering coffee at a formal cafe. The waiter addresses you as usted. Order, ask about the menu, and request the check.
-2. **Scene 2:** Your friend arrives at the cafe. Greet them, tell them about your day, make plans.
+1. **Scene 1:** You're ordering coffee at a formal café. The waiter addresses you as usted. Order, ask about the menu, and request the check.
+2. **Scene 2:** Your friend arrives at the café. Greet them, tell them about your day, make plans.
 3. **Scene 3:** Your friend's boss walks in and your friend introduces you. Make small talk.
 
 This requires shifting from formal (waiter) to informal (friend) to formal (boss) within one continuous scenario. The focus is on fluid register transitions.
@@ -203,13 +203,13 @@ See `curriculum/dialect-notes.yaml` for regional vocabulary preferences.
 ## Signs of Acquisition
 - **Scaffolded:** Correctly produces complete exchanges in both tu and usted registers. Transforms sentences between registers with correct pronouns, verb forms, and vocabulary. Identifies the appropriate register for given social situations.
 - **Unscaffolded:** Shifts registers naturally in role-play without prompting. Chooses usted with strangers and authority figures, tu with friends and peers. Adjusts vocabulary and tone (not just pronouns) when shifting.
-- **Integrated:** Maintains register consistency throughout extended interactions. Recognizes when the other speaker shifts register (usted to tu) and reciprocates appropriately. Uses register-appropriate politeness markers (quisiera, podria, le agradeceria) alongside correct grammar from other concepts.
+- **Integrated:** Maintains register consistency throughout extended interactions. Recognizes when the other speaker shifts register (usted to tu) and reciprocates appropriately. Uses register-appropriate politeness markers (quisiera, podría, le agradecería) alongside correct grammar from other concepts.
 
 ## Connection Points
 Register shifting intersects grammar and culture. The grammatical forms are taught here; the social judgment develops through practice.
 
 - **B-09** (imperatives) introduced tu and usted command forms. Register shifting contextualizes WHEN to use each.
-- **C-04** (conditional) provides the polite request forms (podria, querria). Register shifting teaches when these are socially expected vs optional.
+- **C-04** (conditional) provides the polite request forms (podría, querría). Register shifting teaches when these are socially expected vs optional.
 - **D-01** (past subjunctive) provides quisiera, the ultra-polite request form. This is a register marker as much as a grammar point.
 - **D-04** (passive voice) connects to written register: true passive is a marker of formal writing.
 - **D-06** (nuanced connectors) elevates written and spoken register: sin embargo, no obstante, a pesar de que are formal register markers.

@@ -47,12 +47,12 @@ Show pairs: "el gato negro / la gata negra, los gatos negros / las gatas negras.
 ### Practice (5-10 min)
 Activity options (choose based on energy):
 1. **"Describe this room"** — learner describes objects they can see, using adjectives with correct agreement. Tutor prompts: "What color is it? Is it big or small?"
-2. **"Describe your family"** — "Mi hermano es alto. Mi madre es simpatica." Forces possessives + gender agreement + ser.
+2. **"Describe your family"** — "Mi hermano es alto. Mi madre es simpática." Forces possessives + gender agreement + ser.
 
 Do NOT correct mid-flow. Note errors silently. After the conversation, give 2-3 specific corrections and highlight 1-2 things done well.
 
 ### Checkout (3-5 min)
-**Anki:** Add 8 new cards — common nouns with genders (el libro, la mesa, el dia, la mano) and key adjectives (grande, pequeno, rojo/roja, bonito/bonita).
+**Anki:** Add 8 new cards — common nouns with genders (el libro, la mesa, el día, la mano) and key adjectives (grande, pequeño, rojo/roja, bonito/bonita).
 
 **Tool setup: Dreaming Spanish**
 - Walk the learner through Dreaming Spanish (dreamingspanish.com)
@@ -65,7 +65,7 @@ Do NOT correct mid-flow. Note errors silently. After the conversation, give 2-3 
 - Dreaming Spanish: watch 10-15 min of superbeginner content (10-15 min)
 
 ## Vocabulary Focus
-Begin `curriculum/vocabulary/tier1-survival/basic-descriptions.md` — introduce: colors (rojo, azul, verde, blanco, negro), sizes (grande, pequeno), personality basics (simpatico, inteligente, divertido). These pair naturally with gender agreement practice.
+Begin `curriculum/vocabulary/tier1-survival/basic-descriptions.md` — introduce: colors (rojo, azul, verde, blanco, negro), sizes (grande, pequeño), personality basics (simpático, inteligente, divertido). These pair naturally with gender agreement practice.
 
 ## Learner Observation Targets
 - **Gender intuition:** How quickly do they grasp the -o/-a pattern? Do they generalize it to exceptions (saying "la dia")?

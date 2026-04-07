@@ -65,7 +65,7 @@ After the conversation: give 2-3 corrections on ser/estar specifically. Highligh
 - Start graded reader — first 2-3 pages (10 min)
 
 ## Vocabulary Focus
-Begin `curriculum/vocabulary/tier1-survival/numbers-time-dates.md` — introduce time expressions that use ser: "Son las tres," "Es la una," "Son las diez de la manana." Time is a natural entry point because it reinforces ser in a concrete, high-frequency context.
+Begin `curriculum/vocabulary/tier1-survival/numbers-time-dates.md` — introduce time expressions that use ser: "Son las tres," "Es la una," "Son las diez de la mañana." Time is a natural entry point because it reinforces ser in a concrete, high-frequency context.
 
 ## Learner Observation Targets
 - **Ser/estar confusion severity:** This is the first data point for the highest-risk L1 pattern. How often does the learner default to one verb for everything? Which direction (all ser? all estar?)?

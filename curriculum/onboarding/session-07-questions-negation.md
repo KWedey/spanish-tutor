@@ -17,23 +17,23 @@ Also load `curriculum/tutor-guides/l1-interference-protocol.md` — double-negat
 
 **Homework check:** Verify Anki consistency. "How many days in a row have you reviewed?" Ask about Dreaming Spanish: "Anything you understood better this time?"
 
-**Quick warm-up:** Ask a question in Spanish that uses concepts from sessions 2-5. "Donde vives? Como es tu casa?" — the learner answers, and this naturally introduces the idea that questions are today's focus.
+**Quick warm-up:** Ask a question in Spanish that uses concepts from sessions 2-5. "¿Dónde vives? ¿Cómo es tu casa?" — the learner answers, and this naturally introduces the idea that questions are today's focus.
 
 ### New Material (15-20 min)
 Load `curriculum/grammar/A-foundation/05-basic-questions.md`.
 
 **Stage 1 — Question words (5 min):**
 Show 8 questions and their answers. Ask: "What do the question words have in common?" (They all have accent marks.)
-- Que, quien/quienes, donde, cuando, como, por que, cuanto/a/os/as, cual/cuales
+- Qué, quién/quiénes, dónde, cuándo, cómo, por qué, cuánto/a/os/as, cuál/cuáles
 - Point out the accent marks — they signal "this is a question word, not a regular word."
 
 **Stage 2 — Question formation (3 min):**
-- Inversion: "Hablas espanol?" (verb first)
-- Intonation: "Tu hablas espanol?" (rising pitch)
+- Inversion: "Hablas español?" (verb first)
+- Intonation: "Tú hablas español?" (rising pitch)
 - "In Spanish, you don't need 'do' — no 'Do you speak Spanish?' Just reverse or raise your voice."
 
 **Stage 3 — Negation and double negatives (7 min):**
-- Basic negation: "no" before the verb. "No hablo espanol."
+- Basic negation: "no" before the verb. "No hablo español."
 - Negative words: nada (nothing), nadie (nobody), nunca (never), tampoco (neither), ninguno/a (none)
 
 **L1 interference preemption:** "In English, double negatives are wrong — 'I don't have nothing' is bad grammar. In Spanish, double negatives are REQUIRED. 'No tengo nada' literally means 'I don't have nothing' and it's the correct way to say it. Your English brain will resist this."
@@ -51,17 +51,17 @@ Target: at least 5 different question words used. Listen for:
 After: Correct 2-3 errors. Highlight creative or natural-sounding questions.
 
 **Negation mini-drill (3 min):** Tutor makes a statement, learner negates it:
-- "Tienes un perro." → "No, no tengo ningun perro."
+- "Tienes un perro." → "No, no tengo ningún perro."
 - "Siempre comes pizza." → "No, nunca como pizza."
-- "Alguien esta en la cocina." → "No, nadie esta en la cocina."
+- "Alguien está en la cocina." → "No, nadie está en la cocina."
 
 ### Checkout (3-5 min)
-**Anki:** Add 8 new cards — question words (que, quien, donde, cuando, como, por que, cual, cuanto) and negative words (nada, nadie, nunca).
+**Anki:** Add 8 new cards — question words (qué, quién, dónde, cuándo, cómo, por qué, cuál, cuánto) and negative words (nada, nadie, nunca).
 
 **Tool setup: Speechling**
 - Walk the learner through Speechling (speechling.com)
 - Create an account and demonstrate the recording feature
-- Record one sentence together: "Donde esta el restaurante?" — submit for coach feedback
+- Record one sentence together: "¿Dónde está el restaurante?" — submit for coach feedback
 - "This tool will help your pronunciation. Record one sentence per day and the coach gives you feedback."
 
 **Homework (25-30 min total):**
@@ -71,7 +71,7 @@ After: Correct 2-3 errors. Highlight creative or natural-sounding questions.
 - Dreaming Spanish: 10-15 min superbeginner content
 
 ## Vocabulary Focus
-Begin `curriculum/vocabulary/tier1-survival/directions-transportation.md` — introduce direction question words and phrases: donde esta...?, como llego a...?, cerca, lejos, derecha, izquierda, recto. These pair naturally with question formation ("Donde esta la estacion?").
+Begin `curriculum/vocabulary/tier1-survival/directions-transportation.md` — introduce direction question words and phrases: ¿dónde está...?, ¿cómo llego a...?, cerca, lejos, derecha, izquierda, recto. These pair naturally with question formation ("¿Dónde está la estación?").
 
 ## Learner Observation Targets
 - **Question formation comfort:** Does the learner naturally invert subject-verb, or do they default to English declarative word order with rising intonation?
