@@ -1,6 +1,24 @@
 # Fluency Activities Guide
 
-Loaded when: Phase C+ and today's session includes a fluency activity.
+Loaded when: Phase B+ and today is a fluency day.
+
+## Phase-Specific Guidance
+
+### Phase B (1x/week)
+- Timed monologue only (1 minute). Accuracy is still primary.
+- Fluency work is exposure, not expectation. Don't track metrics yet.
+- Goal: build comfort with sustained output.
+
+### Phase C (2x/week)
+- Full activity set unlocked (monologue, speed translation, shadowing, retelling).
+- Begin tracking fluency metrics. Balanced correction.
+- Only correct meaning-impeding errors and current focus-area errors.
+
+### Phase D (every session)
+- Every session includes a fluency component.
+- Metrics are the primary assessment tool.
+- Correct only meaning-impeding errors during fluency work.
+- Batch everything else for post-activity review.
 
 ## Activities
 
@@ -51,3 +69,34 @@ After each fluency activity, note in the session log:
 | A-B | Accuracy-leaning | Build correct habits. Fluency activities 1x/week max. |
 | C | Balanced | Timed monologues, reduced correction. Only correct repeated/high-impact errors. |
 | D | Fluency-leaning | Smoothness, natural rhythm, spontaneity. Correct only meaning-impeding errors. |
+
+## Fluency Benchmarks
+
+### Oral Fluency (reference — tutor cannot measure directly)
+
+| Metric | Phase C | Phase D |
+|--------|---------|---------|
+| Pace (WPM) | 60-80 developing, 80-100 on track | 100-120 developing, 120+ natural-flow |
+| Hesitation (pauses >2s/min) | 6+ frequent, 3-5 occasional, 0-2 rare | 3+ frequent, 1-2 occasional, 0 rare |
+| Native reference | 120-180 WPM (varies by dialect) | |
+
+### Typed Production (tutor-measurable)
+
+| Phase | Benchmark |
+|-------|-----------|
+| B | Can produce 3-4 simple sentences in 2 minutes |
+| C | Can produce a coherent paragraph in 2 minutes |
+| D | Can sustain multi-paragraph response with complex structures in 3 minutes |
+
+### Self-Correction Rate
+- High self-correction = good (shows monitoring). Track trend.
+- Declining self-correction + stable accuracy = automaticity emerging.
+- Declining self-correction + declining accuracy = losing awareness — flag.
+
+**Important:** These are reference benchmarks, not pass/fail criteria. The tutor estimates from conversation — qualitative assessment backed by quantitative reference.
+
+## Typed vs. Oral Fluency
+
+The tutor operates via text. "Timed monologue" in Claude Code is timed writing — a valid fluency proxy. True oral fluency is delegated to external tools (Speechling, conversation partners).
+
+Fluency metrics in skill-map should note data source: `"moderate (per italki feedback)"` vs. `"moderate (typed production estimate)"`.
