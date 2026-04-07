@@ -51,7 +51,7 @@ Are we on track for stated milestones? If behind, discuss with learner — adjus
 What's feeling good? What's feeling tedious? Check for plateau risk.
 
 ### 10. Maintenance
-- Archive daily session logs older than 30 days to `state/sessions/archive/`
+- Archive daily session logs older than 60 days to `state/sessions/archive/` (see Session Archive section below)
 - Update schedule.yaml with next week's plan
 
 ### 11. Fun Activity
