@@ -257,6 +257,17 @@ input_hours:
 
 # Notes
 notes: ""                    # anything else relevant
+
+# Initial placement (populated in first session for non-beginners)
+initial_placement:
+  level: ""                 # pre-A / early-A / late-A / early-B / mid-B / early-C / mid-C
+  date: null
+  self_report: ""           # beginner / intermediate / advanced (learner's self-assessment)
+  grammar_result: ""        # placement level derived from grammar prompts
+  vocabulary_observation: "" # minimal / narrow / broad / deep
+  reading_result: ""        # below-expected / at-expected / above-expected
+  confidence: ""            # high / medium / low
+  evidence_summary: ""      # tutor's rationale for placement decision
 ```
 
 ### 3. Skill Map (`state/skill-map.yaml`)
@@ -515,6 +526,20 @@ adjustment_log:
   - date: ""
     change: ""
     reason: ""
+
+# Placement validation (active during sessions 2-4 for learners who skip onboarding)
+placement_validation:
+  active: false
+  confidence: null          # high / medium / low / validated
+  sessions_completed: 0
+  listening_baseline_set: false
+  total_downgrades: 0
+  queue:                    # populated during session 1 for Early B+ placements
+    - concept_id: ""
+      priority: 1           # lower = check first
+      status: pending       # pending / checked-pass / checked-fail / pending_downgrade
+      checked_in_session: null  # date when this concept was spot-checked
+      notes: ""
 ```
 
 ### 5. Session Logs (`state/sessions/YYYY-MM-DD.yaml`)
@@ -599,6 +624,42 @@ learner_observations:
   self_assessment: ""           # what they said about how they're feeling about progress
   calibration_note: ""          # if self-assessment diverges from actual performance
   autonomy_readiness: ""        # observations about whether learner is ready for more control
+
+# Initial assessment (session 1 only, for non-beginners)
+assessment:
+  self_report: ""           # learner's self-assessed level before prompts
+  grammar_prompts:
+    introduce_yourself:
+      response_summary: ""  # what the learner said, abbreviated
+      scoring: ""           # pre-A / early-A / late-A / acquired-A-01
+    tell_about_yesterday:
+      response_summary: ""
+      scoring: ""           # below-B / early-B / mid-B / acquired-B-01-B-04
+    what_would_you_do:
+      response_summary: ""
+      scoring: ""           # below-C / early-C / mid-C / acquired-through-C
+  vocabulary_observation:
+    level: ""               # minimal / narrow / broad / deep
+    domains_demonstrated: []
+    production_gap_indicators: []
+    follow_up_topic: ""
+    follow_up_notes: ""
+  reading_check:
+    passage_level: ""       # calibrated one half-step above demonstrated production
+    comprehension: ""       # below-expected / gets-the-gist / understands-nearly-all
+  placement_decision:
+    level: ""               # final placement level
+    confidence: ""          # high / medium / low
+    rationale: ""           # tutor's reasoning
+
+# Placement validation spot-checks (sessions 2-4 only, when placement_validation.active)
+validation_checks:
+  - concept_id: ""
+    elicitation: ""         # how the tutor naturally prompted this (e.g., conversation topic)
+    observation: ""         # what the learner produced
+    result: ""              # checked-pass / checked-fail
+    action: ""              # validated / downgrade-to-practicing / downgrade-to-introduced
+    error_rate_estimate: null
 
 # Next session recommendation
 next_session:
@@ -724,6 +785,15 @@ sessions_rated_too_hard_30d: 0
 # Note: anki_new_cards_per_session and anki_retirement_threshold_days moved to schedule.yaml
 anki_estimated_deck_size: 0
 anki_estimated_daily_review_minutes: 0
+
+# Placement validation effectiveness (populated after validation period closes)
+placement_validation_metrics:
+  placement_level: null     # where the learner was placed
+  initial_confidence: null  # high / medium / low
+  total_concepts_validated: 0
+  total_downgrades: 0
+  final_assessment: null    # placement-confirmed / placement-adjusted
+  validation_completed: null  # date validation period closed
 
 # Last reviewed
 last_system_review: null
