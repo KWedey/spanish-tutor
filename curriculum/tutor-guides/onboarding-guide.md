@@ -33,3 +33,55 @@ This period accomplishes:
 - Populate any learner-profile fields that are still blank
 - The decision engine activates at session 11
 - The learner shouldn't notice the transition — sessions just gradually become more tailored
+
+## Struggling During Onboarding
+
+### Signals
+- Unable to reproduce previous session's concept after review
+- Error rate >50% on controlled practice after full explanation
+- Learner expresses frustration or confusion 2+ sessions in a row
+- Homework consistently incomplete or reported as too difficult
+
+### Step 1 — Check External Factors FIRST
+
+Before assuming concept difficulty, check:
+- Is homework getting done? If not, the fix is reducing load, not reteaching.
+- Has available study time changed? Life events, schedule shifts?
+- Is the learner overwhelmed by tools (Anki setup, multiple apps)?
+- Ask: "How's your study time been this week?"
+- If external factors are the cause → adjust homework load and tool expectations. Do NOT insert consolidation.
+
+### Step 2 — If Concept Difficulty Confirmed
+
+1. Never repeat the exact same session — reteach with a different approach (examples-first if rules-first failed, or vice versa).
+2. Insert an unscheduled consolidation session before advancing.
+3. Maximum 2 inserted consolidation sessions per concept — if still struggling, note as "slow acquisition" in skill-map and continue forward (concept resurfaces via decision engine post-onboarding).
+4. Extend onboarding beyond session 10 if:
+   - 3+ A-phase concepts are still "introduced" (not "practicing")
+   - Learner hasn't demonstrated basic sentence construction
+   - Communication repair phrases are not emerging
+   - Maximum extension: 5 additional sessions (to session 15)
+5. If extended onboarding exceeds session 15:
+   - Complete onboarding regardless
+   - Decision engine takes over with heavy consolidation weighting
+   - Flag in system-health.yaml: `onboarding_extended: true`, `onboarding_sessions: N`
+   - Reduce `max_new_concepts_per_week` to 1
+
+### Emotional Considerations
+- Never imply the learner is behind or slow
+- Frame consolidation as "let's make sure this is solid before we build on it"
+- Adjust energy: more games, less drilling
+
+## Weekly Review During Onboarding
+
+If the learner's `weekly_review_day` falls during onboarding, run a simplified review:
+
+1. Progress check: "Here's what we've covered so far" — list concepts introduced and their status.
+2. Homework review: completion rate, difficulty feedback.
+3. Tool check: is Anki working? Any setup issues?
+4. Quick wins: highlight 2-3 specific things they can do now that they couldn't before.
+5. Motivation check: "How's it feeling so far?"
+
+**Skip:** narrow topic selection, decision engine references, skill-map audit, system health review, resource rotation.
+
+Write an abbreviated weekly summary noting it's an onboarding review. First full weekly review happens the first review day after `onboarding_complete = true`.
