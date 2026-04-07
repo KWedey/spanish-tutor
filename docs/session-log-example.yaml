@@ -1,0 +1,136 @@
+# Example Session Log — shows all fields with realistic values
+# Use as a reference when writing session logs
+
+date: "2026-04-15"
+session_number: 14
+duration_minutes: 35
+learner_energy: medium
+session_type: standard
+session_status: complete
+gap_days: 1
+
+assignment_review:
+  - task: "Review Anki deck — focus on food vocabulary"
+    resource: Anki
+    completed: true
+    learner_report: "Got through all cards, struggled with 'cuchara' vs 'cucharón'"
+    tutor_assessment: "Production of kitchen utensils still weak"
+    verification_result: "Asked about restaurant ordering — used 'tenedor' correctly unprompted"
+    skill_updates:
+      - concept: tier1-food-restaurant
+        field: weak_production
+        note: "Add cuchara, cucharón to weak list"
+  - task: "Watch Dreaming Spanish: 'En el mercado' (8 min)"
+    resource: Dreaming Spanish
+    completed: true
+    learner_report: "Understood most of it, missed some fast parts"
+    tutor_assessment: "Comprehension at Beginner level solid"
+    verification_result: "Asked '¿De qué trataba el video?' — produced 3 accurate summary sentences"
+    skill_updates: []
+
+session_activities:
+  - type: grammar-drill
+    target_concepts: [A-02-ser-vs-estar]
+    duration_minutes: 10
+    performance: mixed
+    errors_noted:
+      - error: "Estoy un estudiante"
+        correction: "Soy estudiante"
+        category: grammar
+        concept: A-02-ser-vs-estar
+        error_type: l1-interference
+      - error: "Es caliente hoy"
+        correction: "Está caliente hoy / Hace calor hoy"
+        category: grammar
+        concept: A-02-ser-vs-estar
+        error_type: l1-interference
+    observations: "Consistent ser/estar confusion with temporary states"
+    highlights: "Self-corrected 'estoy alto' to 'soy alto' unprompted"
+    l1_interference_noted: true
+    fluency_observations: ""
+    notes: "Stage 2 controlled practice — needs more contrastive drilling"
+  - type: conversation
+    target_concepts: [A-02-ser-vs-estar, tier1-food-restaurant]
+    duration_minutes: 12
+    performance: good
+    errors_noted:
+      - error: "La comida es buena (when talking about today's lunch)"
+        correction: "La comida está buena (temporary quality judgment)"
+        category: grammar
+        concept: A-02-ser-vs-estar
+        error_type: developmental
+    observations: "Conversation about restaurants flowed well, used food vocab from homework"
+    highlights: "Produced 'Me gusta el restaurante porque la comida está rica' — correct estar usage!"
+    l1_interference_noted: false
+    fluency_observations: "Moderate pace, 3-4 second pauses for verb conjugation, willing to attempt complex sentences"
+    notes: ""
+
+skill_map_updates:
+  - concept: A-02-ser-vs-estar
+    field: error_rate_drills
+    old_value: 0.30
+    new_value: 0.25
+    evidence: "3/12 errors in controlled practice (improving from 4/12 last session)"
+  - concept: A-02-ser-vs-estar
+    field: error_rate_production
+    old_value: 0.35
+    new_value: 0.28
+    evidence: "1 error in ~12 min conversation (context-dependent: temporary states still weak)"
+  - concept: A-02-ser-vs-estar
+    field: error_trend
+    old_value: stable
+    new_value: improving
+    evidence: "Both drill and production rates declining over last 3 sessions"
+
+assignments:
+  - type: vocabulary
+    resource: Anki
+    task: "Review existing deck + add 5 new cards from today's restaurant conversation (tenedor, cuchillo, cuchara, cuenta, propina)"
+    target_skill: tier1-food-restaurant
+    estimated_minutes: 15
+    priority: required
+    narrow_topic_aligned: true
+    notes: "Focus on production — say each word aloud before flipping"
+  - type: listening
+    resource: Dreaming Spanish
+    task: "Watch 'Mi familia' (Beginner, 7 min) — notice ser vs estar usage"
+    target_skill: A-02-ser-vs-estar
+    estimated_minutes: 10
+    priority: recommended
+    narrow_topic_aligned: false
+    notes: "Pay attention to how they describe people (ser) vs how they feel (estar)"
+  - type: writing
+    resource: journal
+    task: "Write 5 sentences describing your favorite restaurant — use both ser and estar"
+    target_skill: A-02-ser-vs-estar
+    estimated_minutes: 10
+    priority: recommended
+    narrow_topic_aligned: true
+    notes: "Prompt: ¿Cómo es tu restaurante favorito? ¿Cómo está la comida?"
+
+journal_review:
+  entry_date: "2026-04-14"
+  errors_found:
+    - error: "Yo como el almuerzo a las doce"
+      correction: "Como el almuerzo a las doce (subject pronoun unnecessary)"
+      concept: l1-interference-subject-pronoun
+    - error: "La comida es muy delicioso"
+      correction: "La comida es muy deliciosa (gender agreement)"
+      concept: A-03-gender-agreement
+  quality_notes: "Good sentence variety. Attempting compound sentences. Agreement errors persist but decreasing."
+
+learner_observations:
+  mood: motivated
+  engagement: high
+  emotional_state: confident
+  self_assessment: "Feels like ser/estar is starting to click"
+  calibration_note: "Slightly overestimates — still 28% production errors, but trend is positive"
+  autonomy_readiness: "Not yet — still needs structured practice for ser/estar"
+
+next_session:
+  recommended_focus: A-02-ser-vs-estar
+  reason: "Production error still at 28%, but improving. One more session of communicative practice before spot-checking."
+  avoid: "Don't introduce new grammar — ser/estar needs consolidation"
+  session_type: normal
+  estimated_duration: 35
+  l1_interference_to_preempt: [ser-estar-confusion]
