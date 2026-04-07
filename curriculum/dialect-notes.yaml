@@ -123,3 +123,67 @@ pronunciation_differences:
     highland: "Final 's' clearly pronounced"
     introduce_at: Phase C
     notes: "Important for understanding Caribbean Spanish speakers"
+
+caribbean_features:
+  pronunciation:
+    - feature: final-s-aspiration
+      description: "Final 's' aspirated or deleted (esta → ehta)"
+      regions: [cuba, dominican-republic, puerto-rico]
+      introduce_at: B
+    - feature: liquid-neutralization
+      description: "R/L interchange in syllable-final position"
+      regions: [caribbean]
+      introduce_at: C
+    - feature: rapid-tempo
+      description: "Generally faster speech tempo than other dialects"
+      regions: [caribbean]
+      introduce_at: B
+  grammar:
+    - feature: subject-pronoun-frequency
+      description: "Subject pronouns used more frequently than in other dialects"
+      regions: [caribbean]
+      introduce_at: B
+    - feature: inverted-questions
+      description: "¿Qué tú quieres? instead of ¿Qué quieres tú?"
+      regions: [caribbean]
+      introduce_at: C
+  vocabulary:
+    - word: guagua
+      meaning: bus
+      regions: [caribbean]
+    - word: china
+      meaning: orange (Puerto Rico)
+      regions: [puerto-rico]
+
+central_american_features:
+  pronunciation:
+    - feature: conservative-s
+      description: "Generally clear 's' pronunciation"
+      regions: [central-america]
+      introduce_at: B
+    - feature: costa-rican-r
+      description: "Strong, sometimes retroflex 'r'"
+      regions: [costa-rica]
+      introduce_at: C
+  grammar:
+    - feature: varied-voseo
+      description: "Vos usage varies by country; standard in Costa Rica/Guatemala"
+      regions: [costa-rica, guatemala]
+      introduce_at: B
+    - feature: ustedeo
+      description: "Using usted for informal contexts"
+      regions: [costa-rica, colombia]
+      introduce_at: C
+  vocabulary:
+    - word: mae
+      meaning: "dude (Costa Rica)"
+      regions: [costa-rica]
+    - word: cipote
+      meaning: "kid (Honduras)"
+      regions: [honduras]
+    - word: cabal
+      meaning: "exactly (Guatemala)"
+      regions: [guatemala]
+    - word: puchica
+      meaning: "exclamation (general Central American)"
+      regions: [central-america]
