@@ -31,6 +31,11 @@ weekly_topic:
 
 fluency_accuracy_balance: accuracy-leaning
 
+# Fluency day tracking (Phase B+)
+# Phase B: 1x/week, Phase C: 2x/week, Phase D: every session
+fluency_days_this_week: 0
+last_fluency_day: null
+
 grammar_queue: []
 vocabulary_queue: []
 

@@ -51,6 +51,14 @@ This forces mixing ser (identity: soy Kyle, soy de..., soy...) with estar (state
 
 After the conversation: give 2-3 corrections on ser/estar specifically. Highlight any correct uses: "You said 'estoy cansado' — that's exactly right. Tired is a temporary state, so it's estar."
 
+### Pronunciation Check-in (2-3 min)
+Intonation — Spanish uses pitch to distinguish questions from statements. Unlike English, Spanish yes/no questions rise at the end while statements fall:
+- **Statement:** "Estás cansado." — pitch falls on the last syllable
+- **Question:** "¿Estás cansado?" — pitch rises on the last syllable
+- **Statement:** "Es de México." vs **Question:** "¿Es de México?"
+
+Have the learner say "Estás cansado" as a statement, then as a question. The words are identical — only the intonation changes. This connects directly to the ser/estar contrast pairs: "¿Es aburrido?" (is he boring?) vs "Es aburrido." (he IS boring) carry different pragmatic weight through intonation alone.
+
 ### Checkout (3-5 min)
 **Anki:** Add 8 new cards — ser/estar contrast pairs (same adjective, different meaning). Include both conjugated forms: soy/estoy, es/esta, son/estan.
 

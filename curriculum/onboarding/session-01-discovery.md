@@ -43,6 +43,16 @@ Role-play stuck scenarios. Tutor speaks Spanish at natural speed — learner mus
 
 Introduce 5 basic greetings during practice: hola, buenos dias, adios, gracias, por favor. Use them naturally as part of the role-play.
 
+### Pronunciation Check-in (2-3 min)
+Spanish has 5 pure vowels — each one always sounds the same, with no English-style glide or reduction. Using the repair phrases the learner just practiced, highlight the vowel sounds:
+- **a** in "más" and "hablar" — open "ah," never "ay"
+- **e** in "entiendo" and "repetir" — short "eh," never "ee"
+- **i** in "significa" and "dice" — crisp "ee," never "eye"
+- **o** in "por favor" and "cómo" — short "oh," no glide toward "oo"
+- **u** in "puedes" — pure "oo," never "you"
+
+Have the learner repeat "No entiendo" and "Más despacio, por favor" once more, this time focusing on keeping each vowel clean and short. No drilling — just plant the seed.
+
 ### Checkout (3-5 min)
 **Tool setup: Anki**
 - Help the learner install Anki (desktop or mobile)

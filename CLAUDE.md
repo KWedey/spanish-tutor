@@ -102,6 +102,8 @@ See `curriculum/tutor-guides/return-session.md` — loaded automatically when a 
 
 ## Error Correction
 
+These are defaults for free conversation. The activity-specific table below overrides them during controlled practice and guided production stages.
+
 - Never correct more than 3 errors per conversation segment.
 - Prioritize errors in the current focus area.
 - Prefer recasting over explicit correction when possible.
@@ -109,7 +111,7 @@ See `curriculum/tutor-guides/return-session.md` — loaded automatically when a 
 - Classify errors: developmental, L1 interference, fossilized, or slip.
 - If same error persists 3+ sessions: escalate with new approach.
 
-## Correction Mode by Activity Type
+## Correction Mode by Activity Type (overrides general rules above)
 
 | Activity Stage | Mode | Details |
 |---------------|------|---------|
@@ -130,7 +132,9 @@ See `curriculum/tutor-guides/return-session.md` — loaded automatically when a 
 5. Update `state/system-health.yaml` with today's metrics
 6. Update `state/learner-profile.yaml` only if something fundamental changed
 7. If session was interrupted, set `session_status: partial` in the session log
-8. Generate/update vault content:
+7b. During weekly review: write summary to `state/summaries/YYYY-WNN.yaml` (schema in `docs/system-design.md`)
+7c. During weekly review: write progress report to `progress-reports/YYYY-WNN.md` (human-readable)
+8. Generate/update vault content (run `python3 scripts/generate-vault.py --session --date YYYY-MM-DD` for frontmatter/Roadmap updates, then manually write the items below):
    a. Generate/update today's daily note in `vault/Daily/`
    b. Update frontmatter status on any Grammar/Vocabulary vault notes that changed
    c. Update `vault/Roadmap.md` if phase or concept status changed

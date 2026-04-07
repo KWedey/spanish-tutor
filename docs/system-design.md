@@ -32,7 +32,6 @@ language/
 ├── parking-lot.md                   # Learner-editable list of questions and gaps
 ├── docs/
 │   ├── system-design.md             # This document
-│   ├── claude-md-draft.md           # CLAUDE.md draft for review
 │   └── resource-ecosystem.md        # External tools catalog
 ├── curriculum/
 │   ├── tutor-guides/                # Conditional reference docs (loaded per session type)
@@ -47,9 +46,9 @@ language/
 │   │   └── error-recovery.md        # Read when state validation fails
 │   ├── onboarding/                  # Fixed starter sequence (sessions 1-10)
 │   │   ├── session-01-discovery.md
-│   │   ├── session-02-first-words.md
-│   │   ├── session-03-present-tense-intro.md
-│   │   └── ...through session-10.md
+│   │   ├── session-02-present-tense.md
+│   │   ├── session-03-gender-agreement.md
+│   │   └── ...through session-10-consolidation-final.md
 │   ├── grammar/                     # Grammar concept definitions
 │   │   ├── A-foundation/
 │   │   │   ├── 00-communication-repair.md  # FIRST concept: survival phrases for when you're stuck
@@ -276,7 +275,7 @@ The core tracking document. Every grammar concept, vocabulary cluster, and skill
 # performance_unscaffolded is 'competent'.
 
 grammar:
-  present-tense-regular:
+  A-01-present-regular:          # keys use phase prefix: A-01, B-04, etc.
     status: unseen
     introduced_date: null
     last_practiced: null
@@ -409,7 +408,7 @@ cultural_awareness:
     notes: ""
 
 # Fluency metrics (separate from accuracy)
-fluency:
+fluency_metrics:
   speaking_pace: ""             # slow-deliberate, moderate, natural-flow
   hesitation_frequency: ""      # frequent, occasional, rare
   self_correction_rate: ""      # high (good awareness), low (automatic or unaware)
@@ -463,6 +462,11 @@ weekly_topic:
 
 # Fluency vs accuracy emphasis
 fluency_accuracy_balance: accuracy-leaning  # accuracy-leaning, balanced, fluency-leaning
+
+# Fluency day tracking (Phase B+)
+# Phase B: 1x/week, Phase C: 2x/week, Phase D: every session
+fluency_days_this_week: 0
+last_fluency_day: null
 
 # Upcoming queue — what's next when current items are acquired
 grammar_queue: []
@@ -1053,7 +1057,7 @@ If the learner consistently doesn't complete all assignments, the tutor reduces 
 | Conversation partner (italki, etc.) | 30–60 (external, not tutor time) |
 | Self-narration (speaking homework) | 5–10 |
 
-**Budget calculation:** Sum estimated minutes for all assigned tasks. Total must not exceed `learner_profile.available_time_daily - session_duration`. When time is tight, prioritize: (1) Anki review, (2) skill-targeted assignment, (3) immersion.
+**Budget calculation:** Sum estimated minutes for all assigned tasks. Total must not exceed `learner_profile.typical_weekday_minutes - session_duration` (or `typical_weekend_minutes` on weekends). When time is tight, prioritize: (1) Anki review, (2) skill-targeted assignment, (3) immersion.
 
 **External learning load note:** Conversation partner sessions and long podcast episodes count against the daily time budget even though they happen outside the tutor session. Factor them in when they are assigned.
 

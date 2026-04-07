@@ -1,0 +1,551 @@
+# Journal Prompt Library
+# Organized by phase and grammar concept for targeted writing practice.
+# The tutor selects prompts that reinforce the current grammar focus.
+#
+# Difficulty levels:
+#   sentence    — write individual sentences (Phase A)
+#   paragraph   — write a short paragraph or connected sentences (Phase B)
+#   structured  — write with a specific organizational structure (Phase C)
+#   extended    — longer-form writing, essays, arguments (Phase D)
+
+prompts:
+
+  # ===========================================================================
+  # Phase A — Sentence-level writing (15 prompts)
+  # Focus: basic verb conjugation, descriptions, simple structures
+  # ===========================================================================
+
+  - id: A-01
+    phase: A
+    grammar_target: A-01-present-regular
+    vocabulary_cluster: tier1-greetings-introductions
+    difficulty: sentence
+    prompt_en: "Write 5 sentences about your daily routine using -ar, -er, and -ir verbs. Try to drop the subject pronoun when you can."
+    prompt_es: "Escribe 5 oraciones sobre tu rutina diaria usando verbos -ar, -er, e -ir. Intenta no usar el pronombre de sujeto cuando sea posible."
+    grammar_focus: "Present tense regular conjugations, pronoun dropping"
+    example_starter: "Como a las ocho... Trabajo en... Vivo en..."
+
+  - id: A-02
+    phase: A
+    grammar_target: A-01-present-regular
+    vocabulary_cluster: tier2-family-relationships
+    difficulty: sentence
+    prompt_en: "Describe what 3 different family members or friends do during a typical week. Use a different verb for each person."
+    prompt_es: "Describe lo que hacen 3 familiares o amigos durante una semana normal. Usa un verbo diferente para cada persona."
+    grammar_focus: "Third-person conjugation (singular and plural)"
+    example_starter: "Mi hermana estudia... Mis padres trabajan..."
+
+  - id: A-03
+    phase: A
+    grammar_target: A-02-ser-vs-estar
+    vocabulary_cluster: tier1-basic-descriptions
+    difficulty: sentence
+    prompt_en: "Describe yourself in 6 sentences: 3 using ser (permanent traits) and 3 using estar (current states or feelings)."
+    prompt_es: "Descríbete en 6 oraciones: 3 con ser (rasgos permanentes) y 3 con estar (estados o emociones actuales)."
+    grammar_focus: "Ser vs. estar distinction"
+    example_starter: "Soy alto... Estoy cansado hoy... Soy de..."
+
+  - id: A-04
+    phase: A
+    grammar_target: A-02-ser-vs-estar
+    vocabulary_cluster: tier2-home-household
+    difficulty: sentence
+    prompt_en: "Describe your home. Where is it located (estar)? What is it like (ser)? Write 5 sentences mixing both verbs."
+    prompt_es: "Describe tu casa. Donde esta (estar)? Como es (ser)? Escribe 5 oraciones mezclando ambos verbos."
+    grammar_focus: "Ser for characteristics, estar for location"
+    example_starter: "Mi casa es pequeña... Esta en una calle tranquila..."
+
+  - id: A-05
+    phase: A
+    grammar_target: A-03-gender-agreement
+    vocabulary_cluster: tier1-basic-descriptions
+    difficulty: sentence
+    prompt_en: "Look around the room you're in. Describe 5 objects using a noun + adjective, making sure the adjective agrees in gender and number."
+    prompt_es: "Mira la habitacion donde estas. Describe 5 objetos usando sustantivo + adjetivo, asegurandote de que el adjetivo concuerde en genero y numero."
+    grammar_focus: "Noun-adjective gender and number agreement"
+    example_starter: "La mesa grande... Los libros interesantes... Una ventana abierta..."
+
+  - id: A-06
+    phase: A
+    grammar_target: A-04-articles-prepositions
+    vocabulary_cluster: tier1-directions-transportation
+    difficulty: sentence
+    prompt_en: "Write 5 sentences giving directions from your house to a place you go often. Use prepositions (en, a, de, por, cerca de, lejos de)."
+    prompt_es: "Escribe 5 oraciones dando direcciones desde tu casa a un lugar que visitas frecuentemente. Usa preposiciones (en, a, de, por, cerca de, lejos de)."
+    grammar_focus: "Common prepositions, definite vs. indefinite articles"
+    example_starter: "Camino a la derecha... Paso por el parque... Esta cerca de..."
+
+  - id: A-07
+    phase: A
+    grammar_target: A-05-basic-questions
+    vocabulary_cluster: tier1-greetings-introductions
+    difficulty: sentence
+    prompt_en: "Imagine you're meeting a new coworker. Write 6 questions you would ask to get to know them (name, origin, hobbies, family, etc.)."
+    prompt_es: "Imagina que conoces a un nuevo companero de trabajo. Escribe 6 preguntas para conocerlo (nombre, origen, pasatiempos, familia, etc.)."
+    grammar_focus: "Question formation with interrogatives"
+    example_starter: "Como te llamas? De donde eres? Que te gusta...?"
+
+  - id: A-08
+    phase: A
+    grammar_target: A-06-gustar-type-verbs
+    vocabulary_cluster: tier3-hobbies-interests
+    difficulty: sentence
+    prompt_en: "Write about your likes and dislikes. Use gustar, encantar, molestar, and interesar — at least one sentence with each."
+    prompt_es: "Escribe sobre lo que te gusta y lo que no te gusta. Usa gustar, encantar, molestar e interesar — al menos una oracion con cada verbo."
+    grammar_focus: "Gustar-type verb structure (indirect object + verb + subject)"
+    example_starter: "Me gusta cocinar... Me encantan los libros... Me molesta..."
+
+  - id: A-09
+    phase: A
+    grammar_target: A-06-gustar-type-verbs
+    vocabulary_cluster: tier1-food-restaurant
+    difficulty: sentence
+    prompt_en: "Write about your food preferences and your family's. Who likes what? Who hates what? Use different gustar-type verbs."
+    prompt_es: "Escribe sobre tus preferencias de comida y las de tu familia. A quien le gusta que? A quien no? Usa diferentes verbos tipo gustar."
+    grammar_focus: "Gustar with different indirect object pronouns (me, te, le, nos, les)"
+    example_starter: "Me encanta el chocolate... A mi hermano le molesta... A mis padres les gusta..."
+
+  - id: A-10
+    phase: A
+    grammar_target: A-07-present-irregular-common
+    vocabulary_cluster: tier1-greetings-introductions
+    difficulty: sentence
+    prompt_en: "Describe your plans for this weekend using ir, querer, poder, tener que, and hacer."
+    prompt_es: "Describe tus planes para este fin de semana usando ir, querer, poder, tener que, y hacer."
+    grammar_focus: "Common irregular present tense verbs"
+    example_starter: "Voy a... Quiero... Tengo que... Puedo..."
+
+  - id: A-11
+    phase: A
+    grammar_target: A-07-present-irregular-common
+    vocabulary_cluster: tier2-work-office
+    difficulty: sentence
+    prompt_en: "Describe a typical workday. What do you have to do? What can you do? What do you want to do? Use tener, poder, querer, saber, hacer, ir."
+    prompt_es: "Describe un dia de trabajo tipico. Que tienes que hacer? Que puedes hacer? Que quieres hacer? Usa tener, poder, querer, saber, hacer, ir."
+    grammar_focus: "Irregular verbs in meaningful context"
+    example_starter: "Tengo que ir a la oficina... Hago el trabajo... Quiero salir temprano..."
+
+  - id: A-12
+    phase: A
+    grammar_target: A-03-gender-agreement
+    vocabulary_cluster: tier2-weather-seasons
+    difficulty: sentence
+    prompt_en: "Describe your favorite season. What is the weather like? What do you do during this season? Write 5 sentences with correct gender agreement."
+    prompt_es: "Describe tu estacion favorita. Como es el clima? Que haces durante esta estacion? Escribe 5 oraciones con concordancia de genero correcta."
+    grammar_focus: "Demonstratives and adjective agreement with weather/nature vocabulary"
+    example_starter: "El verano es mi estacion favorita... Los dias son largos... Esta temporada es..."
+
+  - id: A-13
+    phase: A
+    grammar_target: A-04-articles-prepositions
+    vocabulary_cluster: tier2-shopping-money
+    difficulty: sentence
+    prompt_en: "Describe your last trip to the store. What did you look for? Where were things located? Use articles and the personal 'a' if applicable."
+    prompt_es: "Describe tu ultima visita a la tienda. Que buscaste? Donde estaban las cosas? Usa articulos y la 'a' personal si aplica."
+    grammar_focus: "Definite/indefinite articles, personal 'a', common prepositions"
+    example_starter: "Voy a la tienda... Busco el pan en... Necesito una..."
+
+  - id: A-14
+    phase: A
+    grammar_target: A-05-basic-questions
+    vocabulary_cluster: tier1-food-restaurant
+    difficulty: sentence
+    prompt_en: "Write 5 questions you would ask a waiter at a restaurant. Then write the answers you hope to get."
+    prompt_es: "Escribe 5 preguntas que le harias a un mesero en un restaurante. Luego escribe las respuestas que esperas recibir."
+    grammar_focus: "Question words in practical context"
+    example_starter: "Que me recomienda? Tienen...? Cuanto cuesta...?"
+
+  - id: A-15
+    phase: A
+    grammar_target: A-00-communication-repair
+    vocabulary_cluster: tier1-greetings-introductions
+    difficulty: sentence
+    prompt_en: "Write 5 situations where you would be lost in a conversation. For each, write the repair phrase you would use in Spanish."
+    prompt_es: "Escribe 5 situaciones donde estarias perdido en una conversacion. Para cada una, escribe la frase de reparacion que usarias en espanol."
+    grammar_focus: "Communication repair and survival phrases"
+    example_starter: "Puede repetir, por favor? No entiendo... Que significa...?"
+
+  - id: A-16
+    phase: A
+    grammar_target: A-08-numbers-quantifiers
+    vocabulary_cluster: tier1-numbers-time-dates
+    difficulty: sentence
+    prompt_en: "Describe your weekly schedule with specific times and quantities. How many hours do you work? What time do you eat? How many days do you exercise? Use numbers and quantifiers (mucho, poco, bastante, demasiado)."
+    prompt_es: "Describe tu horario semanal con horas y cantidades especificas. Cuantas horas trabajas? A que hora comes? Cuantos dias haces ejercicio? Usa numeros y cuantificadores (mucho, poco, bastante, demasiado)."
+    grammar_focus: "Cardinal numbers, time expressions, quantifiers with agreement"
+    example_starter: "Trabajo ocho horas al dia... Como a las dos... Hago ejercicio tres dias... Tengo demasiadas reuniones..."
+
+  - id: A-17
+    phase: A
+    grammar_target: A-09-accent-stress-rules
+    vocabulary_cluster: tier1-basic-descriptions
+    difficulty: sentence
+    prompt_en: "Write 6 pairs of words where the accent mark changes the meaning (papa/papa, el/el, si/si, como/como, esta/esta, que/que). Write a sentence using each word in the pair."
+    prompt_es: "Escribe 6 pares de palabras donde el acento cambia el significado (papa/papa, el/el, si/si, como/como, esta/esta, que/que). Escribe una oracion usando cada palabra del par."
+    grammar_focus: "Written accent marks and stress patterns that change meaning"
+    example_starter: "Mi papa cocina bien. / Quiero una papa frita. // El es mi amigo. / El libro es interesante."
+
+  # ===========================================================================
+  # Phase B — Paragraph-level writing (15 prompts)
+  # Focus: past tense narration, daily life, connected discourse
+  # ===========================================================================
+
+  - id: B-01
+    phase: B
+    grammar_target: B-01-preterite-regular
+    vocabulary_cluster: tier1-food-restaurant
+    difficulty: paragraph
+    prompt_en: "Describe the best meal you had recently. What did you eat? Where did you go? Who were you with? Write a short paragraph in the preterite."
+    prompt_es: "Describe la mejor comida que tuviste recientemente. Que comiste? Adonde fuiste? Con quien estabas? Escribe un parrafo corto en preterito."
+    grammar_focus: "Regular preterite narration"
+    example_starter: "El sabado pasado, comi en... Pedi... Mi amigo comio..."
+
+  - id: B-02
+    phase: B
+    grammar_target: B-02-preterite-irregular
+    vocabulary_cluster: tier3-travel-culture
+    difficulty: paragraph
+    prompt_en: "Tell the story of a trip or adventure you took. What happened? Use at least 5 irregular preterite verbs (ir, ser, hacer, tener, estar, poder, poner, decir)."
+    prompt_es: "Cuenta la historia de un viaje o aventura que tuviste. Que paso? Usa al menos 5 verbos irregulares en preterito (ir, ser, hacer, tener, estar, poder, poner, decir)."
+    grammar_focus: "Irregular preterite forms in narrative"
+    example_starter: "El ano pasado fui a... Hice muchas cosas... Tuve que..."
+
+  - id: B-03
+    phase: B
+    grammar_target: B-03-imperfect
+    vocabulary_cluster: tier2-family-relationships
+    difficulty: paragraph
+    prompt_en: "Describe what your life was like when you were a child. What did you used to do? What were your habits? Write a paragraph using the imperfect."
+    prompt_es: "Describe como era tu vida cuando eras nino/a. Que hacias normalmente? Cuales eran tus costumbres? Escribe un parrafo usando el imperfecto."
+    grammar_focus: "Imperfect for habitual past actions and descriptions"
+    example_starter: "Cuando era nino, vivia en... Siempre jugaba con... Mi familia era..."
+
+  - id: B-04
+    phase: B
+    grammar_target: B-04-preterite-vs-imperfect
+    vocabulary_cluster: tier3-storytelling-narration
+    difficulty: paragraph
+    prompt_en: "Tell the story of a memorable day. Set the scene with the imperfect (weather, feelings, what was happening) and tell what happened with the preterite."
+    prompt_es: "Cuenta la historia de un dia memorable. Describe la escena con el imperfecto (clima, sentimientos, lo que estaba pasando) y cuenta lo que paso con el preterito."
+    grammar_focus: "Preterite vs. imperfect — background vs. foreground events"
+    example_starter: "Era un dia bonito y hacia sol... De repente, sono el telefono... y todo cambio..."
+
+  - id: B-05
+    phase: B
+    grammar_target: B-05-reflexive-verbs
+    vocabulary_cluster: tier2-health-body
+    difficulty: paragraph
+    prompt_en: "Describe your morning routine from waking up to leaving the house. Use as many reflexive verbs as you can (despertarse, levantarse, ducharse, vestirse, peinarse, etc.)."
+    prompt_es: "Describe tu rutina matutina desde que te despiertas hasta que sales de casa. Usa tantos verbos reflexivos como puedas (despertarse, levantarse, ducharse, vestirse, peinarse, etc.)."
+    grammar_focus: "Reflexive verb conjugation and pronoun placement"
+    example_starter: "Me despierto a las siete... Me ducho rapidamente... Me visto y..."
+
+  - id: B-06
+    phase: B
+    grammar_target: B-06-direct-object-pronouns
+    vocabulary_cluster: tier2-shopping-money
+    difficulty: paragraph
+    prompt_en: "You went shopping and bought several things. Describe what you bought, then rewrite the sentences replacing the objects with pronouns (lo, la, los, las)."
+    prompt_es: "Fuiste de compras y compraste varias cosas. Describe lo que compraste, luego reescribe las oraciones reemplazando los objetos con pronombres (lo, la, los, las)."
+    grammar_focus: "Direct object pronoun placement and agreement"
+    example_starter: "Compre una camisa. → La compre en la tienda. Vi los zapatos. → Los vi pero..."
+
+  - id: B-07
+    phase: B
+    grammar_target: B-07-indirect-object-pronouns
+    vocabulary_cluster: tier2-family-relationships
+    difficulty: paragraph
+    prompt_en: "Describe gifts you gave or received recently, or favors people did for you. Who gave what to whom? Use indirect object pronouns (me, te, le, nos, les)."
+    prompt_es: "Describe regalos que diste o recibiste recientemente, o favores que la gente te hizo. Quien dio que a quien? Usa pronombres de objeto indirecto (me, te, le, nos, les)."
+    grammar_focus: "Indirect object pronouns in context"
+    example_starter: "Mi madre me dio un libro... Le compre flores a mi abuela... Mis amigos me prepararon..."
+
+  - id: B-08
+    phase: B
+    grammar_target: B-08-estar-gerund-progressive
+    vocabulary_cluster: tier2-work-office
+    difficulty: paragraph
+    prompt_en: "Describe a chaotic moment — at work, at home, or at a party. What was everyone doing at the same time? Use estar + gerund for each person."
+    prompt_es: "Describe un momento caotico — en el trabajo, en casa, o en una fiesta. Que estaba haciendo cada persona al mismo tiempo? Usa estar + gerundio para cada persona."
+    grammar_focus: "Present progressive (estar + -ando/-iendo)"
+    example_starter: "Mi jefe estaba hablando por telefono... Mi companera estaba escribiendo... Yo estaba intentando..."
+
+  - id: B-09
+    phase: B
+    grammar_target: B-09-imperatives
+    vocabulary_cluster: tier1-food-restaurant
+    difficulty: paragraph
+    prompt_en: "Write a simple recipe for your favorite dish. Give step-by-step instructions using tu commands (corta, mezcla, anade, cocina, sirve)."
+    prompt_es: "Escribe una receta sencilla de tu plato favorito. Da instrucciones paso a paso usando mandatos de tu (corta, mezcla, anade, cocina, sirve)."
+    grammar_focus: "Affirmative tu imperatives, including irregulars"
+    example_starter: "Primero, corta las verduras... Luego, pon el aceite en... Mezcla todo y..."
+
+  - id: B-10
+    phase: B
+    grammar_target: B-10-comparatives-superlatives
+    vocabulary_cluster: tier3-hobbies-interests
+    difficulty: paragraph
+    prompt_en: "Compare two hobbies, sports, or activities you enjoy. Which is more fun? More difficult? Better for health? Use comparatives and superlatives."
+    prompt_es: "Compara dos pasatiempos, deportes o actividades que disfrutas. Cual es mas divertido/a? Mas dificil? Mejor para la salud? Usa comparativos y superlativos."
+    grammar_focus: "Mas...que, menos...que, tan...como, mejor, peor, el/la mas..."
+    example_starter: "El futbol es mas emocionante que... Nadar es tan relajante como... Lo mejor de..."
+
+  - id: B-11
+    phase: B
+    grammar_target: B-11-future-ir-a
+    vocabulary_cluster: tier3-plans-future
+    difficulty: paragraph
+    prompt_en: "Describe your plans for the next month. What are you going to do? Include work, social, and personal plans. Use ir a + infinitive."
+    prompt_es: "Describe tus planes para el proximo mes. Que vas a hacer? Incluye planes de trabajo, sociales y personales. Usa ir a + infinitivo."
+    grammar_focus: "Ir a + infinitive for near future"
+    example_starter: "La proxima semana voy a empezar... El fin de semana vamos a... Tambien voy a intentar..."
+
+  - id: B-12
+    phase: B
+    grammar_target: B-04-preterite-vs-imperfect
+    vocabulary_cluster: tier3-emotions-feelings
+    difficulty: paragraph
+    prompt_en: "Tell a story about a time you were scared, surprised, or deeply happy. Describe how you felt (imperfect) and what happened (preterite)."
+    prompt_es: "Cuenta una historia sobre un momento en que sentiste miedo, sorpresa o mucha felicidad. Describe como te sentias (imperfecto) y que paso (preterito)."
+    grammar_focus: "Imperfect for emotional states, preterite for events that changed them"
+    example_starter: "Estaba nervioso porque... No sabia que iba a pasar... De repente, mi amigo llego y..."
+
+  - id: B-13
+    phase: B
+    grammar_target: B-05-reflexive-verbs
+    vocabulary_cluster: tier3-emotions-feelings
+    difficulty: paragraph
+    prompt_en: "Describe how you and people around you react to different situations. Use emotional reflexive verbs (enojarse, preocuparse, alegrarse, aburrirse, sentirse)."
+    prompt_es: "Describe como tu y las personas a tu alrededor reaccionan ante diferentes situaciones. Usa verbos reflexivos emocionales (enojarse, preocuparse, alegrarse, aburrirse, sentirse)."
+    grammar_focus: "Reflexive verbs for emotional states"
+    example_starter: "Me preocupo cuando... Mi madre se enoja si... Nos alegramos cuando..."
+
+  - id: B-14
+    phase: B
+    grammar_target: B-09-imperatives
+    vocabulary_cluster: tier2-home-household
+    difficulty: paragraph
+    prompt_en: "A friend is house-sitting for you. Write them instructions for taking care of your home, pets, or plants. Use both affirmative and negative tu commands."
+    prompt_es: "Un amigo va a cuidar tu casa. Escribele instrucciones para cuidar tu hogar, mascotas o plantas. Usa mandatos de tu afirmativos y negativos."
+    grammar_focus: "Affirmative and negative tu commands"
+    example_starter: "Riega las plantas todos los dias... No dejes la puerta abierta... Pon la basura en..."
+
+  - id: B-15
+    phase: B
+    grammar_target: B-10-comparatives-superlatives
+    vocabulary_cluster: tier3-travel-culture
+    difficulty: paragraph
+    prompt_en: "Compare two cities or countries you have visited (or want to visit). Which is bigger? More interesting? Better for food? Use a variety of comparison structures."
+    prompt_es: "Compara dos ciudades o paises que hayas visitado (o quieras visitar). Cual es mas grande? Mas interesante? Mejor para la comida? Usa diversas estructuras de comparacion."
+    grammar_focus: "Full range of comparatives and superlatives"
+    example_starter: "Ciudad de Mexico es mas grande que... La comida es tan buena como... Es la ciudad mas..."
+
+  # ===========================================================================
+  # Phase C — Structured composition (12 prompts)
+  # Focus: opinions, subjunctive, hypotheticals, cohesive arguments
+  # ===========================================================================
+
+  - id: C-01
+    phase: C
+    grammar_target: C-01-present-subjunctive
+    vocabulary_cluster: tier3-opinions-agreement
+    difficulty: structured
+    prompt_en: "Write about 3 things you hope will happen this year and 3 things you doubt will happen. Use espero que, dudo que, ojala que with the subjunctive."
+    prompt_es: "Escribe sobre 3 cosas que esperas que pasen este ano y 3 cosas que dudas que pasen. Usa espero que, dudo que, ojala que con el subjuntivo."
+    grammar_focus: "Present subjunctive after expressions of wish and doubt"
+    example_starter: "Espero que mi espanol mejore... Dudo que tenga tiempo para... Ojala que podamos..."
+
+  - id: C-02
+    phase: C
+    grammar_target: C-02-subjunctive-triggers
+    vocabulary_cluster: tier3-opinions-agreement
+    difficulty: structured
+    prompt_en: "Write a short opinion piece about a topic you care about. State your opinion, what you recommend, and what bothers you. Use at least 4 different subjunctive triggers."
+    prompt_es: "Escribe una breve opinion sobre un tema que te importe. Expresa tu opinion, lo que recomiendas y lo que te molesta. Usa al menos 4 diferentes desencadenantes del subjuntivo."
+    grammar_focus: "Variety of subjunctive triggers: emotion, doubt, recommendation, impersonal expressions"
+    example_starter: "Es importante que la gente... Recomiendo que... Me molesta que... No creo que..."
+
+  - id: C-03
+    phase: C
+    grammar_target: C-03-formal-future
+    vocabulary_cluster: tier3-plans-future
+    difficulty: structured
+    prompt_en: "Write a letter to your future self 5 years from now. What will your life be like? What will you have accomplished? Use the formal future tense."
+    prompt_es: "Escribe una carta a tu yo del futuro, dentro de 5 anos. Como sera tu vida? Que habras logrado? Usa el futuro simple."
+    grammar_focus: "Formal future tense (conjugated forms, including irregulars)"
+    example_starter: "Querido yo del futuro: En cinco anos, viviras en... Tendras... Sabras hablar..."
+
+  - id: C-04
+    phase: C
+    grammar_target: C-04-conditional
+    vocabulary_cluster: tier4-hypotheticals-debate
+    difficulty: structured
+    prompt_en: "If you won the lottery tomorrow, what would you do? Write a paragraph using the conditional. Include what you would buy, where you would go, and who you would help."
+    prompt_es: "Si ganaras la loteria manana, que harias? Escribe un parrafo usando el condicional. Incluye que comprarias, adonde irias y a quien ayudarias."
+    grammar_focus: "Conditional tense for hypothetical situations"
+    example_starter: "Si ganara la loteria, primero compraria... Viajaria a... Le daria dinero a..."
+
+  - id: C-05
+    phase: C
+    grammar_target: C-05-por-vs-para
+    vocabulary_cluster: tier2-work-office
+    difficulty: structured
+    prompt_en: "Describe a project you are working on. Explain who it is for (para), why you are doing it (por/para), how long you have been working on it (por), and what you exchanged to get this opportunity (por)."
+    prompt_es: "Describe un proyecto en el que estas trabajando. Explica para quien es (para), por que lo haces (por/para), cuanto tiempo llevas trabajando en el (por), y que intercambiaste para obtener esta oportunidad (por)."
+    grammar_focus: "Por vs. para in all major usage categories"
+    example_starter: "Trabajo en este proyecto para mi empresa... Lo hago por pasion... He trabajado por tres meses..."
+
+  - id: C-06
+    phase: C
+    grammar_target: C-06-compound-tenses
+    vocabulary_cluster: tier3-travel-culture
+    difficulty: structured
+    prompt_en: "Write about experiences you have had (or haven't had) in your life. What have you done? What haven't you tried yet? Use the present perfect (he + participle)."
+    prompt_es: "Escribe sobre experiencias que has tenido (o no has tenido) en tu vida. Que has hecho? Que no has probado todavia? Usa el preterito perfecto (he + participio)."
+    grammar_focus: "Present perfect tense, regular and irregular past participles"
+    example_starter: "He viajado a tres paises... Nunca he probado... Siempre he querido... Este ano he aprendido..."
+
+  - id: C-07
+    phase: C
+    grammar_target: C-07-relative-clauses
+    vocabulary_cluster: tier3-hobbies-interests
+    difficulty: structured
+    prompt_en: "Describe your ideal city to live in. Use relative clauses (que, donde, quien, lo que, el cual) to add detail. 'A city that has...', 'People who...', 'What I want is...'"
+    prompt_es: "Describe tu ciudad ideal para vivir. Usa clausulas relativas (que, donde, quien, lo que, el cual) para anadir detalles. 'Una ciudad que tenga...', 'Personas que...', 'Lo que quiero es...'"
+    grammar_focus: "Relative pronouns and clauses for complex description"
+    example_starter: "Quiero vivir en una ciudad que tenga... donde la gente sea... Lo que mas me importa es..."
+
+  - id: C-08
+    phase: C
+    grammar_target: C-08-indirect-speech
+    vocabulary_cluster: tier2-family-relationships
+    difficulty: structured
+    prompt_en: "Retell a conversation you had with someone recently. What did they tell you? What did you respond? What did they ask? Use indirect speech (me dijo que, le pregunte si, me pidio que)."
+    prompt_es: "Recuenta una conversacion que tuviste con alguien recientemente. Que te dijo? Que le respondiste? Que te pregunto? Usa el discurso indirecto (me dijo que, le pregunte si, me pidio que)."
+    grammar_focus: "Reported speech with indicative and subjunctive"
+    example_starter: "Mi amigo me dijo que queria... Le pregunte si podia... Me pidio que le ayudara con..."
+
+  - id: C-09
+    phase: C
+    grammar_target: C-09-diminutives-augmentatives
+    vocabulary_cluster: tier2-home-household
+    difficulty: structured
+    prompt_en: "Describe a childhood memory using diminutives and augmentatives to convey warmth and size. Think of your 'casita', your 'perrito', your 'abuelita', that 'librazo' that was so heavy."
+    prompt_es: "Describe un recuerdo de tu infancia usando diminutivos y aumentativos para transmitir carino y tamano. Piensa en tu 'casita', tu 'perrito', tu 'abuelita', ese 'librazo' que era tan pesado."
+    grammar_focus: "Diminutive (-ito/-ita) and augmentative (-ote/-ota, -azo/-aza) suffixes"
+    example_starter: "Mi abuelita tenia una casita con un jardincito... Mi perrito era chiquito pero..."
+
+  - id: C-10
+    phase: C
+    grammar_target: C-01-present-subjunctive
+    vocabulary_cluster: tier3-emotions-feelings
+    difficulty: structured
+    prompt_en: "Write advice to a friend who is going through a hard time. Use the subjunctive after expressions of recommendation, hope, and emotion (te recomiendo que, espero que, me alegra que, es necesario que)."
+    prompt_es: "Escribe consejos a un amigo que esta pasando por un momento dificil. Usa el subjuntivo despues de expresiones de recomendacion, esperanza y emocion (te recomiendo que, espero que, me alegra que, es necesario que)."
+    grammar_focus: "Subjunctive in advice-giving context"
+    example_starter: "Te recomiendo que descanses... Espero que te sientas mejor... Es importante que hables con..."
+
+  - id: C-11
+    phase: C
+    grammar_target: C-04-conditional
+    vocabulary_cluster: tier2-work-office
+    difficulty: structured
+    prompt_en: "If you could change one thing about your job (or daily life), what would it be? What would be different? How would it affect other people? Write a structured paragraph."
+    prompt_es: "Si pudieras cambiar una cosa de tu trabajo (o vida diaria), que seria? Que seria diferente? Como afectaria a otras personas? Escribe un parrafo estructurado."
+    grammar_focus: "Conditional for polite hypotheticals and consequences"
+    example_starter: "Si pudiera cambiar algo, eliminaria... Seria mejor porque... Mis companeros tendrian..."
+
+  - id: C-12
+    phase: C
+    grammar_target: C-05-por-vs-para
+    vocabulary_cluster: tier3-travel-culture
+    difficulty: structured
+    prompt_en: "Plan a trip for a friend. Explain where to go, for how long (por), what it is good for (para), why you recommend it (por), and the deadline for booking (para)."
+    prompt_es: "Planifica un viaje para un amigo. Explica adonde ir, por cuanto tiempo (por), para que sirve el viaje (para), por que lo recomiendas (por), y la fecha limite para reservar (para)."
+    grammar_focus: "Por vs. para in practical travel context"
+    example_starter: "Para tu cumpleanos, te recomiendo un viaje a... Por dos semanas... Es perfecto para relajarte... Por el precio, es una ganga..."
+
+  # ===========================================================================
+  # Phase D — Extended writing (8 prompts)
+  # Focus: essays, arguments, professional register, nuanced expression
+  # ===========================================================================
+
+  - id: D-01
+    phase: D
+    grammar_target: D-01-past-subjunctive
+    vocabulary_cluster: tier4-philosophy-ideas
+    difficulty: extended
+    prompt_en: "Write about a decision you made that changed your life. What would have happened if you had chosen differently? Use the past subjunctive (si hubiera/hubiese..., habria...)."
+    prompt_es: "Escribe sobre una decision que tomaste y que cambio tu vida. Que habria pasado si hubieras elegido diferente? Usa el subjuntivo pasado (si hubiera/hubiese..., habria...)."
+    grammar_focus: "Past subjunctive for counterfactual reflection"
+    example_starter: "Hace cinco anos, decidi... Si no hubiera tomado esa decision, probablemente estaria... Habria sido..."
+
+  - id: D-02
+    phase: D
+    grammar_target: D-02-si-clauses
+    vocabulary_cluster: tier4-hypotheticals-debate
+    difficulty: extended
+    prompt_en: "Write three paragraphs using three types of si-clauses: (1) a real condition about the present, (2) an unlikely condition about the future, and (3) an impossible condition about the past."
+    prompt_es: "Escribe tres parrafos usando tres tipos de clausulas con si: (1) una condicion real sobre el presente, (2) una condicion improbable sobre el futuro, y (3) una condicion imposible sobre el pasado."
+    grammar_focus: "All three types of si-clauses"
+    example_starter: "Si tengo tiempo, estudio... Si tuviera mas dinero, viajaria a... Si hubiera nacido en otro pais, mi vida habria sido..."
+
+  - id: D-03
+    phase: D
+    grammar_target: D-03-subjunctive-all-tenses
+    vocabulary_cluster: tier4-politics-society
+    difficulty: extended
+    prompt_en: "Write a short essay about a social issue you care about. Express what you wish were different (past subjunctive), what you hope will change (present subjunctive), and what you would have liked to see happen (pluperfect subjunctive)."
+    prompt_es: "Escribe un ensayo corto sobre un problema social que te importe. Expresa lo que desearias que fuera diferente (subjuntivo pasado), lo que esperas que cambie (subjuntivo presente), y lo que te habria gustado que pasara (pluscuamperfecto de subjuntivo)."
+    grammar_focus: "Subjunctive across all tenses in a single cohesive piece"
+    example_starter: "Es un tema que me importa mucho. Deseo que la sociedad cambie... Si las cosas fueran diferentes... Me habria gustado que hubieramos actuado antes..."
+
+  - id: D-04
+    phase: D
+    grammar_target: D-04-passive-voice
+    vocabulary_cluster: tier4-politics-society
+    difficulty: extended
+    prompt_en: "Write a news summary about recent events (real or imagined). Use the passive voice (fue construido, se aprobaron, ha sido criticado) and the impersonal se (se dice que, se cree que)."
+    prompt_es: "Escribe un resumen de noticias sobre eventos recientes (reales o imaginados). Usa la voz pasiva (fue construido, se aprobaron, ha sido criticado) y el se impersonal (se dice que, se cree que)."
+    grammar_focus: "Passive voice and impersonal se in formal register"
+    example_starter: "Segun fuentes oficiales, se aprobo una nueva ley... La propuesta fue criticada por... Se espera que..."
+
+  - id: D-05
+    phase: D
+    grammar_target: D-05-register-shifting
+    vocabulary_cluster: tier4-professional-specialized
+    difficulty: extended
+    prompt_en: "Write about the same topic three times in three different registers: (1) a text message to a close friend (tu, slang, casual), (2) an email to a colleague (usted, professional), (3) a formal letter to an official (usted, formal courtesies)."
+    prompt_es: "Escribe sobre el mismo tema tres veces en tres registros diferentes: (1) un mensaje de texto a un amigo cercano (tu, jerga, casual), (2) un correo a un colega (usted, profesional), (3) una carta formal a un funcionario (usted, cortesias formales)."
+    grammar_focus: "Register shifting between tu/usted, casual/formal vocabulary and tone"
+    example_starter: "Casual: Oye, sabes que paso? Resulta que... // Profesional: Estimado/a, le escribo para informarle que... // Formal: Muy senor mio, me dirijo a usted para..."
+
+  - id: D-06
+    phase: D
+    grammar_target: D-06-nuanced-connectors
+    vocabulary_cluster: tier4-philosophy-ideas
+    difficulty: extended
+    prompt_en: "Write a persuasive essay arguing for or against a debatable topic. Use nuanced connectors to build your argument (sin embargo, no obstante, por lo tanto, en cambio, a pesar de que, dado que, en primer lugar)."
+    prompt_es: "Escribe un ensayo persuasivo argumentando a favor o en contra de un tema debatible. Usa conectores sofisticados para construir tu argumento (sin embargo, no obstante, por lo tanto, en cambio, a pesar de que, dado que, en primer lugar)."
+    grammar_focus: "Discourse connectors for cohesive argumentation"
+    example_starter: "En primer lugar, es importante reconocer que... Sin embargo, hay quienes argumentan que... No obstante, los datos demuestran que... Por lo tanto..."
+
+  - id: D-07
+    phase: D
+    grammar_target: D-02-si-clauses
+    vocabulary_cluster: tier4-hypotheticals-debate
+    difficulty: extended
+    prompt_en: "Choose a historical event and rewrite history. What if it had gone differently? Argue what the consequences would have been. Use complex si-clauses, conditional, and past subjunctive throughout."
+    prompt_es: "Elige un evento historico y reescribe la historia. Que habria pasado si hubiera sido diferente? Argumenta cuales habrian sido las consecuencias. Usa clausulas con si complejas, condicional y subjuntivo pasado."
+    grammar_focus: "Extended counterfactual reasoning with mixed tenses"
+    example_starter: "Si la Revolucion Mexicana no hubiera ocurrido, el pais probablemente habria... Las consecuencias habrian sido... Es posible que la sociedad hubiera..."
+
+  - id: D-08
+    phase: D
+    grammar_target: D-05-register-shifting
+    vocabulary_cluster: tier4-humor-idioms
+    difficulty: extended
+    prompt_en: "Write a humorous story or anecdote that happened to you, using idioms and colloquial expressions. Then write a brief footnote explaining 3 idioms you used for a non-native speaker."
+    prompt_es: "Escribe una historia o anecdota graciosa que te haya pasado, usando modismos y expresiones coloquiales. Luego escribe una nota al pie explicando 3 modismos que usaste para un hablante no nativo."
+    grammar_focus: "Idiomatic expression, colloquial register, cultural fluency"
+    example_starter: "El otro dia me metieron gato por liebre en el mercado... Estaba muerto de risa porque... Al final, no fue para tanto..."

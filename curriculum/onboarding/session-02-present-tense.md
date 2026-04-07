@@ -37,6 +37,14 @@ Guided conversation: "Tell me about your typical day. What do you do in the morn
 
 Scaffolding: provide verb prompts if the learner stalls ("What about eating? Cooking? Studying?"). Note which verbs they attempt and which they avoid. Listen for subject pronoun overuse.
 
+### Pronunciation Check-in (2-3 min)
+Stress patterns in conjugated verbs — Spanish stress is predictable from spelling, and conjugated forms shift the stress:
+- **Infinitives** stress the last syllable: hab-**LAR**, co-**MER**, vi-**VIR**
+- **Yo forms** stress the stem: **HAB**-lo, **CO**-mo, **VI**-vo
+- **Ellos forms** stress the ending: hab-**LAN**, co-**MEN**, vi-**VEN**
+
+Have the learner say "hablar" then "hablo" back-to-back, exaggerating where the stress falls. Repeat with "comer/como" and "vivir/vivo." The goal is noticing the shift, not mastery — stress rules will be taught formally later.
+
 ### Checkout (3-5 min)
 **Anki:** Add 8 new cards — high-frequency verbs: trabajar, comer, vivir, estudiar, cocinar, hablar, leer, escribir (infinitive on front, meaning + example conjugation on back).
 

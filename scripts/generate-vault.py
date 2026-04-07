@@ -615,10 +615,14 @@ Welcome to your Spanish learning vault. This Obsidian vault is auto-generated fr
 ## Setup
 
 1. **Install Obsidian** from [obsidian.md](https://obsidian.md/) if you haven't already.
-2. **Open this vault**: In Obsidian, choose "Open folder as vault" and select the `vault/` directory.
-3. **Install community plugins** (recommended):
-   - **Dataview** (required for dashboards) -- enables the live queries on Home, Progress, and Roadmap pages.
-4. **Set Home as your start page**: Settings > Core Plugins > enable "Home" and set to `Home.md`.
+2. **Open this project as a vault**: In Obsidian, choose "Open folder as vault" and select the **project root directory** (not the `vault/` subdirectory). This allows Obsidian to see your journal and parking lot files alongside the generated vault content.
+3. **Trust community plugins** when prompted by Obsidian.
+4. **Install required plugins** (Settings > Community Plugins > Browse):
+   - **Dataview** -- powers all dashboards, progress tables, and filtered views
+   - **Homepage** -- opens Home.md automatically when you launch the vault (set to `vault/Home.md`)
+5. **Install recommended plugins:**
+   - **Calendar** -- visual calendar in the sidebar showing session days. Set daily notes folder to `vault/Daily`.
+   - **Templater** -- templates for journal entries. Set template folder to `vault/Templates`.
 
 ## Orientation
 

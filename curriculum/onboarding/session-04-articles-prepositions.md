@@ -48,6 +48,14 @@ Stage 1 activity: Show pairs — "Veo la mesa. Veo **a** Maria." Ask: "What's di
 
 Listen for missing personal 'a' and English preposition transfers. Note patterns silently; correct 2-3 at the end.
 
+### Pronunciation Check-in (2-3 min)
+Connected speech — in natural Spanish, articles link smoothly to the noun that follows. English speakers tend to insert tiny pauses between words; Spanish flows across word boundaries:
+- "el agua" — the /l/ connects directly to the /a/, sounding like "e-LA-gua"
+- "la escuela" — "laes-CUE-la," no gap between "la" and "escuela"
+- "en una oficina" — the words chain together: "e-NU-nao-fi-CI-na"
+
+Have the learner say "en la mesa" and "cerca de la escuela" at a comfortable pace, trying to link words without pausing between the article and noun. Speed is not the goal — smooth connections are.
+
 ### Checkout (3-5 min)
 **Anki:** Add 8 new cards — contractions (al, del), personal 'a' examples, common preposition phrases (cerca de, lejos de, al lado de, encima de).
 

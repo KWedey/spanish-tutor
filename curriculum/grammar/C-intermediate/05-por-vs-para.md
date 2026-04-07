@@ -4,9 +4,10 @@
 English uses one word -- "for" -- where Spanish uses two: **por** and **para**. This distinction is one of the most persistent challenges for English speakers because the rules are many, the exceptions are real, and both prepositions can appear in similar contexts with different meanings. Mastering por vs para is not a single lesson but an ongoing refinement that deepens with every new context encountered.
 
 ## When to Teach
-- Phase: C
+- Phase: C (formal, systematic treatment)
 - Prerequisites: A-04-articles-prepositions (basic preposition knowledge)
 - L1 interference to preempt: none listed in l1-interference.yaml, but this is notoriously difficult because English collapses two distinct concepts into one word
+- **Early exposure note:** Learners encounter por and para constantly from Phase A onward. During Phases A-B, teach the most common uses informally as they arise (para = "for/to", por = "because of/through") without the full rule system. The systematic treatment here in Phase C formalizes what the learner has already been absorbing through input and practice.
 
 ## The Pattern
 

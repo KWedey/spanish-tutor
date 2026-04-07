@@ -131,6 +131,34 @@ grammar:
     prerequisites: [A-01-present-regular]
     notes: "ir, tener, querer, poder, hacer, decir, saber/conocer, hay"
 
+  A-08-numbers-quantifiers:
+    status: unseen
+    introduced_date: null
+    last_practiced: null
+    practice_count: 0
+    error_rate_drills: null
+    error_rate_production: null
+    error_trend: null
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
+    prerequisites: [A-03-gender-agreement]
+    notes: "Cardinals, ordinals, quantifier agreement, tener-for-age expressions"
+
+  A-09-accent-stress-rules:
+    status: unseen
+    introduced_date: null
+    last_practiced: null
+    practice_count: 0
+    error_rate_drills: null
+    error_rate_production: null
+    error_trend: null
+    performance_scaffolded: null
+    performance_unscaffolded: null
+    integration_tested: false
+    prerequisites: []
+    notes: "3 stress rules, meaning-changing accents, verb tense accents. Reinforced every phase."
+
   B-01-preterite-regular:
     status: unseen
     introduced_date: null

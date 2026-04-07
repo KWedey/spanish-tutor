@@ -51,6 +51,13 @@ Activity options (choose based on energy):
 
 Do NOT correct mid-flow. Note errors silently. After the conversation, give 2-3 specific corrections and highlight 1-2 things done well.
 
+### Pronunciation Check-in (2-3 min)
+Vowel endings carry gender information — pronouncing them precisely matters for being understood:
+- **-o** vs **-a**: "gato" vs "gata" — the final vowel is the only difference. A sloppy, reduced vowel erases the gender marker.
+- **-os** vs **-as**: "gatos" vs "gatas" — same principle in plural.
+
+Have the learner say "el gato negro" then "la gata negra," focusing on crisp, distinct final vowels. Then try "los gatos negros / las gatas negras." Remind them: in English, unstressed endings get swallowed; in Spanish, every vowel stays full.
+
 ### Checkout (3-5 min)
 **Anki:** Add 8 new cards — common nouns with genders (el libro, la mesa, el día, la mano) and key adjectives (grande, pequeño, rojo/roja, bonito/bonita).
 

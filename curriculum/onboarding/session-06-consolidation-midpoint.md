@@ -42,6 +42,16 @@ No scaffolding. Let the learner produce freely. This is the primary assessment o
 
 After: 2-3 corrections on the most impactful patterns. Highlight 1-2 things that have genuinely improved since session 2.
 
+### Pronunciation Check-in (2-3 min)
+Quick review of all pronunciation points from sessions 1-5. Run through one example of each:
+1. **Pure vowels (S1):** Say "No entiendo" — all 5 vowels present, each one clean
+2. **Stress shift (S2):** Say "hablar" then "hablo" — hear the stress move
+3. **Gender vowels (S3):** Say "el gato negro / la gata negra" — crisp final vowels
+4. **Linking (S4):** Say "en la escuela" — smooth, no pauses between words
+5. **Intonation (S5):** Say "¿Estás cansado?" then "Estás cansado." — rising vs falling pitch
+
+One pass through all five is enough. Note which areas sound natural and which still need attention — these observations feed into pronunciation tracking when Speechling starts in session 7.
+
 ### Checkout (3-5 min)
 **Reduced homework** — this is consolidation, not expansion:
 - Anki review — all cards (10 min)
