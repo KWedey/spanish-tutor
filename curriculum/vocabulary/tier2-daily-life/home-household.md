@@ -2,7 +2,7 @@
 
 ## Cluster Meta
 - Phase alignment: B
-- Core words: 31
+- Core words: 35
 - Exposure words: 20
 - Grammar reinforcement: [B-05-reflexive-verbs, A-02-ser-vs-estar]
 - Topic bank alignment: ["My home and neighborhood"]

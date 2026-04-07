@@ -2,7 +2,7 @@
 
 ## Cluster Meta
 - Phase alignment: C
-- Core words: 30
+- Core words: 28
 - Exposure words: 17
 - Grammar reinforcement: [C-03-formal-future, C-04-conditional]
 - Topic bank alignment: ["If I could change one thing..."]

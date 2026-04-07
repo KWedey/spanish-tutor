@@ -2,7 +2,7 @@
 
 ## Cluster Meta
 - Phase alignment: B
-- Core words: 30
+- Core words: 29
 - Exposure words: 15
 - Grammar reinforcement: [B-06-direct-object-pronouns, A-07-present-irregular-common]
 - Topic bank alignment: ["Shopping and money"]

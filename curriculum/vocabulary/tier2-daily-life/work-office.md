@@ -2,7 +2,7 @@
 
 ## Cluster Meta
 - Phase alignment: B
-- Core words: 31
+- Core words: 27
 - Exposure words: 20
 - Grammar reinforcement: [B-01-preterite-regular, B-11-future-ir-a]
 - Topic bank alignment: ["Work and career"]

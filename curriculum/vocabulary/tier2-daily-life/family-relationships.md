@@ -2,7 +2,7 @@
 
 ## Cluster Meta
 - Phase alignment: B
-- Core words: 31
+- Core words: 28
 - Exposure words: 16
 - Grammar reinforcement: [B-03-imperfect, B-04-preterite-vs-imperfect]
 - Topic bank alignment: ["Childhood and family"]
