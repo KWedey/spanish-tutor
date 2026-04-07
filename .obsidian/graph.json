@@ -1,0 +1,14 @@
+{
+  "colorGroups": [
+    { "query": "tag:#unseen", "color": { "a": 1, "rgb": 8421504 } },
+    { "query": "tag:#introduced", "color": { "a": 1, "rgb": 4444159 } },
+    { "query": "tag:#practicing", "color": { "a": 1, "rgb": 16761600 } },
+    { "query": "tag:#acquired", "color": { "a": 1, "rgb": 3394611 } },
+    { "query": "tag:#automatic", "color": { "a": 1, "rgb": 65280 } },
+    { "query": "tag:#regressed", "color": { "a": 1, "rgb": 16711680 } }
+  ],
+  "search": "-tag:#daily",
+  "showTags": false,
+  "showAttachments": false,
+  "showOrphans": false
+}

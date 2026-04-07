@@ -1,0 +1,16 @@
+{
+  "userIgnoreFilters": [
+    "state/",
+    "curriculum/",
+    "docs/",
+    ".git/",
+    ".superpowers/",
+    ".planning/",
+    "resources/",
+    "progress-reports/",
+    "scripts/"
+  ],
+  "newFileLocation": "folder",
+  "newFileFolderPath": "vault",
+  "attachmentFolderPath": "vault"
+}
