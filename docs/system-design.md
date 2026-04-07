@@ -652,7 +652,7 @@ phase_transition:
     receptive_task: ""          # e.g., "Summarize this audio clip"
     performance_summary: ""
     gaps_identified: []
-    decision: ""                # advanced, extended
+    decision: ""                # advance | extend | partial
   carryover_concepts: []        # concepts entering the new phase still in "practicing"
   learner_reflection: ""
 
@@ -660,7 +660,7 @@ phase_transition:
 snapshot:
   cefr_estimate: ""
   active_vocabulary: 0
-  grammar_acquired: []
+  grammar_acquired: 0
   total_sessions: 0
   days_since_start: 0
 ```
@@ -924,7 +924,7 @@ For each candidate concept/activity:
 
   PARKING_LOT (modifier)
     If parking-lot.md contains an item directly related to this concept:
-      +2 priority. Real learner need — address it.
+      +3 priority. Real learner need — address it.
 
   SPRINT_OVERRIDE (gate)
     If sprint.active is true in schedule.yaml:
@@ -956,15 +956,15 @@ For each candidate topic:
     Does this topic overlap with the current active vocabulary cluster?
     High overlap = less dead weight, more reinforcement.
 
-  LEARNER_INTEREST (0-5)
+  LEARNER_INTEREST (0-3)
     Has the learner expressed interest in this topic?
     Check: learner-profile.yaml interests, parking-lot.md, recent session notes.
-    Unknown interest = 2 (neutral), known interest = 4-5, known dislike = 0.
+    Strong connection = 3, mild = 1, unknown/neutral = 0.
 
-  FRESHNESS (0-5)
+  FRESHNESS (0-3)
     How long since this topic was last used?
-    Used this month: 0. Used last month: 2. Not used in 60+ days: 5.
-    Never used: 4 (slight preference for fresh material over untested).
+    Never used = 3. Used 4+ weeks ago = 2. Used 2-3 weeks ago = 1.
+    Used last week = 0 (exclude).
 
   TOPIC_SCORE = GRAMMAR_FIT + VOCABULARY_FIT + LEARNER_INTEREST + FRESHNESS
 ```
@@ -1208,12 +1208,14 @@ Protocol:
 
 ### Post-Session Vault Generation
 
-After writing state files and committing, the tutor should note whether an Obsidian vault export is due. The vault mirrors key state and curriculum files into a human-browsable format for offline review.
+After writing state files, the tutor generates/updates Obsidian vault content and includes it in the session commit.
 
-- Vault generation runs via `scripts/generate-vault.sh` (see `docs/vault-design.md` when available)
-- Trigger: after every session where `skill-map.yaml` or `milestones/` were updated
-- Output: `vault/` directory (git-ignored; regenerated on demand)
-- The learner can open `vault/` in Obsidian to browse their progress, grammar notes, and milestone history without needing Claude
+- **Full generation** (initial setup, curriculum changes): `python3 scripts/generate-vault.py --full`
+- **Per-session update** (after every session): `python3 scripts/generate-vault.py --session --date YYYY-MM-DD`
+- Output: `vault/` directory (committed to git)
+- The learner opens the repo root as an Obsidian vault to browse progress, grammar notes, and milestone history
+
+See spec at `docs/superpowers/specs/2026-04-06-system-audit-and-obsidian-vault-design.md` for full vault architecture.
 
 ---
 
@@ -1226,7 +1228,7 @@ Validation checks:
 1. Can all YAML files be parsed? (If not → load error-recovery.md)
 2. Does skill-map have entries for all concepts in the current phase?
 3. Are there status/error_rate contradictions?
-   (e.g., status: "acquired" but error_rate_recent: 0.40 → flag and investigate)
+   (e.g., status: "acquired" but error_rate_production: 0.40 → flag and investigate)
 4. Is the session log sequence reasonable? (no future dates, no impossible gaps)
 5. Does schedule.yaml reference concepts that exist in skill-map?
 6. Are vocabulary counts consistent? (passive_known >= active_known always)
