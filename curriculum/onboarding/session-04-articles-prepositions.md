@@ -75,6 +75,12 @@ Continue `curriculum/vocabulary/tier1-survival/basic-descriptions.md` — add lo
 - **Contraction compliance:** Do they remember al and del, or do they produce "a el" and "de el"?
 - **Cumulative load:** Session 4 is the last session before a high-severity concept (ser/estar). Monitor whether the learner is keeping up or feeling stretched.
 
+## Pre-instruction Awareness Notes
+
+**Ser/estar (taught next session):** This is the last session before formal ser/estar instruction. The learner has now had 3 sessions of gentle recasting. In the session observations, note: (1) how often they self-correct after recasting, (2) which ser/estar contexts are most confusing (likely temporary states and location). This data directly informs the session 5 lesson plan — share it with the ser/estar introduction as baseline error patterns.
+
+**Stress patterns:** Continue modeling correct stress. By session 4, the learner should be developing an ear for where stress falls, even without knowing the rules. If they're consistently getting stress right through imitation, note this as a positive signal — A-09 will be easier.
+
 ## Adjustment Notes
 - If gender agreement is still shaky: weave extra gender practice into the article drills (every article requires correct gender). This session naturally reinforces A-03.
 - If the learner picks up articles and prepositions quickly: spend extra time on personal 'a' — it is the hardest part of this session and critical for B-06 (direct object pronouns).

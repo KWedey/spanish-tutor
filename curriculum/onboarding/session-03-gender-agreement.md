@@ -80,6 +80,12 @@ Begin `curriculum/vocabulary/tier1-survival/basic-descriptions.md` — introduce
 - **Adjective placement:** How persistent is the English word order? This L1 interference pattern may take several sessions to fade.
 - **Cognitive load:** Gender agreement adds a new dimension to every sentence. Watch for signs of overload (long pauses, reverting to English, frustration).
 
+## Pre-instruction Awareness Notes
+
+**Ser/estar (taught in session 5):** Continue gentle recasting from session 2. Session 3 naturally produces many ser/estar opportunities ("Mi hermano *es* alto" vs. "Mi hermano *está* cansado"). If the learner uses ser for temporary states, recast with estar without explaining the distinction: "Ah, *está* cansado hoy — understood." Track the error frequency in session observations for the ser/estar formal introduction in session 5.
+
+**Stress patterns:** During the pronunciation check-in on vowel endings, also note stress placement. If the learner stresses Spanish words with English patterns, model the correct pronunciation. Exaggerate the correct stress slightly: "es-TU-dian-te, not estu-DIAN-te."
+
 ## Adjustment Notes
 - If the learner is still shaky on present tense conjugation: spend extra time in the review warm-up. Consider a brief present tense drill during the practice portion alongside gender agreement.
 - If gender clicks quickly: introduce demonstratives and possessives in the same session. If not, defer demonstratives/possessives to session 4 warm-up.

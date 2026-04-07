@@ -73,8 +73,13 @@ grammar_differences:
   - feature: "voseo"
     regions: [argentina, uruguay, parts of central america]
     introduce_at: Phase C
-    description: "Replace tu conjugation with vos forms (vos tenes, vos queres)"
-    notes: "Teach recognition in Phase B, production in Phase C for target dialects"
+    description: "Replace tú with vos. Present tense uses stressed final syllable: vos hablás, vos comés, vos vivís, vos tenés, vos querés, vos podés"
+    notes: "Teach recognition in Phase B, production in Phase C for target dialects. If target dialect uses vos, introduce alongside tú from Phase A."
+    conjugation_pattern:
+      ar: "-ás (hablás)"
+      er: "-és (comés)"
+      ir: "-ís (vivís)"
+      irregulars: "tenés, querés, podés, sabés, venís, decís"
 
   - feature: "leismo"
     regions: [spain]
@@ -96,7 +101,7 @@ grammar_differences:
   - feature: "voseo imperatives"
     regions: [argentina, uruguay, parts of central america]
     introduce_at: Phase C
-    description: "Vos imperative forms differ: habla (vos), come (vos), vivi (vos)"
+    description: "Vos imperative forms use stressed final syllable (drop -s from present): hablá, comé, viví"
     notes: "Teach alongside B-09 imperatives for recognition, production in Phase C for target dialects"
 
   - feature: "progressive frequency"

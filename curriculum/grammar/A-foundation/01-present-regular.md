@@ -129,6 +129,19 @@ Prompt: "Tell me about your typical day — what do you do from morning to night
 ### Stage 4: Communicative Practice
 Prompt: "Describe what your family members do — their jobs, their habits, what they do on weekends." This requires third-person conjugation (trabaja, come, vive) and naturally reduces pronoun dependence because the subject shifts between people. Topic naturally elicits a range of verbs and persons.
 
+### Dialect Variants (Reference Only)
+
+The conjugation tables above use the standard tú/ustedes system used in Mexico and most of Latin America. Two regional variants exist:
+
+**Vosotros (Spain only):** A second-person plural form used in informal contexts. Latin American Spanish uses ustedes for both formal and informal plural. Vosotros is included in the tables above for reference but is NOT actively practiced unless the learner's target dialect is Castilian Spanish.
+
+**Vos (Argentina, Uruguay, parts of Central America):** Replaces tú in informal singular. Conjugation uses stressed final-syllable forms:
+- -ar: vos hablás (vs. tú hablas)
+- -er: vos comés (vs. tú comes)  
+- -ir: vos vivís (vs. tú vives)
+
+**For this program:** The learner's target dialect (set in learner-profile.yaml) determines which forms are actively practiced. If the target dialect uses vos, introduce these forms alongside tú from the start. If not, vos forms are taught for recognition only in Phase D (register shifting).
+
 ## Dialect Notes
 **Vosotros** (2nd person plural) is used exclusively in Spain. Latin American Spanish uses **ustedes** for both formal and informal plural "you," conjugated with the 3rd-person plural form (hablan, comen, viven). If the learner's target dialect is Latin American, teach ustedes and skip vosotros forms. Mention that vosotros exists so they recognize it in Spanish media, but do not drill it.
 

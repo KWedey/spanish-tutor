@@ -67,6 +67,14 @@ Continue `curriculum/vocabulary/tier1-survival/greetings-introductions.md` — a
 - **Subject pronoun overuse:** How frequently do they include unnecessary yo/tu/el? This is the primary L1 marker to track.
 - **Verb avoidance:** Are they sticking to -ar verbs and avoiding -er/-ir? If so, push -er/-ir in drills.
 
+## Pre-instruction Awareness Notes
+
+These concepts haven't been formally taught yet, but the learner will produce errors related to them. Use gentle recasting — model the correct form without explaining the rule. The goal is to prevent fossilization, not to teach the concept early.
+
+**Ser/estar (taught in session 5):** If the learner produces sentences like "Soy cansado" (I am tired) or "Es en la mesa" (It is on the table), recast naturally: "Ah, *estoy* cansado — sí, yo también estoy cansado." Don't explain why — just model the correct form. If they ask, say: "Good catch — we'll cover that in a few sessions. For now, just notice that some 'I am' sentences use a different word."
+
+**Stress patterns (taught in A-09):** During the pronunciation check-in, if the learner applies English stress to Spanish words (e.g., saying "te-LE-fo-no" instead of "te-LÉ-fo-no"), model the correct stress without explaining the rules: "Listen — te-LÉ-fo-no. Hear where the strong beat falls?" Stress rules come later; for now, build awareness through imitation.
+
 ## Adjustment Notes
 - If repair phrases are NOT solid: spend an extra 3-5 min drilling them before starting new material. Repair phrases must be automatic by session 5.
 - If the learner grasps conjugation immediately: skip some Stage 2 drills and move to Stage 3 (guided production) earlier. Add more complex sentences ("My brother works and studies").

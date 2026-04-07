@@ -15,6 +15,7 @@ interference_patterns:
     preempt_at: A-02-ser-vs-estar
     severity: high
     persistence: "Can fossilize permanently if not caught early"
+    pre_instruction_recast: true  # recast gently in sessions 2-4 before formal instruction in session 5
 
   - id: adjective-placement
     english_cause: "English puts adjectives before nouns"
@@ -183,6 +184,7 @@ interference_patterns:
     preempt_at: A-09-accent-stress-rules
     severity: medium
     persistence: "Improves with listening input but requires explicit awareness to fully resolve"
+    pre_instruction_recast: true  # model correct stress in sessions 2-4 before formal rules in A-09
 
   - id: diminutive-underuse
     english_cause: "English has no productive diminutive morphology"

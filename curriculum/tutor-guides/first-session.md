@@ -92,6 +92,14 @@ If the learner has any prior exposure, use the three graded prompts above as a s
 - If they have a specific country/region in mind, note it.
 - If no preference, recommend Mexican Spanish (most widely understood, abundant media).
 
+**Dialect impact on grammar:** The learner's dialect choice affects which pronoun forms are actively taught:
+- **Mexico/most of Latin America:** tú (informal) + usted (formal) + ustedes (plural). Vosotros is skipped entirely.
+- **Spain (Castilian):** tú + usted + vosotros (informal plural) + ustedes (formal plural). Vosotros conjugation forms are added to all verb paradigms.
+- **Argentina/Uruguay:** vos (informal) + usted (formal) + ustedes (plural). Vos conjugation forms replace tú forms in active practice from Phase A. Tú is taught for recognition.
+- **Central America:** Mixed — some countries use vos, others tú. Ask the learner's specific target and adjust accordingly.
+
+Record the choice in `learner-profile.yaml` under `target_dialect` — this drives conditional content in grammar files and dialect-notes.yaml throughout the program.
+
 ### 6. First Assignment (3 min)
 End with something achievable that builds momentum:
 - Walk them through setting up Anki if they don't have it.

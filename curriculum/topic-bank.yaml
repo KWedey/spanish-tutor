@@ -1,10 +1,12 @@
 # Topic Bank — available weekly narrow topics
+# topic_id: kebab-case identifier matching media-bank.yaml topic_alignment values
 # The tutor selects one per week during weekly review.
 # Don't repeat a topic within 4 weeks.
 
 topics:
   # Phase A topics
   - name: "Greetings and introductions"
+    topic_id: greetings-and-introductions
     grammar_alignment: [A-01-present-regular, A-02-ser-vs-estar]
     vocabulary_alignment: [tier1-greetings-introductions]
     cefr_range: [A1]
@@ -15,6 +17,7 @@ topics:
       - "Starting a conversation with a stranger — small talk openers, polite interest"
 
   - name: "My daily routine"
+    topic_id: my-daily-routine
     grammar_alignment: [A-01-present-regular, A-05-basic-questions]
     vocabulary_alignment: [tier1-numbers-time-dates]
     cefr_range: [A1, A2]
@@ -26,6 +29,7 @@ topics:
       - "A typical workday — commute, lunch breaks, what time things happen"
 
   - name: "Food and eating out"
+    topic_id: food-and-eating-out
     grammar_alignment: [A-01-present-regular, A-07-present-irregular-common]
     vocabulary_alignment: [tier1-food-restaurant]
     cefr_range: [A1, A2]
@@ -37,6 +41,7 @@ topics:
       - "Food culture — regional dishes, meal times, eating customs in Latin America"
 
   - name: "Getting around town"
+    topic_id: getting-around-town
     grammar_alignment: [A-04-articles-prepositions, A-05-basic-questions]
     vocabulary_alignment: [tier1-directions-transportation]
     cefr_range: [A1, A2]
@@ -48,6 +53,7 @@ topics:
       - "Navigating an airport — check-in, gates, customs, finding your way"
 
   - name: "Describing people and things"
+    topic_id: describing-people-and-things
     grammar_alignment: [A-02-ser-vs-estar, A-03-gender-agreement]
     vocabulary_alignment: [tier1-basic-descriptions]
     cefr_range: [A1, A2]
@@ -59,6 +65,7 @@ topics:
 
   # Phase B topics
   - name: "Childhood and family"
+    topic_id: childhood-and-family
     grammar_alignment: [B-03-imperfect, B-04-preterite-vs-imperfect]
     vocabulary_alignment: [tier2-family-relationships]
     cefr_range: [A2, B1]
@@ -70,6 +77,7 @@ topics:
       - "Comparing childhood and adulthood — what changed, what stayed the same"
 
   - name: "My home and neighborhood"
+    topic_id: my-home-and-neighborhood
     grammar_alignment: [B-01-preterite-regular, A-02-ser-vs-estar]
     vocabulary_alignment: [tier2-home-household]
     cefr_range: [A2, B1]
@@ -81,6 +89,7 @@ topics:
       - "The ideal home — what you'd want in a dream house, location, features"
 
   - name: "Work and career"
+    topic_id: work-and-career
     grammar_alignment: [B-01-preterite-regular, B-11-future-ir-a]
     vocabulary_alignment: [tier2-work-office]
     cefr_range: [A2, B1]
@@ -92,6 +101,7 @@ topics:
       - "A difficult day at work — what went wrong, how you handled it"
 
   - name: "Shopping and money"
+    topic_id: shopping-and-money
     grammar_alignment: [B-06-direct-object-pronouns, A-07-present-irregular-common]
     vocabulary_alignment: [tier2-shopping-money]
     cefr_range: [A2, B1]
@@ -103,6 +113,7 @@ topics:
       - "Budgeting and spending habits — what you spend money on, saving vs. splurging"
 
   - name: "Weather and seasons"
+    topic_id: weather-and-seasons
     grammar_alignment: [B-03-imperfect, B-04-preterite-vs-imperfect]
     vocabulary_alignment: [tier2-weather-seasons]
     cefr_range: [A2, B1]
@@ -113,6 +124,7 @@ topics:
       - "Climate where you grew up vs. now — how it used to be, how it's different"
 
   - name: "Health and the body"
+    topic_id: health-and-the-body
     grammar_alignment: [B-05-reflexive-verbs, A-02-ser-vs-estar]
     vocabulary_alignment: [tier2-health-body]
     cefr_range: [A2, B1]
@@ -124,6 +136,7 @@ topics:
       - "At the pharmacy — asking for medicine, reading labels, home remedies"
 
   - name: "Weekend plans and activities"
+    topic_id: weekend-plans-and-activities
     grammar_alignment: [B-11-future-ir-a, B-01-preterite-regular]
     vocabulary_alignment: [tier3-plans-future, tier3-hobbies-interests]
     cefr_range: [A2, B1]
@@ -135,6 +148,7 @@ topics:
       - "Hobbies and free time — what you enjoy doing, how you got into it"
 
   - name: "A memorable trip"
+    topic_id: a-memorable-trip
     grammar_alignment: [B-01-preterite-regular, B-04-preterite-vs-imperfect]
     vocabulary_alignment: [tier3-travel-culture]
     cefr_range: [A2, B1]
@@ -147,6 +161,7 @@ topics:
 
   # Phase C topics
   - name: "Opinions and debate"
+    topic_id: opinions-and-debate
     grammar_alignment: [C-01-present-subjunctive, C-02-subjunctive-triggers]
     vocabulary_alignment: [tier3-opinions-agreement]
     cefr_range: [B1, B2]
@@ -158,6 +173,7 @@ topics:
       - "A controversial topic you feel strongly about — making your case respectfully"
 
   - name: "Emotions and relationships"
+    topic_id: emotions-and-relationships
     grammar_alignment: [C-01-present-subjunctive, C-02-subjunctive-triggers]
     vocabulary_alignment: [tier3-emotions-feelings]
     cefr_range: [B1, B2]
@@ -169,6 +185,7 @@ topics:
       - "Relationships across cultures — differences in how people show affection or respect"
 
   - name: "Telling stories"
+    topic_id: telling-stories
     grammar_alignment: [B-04-preterite-vs-imperfect, C-07-relative-clauses]
     vocabulary_alignment: [tier3-storytelling-narration]
     cefr_range: [B1, B2]
@@ -180,6 +197,7 @@ topics:
       - "A story someone told you that stuck with you — who told it, why it mattered"
 
   - name: "Travel and culture"
+    topic_id: travel-and-culture
     grammar_alignment: [C-04-conditional, C-05-por-vs-para]
     vocabulary_alignment: [tier3-travel-culture]
     cefr_range: [B1, B2]
@@ -191,6 +209,7 @@ topics:
       - "Local customs and etiquette — greetings, tipping, table manners in different places"
 
   - name: "If I could change one thing..."
+    topic_id: if-i-could-change-one-thing
     grammar_alignment: [C-04-conditional, C-01-present-subjunctive]
     vocabulary_alignment: [tier4-hypotheticals-debate]
     cefr_range: [B1, B2]
@@ -203,6 +222,7 @@ topics:
 
   # Phase D topics
   - name: "Current events and society"
+    topic_id: current-events-and-society
     grammar_alignment: [D-04-passive-voice, D-06-nuanced-connectors]
     vocabulary_alignment: [tier4-politics-society]
     cefr_range: [B2, C1]
@@ -214,6 +234,7 @@ topics:
       - "Inequality and access — education, healthcare, economic opportunity"
 
   - name: "Philosophy and big ideas"
+    topic_id: philosophy-and-big-ideas
     grammar_alignment: [D-02-si-clauses, D-03-subjunctive-all-tenses]
     vocabulary_alignment: [tier4-philosophy-ideas]
     cefr_range: [B2, C1]
@@ -225,6 +246,7 @@ topics:
       - "The meaning of success — how different cultures define it"
 
   - name: "Humor, idioms, and slang"
+    topic_id: humor-idioms-and-slang
     grammar_alignment: [D-05-register-shifting]
     vocabulary_alignment: [tier4-humor-idioms]
     cefr_range: [B2, C1]
@@ -236,6 +258,7 @@ topics:
       - "Funny misunderstandings — times a word or phrase meant something you didn't expect"
 
   - name: "Professional communication"
+    topic_id: professional-communication
     grammar_alignment: [D-05-register-shifting, D-06-nuanced-connectors]
     vocabulary_alignment: [tier4-professional-specialized]
     cefr_range: [B2, C1]
@@ -247,6 +270,7 @@ topics:
       - "Networking at a conference — introducing yourself, exchanging contact info, small talk"
 
   - name: "Giving directions"
+    topic_id: giving-directions
     grammar_alignment: [B-09-imperatives]
     vocabulary_alignment: [tier1-directions-transportation]
     cefr_range: [A2, B1]
@@ -257,6 +281,7 @@ topics:
       - "Giving instructions for a task — step-by-step directions, do this then that"
 
   - name: "Comparing cities and countries"
+    topic_id: comparing-cities-and-countries
     grammar_alignment: [B-10-comparatives-superlatives]
     vocabulary_alignment: [tier3-travel-culture]
     cefr_range: [A2, B1]
@@ -268,6 +293,7 @@ topics:
       - "Urban vs. rural life — advantages, disadvantages, which you prefer"
 
   - name: "What are you doing right now?"
+    topic_id: what-are-you-doing-right-now
     grammar_alignment: [B-08-estar-gerund-progressive]
     vocabulary_alignment: [tier2-home-household]
     cefr_range: [A2, B1]
@@ -278,6 +304,7 @@ topics:
       - "Live-narrating an event — what's happening at a party, game, or gathering"
 
   - name: "Retelling a friend's story"
+    topic_id: retelling-a-friends-story
     grammar_alignment: [C-08-indirect-speech]
     vocabulary_alignment: [tier3-storytelling-narration]
     cefr_range: [B1, B2]
@@ -289,6 +316,7 @@ topics:
       - "Summarizing a podcast or interview — what the speaker talked about, key points"
 
   - name: "Terms of endearment and affection"
+    topic_id: terms-of-endearment-and-affection
     grammar_alignment: [C-09-diminutives-augmentatives]
     vocabulary_alignment: [tier2-family-relationships]
     cefr_range: [B1, B2]
