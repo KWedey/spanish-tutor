@@ -25,5 +25,13 @@ sessions_rated_too_hard_30d: 0
 anki_estimated_deck_size: 0
 anki_estimated_daily_review_minutes: 0
 
+placement_validation_metrics:
+  placement_level: null
+  initial_confidence: null
+  total_concepts_validated: 0
+  total_downgrades: 0
+  final_assessment: null
+  validation_completed: null
+
 last_validation_issues: []
 last_system_review: null

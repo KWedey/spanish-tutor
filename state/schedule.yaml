@@ -50,4 +50,12 @@ carryover_concepts: []
 anki_new_cards_per_session: 8
 anki_retirement_threshold_days: 60
 
+placement_validation:
+  active: false
+  confidence: null
+  sessions_completed: 0
+  listening_baseline_set: false
+  total_downgrades: 0
+  queue: []
+
 adjustment_log: []
