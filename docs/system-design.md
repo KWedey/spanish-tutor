@@ -381,6 +381,10 @@ vocabulary:
     weak_recognition: []        # can't recognize at all — need input exposure
     last_practiced: null
     notes: ""
+    error_tracking:
+      error_rate_production: null  # rolling avg, last 5 in-session observations (null = unobserved)
+      common_errors: []            # e.g., "gender: 'el mano' → 'la mano'"
+      last_observed: null          # date of last in-session production observation
 
   # ... (one entry per vocabulary cluster in curriculum/vocabulary/)
 
@@ -443,17 +447,20 @@ writing:
 
 receptive_skills:
   listening:
-    current_level: null           # superbeginner, beginner, intermediate, advanced, native
-    comprehension_quality: null   # gist, main-ideas, detailed, near-native
-    speed_tolerance: null         # slow, moderate, natural
-    last_level_change: null
-    notes: ""
+    current_level: L1             # L1 (simplified speech) / L2 (slow structured) / L3 (moderate semi-structured) / L4 (natural with text support) / L5 (native, varied accents)
+    comprehension_quality: null   # gist / main_ideas / details / inference
+    hours_at_level: 0             # hours of input at current level (self-reported, cross-referenced with debrief quality)
+    hours_total: 0                # cumulative listening input hours
+    level_up_evidence: []         # dated observations, e.g., [{date: "2026-05-01", note: "summarized podcast details accurately, 3rd consecutive session"}]
+    level_history: []             # e.g., [{level: L1, entered: "2026-04-10", hours_spent: 6}]
   reading:
-    current_level: null           # graded-A1, graded-A2, graded-B1, adapted, authentic-simple, authentic
-    comprehension_quality: null   # gist, main-ideas, detailed, near-native
-    lookup_frequency: null        # constant, frequent, occasional, rare
-    last_level_change: null
-    notes: ""
+    current_level: R1             # R1 (cognates, short texts) / R2 (short paragraphs, graded L1) / R3 (graded L2-3, simple articles) / R4 (authentic articles, short stories) / R5 (literature, journalism)
+    comprehension_quality: null   # gist / main_ideas / details / inference
+    lookup_frequency: frequent    # frequent / occasional / rare / none
+    hours_at_level: 0
+    hours_total: 0
+    level_up_evidence: []
+    level_history: []
 
 # Cultural and pragmatic competence
 cultural_awareness:
@@ -579,7 +586,16 @@ grammar_queue: []
 vocabulary_queue: []
 
 # Carryover — concepts from prior phase still in active practice
+# Each entry tracks escalation state for stalled-concept intervention.
+# Populated during phase transitions for concepts not yet "acquired".
 carryover_concepts: []
+  # Entry structure when populated:
+  # - concept_id: A-05           # skill-map key
+  #   carryover_date: ""         # date concept entered carryover
+  #   sessions_in_carryover: 0   # incremented each session the concept is practiced
+  #   current_approach: ""       # rule_based / example_based / communicative / context_shift
+  #   is_prerequisite: false     # true if this concept blocks introduction of current-phase concepts
+  #   escalation_stage: normal   # normal / flagged / approach_changed / sprint / surfaced
 
 # SRS tuning (moved from system-health — these are config knobs, not health metrics)
 anki_new_cards_per_session: 8
@@ -613,6 +629,35 @@ placement_validation:
       notes: ""
 ```
 
+### 4b. Resource Tracker (`state/resource-tracker.yaml`)
+
+Tracks input resource engagement and comprehension trends. Entries created on first assignment — not pre-populated from media-bank.
+
+```yaml
+schema_version: 1
+
+input_summary:
+  total_listening_hours: 0
+  total_reading_hours: 0
+  current_listening_level: L1    # mirrors skill-map.receptive_skills.listening.current_level
+  current_reading_level: R1      # mirrors skill-map.receptive_skills.reading.current_level
+
+resources: []
+  # Entry structure when populated:
+  # - name: "Dreaming Spanish"
+  #   type: listening              # listening / reading / mixed
+  #   level_range: [L2, L4]       # levels this resource spans
+  #   sessions_assigned: 0
+  #   sessions_completed: 0
+  #   hours_logged: 0
+  #   comprehension_trend: null    # improving / stable / declining
+  #   vocabulary_extracted: 0      # count of words surfaced in debriefs
+  #   last_assigned: null
+  #   last_completed: null
+  #   learner_engagement: null     # enthusiastic / neutral / reluctant
+  #   notes: ""
+```
+
 ### 5. Session Logs (`state/sessions/YYYY-MM-DD.yaml`)
 
 Written at the end of every session. The primary handoff mechanism between agents. Kept for 60 days, then compressed into weekly summaries.
@@ -639,6 +684,19 @@ assignment_review:
     verification_result: ""     # what the tutor observed when testing the claim
     skill_updates: []           # any changes to make to skill-map
 
+# Input comprehension debrief — what the learner consumed since last session
+input_reviewed: []
+  # Entry structure when populated:
+  # - resource: ""                          # resource name
+  #   type: listening                       # listening / reading
+  #   duration_minutes: 0
+  #   passes: 1                             # multi-pass count (L2-L3: recommend 2-3)
+  #   comprehension_assessment: null        # gist / main_ideas / details / inference
+  #   vocabulary_extracted: []              # words/phrases learner reported
+  #   production_gaps_observed: []          # words learner reached for but couldn't produce
+  #   difficulty_self_report: null          # too_easy / just_right / too_hard
+  #   level_at_time: ""                     # learner's level when assigned
+
 # Live session content
 session_activities:
   - type: ""                    # conversation, grammar-drill, translation, fluency-drill, writing-review, etc.
@@ -664,6 +722,13 @@ skill_map_updates:
     old_value: ""
     new_value: ""
     evidence: ""                # why this change
+
+# Interleaving — prior concepts woven into today's primary concept practice
+interleaved_concepts: []
+  # Entry structure when populated:
+  # - concept_id: ""                        # skill-map key
+  #   interleave_context: ""                # e.g., "embedded ser/estar in preterite drills"
+  #   errors_observed: 0
 
 # Assignments for before next session
 assignments:
