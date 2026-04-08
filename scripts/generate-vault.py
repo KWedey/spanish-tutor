@@ -343,9 +343,17 @@ def generate_pronunciation_note(sound_id: str, data: dict) -> tuple[Path, str]:
 # Home.md
 # ---------------------------------------------------------------------------
 
-def generate_home(schedule: dict) -> tuple[Path, str]:
+def generate_home(schedule: dict, skill_map: dict) -> tuple[Path, str]:
     phase = schedule.get("current_phase", "A-foundation")
     week = schedule.get("current_week", 1)
+    listening = skill_map.get('receptive_skills', {}).get('listening', {})
+    reading = skill_map.get('receptive_skills', {}).get('reading', {})
+    listening_level = listening.get('current_level', 'L1')
+    reading_level = reading.get('current_level', 'R1')
+    listening_quality = listening.get('comprehension_quality') or 'not assessed'
+    reading_quality = reading.get('comprehension_quality') or 'not assessed'
+    listening_hours = listening.get('hours_total', 0)
+    reading_hours = reading.get('hours_total', 0)
 
     content = f"""\
 ---
@@ -392,6 +400,13 @@ SORT status ASC
 - [[Parking Lot]]
 - [[Progress/Grammar Progress|Grammar Progress]]
 - [[Progress/Vocabulary Progress|Vocabulary Progress]]
+
+## Input Progress
+
+| Skill | Level | Comprehension | Total Hours |
+|-------|-------|--------------|-------------|
+| Listening | {listening_level} | {listening_quality} | {listening_hours} |
+| Reading | {reading_level} | {reading_quality} | {reading_hours} |
 """
     return VAULT_DIR / "Home.md", content
 
@@ -459,6 +474,20 @@ def generate_roadmap(skill_map: dict) -> tuple[Path, str]:
                     lines.append(f"    {src} --> {dst}")
         lines.append("```")
         lines.append("")
+
+    # Input levels section
+    listening_level = skill_map.get('receptive_skills', {}).get('listening', {}).get('current_level', 'L1')
+    reading_level = skill_map.get('receptive_skills', {}).get('reading', {}).get('current_level', 'R1')
+    lines.append("## Input Levels")
+    lines.append("")
+    lines.append("### Listening")
+    lines.append("L1 (Simplified) → L2 (Slow/Structured) → L3 (Moderate) → L4 (Natural + Subtitles) → L5 (Native Media)")
+    lines.append("")
+    lines.append("### Reading")
+    lines.append("R1 (Cognates/Labels) → R2 (Graded Readers L1) → R3 (Graded L2-3) → R4 (Authentic Articles) → R5 (Literature)")
+    lines.append("")
+    lines.append(f"**Current:** Listening {listening_level} | Reading {reading_level}")
+    lines.append("")
 
     return VAULT_DIR / "Roadmap.md", "\n".join(lines)
 
@@ -689,7 +718,7 @@ def run_full(skill_map: dict, schedule: dict) -> None:
         files_written += 1
 
     # Home
-    path, content = generate_home(schedule)
+    path, content = generate_home(schedule, skill_map)
     write_vault_file(path, content, force=True)
     files_written += 1
 

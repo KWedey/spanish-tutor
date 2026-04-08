@@ -1,6 +1,6 @@
 ---
 generated: true
-last_generated: "2026-04-07"
+last_generated: "2026-04-08"
 tags: ["dashboard"]
 ---
 %%Auto-generated from tutor state. Edits will be overwritten.%%
@@ -39,6 +39,13 @@ SORT status ASC
 ## Quick Links
 
 - [[Roadmap]]
-- [[parking-lot|Parking Lot]]
+- [[Parking Lot]]
 - [[Progress/Grammar Progress|Grammar Progress]]
 - [[Progress/Vocabulary Progress|Vocabulary Progress]]
+
+## Input Progress
+
+| Skill | Level | Comprehension | Total Hours |
+|-------|-------|--------------|-------------|
+| Listening | L1 | not assessed | 0 |
+| Reading | R1 | not assessed | 0 |
