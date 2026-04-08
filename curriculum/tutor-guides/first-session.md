@@ -122,6 +122,8 @@ Score:
 
 **This tests reading, not listening.** Listening baseline is deferred: assign a Dreaming Spanish video at estimated level, review comprehension in session 2.
 
+**Listening baseline fallback:** If the learner does not complete the listening homework by session 3 (skipped homework, extended gap, or session 2 delayed), conduct an in-session listening exercise: play a 2-minute Dreaming Spanish clip at estimated level and assess comprehension directly. Do not leave listening_baseline_set as false beyond session 3.
+
 ### Placement Protocol
 
 #### Placement Level Determination

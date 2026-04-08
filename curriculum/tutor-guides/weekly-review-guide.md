@@ -49,6 +49,27 @@ Check `state/system-health.yaml`:
 ### 8. Goal Check
 Are we on track for stated milestones? If behind, discuss with learner — adjust timeline or intensity.
 
+### 8a. Goal Tracking Update
+
+Update `goal_tracking` in system-health.yaml:
+1. Calculate `current_acquisition_rate` (concepts acquired in last 30 days / 4.3 weeks)
+2. Count `concepts_remaining_for_next_phase` (current phase prerequisites not yet acquired)
+3. Count `concepts_remaining_for_target_level` (all prerequisites between current phase and `target_level`)
+4. Estimate `estimated_weeks_remaining` = concepts_remaining / current_acquisition_rate (rough — flag if rate is 0)
+5. Set `primary_goal_progress`: on-track if estimate ≤ target date margin, behind if exceeding by 20%+, ahead if under by 20%+, at-risk if rate is 0 or declining
+6. Update `milestone_progress` with any milestones achieved this week
+7. Set `last_goal_review` to today's date
+
+### 8b. Phase D Stall Detection
+
+If the learner is in Phase D and `days_in_current_phase` (from system-health.yaml) exceeds 120 days without approaching graduation criteria:
+
+1. Flag in system-health: `phase_d_stall: true`
+2. Review: Are graduation criteria realistic? Has the learner's goal changed?
+3. Discuss honestly with the learner: "You've been in Phase D for [N] weeks. Let's talk about what 'done' looks like for you."
+4. Options: adjust graduation criteria, set a concrete target date, shift to maintenance mode if the learner is satisfied with current level, or identify specific blockers to address.
+5. Re-check every 4 weeks until resolved.
+
 ### 9. Motivation Check
 What's feeling good? What's feeling tedious? Check for plateau risk.
 

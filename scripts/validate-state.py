@@ -171,15 +171,15 @@ def check_carryover_concepts(sched: dict, sm: dict) -> None:
         pass_("No carryover concepts to check")
         return
     grammar = sm.get("grammar", {})
-    vocabulary = sm.get("vocabulary", {})
-    all_concepts = set(grammar.keys()) | set(vocabulary.keys())
     for cid in carryover:
-        if cid not in all_concepts:
-            fail(f"Carryover concept '{cid}' not found in skill-map")
+        if cid not in grammar:
+            fail(f"Carryover concept '{cid}' not found in skill-map grammar section")
         else:
-            entry = grammar.get(cid) or vocabulary.get(cid) or {}
-            if isinstance(entry, dict) and entry.get("status") == "acquired":
-                warn(f"Carryover concept '{cid}' has status 'acquired' — should be removed from carryover")
+            entry = grammar[cid]
+            if isinstance(entry, dict):
+                status = entry.get("status")
+                if status in ("acquired", "automatic"):
+                    warn(f"Carryover concept '{cid}' has status '{status}' — should be removed from carryover list")
     pass_(f"Checked {len(carryover)} carryover concepts")
 
 
@@ -196,6 +196,67 @@ def check_schedule_enums(sched: dict) -> None:
     if isinstance(week, int) and week < 0:
         fail(f"schedule.current_week={week} is negative")
     pass_("Schedule enum values are valid")
+
+
+def check_integration_tested_with(sm: dict) -> None:
+    grammar = sm.get("grammar", {})
+    grammar_ids = set(grammar.keys())
+    for cid, entry in grammar.items():
+        if not isinstance(entry, dict): continue
+        # Legacy boolean field check
+        if "integration_tested" in entry:
+            warn(f"Grammar '{cid}': legacy field 'integration_tested' found — should be 'integration_tested_with' (list)")
+        itw = entry.get("integration_tested_with")
+        if itw is None:
+            # Field simply absent — not a blocker, schema may be partial
+            pass
+        elif not isinstance(itw, list):
+            fail(f"Grammar '{cid}': 'integration_tested_with' should be a list, got {type(itw).__name__}")
+        else:
+            for ref in itw:
+                if ref not in grammar_ids:
+                    fail(f"Grammar '{cid}': 'integration_tested_with' references unknown concept '{ref}'")
+    pass_("Checked integration_tested_with format for all grammar concepts")
+
+
+def check_acquired_zero_practice(sm: dict, profile: dict) -> None:
+    grammar = sm.get("grammar", {})
+    placement_level = None
+    if isinstance(profile, dict):
+        placement_level = (profile.get("initial_placement") or {}).get("level") or None
+    # Extract the phase letter from a placement level string like "B-conversational" or just "B"
+    placement_phase: str | None = None
+    if placement_level:
+        placement_phase = placement_level[0].upper() if placement_level else None
+
+    phase_order = {"A": 0, "B": 1, "C": 2, "D": 3}
+
+    for cid, entry in grammar.items():
+        if not isinstance(entry, dict): continue
+        if entry.get("status") != "acquired": continue
+        if (entry.get("practice_count") or 0) != 0: continue
+        # Concept is acquired with practice_count == 0
+        concept_phase = cid[0].upper() if cid else None
+        if (placement_phase
+                and concept_phase in phase_order
+                and placement_phase in phase_order
+                and phase_order[concept_phase] < phase_order[placement_phase]):
+            # Below placement level — exempt
+            pass_(f"Grammar '{cid}': acquired with practice_count=0 (placement-exempt: below {placement_phase}-level placement)")
+        else:
+            warn(f"Grammar '{cid}': acquired with practice_count=0 — cannot acquire without practice unless placement-validated")
+
+
+def check_placement_validation_consistency(sched: dict) -> None:
+    pv = sched.get("placement_validation") or {}
+    pv_active = pv.get("active", False)
+    onboarding_complete = sched.get("onboarding_complete", False)
+    if pv_active and not onboarding_complete:
+        fail("Placement validation active but onboarding not complete — contradictory state")
+    elif pv_active:
+        pass_("Placement validation active and onboarding_complete is true — consistent")
+    else:
+        pass_("Placement validation not active — no consistency check needed")
 
 
 # --- Main ---------------------------------------------------------------------
@@ -226,9 +287,13 @@ def main() -> None:
 
     if skill_map is not None: check_acquired_consistency(skill_map)
     if skill_map is not None: check_performance_enums(skill_map)
+    if skill_map is not None: check_integration_tested_with(skill_map)
+    if skill_map is not None and profile is not None:
+        check_acquired_zero_practice(skill_map, profile)
     check_session_filenames()
     if schedule is not None:
         check_schedule_enums(schedule)
+        check_placement_validation_consistency(schedule)
     if schedule is not None and skill_map is not None:
         check_carryover_concepts(schedule, skill_map)
 

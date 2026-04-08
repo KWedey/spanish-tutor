@@ -6,6 +6,14 @@ Loaded when: `sprint.active` is true in schedule.yaml.
 
 The learner has a deadline: trip, work event, meeting, date, family visit.
 
+## Placement Validation Collision
+
+If `placement_validation.active` is true when sprint mode is requested:
+
+- **Sessions 2-4 (validation window):** Placement validation takes priority. Sprint preparation runs as secondary focus only — the tutor can orient vocabulary toward the sprint goal during validation exercises, but validation spot-checks are not displaced.
+- **After validation completes:** Sprint mode takes full control of concept selection and activity routing.
+- **Rationale:** An incorrect placement will undermine sprint preparation. Validating the learner's actual level first ensures sprint activities are appropriately calibrated.
+
 ## Protocol
 
 1. Set `sprint.active: true` in schedule.yaml with:

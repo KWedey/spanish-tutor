@@ -22,7 +22,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites: []
     notes: FIRST concept — survival phrases for when learner is stuck
   A-01-present-regular:
@@ -35,7 +35,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites: []
     notes: Introduces hay briefly; full treatment in A-07
   A-02-ser-vs-estar:
@@ -48,7 +48,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-01-present-regular
     notes: ''
@@ -62,7 +62,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites: []
     notes: 'Expanded: includes demonstratives (este/ese/aquel) and unstressed possessives
       (mi/tu/su)'
@@ -76,7 +76,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-03-gender-agreement
     notes: 'Expanded: includes personal ''a'' as dedicated section'
@@ -90,7 +90,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-01-present-regular
     notes: ''
@@ -104,7 +104,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-01-present-regular
     notes: 'Reversed sentence structure: gustar, encantar, molestar, importar, interesar,
@@ -119,7 +119,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-01-present-regular
     notes: ir, tener, querer, poder, hacer, decir, saber/conocer, hay
@@ -133,7 +133,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-03-gender-agreement
     notes: Cardinals, ordinals, quantifier agreement, tener-for-age expressions
@@ -147,7 +147,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites: []
     notes: 3 stress rules, meaning-changing accents, verb tense accents. Reinforced
       every phase.
@@ -161,7 +161,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-01-present-regular
     notes: ''
@@ -175,7 +175,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - B-01-preterite-regular
     notes: ''
@@ -189,7 +189,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-01-present-regular
     notes: ''
@@ -203,7 +203,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - B-01-preterite-regular
     - B-02-preterite-irregular
@@ -219,7 +219,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-01-present-regular
     notes: ''
@@ -233,7 +233,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-01-present-regular
     - A-04-articles-prepositions
@@ -248,7 +248,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - B-06-direct-object-pronouns
     notes: ''
@@ -262,7 +262,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-01-present-regular
     - A-02-ser-vs-estar
@@ -277,7 +277,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-01-present-regular
     - A-07-present-irregular-common
@@ -293,7 +293,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-03-gender-agreement
     notes: 'mas...que, menos...que, tan...como. Irregulars: mejor, peor, mayor, menor.'
@@ -307,7 +307,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-01-present-regular
     notes: ''
@@ -321,7 +321,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-01-present-regular
     - A-07-present-irregular-common
@@ -336,7 +336,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - C-01-present-subjunctive
     notes: ''
@@ -350,7 +350,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-01-present-regular
     notes: ''
@@ -364,7 +364,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - C-03-formal-future
     notes: ''
@@ -378,7 +378,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-04-articles-prepositions
     notes: ''
@@ -392,7 +392,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - B-01-preterite-regular
     notes: ''
@@ -406,7 +406,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - C-01-present-subjunctive
     notes: ''
@@ -420,7 +420,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - C-01-present-subjunctive
     - C-02-subjunctive-triggers
@@ -436,7 +436,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - A-03-gender-agreement
     notes: -ito/-ita, -ote/-ota. Essential for natural speech, especially Mexican
@@ -451,7 +451,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - C-01-present-subjunctive
     - B-03-imperfect
@@ -466,7 +466,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - C-04-conditional
     - D-01-past-subjunctive
@@ -481,7 +481,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - D-01-past-subjunctive
     - C-06-compound-tenses
@@ -496,7 +496,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites:
     - B-01-preterite-regular
     notes: ''
@@ -510,7 +510,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites: []
     notes: Grammar forms for tu/usted/vos. Cultural judgment tracked separately in
       cultural_awareness.
@@ -524,7 +524,7 @@ grammar:
     error_trend: null
     performance_scaffolded: null
     performance_unscaffolded: null
-    integration_tested: false
+    integration_tested_with: []
     prerequisites: []
     notes: ''
 vocabulary:

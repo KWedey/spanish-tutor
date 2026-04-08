@@ -33,5 +33,19 @@ placement_validation_metrics:
   final_assessment: null
   validation_completed: null
 
+goal_tracking:
+  primary_goal_progress: ""
+  estimated_weeks_remaining: null
+  concepts_remaining_for_next_phase: 0
+  concepts_remaining_for_target_level: 0
+  current_acquisition_rate: 0.0
+  last_goal_review: null
+  milestone_progress: []
+
+session_difficulty_tracking:
+  last_session_rating: null
+  consecutive_too_easy: 0
+  consecutive_too_hard: 0
+
 last_validation_issues: []
 last_system_review: null

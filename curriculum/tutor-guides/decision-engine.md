@@ -26,6 +26,9 @@ PRIORITY = NEED + GAP + DECAY + TOPIC_BOOST - VARIETY_PENALTY
 | Current phase maintenance | 2 |
 | Previous phase maintenance | 1 |
 | Two+ phases back maintenance | 0.5 |
+| Cultural concept (any phase) | min(base score, 5) |
+
+> **Note:** Cultural concepts use the same base scoring as grammar concepts of their type, but the NEED score is capped at 5. This ensures cultural work never displaces grammar as the primary focus.
 
 ### GAP (0-10) — uses `error_rate_production`
 
@@ -84,7 +87,7 @@ Highest score = primary focus. Second highest = secondary (if time allows and no
 | Both high | → | Stage 2 (controlled practice from concept file) |
 | Drills low, production high | → | Stage 3-4 (communicative practice) |
 | Both low | → | Spot-check via conversation, move to secondary |
-| Integration untested | → | Combined exercise with another acquired concept |
+| Integration untested (check integration_tested_with for specific combinations) | → | Combined exercise with another acquired concept **not yet in** `integration_tested_with` list. After successful integration practice, append the tested combination to the list. |
 
 **New concept introduction (concurrent concept gate):** Before scoring any unseen concept, count concepts currently in "practicing" status. If count ≥ 3 (or ≥ 4 with carryover), exclude all unseen concepts from candidates — consolidate first. Otherwise, route new concept to Stage 1 (noticing) from concept file.
 
@@ -105,6 +108,18 @@ Highest score wins. Tie-break: prefer higher LEARNER_INTEREST.
 
 Sprint override: if `sprint.active` is true, topic = sprint scenario theme. Skip scoring.
 
+## Step 6b — Media Selection for Homework
+
+When assigning listening or reading homework, select from `curriculum/media-bank.yaml` using:
+
+1. **Phase filter:** Only resources whose `phase_range` includes the learner's current phase
+2. **Dialect preference:** Prefer resources matching `target_dialect` from learner-profile. Accept neutral-dialect resources.
+3. **Topic alignment:** Score by overlap with the current weekly narrow topic (direct match > adjacent > unrelated)
+4. **Level calibration:** Match to `receptive_skills.listening.current_level` or `receptive_skills.reading.current_level` — assign at-level or one step above
+5. **Freshness:** Avoid assigning the same channel/source 3 sessions in a row. Rotate.
+
+If multiple resources tie, prefer the one the learner has engaged with before (check `resource-tracker.yaml` engagement data). For new learners, start with the most accessible option in each category.
+
 ## Step 7 — Session Format (occasional)
 
 Most sessions use the standard 4-phase flow. Occasionally consider an alternative format from `curriculum/tutor-guides/session-variety.md`. Triggers:
@@ -123,3 +138,17 @@ Frequency: no more than 1 alternative format per week. The standard session is t
 - **"New concept ready to introduce"**: NEED=10, GAP=10, DECAY=0 → score 20. Highest. Route: Stage 1 (noticing).
 - **"Post-return regression on gender agreement"**: GAP=10, DECAY=9, NEED=7 → score 26. Urgent. Dedicated recovery.
 - **"Parking lot: learner asked about conditional"**: If C-04 prerequisites met, boost by +3 and consider as primary.
+
+## Naturally-Acquired Concepts
+
+When the learner spontaneously uses a concept that hasn't been formally introduced (status: unseen):
+
+1. **Confirm understanding:** Test it naturally in 2-3 more contexts within the same session. Don't announce you're testing.
+2. **If confirmed:** Update skill-map:
+   - Set `introduced_date` to today
+   - Set `status` to `practicing` (not acquired — needs more observation)
+   - Set `performance_unscaffolded` to `competent` (they demonstrated it unprompted)
+   - Set `error_rate_production` based on observed accuracy
+   - Add note: "Naturally acquired — observed in free production before formal introduction"
+3. **If shaky:** Set to `introduced` with a note. The decision engine will prioritize it for formal practice.
+4. **Skip formal Stage 1 (noticing)** for confirmed natural acquisitions. Route directly to Stage 3-4 communicative practice.

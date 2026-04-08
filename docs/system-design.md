@@ -28,7 +28,9 @@ The system's core insight: **the tutor doesn't deliver all the content — it or
 
 ```
 language/
-├── CLAUDE.md                        # Core tutor instructions (~150 lines, concise)
+├── CLAUDE.md                        # Core tutor instructions (concise, loaded every session)
+├── SETUP.md                         # Prerequisites, dependency installation, script usage
+├── requirements.txt                 # Python dependencies (PyYAML)
 ├── parking-lot.md                   # Learner-editable list of questions and gaps
 ├── docs/
 │   ├── system-design.md             # This document
@@ -38,12 +40,17 @@ language/
 │   │   ├── first-session.md         # Read only on session 1
 │   │   ├── onboarding-guide.md      # Read during sessions 2-10
 │   │   ├── weekly-review-guide.md   # Read on weekly review day
+│   │   ├── decision-engine.md       # Read on standard sessions (concept selection + routing)
 │   │   ├── emotional-intelligence.md # Read when motivation low or emotional signal
 │   │   ├── l1-interference-protocol.md # Read when introducing new concepts
-│   │   ├── fluency-activities.md    # Read in Phase C+
+│   │   ├── fluency-activities.md    # Read in Phase B+ on fluency days
 │   │   ├── sprint-mode.md           # Read when sprint is active
 │   │   ├── real-world-debrief.md    # Read when learner reports real-world encounter
 │   │   ├── placement-validation.md  # Read during placement validation (sessions 2-4, Early B+)
+│   │   ├── phase-transition-guide.md # Read when phase prerequisites are met
+│   │   ├── return-session.md        # Read when 3+ day gap since last session
+│   │   ├── session-variety.md       # Read occasionally for alternative session formats
+│   │   ├── maintenance-mode.md      # Read when autonomy_level is maintenance (post-Phase D)
 │   │   └── error-recovery.md        # Read when state validation fails
 │   ├── onboarding/                  # Fixed starter sequence (sessions 1-10)
 │   │   ├── session-01-discovery.md
@@ -120,9 +127,16 @@ language/
 │   │   ├── vowel-sounds.md
 │   │   ├── stress-rules.md
 │   │   └── ...12 files total
+│   ├── cultural/                    # Pragmatic competence guides
+│   │   ├── politeness-formulas.md
+│   │   ├── conversational-rhythm.md
+│   │   ├── regional-awareness.md
+│   │   └── humor-and-idioms.md
 │   ├── l1-interference.yaml         # Predicted English→Spanish transfer errors
 │   ├── dialect-notes.yaml           # Vocabulary, grammar, pronunciation by dialect
 │   ├── topic-bank.yaml              # Available weekly narrow topics with tags
+│   ├── journal-prompts.yaml         # Writing prompts keyed to grammar/vocabulary
+│   ├── media-bank.yaml              # External content recommendations by phase/topic
 │   └── activities/                  # Activity type templates
 │       ├── conversation-prompts.md
 │       ├── translation-exercises.md
@@ -153,8 +167,22 @@ language/
 │   └── YYYY-MM-DD.md
 ├── progress-reports/                # Human-readable weekly progress summaries
 │   └── YYYY-WNN.md
-└── resources/
-    └── resource-catalog.yaml        # Structured catalog of all external tools
+├── resources/
+│   └── resource-catalog.yaml        # Structured catalog of all external tools
+├── scripts/                         # Automation and maintenance
+│   ├── init-student.py              # Reset learner state to blank templates
+│   ├── validate-state.py            # State file integrity checks
+│   ├── generate-vault.py            # Generate/update Obsidian vault
+│   └── migrate-state.py             # Schema version migrations
+├── STUDENT-GUIDE.md                 # Learner-facing program overview
+└── vault/                           # Obsidian knowledge base (auto-generated)
+    ├── Home.md, Roadmap.md, Getting Started.md
+    ├── Daily/                       # Session notes
+    ├── Grammar/                     # Concept notes by phase
+    ├── Vocabulary/                  # Cluster notes by tier
+    ├── Pronunciation/               # Sound guides
+    ├── Progress/                    # Dashboards and reports
+    └── Templates/                   # Note templates
 ```
 
 ---
@@ -306,8 +334,9 @@ grammar:
     error_trend: null           # improving, stable, declining (based on production rate)
     performance_scaffolded: null    # null (untested), struggling, competent
     performance_unscaffolded: null  # null (untested), struggling, competent
-    integration_tested: false       # tested in combination with other active concepts?
-                                    # Resets to false if the concept regresses. Otherwise persists until 'automatic'.
+    integration_tested_with: []    # List of concept IDs tested in combination (e.g., [A-01-present-regular, A-03-gender-agreement])
+                                    # Resets to [] if the concept regresses. Otherwise persists until 'automatic'.
+                                    # A concept is not fully consolidated until it has been combined with at least one other active concept.
     prerequisites: []
     notes: ""
 
@@ -317,9 +346,11 @@ grammar:
 - Rates are rolling averages over the last 5 practice instances per context (drill or production)
 - If `practice_count < 3`, rates remain `null` — use `performance_scaffolded` / `performance_unscaffolded` qualitative assessments instead
 - `error_trend` is derived from `error_rate_production` trajectory over last 3 sessions
-  - `improving`: error_rate_production decreased by ≥5 percentage points over last 3 sessions
-  - `declining`: error_rate_production increased by ≥5 percentage points over last 3 sessions
-  - `stable`: change < 5 percentage points, or fewer than 3 practice instances available
+  **Calculation:** Compare the 3-session rolling average of `error_rate_production` for the most recent 3 sessions against the previous 3 sessions:
+  - `improving`: current 3-session average is 5+ percentage points lower than previous 3-session average
+  - `declining`: current 3-session average is 5+ percentage points higher than previous 3-session average
+  - `stable`: difference is less than 5 percentage points in either direction
+  - If fewer than 6 sessions of data exist, use the available sessions and note lower confidence in the session log.
 - If `last_practiced` is more than 60 days ago, consider stored error rates **stale** — collect fresh data before using them for advancement decisions. Note staleness in the session log.
 
 **Decision engine usage of error rates:**
@@ -457,6 +488,19 @@ overall_estimates:
   last_formal_assessment: null      # date of last placement test or equivalent
 ```
 
+**Writing assessment rubric:**
+
+Writing dimensions use the same status values as grammar. The rubric below defines what each status means for each dimension:
+
+| Dimension | unseen | introduced | practicing | acquired |
+|-----------|--------|-----------|------------|----------|
+| sentence_construction | No writing attempted | Produces simple SVO sentences, frequent word order errors | Varies sentence length, attempts compound sentences, occasional structural errors | Consistently correct word order, subordinate clauses, varied sentence patterns |
+| paragraph_coherence | — | Writes isolated sentences | Groups related sentences, basic transitions (y, pero, también) | Clear topic sentences, logical flow, varied connectors |
+| formal_register | — | Only knows one register | Recognizes formal/informal distinction, inconsistent application | Shifts register appropriately for context (email vs. journal vs. letter) |
+| creative_expression | — | Translates literally from English | Attempts idioms and culturally appropriate phrasing | Uses figurative language, humor, cultural references naturally |
+
+Writing is assessed through journal entries and written exercises. Status advances follow the same error-rate thresholds as grammar (< 10% structural errors for 'acquired'), but the tutor also considers qualitative progression through the rubric.
+
 ### 4. Schedule (`state/schedule.yaml`)
 
 The tutor's current plan. Updated at the end of each session.
@@ -490,6 +534,8 @@ weekly_topic:
   vocabulary_cluster: ""       # which vocab cluster this reinforces
   grammar_reinforcement: ""    # which grammar concept gets extra context
   started: ""                  # date this topic block started
+
+topic_history: []    # List of {topic_id, week, date_started} — tracks which weekly narrow topics have been used and when, for FRESHNESS scoring in the decision engine
 
 # Fluency vs accuracy emphasis
 fluency_accuracy_balance: accuracy-leaning  # accuracy-leaning, balanced, fluency-leaning
@@ -663,6 +709,8 @@ validation_checks:
     action: ""              # validated / downgrade-to-practicing / downgrade-to-introduced
     error_rate_estimate: null
 
+session_difficulty_rating: null   # learner self-report at checkout: too-easy | just-right | too-hard | null
+
 # Next session recommendation
 next_session:
   recommended_focus: ""
@@ -672,6 +720,8 @@ next_session:
   estimated_duration: 0
   l1_interference_to_preempt: [] # predicted transfer errors to address proactively
 ```
+
+**Session difficulty rating:** `session_difficulty_rating` is captured during checkout ("How did today feel — too easy, about right, or too hard?"). It feeds into `system-health.yaml` counters (`sessions_rated_too_easy_30d`, `sessions_rated_too_hard_30d`) and influences next-session calibration: two consecutive `too-easy` ratings → increase challenge; two consecutive `too-hard` ratings → reduce load.
 
 **Session recovery:** If `session_status` is `partial`, the next session's agent should:
 1. Note that the previous session was incomplete
@@ -796,6 +846,16 @@ placement_validation_metrics:
   total_downgrades: 0
   final_assessment: null    # placement-confirmed / placement-adjusted
   validation_completed: null  # date validation period closed
+
+# Goal tracking
+goal_tracking:
+  primary_goal_progress: ""       # qualitative: on-track | behind | ahead | at-risk
+  estimated_weeks_remaining: null  # rough estimate based on current acquisition rate and remaining concepts
+  concepts_remaining_for_next_phase: 0
+  concepts_remaining_for_target_level: 0
+  current_acquisition_rate: 0.0   # concepts acquired per week (30-day rolling average)
+  last_goal_review: null          # date of last weekly review goal check
+  milestone_progress: []          # list of {goal, status: pending|achieved|at-risk, target_date, notes}
 
 # Last reviewed
 last_system_review: null

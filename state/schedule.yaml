@@ -31,6 +31,8 @@ weekly_topic:
   grammar_reinforcement: ""
   started: ""
 
+topic_history: []
+
 fluency_accuracy_balance: accuracy-leaning
 
 fluency_days_this_week: 0
