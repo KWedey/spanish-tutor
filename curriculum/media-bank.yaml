@@ -6,52 +6,62 @@ youtube_channels:
   - name: Dreaming Spanish
     dialect: mixed
     phase_range: [A, B, C]
+    level_range: [L2, L4]
     levels: [superbeginner, beginner, intermediate, advanced]
     topic_alignment: [all]
     notes: "Primary comprehensible input. 2000+ videos. Assign daily."
   - name: Easy Spanish
     dialect: mixed
     phase_range: [A, B, C]
+    level_range: [L3, L4]
     topic_alignment: [food-and-eating-out, travel-and-culture, opinions-and-debate]
     notes: "Street interviews with subtitles. Real accents and natural speech."
   - name: SpanishPod101
     dialect: neutral
     phase_range: [A, B]
+    level_range: [L2, L3]
     topic_alignment: [greetings-and-introductions, my-daily-routine, food-and-eating-out]
     notes: "Structured grammar lessons. Can feel classroom-like — use sparingly."
   - name: Why Not Spanish
     dialect: colombian
     phase_range: [A, B, C]
+    level_range: [L2, L4]
     topic_alignment: [childhood-and-family, emotions-and-relationships, humor-idioms-and-slang]
     notes: "Colombian couple. Natural, fun. Good cultural exposure and colloquial speech."
   - name: Butterfly Spanish
     dialect: mexican
     phase_range: [A, B]
+    level_range: [L2, L3]
     topic_alignment: [greetings-and-introductions, describing-people-and-things, my-daily-routine]
     notes: "Clear Mexican accent. Strong grammar explanations for visual learners."
   - name: Español con Juan
     dialect: peninsular
     phase_range: [B, C]
+    level_range: [L3, L4]
     topic_alignment: [opinions-and-debate, telling-stories, philosophy-and-big-ideas]
     notes: "Entirely in Spanish. Whiteboard grammar with storytelling. Phase B+ only."
   - name: Hola Spanish
     dialect: colombian
     phase_range: [A, B]
+    level_range: [L2, L3]
     topic_alignment: [getting-around-town, shopping-and-money, food-and-eating-out]
     notes: "Practical scenario-based lessons. Good for travel topics."
   - name: SpanishWithPaul
     dialect: peninsular
     phase_range: [A, B]
+    level_range: [L2, L3]
     topic_alignment: [greetings-and-introductions, my-daily-routine, describing-people-and-things]
     notes: "Highly structured course format. Systematic progression."
   - name: Superholly
     dialect: mexican
     phase_range: [B, C, D]
+    level_range: [L4, L5]
     topic_alignment: [humor-idioms-and-slang, current-events-and-society, opinions-and-debate]
     notes: "Bilingual Mexican creator. Culture, humor. Authentic fast speech."
   - name: Academia Play
     dialect: peninsular
     phase_range: [C, D]
+    level_range: [L4, L5]
     topic_alignment: [current-events-and-society, philosophy-and-big-ideas]
     notes: "Animated history/science in Spanish. Dense. Phase C+ content immersion."
 
@@ -60,51 +70,61 @@ podcasts:
     dialect: peninsular
     editions: [Latino, Peninsular]
     phase_range: [A, B, C]
+    level_range: [L2, L3]
     topic_alignment: [current-events-and-society, opinions-and-debate]
     notes: "Graded speed. Two editions. Bridge to native-speed content."
   - name: Radio Ambulante
     dialect: mixed_latin_american
     phase_range: [C, D]
+    level_range: [L5]
     topic_alignment: [telling-stories, current-events-and-society, travel-and-culture]
     notes: "NPR-quality narrative journalism. Full transcripts. Phase C+ only."
   - name: Duolingo Spanish Podcast
     dialect: mixed_latin_american
     phase_range: [A, B]
+    level_range: [L2, L3]
     topic_alignment: [childhood-and-family, a-memorable-trip, telling-stories]
     notes: "Bilingual format — English narrator, Spanish story. Perfect Phase A-B bridge."
   - name: Notes in Spanish
     dialect: peninsular
     phase_range: [A, B, C]
+    level_range: [L2, L4]
     topic_alignment: [my-daily-routine, opinions-and-debate, emotions-and-relationships]
     notes: "British-Spanish couple. Three tiers: Beginners, Intermediate, Advanced."
   - name: Coffee Break Spanish
     dialect: peninsular
     phase_range: [A, B]
+    level_range: [L2, L3]
     topic_alignment: [greetings-and-introductions, getting-around-town, food-and-eating-out]
     notes: "Structured lessons with native speakers. Strong Phase A resource."
   - name: Hoy Hablamos
     dialect: peninsular
     phase_range: [B, C]
+    level_range: [L3, L4]
     topic_alignment: [humor-idioms-and-slang, my-daily-routine, opinions-and-debate]
     notes: "Daily short episodes with transcripts. Good for building a listening habit."
   - name: Españolistos
     dialect: colombian
     phase_range: [B, C]
+    level_range: [L3, L4]
     topic_alignment: [emotions-and-relationships, work-and-career, childhood-and-family]
     notes: "American-Colombian couple. Natural conversations with vocab explanations."
   - name: No Hay Tos
     dialect: mexican
     phase_range: [B, C, D]
+    level_range: [L4, L5]
     topic_alignment: [humor-idioms-and-slang, comparing-cities-and-countries, travel-and-culture]
     notes: "Mexican-American duo. Slang, idioms, cultural contrasts."
   - name: El Hilo
     dialect: mixed_latin_american
     phase_range: [C, D]
+    level_range: [L5]
     topic_alignment: [current-events-and-society, professional-communication]
     notes: "Weekly deep-dive Latin American journalism. Challenging but rewarding."
   - name: Cuentos de Hadas
     dialect: neutral
     phase_range: [A, B]
+    level_range: [L2]
     topic_alignment: [telling-stories, childhood-and-family]
     notes: "Fairy tales narrated slowly. Low-pressure beginner listening."
 
@@ -113,60 +133,70 @@ tv_shows:
     platform: YouTube (free)
     dialect: peninsular
     phase_range: [A]
+    level_range: [L2]
     topic_alignment: [greetings-and-introductions, my-daily-routine, describing-people-and-things]
     notes: "Sitcom for learners. Very simplified language. True beginner TV."
   - name: Destinos
     platform: YouTube (free)
     dialect: mixed
     phase_range: [A, B]
+    level_range: [L2, L3]
     topic_alignment: [greetings-and-introductions, childhood-and-family, a-memorable-trip]
     notes: "Educational telenovela for learners. Slow, clear, graded. Phase A gold."
   - name: Club de Cuervos
     platform: Netflix
     dialect: mexican
     phase_range: [B, C]
+    level_range: [L4]
     topic_alignment: [work-and-career, emotions-and-relationships, humor-idioms-and-slang]
     notes: "Comedy about a soccer team family. Natural Mexican speech."
   - name: Elite
     platform: Netflix
     dialect: peninsular
     phase_range: [B, C]
+    level_range: [L4, L5]
     topic_alignment: [emotions-and-relationships, opinions-and-debate]
     notes: "Teen drama. Contemporary slang, casual speech. Mature themes."
   - name: Las Chicas del Cable
     platform: Netflix
     dialect: peninsular
     phase_range: [B, C]
+    level_range: [L4]
     topic_alignment: [work-and-career, emotions-and-relationships, childhood-and-family]
     notes: "Period drama. Clear enunciation, formal register. Phase B stretch listening."
   - name: Nada (2023)
     platform: Netflix
     dialect: peninsular
     phase_range: [B, C]
+    level_range: [L3, L4]
     topic_alignment: [childhood-and-family, emotions-and-relationships, my-home-and-neighborhood]
     notes: "Coming-of-age slice of life. Simple dialogue, cultural depth."
   - name: Siempre Bruja
     platform: Netflix
     dialect: colombian
     phase_range: [B, C]
+    level_range: [L3, L4]
     topic_alignment: [telling-stories, emotions-and-relationships]
     notes: "Fantasy drama set in Cartagena. Colombian accent, clear speech."
   - name: La Casa de Papel
     platform: Netflix
     dialect: peninsular
     phase_range: [C, D]
+    level_range: [L5]
     topic_alignment: [telling-stories, opinions-and-debate, emotions-and-relationships]
     notes: "Fast speech, complex plot. Use Spanish subtitles. Phase C+."
   - name: Narcos
     platform: Netflix
     dialect: colombian
     phase_range: [C, D]
+    level_range: [L5]
     topic_alignment: [current-events-and-society, telling-stories]
     notes: "Mixed English/Spanish. Colombian dialect. Violent content."
   - name: El Internado
     platform: Amazon Prime
     dialect: peninsular
     phase_range: [C, D]
+    level_range: [L5]
     topic_alignment: [telling-stories, emotions-and-relationships, opinions-and-debate]
     notes: "Mystery/thriller. Complex dialogue. Advanced listening stamina."
 
@@ -236,48 +266,183 @@ books:
   - title: Short Stories in Spanish for Beginners (Olly Richards)
     type: graded_reader
     phase_range: [A, B]
+    level_range: [R2]
     cefr: [A2, B1]
     topic_alignment: [telling-stories, my-daily-routine, a-memorable-trip]
     notes: "8 stories with glossaries. Primary Phase A reading resource."
   - title: Practice Makes Perfect — Spanish Reading and Comprehension
     type: graded_reader
     phase_range: [A, B]
+    level_range: [R1, R2]
     cefr: [A1, A2, B1]
     topic_alignment: [my-daily-routine, food-and-eating-out, getting-around-town]
     notes: "Textbook-style graded readings with exercises."
   - title: Short Stories in Spanish for Intermediate Learners (Olly Richards)
     type: graded_reader
     phase_range: [B, C]
+    level_range: [R3]
     cefr: [B1, B2]
     topic_alignment: [telling-stories, travel-and-culture, emotions-and-relationships]
     notes: "Step up from beginner volume. Longer stories, less hand-holding."
   - title: El Principito (Antoine de Saint-Exupéry)
     type: adapted_classic
     phase_range: [B, C]
+    level_range: [R3]
     cefr: [B1]
     topic_alignment: [philosophy-and-big-ideas, childhood-and-family, emotions-and-relationships]
     notes: "Simple prose, deep themes. Bilingual editions available. Phase B stretch."
   - title: Cajas de Cartón (Francisco Jiménez)
     type: authentic_literature
     phase_range: [B, C]
+    level_range: [R3, R4]
     cefr: [B1, B2]
     topic_alignment: [childhood-and-family, work-and-career, a-memorable-trip]
     notes: "Autobiographical stories. Simple language, powerful content."
   - title: Crónica de una Muerte Anunciada (Gabriel García Márquez)
     type: authentic_literature
     phase_range: [C, D]
+    level_range: [R4]
     cefr: [B2, C1]
     topic_alignment: [telling-stories, current-events-and-society]
     notes: "Short novel (~120 pages). Good first authentic novel."
   - title: Como Agua para Chocolate (Laura Esquivel)
     type: authentic_literature
     phase_range: [C, D]
+    level_range: [R4]
     cefr: [B2, C1]
     topic_alignment: [food-and-eating-out, childhood-and-family, emotions-and-relationships]
     notes: "Mexican magical realism. Food and family. Rich but accessible."
   - title: La Sombra del Viento (Carlos Ruiz Zafón)
     type: authentic_literature
     phase_range: [D]
+    level_range: [R5]
     cefr: [C1]
     topic_alignment: [telling-stories, philosophy-and-big-ideas, emotions-and-relationships]
     notes: "Gothic mystery in Barcelona. Beautiful prose. Challenging capstone read."
+
+# Prescriptive episodes — specific content for L2-L3 assignments with summaries
+# Content summaries enable informed comprehension debriefs.
+# These must be human-authored (from episode descriptions or manual review).
+# The tutor cannot generate summaries — it cannot watch/listen to content.
+# Add entries incrementally as resources enter regular rotation.
+
+prescriptive_episodes:
+  listening:
+    - source: Dreaming Spanish
+      title: "Super Beginner — Mi rutina diaria"
+      level: L2
+      dialect: neutral_latam
+      duration_minutes: 7
+      topic_alignment: [my-daily-routine]
+      content_summary: >
+        Speaker acts out a complete morning routine using present tense.
+        Key vocabulary: despertarse, levantarse, ducharse, vestirse, desayunar,
+        salir de casa. Heavily visual with each action demonstrated physically.
+        Simple sentence structure: "Primero me despierto. Después me levanto."
+
+    - source: Dreaming Spanish
+      title: "Super Beginner — Mi familia"
+      level: L2
+      dialect: neutral_latam
+      duration_minutes: 6
+      topic_alignment: [childhood-and-family]
+      content_summary: >
+        Speaker introduces family members using photos/drawings. Key vocabulary:
+        madre, padre, hermano, hermana, abuelo, abuela, tío, tía. Uses ser for
+        descriptions ("Mi madre es alta") and tener for age ("Mi hermano tiene
+        veinte años"). Slow, clear, repetitive.
+
+    - source: Dreaming Spanish
+      title: "Beginner — Qué hago los fines de semana"
+      level: L2
+      dialect: neutral_latam
+      duration_minutes: 9
+      topic_alignment: [weekend-plans-and-activities]
+      content_summary: >
+        Speaker describes weekend activities with visual support. Key vocabulary:
+        ir al parque, cocinar, leer, ver películas, salir con amigos. Uses gustar
+        construction ("Me gusta cocinar") and ir + a + infinitive for plans.
+        Moderate visual support, slightly less repetitive than Super Beginner.
+
+    - source: News in Slow Spanish
+      title: "Weekly News — sample beginner episode"
+      level: L2
+      dialect: peninsular
+      duration_minutes: 10
+      topic_alignment: [current-events-and-society]
+      content_summary: >
+        Current events presented at reduced speed with simplified vocabulary.
+        Each story is 2-3 minutes. Grammar structures are present tense dominant.
+        Useful for building news vocabulary: país, gobierno, personas, problema.
+        Peninsular pronunciation and vocabulary.
+
+    - source: Duolingo Spanish Podcast
+      title: "Sample beginner episode"
+      level: L2
+      dialect: mixed_latin_american
+      duration_minutes: 20
+      topic_alignment: [telling-stories, childhood-and-family]
+      content_summary: >
+        Bilingual format — English narrator provides context, Spanish speaker
+        tells personal story. The Spanish segments use past tense (preterite/
+        imperfect) but at slow, clear pace with context from English framing.
+        Good for passive exposure to past tense before formal introduction.
+
+    - source: Coffee Break Spanish
+      title: "Sample lesson episode"
+      level: L2
+      dialect: peninsular
+      duration_minutes: 20
+      topic_alignment: [greetings-and-introductions, getting-around-town]
+      content_summary: >
+        Structured lesson with native speaker. Introduces situational vocabulary
+        (greetings, directions, ordering) with repetition and explanation.
+        Teacher-student format — the English-speaking host learns alongside listener.
+
+    - source: Dreaming Spanish
+      title: "Intermediate — Una historia de mi infancia"
+      level: L3
+      dialect: neutral_latam
+      duration_minutes: 12
+      topic_alignment: [childhood-and-family, telling-stories]
+      content_summary: >
+        Speaker narrates a childhood memory using past tenses. Key grammar:
+        preterite for events ("Un día fui al parque"), imperfect for descriptions
+        ("Hacía mucho calor"). Less visual support than Beginner — relies more
+        on narrative context. Natural connectors: entonces, después, pero.
+
+    - source: Dreaming Spanish
+      title: "Intermediate — Comparando ciudades"
+      level: L3
+      dialect: neutral_latam
+      duration_minutes: 10
+      topic_alignment: [comparing-cities-and-countries]
+      content_summary: >
+        Speaker compares two cities they've lived in. Key grammar: comparatives
+        (más...que, menos...que, tan...como), ser vs estar for city descriptions.
+        Moderate speed, some natural filler words (bueno, pues, o sea). Good for
+        opinion vocabulary: creo que, me parece, en mi opinión.
+
+    - source: Easy Spanish
+      title: "Street interview sample — ¿Qué comes normalmente?"
+      level: L3
+      dialect: mixed
+      duration_minutes: 8
+      topic_alignment: [food-and-eating-out]
+      content_summary: >
+        Street interviews with multiple speakers about eating habits. Varied
+        accents and speaking speeds. Subtitles available. Key vocabulary: comida,
+        desayuno, almuerzo, cena, cocinar, restaurante. Some speakers are fast —
+        subtitles help. Good exposure to natural speech variety.
+
+    - source: Españolistos
+      title: "Sample conversation episode"
+      level: L3
+      dialect: colombian
+      duration_minutes: 25
+      topic_alignment: [emotions-and-relationships]
+      content_summary: >
+        American-Colombian couple discusses a relationship topic naturally.
+        Vocabulary explanations embedded in conversation (Andrea explains Colombian
+        expressions to her husband). Moderate pace, natural back-and-forth.
+        Good model for conversational rhythm and back-channeling.
