@@ -259,6 +259,116 @@ def check_placement_validation_consistency(sched: dict) -> None:
         pass_("Placement validation not active — no consistency check needed")
 
 
+def check_receptive_skills(skill_map: dict) -> None:
+    """Validate receptive_skills schema and level values."""
+    rs = skill_map.get('receptive_skills', {})
+    if not rs:
+        warn('receptive_skills section missing from skill-map')
+        return
+
+    valid_listening = {'L1', 'L2', 'L3', 'L4', 'L5'}
+    valid_reading = {'R1', 'R2', 'R3', 'R4', 'R5'}
+    valid_quality = {None, 'gist', 'main_ideas', 'details', 'inference'}
+    valid_lookup = {None, 'frequent', 'occasional', 'rare', 'none'}
+
+    listening = rs.get('listening', {})
+    reading = rs.get('reading', {})
+
+    level = listening.get('current_level')
+    if level and level not in valid_listening:
+        fail(f'receptive_skills.listening.current_level invalid: {level} (expected L1-L5)')
+    else:
+        pass_('receptive_skills.listening.current_level valid')
+
+    quality = listening.get('comprehension_quality')
+    if quality not in valid_quality:
+        fail(f'receptive_skills.listening.comprehension_quality invalid: {quality}')
+
+    level = reading.get('current_level')
+    if level and level not in valid_reading:
+        fail(f'receptive_skills.reading.current_level invalid: {level} (expected R1-R5)')
+    else:
+        pass_('receptive_skills.reading.current_level valid')
+
+    lookup = reading.get('lookup_frequency')
+    if lookup not in valid_lookup:
+        fail(f'receptive_skills.reading.lookup_frequency invalid: {lookup}')
+
+    # Hours should be non-negative
+    for skill_name, skill in [('listening', listening), ('reading', reading)]:
+        for field in ['hours_at_level', 'hours_total']:
+            val = skill.get(field, 0)
+            if val is not None and val < 0:
+                fail(f'receptive_skills.{skill_name}.{field} is negative: {val}')
+
+    # hours_total >= hours_at_level
+    for skill_name, skill in [('listening', listening), ('reading', reading)]:
+        total = skill.get('hours_total', 0) or 0
+        at_level = skill.get('hours_at_level', 0) or 0
+        if at_level > total:
+            warn(f'receptive_skills.{skill_name}.hours_at_level ({at_level}) > hours_total ({total})')
+
+
+def check_vocab_error_tracking(skill_map: dict) -> None:
+    """Validate vocabulary cluster error_tracking fields."""
+    vocab = skill_map.get('vocabulary', {})
+    for cluster_id, cluster in vocab.items():
+        et = cluster.get('error_tracking')
+        if et is None:
+            warn(f'vocabulary.{cluster_id} missing error_tracking section')
+            continue
+
+        rate = et.get('error_rate_production')
+        if rate is not None:
+            if not (0.0 <= rate <= 1.0):
+                fail(f'vocabulary.{cluster_id}.error_tracking.error_rate_production out of range: {rate}')
+
+        if not isinstance(et.get('common_errors', []), list):
+            fail(f'vocabulary.{cluster_id}.error_tracking.common_errors should be a list')
+
+    pass_(f'vocabulary error_tracking validated for {len(vocab)} clusters')
+
+
+def check_resource_tracker(resource_tracker: dict) -> None:
+    """Validate resource-tracker schema."""
+    summary = resource_tracker.get('input_summary', {})
+    if not summary:
+        warn('resource-tracker missing input_summary section')
+        return
+
+    valid_listening = {'L1', 'L2', 'L3', 'L4', 'L5'}
+    valid_reading = {'R1', 'R2', 'R3', 'R4', 'R5'}
+
+    cl = summary.get('current_listening_level')
+    if cl and cl not in valid_listening:
+        fail(f'resource-tracker.input_summary.current_listening_level invalid: {cl}')
+
+    cr = summary.get('current_reading_level')
+    if cr and cr not in valid_reading:
+        fail(f'resource-tracker.input_summary.current_reading_level invalid: {cr}')
+
+    for field in ['total_listening_hours', 'total_reading_hours']:
+        val = summary.get(field, 0)
+        if val is not None and val < 0:
+            fail(f'resource-tracker.input_summary.{field} is negative: {val}')
+
+    resources = resource_tracker.get('resources', [])
+    valid_types = {'listening', 'reading', 'mixed'}
+    valid_trends = {None, 'improving', 'stable', 'declining'}
+    valid_engagement = {None, 'enthusiastic', 'neutral', 'reluctant'}
+
+    for r in resources:
+        name = r.get('name', 'unknown')
+        if r.get('type') not in valid_types:
+            fail(f'resource-tracker resource "{name}" has invalid type: {r.get("type")}')
+        if r.get('comprehension_trend') not in valid_trends:
+            warn(f'resource-tracker resource "{name}" has invalid comprehension_trend')
+        if r.get('learner_engagement') not in valid_engagement:
+            warn(f'resource-tracker resource "{name}" has invalid learner_engagement')
+
+    pass_(f'resource-tracker validated ({len(resources)} resources)')
+
+
 # --- Main ---------------------------------------------------------------------
 
 def main() -> None:
@@ -266,10 +376,11 @@ def main() -> None:
     ap.add_argument("--verbose", action="store_true", help="Show PASS results in addition to WARN/FAIL")
     args = ap.parse_args()
 
-    profile    = load_yaml(STATE / "learner-profile.yaml")
-    skill_map  = load_yaml(STATE / "skill-map.yaml")
-    schedule   = load_yaml(STATE / "schedule.yaml")
-    health     = load_yaml(STATE / "system-health.yaml")
+    profile          = load_yaml(STATE / "learner-profile.yaml")
+    skill_map        = load_yaml(STATE / "skill-map.yaml")
+    schedule         = load_yaml(STATE / "schedule.yaml")
+    health           = load_yaml(STATE / "system-health.yaml")
+    resource_tracker = load_yaml(STATE / "resource-tracker.yaml")
 
     sdir = STATE / "sessions"
     has_sessions = sdir.exists() and any(f.is_file() and f.suffix == ".yaml" for f in sdir.iterdir())
@@ -290,12 +401,17 @@ def main() -> None:
     if skill_map is not None: check_integration_tested_with(skill_map)
     if skill_map is not None and profile is not None:
         check_acquired_zero_practice(skill_map, profile)
+    if skill_map is not None:
+        check_receptive_skills(skill_map)
+        check_vocab_error_tracking(skill_map)
     check_session_filenames()
     if schedule is not None:
         check_schedule_enums(schedule)
         check_placement_validation_consistency(schedule)
     if schedule is not None and skill_map is not None:
         check_carryover_concepts(schedule, skill_map)
+    if resource_tracker is not None:
+        check_resource_tracker(resource_tracker)
 
     for lvl, msg in results:
         if lvl == "PASS" and not args.verbose: continue
