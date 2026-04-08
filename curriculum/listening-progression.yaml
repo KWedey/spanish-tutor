@@ -1,0 +1,221 @@
+# Listening Progression — 5 levels from simplified speech to native media
+# Referenced by input-orchestration.md and decision engine (Step 6b).
+# Levels advance independently of grammar phases — driven by debrief quality and hours.
+
+levels:
+  L1:
+    name: Simplified tutor speech
+    description: >
+      Learner processes isolated words and short memorized phrases.
+      Input comes primarily from in-session tutor speech (slowed, simplified)
+      and audio on Anki cards. Forvo for pronunciation reference.
+    speed: simplified
+    support: full_context
+    comprehension_target: gist
+    comprehension_description: Recognize individual words and memorized phrases
+    sources:
+      - name: In-session tutor speech
+        type: session
+        notes: Tutor uses simplified Spanish during practice
+      - name: Anki card audio
+        type: srs
+        notes: Pronunciation audio on flashcards
+      - name: Forvo
+        type: reference
+        notes: Native pronunciation of individual words
+    multi_pass: false
+    level_up:
+      criteria:
+        - Recognizes 50+ words in spoken context (not just flashcards)
+        - Can follow simplified tutor instructions in Spanish
+        - Comprehension debrief shows word-level recognition is consistent
+      minimum_hours: 5
+      consecutive_weeks_at_target: 1
+    notes: >
+      Most learners pass through L1 quickly (sessions 1-3) since it overlaps
+      with initial vocabulary building. No dedicated input homework at this level.
+
+  L2:
+    name: Slow, structured speech
+    description: >
+      Learner processes slow, clearly enunciated speech with heavy visual support
+      and repetition. Content is designed for learners — simplified vocabulary,
+      clear context, visual reinforcement of meaning.
+    speed: slow
+    support: heavy_visual_and_repetition
+    comprehension_target: gist
+    comprehension_description: "Can answer 'what was it about?' with a general topic"
+    sources:
+      - name: Dreaming Spanish
+        type: youtube
+        level_within_source: [Super Beginner, Beginner]
+        notes: Primary L2 resource. 2000+ videos. Heavily visual, comprehensible input method.
+      - name: News in Slow Spanish
+        type: podcast
+        notes: Graded speed. Two editions (Latino, Peninsular). Bridge to faster content.
+      - name: Coffee Break Spanish
+        type: podcast
+        notes: Structured lessons. Strong for travel-topic vocabulary.
+      - name: Cuentos de Hadas
+        type: podcast
+        notes: Fairy tales narrated slowly. Low-pressure listening.
+      - name: Duolingo Spanish Podcast
+        type: podcast
+        notes: Bilingual format (English narrator, Spanish story). Good bridge.
+      - name: Extra en Español
+        type: tv
+        notes: Sitcom for learners. Very simplified language.
+      - name: Destinos
+        type: tv
+        notes: Educational telenovela. Slow, clear, graded.
+    multi_pass: true
+    multi_pass_protocol:
+      pass_1: Listen for gist — what is the general topic?
+      pass_2: Listen for details — what specifically happened or was described?
+      pass_3: Listen for vocabulary — what new words can you pick out from context?
+    level_up:
+      criteria:
+        - Comprehension debrief consistently shows gist-level understanding
+        - Can name the topic and 1-2 specifics from assigned content
+        - Self-reports "just right" or "too easy" for 2+ consecutive weeks
+      minimum_hours: 20
+      consecutive_weeks_at_target: 2
+    notes: >
+      This is where most early learners spend significant time. Multi-pass listening
+      is strongly recommended. Prescriptive assignments — tutor selects specific episodes.
+
+  L3:
+    name: Moderate, semi-structured speech
+    description: >
+      Learner processes moderate-speed speech with some visual support but less
+      repetition. Content may be designed for learners or be simplified native content.
+      Speaker may use natural connectors and some colloquial phrasing.
+    speed: moderate
+    support: visual_support_less_repetition
+    comprehension_target: main_ideas
+    comprehension_description: "Can summarize main ideas and some supporting details"
+    sources:
+      - name: Dreaming Spanish
+        type: youtube
+        level_within_source: [Intermediate]
+        notes: Step up from Beginner. Less visual scaffolding, more natural speech.
+      - name: Notes in Spanish
+        type: podcast
+        level_within_source: [Intermediate]
+        notes: Three tiers available. Intermediate tier matches L3 well.
+      - name: Españolistos
+        type: podcast
+        notes: Natural conversations with vocabulary explanations inline.
+      - name: Hoy Hablamos
+        type: podcast
+        notes: Short daily episodes with transcripts. Good for building habit.
+      - name: Easy Spanish
+        type: youtube
+        notes: Street interviews with subtitles. Real accents, natural speech.
+    multi_pass: true
+    multi_pass_protocol:
+      pass_1: Listen for main ideas — what are the key points?
+      pass_2: Listen for details and new vocabulary
+    level_up:
+      criteria:
+        - Comprehension debrief shows main-idea understanding with some details
+        - Can discuss content beyond surface-level summary
+        - Self-reports "just right" or "too easy" for 2+ consecutive weeks
+      minimum_hours: 40
+      consecutive_weeks_at_target: 2
+    notes: >
+      The L2→L3 transition is the biggest hurdle. If a learner struggles, don't level
+      down immediately — try different L3 sources first. Españolistos and Hoy Hablamos
+      offer more scaffolding than Dreaming Spanish Intermediate.
+
+  L4:
+    name: Natural speed with text support
+    description: >
+      Learner processes natural-speed speech with subtitle or transcript support
+      available. Content is native media consumed with Language Reactor, Spanish
+      subtitles, or transcript-provided podcasts.
+    speed: natural
+    support: text_support_available
+    comprehension_target: details
+    comprehension_description: "Can follow narrative, catch details, make basic inferences"
+    sources:
+      - name: Language Reactor
+        type: browser_extension
+        notes: Netflix/YouTube with dual subtitles. Primary L4 tool.
+      - name: Duolingo Spanish Podcast
+        type: podcast
+        notes: Still useful at L4 for the full-Spanish segments.
+      - name: No Hay Tos
+        type: podcast
+        notes: Mexican-American duo. Slang, idioms. Natural pace.
+      - name: Club de Cuervos
+        type: tv
+        notes: Comedy. Natural Mexican speech. Use Spanish subtitles.
+      - name: Las Chicas del Cable
+        type: tv
+        notes: Period drama. Clear enunciation, formal register.
+      - name: Nada (2023)
+        type: tv
+        notes: Simple dialogue, cultural depth. Good L4 entry.
+    multi_pass: false
+    level_up:
+      criteria:
+        - Comprehension debrief shows detail-level understanding
+        - Can discuss plot points, character motivations, or argument structure
+        - Increasingly comfortable without subtitles for familiar content
+        - Self-reports "just right" or "too easy" for 2+ consecutive weeks
+      minimum_hours: 60
+      consecutive_weeks_at_target: 2
+    notes: >
+      At L4, the learner starts engaging with content for enjoyment, not just study.
+      Guided assignments — tutor suggests 2-3 options, learner picks.
+
+  L5:
+    name: Native media, varied accents
+    description: >
+      Learner processes native-speed speech across varied accents, registers, and
+      speaking styles without text support. Content is authentic media chosen by the
+      learner for interest, not for study.
+    speed: natural_varied
+    support: none
+    comprehension_target: inference
+    comprehension_description: "Full comprehension with inference, humor, subtext"
+    sources:
+      - name: Radio Ambulante
+        type: podcast
+        notes: NPR-quality narrative journalism. Full transcripts available but not needed.
+      - name: El Hilo
+        type: podcast
+        notes: Weekly deep-dive journalism. Challenging vocabulary.
+      - name: La Casa de Papel
+        type: tv
+        notes: Fast speech, complex plot. No subtitles at this level.
+      - name: Narcos
+        type: tv
+        notes: Colombian dialect. Mixed English/Spanish.
+      - name: El Internado
+        type: tv
+        notes: Mystery/thriller. Complex dialogue. Advanced listening stamina.
+      - name: Calle 13 / Residente
+        type: music
+        notes: Rapid-fire lyrics, social commentary. Advanced vocabulary.
+    multi_pass: false
+    level_up:
+      criteria:
+        - This is the terminal level. No level-up.
+        - "Mastery indicators: follows humor and wordplay, catches regional expressions,
+          comfortable with unfamiliar accents after brief adjustment"
+      minimum_hours: null
+      consecutive_weeks_at_target: null
+    notes: >
+      Autonomous assignments — learner chooses their own input. Debrief focuses on
+      what they found interesting, new expressions encountered, cultural observations.
+
+# Level-down criteria (applies to all levels L2+):
+# - Comprehension debrief shows gist-only at a level targeting details, for 2+ sessions
+# - OR learner reports sustained struggle for 2+ sessions
+# - Level-down is never framed as failure.
+# - Before leveling down, try a different source at the same level first.
+
+# Hour minimums are soft guidelines, not hard gates.
+# A learner consistently excelling before the hour target should not be held back.
