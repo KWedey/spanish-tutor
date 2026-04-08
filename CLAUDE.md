@@ -144,7 +144,7 @@ These are defaults for free conversation. The activity-specific table below over
 1. Write session log to `state/sessions/YYYY-MM-DD.yaml` (use schema from `docs/system-design.md`)
 2. Update `state/skill-map.yaml` with status changes, error rates, observations
 2b. Update `performance_scaffolded` and `performance_unscaffolded` for each practiced concept
-2c. Update `integration_tested` if concepts were combined in free practice
+2c. Update `integration_tested_with` if concepts were combined in free practice (append tested concept IDs to the list)
 2d. Update `receptive_skills` if listening/reading homework was reviewed
 3. Update `state/schedule.yaml` if plan needs adjustment (including `carryover_concepts`)
 3b. Update `last_session_date` in `state/schedule.yaml` to today's date
