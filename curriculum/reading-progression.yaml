@@ -1,0 +1,165 @@
+# Reading Progression — 5 levels from cognate recognition to authentic literature
+# Referenced by input-orchestration.md and decision engine (Step 6b).
+# Levels advance independently of grammar phases and listening levels.
+
+levels:
+  R1:
+    name: Cognates, labels, short familiar-topic texts
+    description: >
+      Learner recognizes cognates, reads labels, menus, and single sentences
+      on familiar topics. Heavy reliance on English-Spanish cognate overlap.
+      Reading happens primarily in-session and on Anki cards.
+    comprehension_target: gist
+    comprehension_description: Word-level recognition, cognate identification
+    sources:
+      - name: In-session materials
+        type: session
+        notes: Tutor-created sentences, vocabulary lists in context
+      - name: Anki card context sentences
+        type: srs
+        notes: Example sentences on flashcards
+      - name: SpanishDict
+        type: reference
+        notes: Dictionary with example sentences and conjugation tables
+    level_up:
+      criteria:
+        - Recognizes 80%+ of common cognates in short texts
+        - Can read simple sentences with known vocabulary without dictionary
+        - Ready to engage with short paragraphs
+      minimum_hours: 3
+      consecutive_weeks_at_target: 1
+    notes: >
+      Brief level — most learners pass through R1 during sessions 1-5 as vocabulary
+      builds. No dedicated reading homework at this level beyond Anki.
+
+  R2:
+    name: Short paragraphs, graded readers L1
+    description: >
+      Learner reads short paragraphs and entry-level graded readers.
+      Dictionary support is expected and normal. Content uses controlled
+      vocabulary with glossaries.
+    comprehension_target: gist
+    comprehension_description: Gist comprehension with dictionary support
+    sources:
+      - name: "Short Stories in Spanish for Beginners (Olly Richards)"
+        type: graded_reader
+        cefr: [A2, B1]
+        notes: "8 stories with glossaries. Primary Phase A-B reading resource."
+      - name: "Practice Makes Perfect — Spanish Reading and Comprehension"
+        type: graded_reader
+        cefr: [A1, A2, B1]
+        notes: Textbook-style graded readings with exercises.
+      - name: SpanishDict articles
+        type: web
+        notes: Grammar and culture articles written for learners.
+    level_up:
+      criteria:
+        - Can read a full graded reader chapter and summarize the main idea
+        - Dictionary lookups decreasing (from every sentence to every few sentences)
+        - Comprehension debrief shows gist understanding of assigned reading
+      minimum_hours: 15
+      consecutive_weeks_at_target: 2
+    notes: >
+      Prescriptive assignments — tutor assigns specific chapters or passages.
+      Encourage the learner to read through unknown words before looking them up.
+
+  R3:
+    name: Graded readers L2-3, simple articles
+    description: >
+      Learner reads higher-level graded readers and simple authentic articles.
+      Dictionary lookup is occasional, not constant. Content uses natural
+      language with some simplification.
+    comprehension_target: main_ideas
+    comprehension_description: Main ideas with limited dictionary lookup
+    sources:
+      - name: "Short Stories in Spanish for Intermediate Learners (Olly Richards)"
+        type: graded_reader
+        cefr: [B1, B2]
+        notes: Longer stories, less hand-holding than beginner volume.
+      - name: "El Principito (Antoine de Saint-Exupéry)"
+        type: adapted_classic
+        cefr: [B1]
+        notes: Simple prose, deep themes. Bilingual editions available.
+      - name: "Cajas de Cartón (Francisco Jiménez)"
+        type: authentic_literature
+        cefr: [B1, B2]
+        notes: Autobiographical. Simple language, powerful content.
+      - name: News in Slow Spanish articles
+        type: web
+        notes: Companion articles to the podcast. Graded language.
+      - name: Simple blog posts
+        type: web
+        notes: Lifestyle, travel, food blogs written in accessible Spanish.
+    level_up:
+      criteria:
+        - Comprehension debrief shows main-idea understanding
+        - Can discuss themes and key events from assigned reading
+        - Dictionary lookup is occasional (a few times per page, not per sentence)
+      minimum_hours: 30
+      consecutive_weeks_at_target: 2
+    notes: >
+      Guided assignments — tutor suggests 2-3 options, learner picks.
+      Journal prompts can reference reading content for deeper processing.
+
+  R4:
+    name: Authentic articles, blog posts, short stories
+    description: >
+      Learner reads authentic (non-graded) content written for native speakers.
+      Dictionary lookup is infrequent. Content includes opinion pieces, news
+      articles, and short literary fiction.
+    comprehension_target: details
+    comprehension_description: Detail comprehension with infrequent dictionary lookup
+    sources:
+      - name: BBC Mundo
+        type: web
+        notes: International news in clear, standard Spanish.
+      - name: "Crónica de una Muerte Anunciada (García Márquez)"
+        type: authentic_literature
+        cefr: [B2, C1]
+        notes: Short novel (~120 pages). Good first authentic novel.
+      - name: "Como Agua para Chocolate (Laura Esquivel)"
+        type: authentic_literature
+        cefr: [B2, C1]
+        notes: Mexican magical realism. Food and family. Rich but accessible.
+      - name: Medium-length articles and essays
+        type: web
+        notes: Opinion pieces, cultural commentary, long-form journalism.
+    level_up:
+      criteria:
+        - Can read an article and discuss specific arguments or narrative details
+        - Dictionary lookup is rare (a few times per article, for specialized vocabulary)
+        - Comprehension debrief shows detail-level understanding
+      minimum_hours: 40
+      consecutive_weeks_at_target: 2
+    notes: >
+      Autonomous-leaning assignments. The learner should be choosing reading material
+      based on interest. Tutor may suggest specific articles aligned with weekly topic.
+
+  R5:
+    name: Literature, journalism, technical content
+    description: >
+      Learner reads complex authentic texts — novels, longform journalism,
+      academic or professional content. Full comprehension with rare dictionary use.
+    comprehension_target: inference
+    comprehension_description: Full comprehension including inference, style, subtext
+    sources:
+      - name: "La Sombra del Viento (Carlos Ruiz Zafón)"
+        type: authentic_literature
+        cefr: [C1]
+        notes: Gothic mystery in Barcelona. Beautiful prose. Capstone read.
+      - name: Longform journalism
+        type: web
+        notes: Radio Ambulante transcripts, El País longform, Gatopardo.
+      - name: Academic or professional content
+        type: web
+        notes: Content in the learner's professional domain.
+    level_up:
+      criteria:
+        - Terminal level. No level-up.
+        - "Mastery indicators: reads for pleasure without study intent,\
+          \ appreciates literary style and wordplay, comfortable across registers"
+      minimum_hours: null
+      consecutive_weeks_at_target: null
+    notes: >
+      Fully autonomous. Learner chooses all reading. Debrief is conversational —
+      what they're reading, what they found interesting, new expressions encountered.
