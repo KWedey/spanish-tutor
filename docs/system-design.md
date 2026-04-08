@@ -149,6 +149,11 @@ language/
 │       ├── role-play-scenarios.md
 │       ├── error-correction.md
 │       └── grammar-in-context.md
+```
+
+Activity templates in `curriculum/activities/` are **supplementary reference material**, not primary routing targets. The decision engine routes to grammar concept files (which contain stage-specific practice instructions). Activity templates provide additional exercise formats the tutor can draw from when a concept file's built-in activities need variety or when the session-variety guide calls for an alternative format (e.g., Game Day, Storytelling).
+
+```
 ├── state/
 │   ├── learner-profile.yaml         # Who the learner is, goals, preferences
 │   ├── skill-map.yaml               # Per-concept mastery tracking
@@ -400,6 +405,23 @@ pronunciation:
     notes: ""
   # ... (b-v, d-soft, g-soft, j, ñ, ll, linking, intonation, stress)
 
+### Pronunciation Status Updates from External Feedback
+
+The tutor cannot assess pronunciation directly (text-based). Status changes come from:
+
+1. **Speechling feedback:** When the learner reports Speechling coach feedback, update the pronunciation entry's `external_feedback` field with a dated note (e.g., "2026-04-08: coach says rr trill improving, still inconsistent in fast speech"). Advance status based on coach assessment:
+   - "needs work" → `practicing`
+   - "good" or "consistent" → `acquired`
+   - "excellent" / "native-like" → `automatic`
+
+2. **italki/conversation partner feedback:** If the partner comments on pronunciation, log it as lower-confidence data (partners aren't trained assessors). Use as a supporting signal, not primary evidence.
+
+3. **Learner self-report:** Record but weight per `calibration.trust_weight`. Self-reports of pronunciation difficulty are more reliable than self-reports of pronunciation success.
+
+4. **Whisper transcription accuracy:** If the learner uses local Whisper for self-checking, consistent transcription accuracy for target sounds is supporting evidence for advancement.
+
+If no external feedback has been received for a pronunciation target in 30+ days, flag it during weekly review and suggest a Speechling session.
+
 # Writing skill progression
 writing:
   sentence_construction:
@@ -509,6 +531,7 @@ The tutor's current plan. Updated at the end of each session.
 current_phase: A-foundation    # matches curriculum directory
 current_week: 1
 onboarding_complete: false     # true after session 10 (decision engine activates)
+last_session_date: null          # Date of most recent session (YYYY-MM-DD). Updated at end of every session. Used for gap detection in return-session routing — avoids relying on filename parsing of session logs.
 autonomy_level: guided         # guided, collaborative, learner-led, maintenance
 
 # Active tracks — what's being worked on right now
@@ -1540,6 +1563,19 @@ Self-reported homework completion is cross-referenced with in-session performanc
 - **After reported conversation partner session:** "What did you talk about? Did they correct anything?"
 
 The tutor tracks calibration between self-reports and observed performance. Over time, it learns how much to trust each learner's self-assessment.
+
+### Verification Strategy by Assignment Type
+
+| Assignment Type | Verification Approach | Red Flag |
+|----------------|----------------------|----------|
+| Anki review | Quiz 2-3 cards from the deck in conversation | Claims completion but can't recall any recent cards |
+| Dreaming Spanish / listening | "¿De qué trataba?" — ask for summary in Spanish | Vague summary that could apply to any video |
+| Graded reader / reading | Ask about a specific detail or character | Only recalls the topic, not content |
+| Journal entry | Read it (it's in `journal/`). Correct 2-3 errors. | Entry is suspiciously short or copied |
+| Speechling / pronunciation | Ask them to type a word that uses the target sound. Note if they report difficulty. | Skipped entirely — watch for pattern |
+| Conversation partner (italki) | "¿De qué hablaron?" + "¿Qué palabra nueva aprendiste?" | Can't recall any specifics |
+
+Don't interrogate — weave verification into warm-up conversation naturally. If a learner consistently doesn't complete assignments, reduce load before confronting.
 
 ### Periodic Formal Assessment
 

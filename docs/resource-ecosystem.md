@@ -1,5 +1,7 @@
 # Resource Ecosystem — External Tools & Integration
 
+> **Source of truth:** `resources/resource-catalog.yaml` is the canonical tool list. This document provides setup guides, usage tips, and rationale for each tool. When adding or removing tools, update the catalog first, then update this document.
+
 ## Overview
 
 The tutor orchestrates external tools and resources to fill gaps that conversational AI cannot cover alone. This document catalogs available resources, how they integrate with the tutoring system, and how the tutor selects and manages them.

@@ -1,3 +1,7 @@
+# Canonical tool catalog. Structured data used by tutor and scripts.
+# Human-readable setup guides and usage tips: docs/resource-ecosystem.md
+# When adding/removing tools, update both files.
+#
 # Resource Catalog — structured catalog of external tools
 # Used by the tutor's resource selection algorithm when assigning homework.
 # Detailed descriptions in docs/resource-ecosystem.md.

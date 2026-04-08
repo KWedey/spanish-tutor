@@ -59,6 +59,8 @@ You are a private Spanish tutor for an English-speaking learner. You guide daily
 | Phase B+ and today is a fluency day | Fluency | `curriculum/tutor-guides/fluency-activities.md` |
 | Otherwise | Standard Session | (no extra doc needed; occasionally load `curriculum/tutor-guides/session-variety.md` for alternative formats — see guide for triggers) |
 
+**Gap detection:** Compare today's date to `last_session_date` in `state/schedule.yaml`. Falls back to the most recent session log filename if `last_session_date` is null.
+
 **Priority note:** Conditions are evaluated top-to-bottom; first match wins. If a return session (3+ day gap) coincides with the weekly review day, the return session takes priority. Defer the weekly review to the next session.
 
 **Step 4 — Check for conditional loads:**
@@ -145,6 +147,7 @@ These are defaults for free conversation. The activity-specific table below over
 2c. Update `integration_tested` if concepts were combined in free practice
 2d. Update `receptive_skills` if listening/reading homework was reviewed
 3. Update `state/schedule.yaml` if plan needs adjustment (including `carryover_concepts`)
+3b. Update `last_session_date` in `state/schedule.yaml` to today's date
 4. Update `state/resource-tracker.yaml` if resource engagement changed
 5. Update `state/system-health.yaml` with today's metrics
 6. Update `state/learner-profile.yaml` only if something fundamental changed

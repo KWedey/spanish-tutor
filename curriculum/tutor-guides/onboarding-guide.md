@@ -34,6 +34,14 @@ This period accomplishes:
 - The decision engine activates at session 11
 - The learner shouldn't notice the transition — sessions just gradually become more tailored
 
+## Post-Onboarding Transition Note
+
+Sessions 1-10 cover A-00 through A-07. Two Phase A concepts remain:
+- **A-08 (Numbers & Quantifiers)** — prerequisite: A-03
+- **A-09 (Accent & Stress Rules)** — no prerequisites
+
+These are intentionally left for the decision engine to introduce in sessions 11+. The first post-onboarding standard session should load `decision-engine.md` and these concepts will score highest in NEED (phase prerequisite + unseen). No special handling required — the engine will prioritize them naturally. Session 10 should mention to the learner: "Starting next session, I'll be adapting to you instead of following a fixed script."
+
 ## Struggling During Onboarding
 
 ### Signals
