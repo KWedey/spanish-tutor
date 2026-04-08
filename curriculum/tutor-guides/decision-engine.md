@@ -2,6 +2,36 @@
 
 Loaded when: Standard session (post-onboarding). Used to select today's focus concepts and route to appropriate activities.
 
+## Step 0b — Carryover Escalation Check
+
+Run at session start for each concept in `schedule.yaml > carryover_concepts`. Check `sessions_in_carryover` against the escalation ladder.
+
+### Prerequisite Carryover (is_prerequisite: true)
+
+| Sessions | Stage | Action |
+|----------|-------|--------|
+| 1-5 | normal | Normal carryover allocation. No special treatment. |
+| 6 | flagged | Flag in system-health. Review error patterns: same mistake repeating → explanation isn't landing. Varied errors → insufficient practice volume. |
+| 8 | approach_changed | Try a different instructional approach. If rule-based before, try example-based. If drills, try communicative. If always same context, try new context. Update `current_approach` in schedule. |
+| 10 | sprint | Auto-trigger a 2-session mini-sprint on this concept. Log sprint rationale in adjustment_log. |
+| 12+ | surfaced | Surface to learner: "This concept is taking longer than expected. That's normal — [concept] is genuinely hard for English speakers. Let's talk about what's not clicking." Use learner input to redesign approach. |
+
+### Non-Prerequisite Carryover (is_prerequisite: false)
+
+| Sessions | Stage | Action |
+|----------|-------|--------|
+| 1-8 | normal | Normal allocation. |
+| 9 | flagged | Flag in system-health. Review error patterns. |
+| 12 | approach_changed | Try different approach. |
+| 15 | sprint or deprioritize | If learner is progressing well on prerequisites, deprioritization is valid. Otherwise, mini-sprint. |
+| 18+ | surfaced | Surface to learner. |
+
+**Key principle:** Each escalation step changes the approach, not just the intensity. Repeating the same thing harder doesn't fix a stall.
+
+**Integration with interleaving:** Stalled carryover concepts should be prioritized as interleaving targets in Step 5b. Practicing them woven into other activities (rather than in isolation) may help with transfer.
+
+After checking, increment `sessions_in_carryover` for each carryover concept that was practiced this session. Update `escalation_stage` if a threshold was crossed.
+
 ## Step 1 — Gather Candidates
 
 All concepts in current phase with status: introduced, practicing, regressed, or acquired (for maintenance). Plus `carryover_concepts` from `schedule.yaml`. Plus maintenance from all previous phases (with decaying priority).
@@ -42,6 +72,22 @@ PRIORITY = NEED + GAP + DECAY + TOPIC_BOOST - VARIETY_PENALTY
 | Practicing, production error <15% | 3 |
 | Acquired, not integration-tested | 2 |
 | Acquired + integration-tested | 0 |
+
+### Vocabulary GAP Scoring
+
+Vocabulary clusters with `error_tracking` data are now scored using the same GAP formula as grammar:
+
+| State | Score |
+|-------|-------|
+| error_rate_production > 0.30 | 8 |
+| error_rate_production 0.15-0.30 | 5 |
+| error_rate_production < 0.15 | 3 |
+| error_rate_production null (unobserved) | 4 |
+| No error_tracking data and last_observed null | 2 |
+
+**Weight vocabulary GAP below grammar GAP** — vocabulary production errors are observed less frequently (incidentally during conversation, not in dedicated drills). Specific weight ratio should be tuned after 20+ sessions of real data. Until then, treat vocabulary GAP as roughly 70% of equivalent grammar GAP when comparing cross-category candidates.
+
+Vocabulary clusters where `passive_known` has increased in the last 2 sessions (input exposure logged) receive a +2 TOPIC_BOOST — the learner has encountered these words in context and is primed for production.
 
 ### DECAY (0-10)
 
@@ -91,6 +137,51 @@ Highest score = primary focus. Second highest = secondary (if time allows and no
 
 **New concept introduction (concurrent concept gate):** Before scoring any unseen concept, count concepts currently in "practicing" status. If count ≥ 3 (or ≥ 4 with carryover), exclude all unseen concepts from candidates — consolidate first. Otherwise, route new concept to Stage 1 (noticing) from concept file.
 
+## Step 5b — Select Interleaved Concepts
+
+After selecting the primary concept and routing to an activity stage, select 1-3 prior concepts to weave into the practice activities. Interleaving exercises prior concepts organically during new learning — replacing separate review blocks.
+
+### Selection
+
+1. Query skill-map for concepts with status "acquired" or "practicing" at Stage 3+ (guided production or later)
+2. Rank by DECAY score (highest = longest since practiced)
+3. Prefer stalled carryover concepts (serves double duty as escalation — see Step 0b)
+4. Select count based on primary concept's stage:
+
+| Primary Concept Stage | Interleaved Count | Rule |
+|----------------------|-------------------|------|
+| Stage 1-2 (first session with concept) | 0-1 | At most 1 acquired concept. New concepts need focused attention. |
+| Stage 2 (controlled practice, subsequent sessions) | 1 | 1 acquired concept embedded in drill sentences |
+| Stage 3 (guided production) | 2 | 1 acquired + 1 practicing (Stage 3+) woven into prompts |
+| Stage 4 (integration) | 2-3 | Concepts across status levels combined in conversation |
+
+### How to Interleave
+
+Don't create separate review activities. Embed prior concepts in the primary concept's practice:
+
+- **Stage 2 drills:** Write drill sentences that require both the primary concept and the interleaved concept. Example: preterite drills where sentences also require correct ser/estar.
+- **Stage 3 prompts:** Design conversation prompts that naturally elicit both. Example: "Tell me about a trip you took" targets preterite but requires prepositions and object pronouns.
+- **Stage 4 scenarios:** Create scenarios that demand the primary concept plus 2-3 others. Example: giving advice about a problem (conditional + subjunctive + opinion vocabulary).
+
+### Guardrails
+
+- Never interleave a concept the learner hasn't reached Stage 3+ on
+- Never interleave more than 3 concepts in a single activity
+- If the primary concept is brand new (Stage 1-2, first session), interleave at most 1 acquired concept
+
+### Recording
+
+Log interleaved concepts in the session log:
+
+```yaml
+interleaved_concepts:
+  - concept_id: A-02
+    interleave_context: "embedded ser/estar usage in preterite drill sentences"
+    errors_observed: 0
+```
+
+Reset the DECAY clock for interleaved concepts — they count as practiced.
+
 ## Step 6 — Weekly Topic Selection (during weekly review)
 
 Score each candidate from `curriculum/topic-bank.yaml`:
@@ -108,17 +199,20 @@ Highest score wins. Tie-break: prefer higher LEARNER_INTEREST.
 
 Sprint override: if `sprint.active` is true, topic = sprint scenario theme. Skip scoring.
 
-## Step 6b — Media Selection for Homework
+## Step 6b — Input Selection for Homework
 
-When assigning listening or reading homework, select from `curriculum/media-bank.yaml` using:
+**Full protocol in `curriculum/tutor-guides/input-orchestration.md` Section 1.** Summary:
 
-1. **Phase filter:** Only resources whose `phase_range` includes the learner's current phase
-2. **Dialect preference:** Prefer resources matching `target_dialect` from learner-profile. Accept neutral-dialect resources.
-3. **Topic alignment:** Score by overlap with the current weekly narrow topic (direct match > adjacent > unrelated)
-4. **Level calibration:** Match to `receptive_skills.listening.current_level` or `receptive_skills.reading.current_level` — assign at-level or one step above
-5. **Freshness:** Avoid assigning the same channel/source 3 sessions in a row. Rotate.
+1. **Level filter:** Resources whose `level_range` includes current listening/reading level or one above (i+1)
+2. **Dialect preference:** Prefer resources matching `target_dialect`. Accept neutral-dialect.
+3. **Topic alignment:** Score by overlap with weekly narrow topic
+4. **Freshness:** Check `resource-tracker.yaml` — prefer resources not assigned in last 2 sessions. Avoid `learner_engagement: reluctant`.
+5. **Autonomy:** Prescriptive (Phase A-B), guided (Phase C), autonomous (Phase D)
+6. **Time budget:** Fit to remaining homework time after Anki and writing assignments. Input share increases with phase.
 
-If multiple resources tie, prefer the one the learner has engaged with before (check `resource-tracker.yaml` engagement data). For new learners, start with the most accessible option in each category.
+For L2-L3 prescriptive assignments, check `media-bank.yaml > prescriptive_episodes` for entries with `content_summary` — these enable informed comprehension debriefs.
+
+**Vocabulary boost:** If a vocabulary cluster's `passive_known` increased recently (from input exposure), boost that cluster for production practice. Input primes production.
 
 ## Step 7 — Session Format (occasional)
 
