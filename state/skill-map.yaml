@@ -538,6 +538,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier1-numbers-time-dates:
     status: unseen
     words_total: 77
@@ -548,6 +552,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier1-food-restaurant:
     status: unseen
     words_total: 64
@@ -558,6 +566,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier1-directions-transportation:
     status: unseen
     words_total: 49
@@ -568,6 +580,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier1-basic-descriptions:
     status: unseen
     words_total: 60
@@ -578,6 +594,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier2-home-household:
     status: unseen
     words_total: 55
@@ -588,6 +608,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier2-work-office:
     status: unseen
     words_total: 47
@@ -598,6 +622,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier2-family-relationships:
     status: unseen
     words_total: 44
@@ -608,6 +636,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier2-shopping-money:
     status: unseen
     words_total: 44
@@ -618,6 +650,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier2-weather-seasons:
     status: unseen
     words_total: 40
@@ -628,6 +664,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier2-health-body:
     status: unseen
     words_total: 51
@@ -638,6 +678,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier3-opinions-agreement:
     status: unseen
     words_total: 47
@@ -648,6 +692,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier3-emotions-feelings:
     status: unseen
     words_total: 49
@@ -658,6 +706,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier3-plans-future:
     status: unseen
     words_total: 45
@@ -668,6 +720,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier3-storytelling-narration:
     status: unseen
     words_total: 46
@@ -678,6 +734,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier3-hobbies-interests:
     status: unseen
     words_total: 49
@@ -688,6 +748,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier3-travel-culture:
     status: unseen
     words_total: 50
@@ -698,6 +762,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier4-politics-society:
     status: unseen
     words_total: 48
@@ -708,6 +776,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier4-philosophy-ideas:
     status: unseen
     words_total: 47
@@ -718,6 +790,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier4-hypotheticals-debate:
     status: unseen
     words_total: 47
@@ -728,6 +804,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier4-humor-idioms:
     status: unseen
     words_total: 49
@@ -738,6 +818,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
   tier4-professional-specialized:
     status: unseen
     words_total: 48
@@ -748,6 +832,10 @@ vocabulary:
     weak_recognition: []
     last_practiced: null
     notes: ''
+    error_tracking:
+      error_rate_production: null
+      common_errors: []
+      last_observed: null
 pronunciation:
   vowel-sounds:
     status: unseen
@@ -828,17 +916,20 @@ writing:
     notes: ''
 receptive_skills:
   listening:
-    current_level: null
+    current_level: L1
     comprehension_quality: null
-    speed_tolerance: null
-    last_level_change: null
-    notes: ''
+    hours_at_level: 0
+    hours_total: 0
+    level_up_evidence: []
+    level_history: []
   reading:
-    current_level: null
+    current_level: R1
     comprehension_quality: null
-    lookup_frequency: null
-    last_level_change: null
-    notes: ''
+    lookup_frequency: frequent
+    hours_at_level: 0
+    hours_total: 0
+    level_up_evidence: []
+    level_history: []
 cultural_awareness:
   register_shifting:
     status: unseen
