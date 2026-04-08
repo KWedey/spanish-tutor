@@ -1,3 +1,5 @@
 .superpowers/
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
+vault/
+__pycache__/
