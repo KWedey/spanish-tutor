@@ -1,10 +1,10 @@
 ---
 generated: true
-source: "curriculum/pronunciation/ny-sound.md"
-last_generated: "2026-04-07"
-sound_id: "ny-sound"
-title: "Ny Sound"
-status: "unseen"
+source: curriculum/pronunciation/ny-sound.md
+last_generated: 2026-04-09
+sound_id: ny-sound
+title: Ny Sound
+status: unseen
 last_practiced: null
 tags: ["pronunciation", "unseen"]
 ---

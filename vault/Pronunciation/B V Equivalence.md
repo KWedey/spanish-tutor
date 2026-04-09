@@ -1,10 +1,10 @@
 ---
 generated: true
-source: "curriculum/pronunciation/b-v-equivalence.md"
-last_generated: "2026-04-07"
-sound_id: "b-v-equivalence"
-title: "B V Equivalence"
-status: "unseen"
+source: curriculum/pronunciation/b-v-equivalence.md
+last_generated: 2026-04-09
+sound_id: b-v-equivalence
+title: B V Equivalence
+status: unseen
 last_practiced: null
 tags: ["pronunciation", "unseen"]
 ---

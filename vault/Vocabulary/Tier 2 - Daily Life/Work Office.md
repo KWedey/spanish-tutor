@@ -1,12 +1,12 @@
 ---
 generated: true
-source: "curriculum/vocabulary/tier2-daily-life/work-office.md"
-last_generated: "2026-04-07"
-cluster_id: "tier2-work-office"
-title: "Work Office"
+source: curriculum/vocabulary/tier2-daily-life/work-office.md
+last_generated: 2026-04-09
+cluster_id: tier2-work-office
+title: Work Office
 tier: 2
-category: "daily-life"
-status: "unseen"
+category: daily-life
+status: unseen
 words_total: 47
 words_introduced: 0
 passive_known: 0

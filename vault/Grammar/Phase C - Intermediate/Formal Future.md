@@ -1,11 +1,11 @@
 ---
 generated: true
-source: "curriculum/grammar/C-intermediate/03-formal-future.md"
-last_generated: "2026-04-07"
-concept_id: "C-03-formal-future"
-title: "Formal Future"
-phase: "C"
-status: "unseen"
+source: curriculum/grammar/C-intermediate/03-formal-future.md
+last_generated: 2026-04-09
+concept_id: C-03-formal-future
+title: Formal Future
+phase: C
+status: unseen
 error_rate_drills: null
 error_rate_production: null
 error_trend: null

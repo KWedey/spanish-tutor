@@ -1,10 +1,10 @@
 ---
 generated: true
-source: "curriculum/pronunciation/d-soft.md"
-last_generated: "2026-04-07"
-sound_id: "d-soft"
-title: "D Soft"
-status: "unseen"
+source: curriculum/pronunciation/d-soft.md
+last_generated: 2026-04-09
+sound_id: d-soft
+title: D Soft
+status: unseen
 last_practiced: null
 tags: ["pronunciation", "unseen"]
 ---

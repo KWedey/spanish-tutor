@@ -1,11 +1,11 @@
 ---
 generated: true
-source: "curriculum/grammar/C-intermediate/07-relative-clauses.md"
-last_generated: "2026-04-07"
-concept_id: "C-07-relative-clauses"
-title: "Relative Clauses"
-phase: "C"
-status: "unseen"
+source: curriculum/grammar/C-intermediate/07-relative-clauses.md
+last_generated: 2026-04-09
+concept_id: C-07-relative-clauses
+title: Relative Clauses
+phase: C
+status: unseen
 error_rate_drills: null
 error_rate_production: null
 error_trend: null

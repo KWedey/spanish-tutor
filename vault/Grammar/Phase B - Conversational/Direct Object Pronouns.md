@@ -1,11 +1,11 @@
 ---
 generated: true
-source: "curriculum/grammar/B-conversational/06-direct-object-pronouns.md"
-last_generated: "2026-04-07"
-concept_id: "B-06-direct-object-pronouns"
-title: "Direct Object Pronouns"
-phase: "B"
-status: "unseen"
+source: curriculum/grammar/B-conversational/06-direct-object-pronouns.md
+last_generated: 2026-04-09
+concept_id: B-06-direct-object-pronouns
+title: Direct Object Pronouns
+phase: B
+status: unseen
 error_rate_drills: null
 error_rate_production: null
 error_trend: null

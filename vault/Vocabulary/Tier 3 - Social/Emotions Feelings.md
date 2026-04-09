@@ -1,12 +1,12 @@
 ---
 generated: true
-source: "curriculum/vocabulary/tier3-social/emotions-feelings.md"
-last_generated: "2026-04-07"
-cluster_id: "tier3-emotions-feelings"
-title: "Emotions Feelings"
+source: curriculum/vocabulary/tier3-social/emotions-feelings.md
+last_generated: 2026-04-09
+cluster_id: tier3-emotions-feelings
+title: Emotions Feelings
 tier: 3
-category: "social"
-status: "unseen"
+category: social
+status: unseen
 words_total: 49
 words_introduced: 0
 passive_known: 0

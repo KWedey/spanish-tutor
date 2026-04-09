@@ -1,11 +1,11 @@
 ---
 generated: true
-source: "curriculum/grammar/B-conversational/07-indirect-object-pronouns.md"
-last_generated: "2026-04-07"
-concept_id: "B-07-indirect-object-pronouns"
-title: "Indirect Object Pronouns"
-phase: "B"
-status: "unseen"
+source: curriculum/grammar/B-conversational/07-indirect-object-pronouns.md
+last_generated: 2026-04-09
+concept_id: B-07-indirect-object-pronouns
+title: Indirect Object Pronouns
+phase: B
+status: unseen
 error_rate_drills: null
 error_rate_production: null
 error_trend: null
@@ -250,3 +250,9 @@ The doubling pattern (Le doy el libro a María) is culturally important -- omitt
 Pronoun attachment to commands (Dímelo, No me lo digas) connects to B-09 (imperatives). When imperatives are taught, the stacking rules from this concept apply directly -- no new rules, just a new verb form.
 
 Possible regression: when stacking is first introduced, learners may temporarily lose confidence with the direct object pronouns from B-06, reverting to full nouns. If this occurs, briefly revisit B-06 drills with single pronouns before returning to stacking.
+
+### Clitic Climbing (Preview)
+When an indirect or direct object pronoun accompanies an infinitive, the pronoun can either attach to the infinitive or "climb" to the conjugated verb:
+- **Attached:** Quiero dártelo (I want to give it to you)
+- **Climbed:** Te lo quiero dar (I want to give it to you)
+Both forms are correct. The climbed form is slightly more common in casual speech. This applies whenever a conjugated verb + infinitive combination appears (querer, poder, ir a, etc.).

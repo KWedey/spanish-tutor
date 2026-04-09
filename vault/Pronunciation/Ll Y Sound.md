@@ -1,10 +1,10 @@
 ---
 generated: true
-source: "curriculum/pronunciation/ll-y-sound.md"
-last_generated: "2026-04-07"
-sound_id: "ll-y-sound"
-title: "Ll Y Sound"
-status: "unseen"
+source: curriculum/pronunciation/ll-y-sound.md
+last_generated: 2026-04-09
+sound_id: ll-y-sound
+title: Ll Y Sound
+status: unseen
 last_practiced: null
 tags: ["pronunciation", "unseen"]
 ---

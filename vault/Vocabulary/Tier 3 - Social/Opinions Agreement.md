@@ -1,12 +1,12 @@
 ---
 generated: true
-source: "curriculum/vocabulary/tier3-social/opinions-agreement.md"
-last_generated: "2026-04-07"
-cluster_id: "tier3-opinions-agreement"
-title: "Opinions Agreement"
+source: curriculum/vocabulary/tier3-social/opinions-agreement.md
+last_generated: 2026-04-09
+cluster_id: tier3-opinions-agreement
+title: Opinions Agreement
 tier: 3
-category: "social"
-status: "unseen"
+category: social
+status: unseen
 words_total: 47
 words_introduced: 0
 passive_known: 0

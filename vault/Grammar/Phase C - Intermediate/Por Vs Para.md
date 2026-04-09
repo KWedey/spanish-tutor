@@ -1,11 +1,11 @@
 ---
 generated: true
-source: "curriculum/grammar/C-intermediate/05-por-vs-para.md"
-last_generated: "2026-04-07"
-concept_id: "C-05-por-vs-para"
-title: "Por Vs Para"
-phase: "C"
-status: "unseen"
+source: curriculum/grammar/C-intermediate/05-por-vs-para.md
+last_generated: 2026-04-09
+concept_id: C-05-por-vs-para
+title: Por Vs Para
+phase: C
+status: unseen
 error_rate_drills: null
 error_rate_production: null
 error_trend: null

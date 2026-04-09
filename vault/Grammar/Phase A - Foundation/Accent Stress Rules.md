@@ -1,11 +1,11 @@
 ---
 generated: true
-source: "curriculum/grammar/A-foundation/09-accent-stress-rules.md"
-last_generated: "2026-04-07"
-concept_id: "A-09-accent-stress-rules"
-title: "Accent Stress Rules"
-phase: "A"
-status: "unseen"
+source: curriculum/grammar/A-foundation/09-accent-stress-rules.md
+last_generated: 2026-04-09
+concept_id: A-09-accent-stress-rules
+title: Accent Stress Rules
+phase: A
+status: unseen
 error_rate_drills: null
 error_rate_production: null
 error_trend: null

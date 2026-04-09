@@ -1,12 +1,12 @@
 ---
 generated: true
-source: "curriculum/vocabulary/tier3-social/storytelling-narration.md"
-last_generated: "2026-04-07"
-cluster_id: "tier3-storytelling-narration"
-title: "Storytelling Narration"
+source: curriculum/vocabulary/tier3-social/storytelling-narration.md
+last_generated: 2026-04-09
+cluster_id: tier3-storytelling-narration
+title: Storytelling Narration
 tier: 3
-category: "social"
-status: "unseen"
+category: social
+status: unseen
 words_total: 46
 words_introduced: 0
 passive_known: 0

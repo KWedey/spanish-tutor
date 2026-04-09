@@ -1,11 +1,11 @@
 ---
 generated: true
-source: "curriculum/grammar/B-conversational/10-comparatives-superlatives.md"
-last_generated: "2026-04-07"
-concept_id: "B-10-comparatives-superlatives"
-title: "Comparatives Superlatives"
-phase: "B"
-status: "unseen"
+source: curriculum/grammar/B-conversational/10-comparatives-superlatives.md
+last_generated: 2026-04-09
+concept_id: B-10-comparatives-superlatives
+title: Comparatives Superlatives
+phase: B
+status: unseen
 error_rate_drills: null
 error_rate_production: null
 error_trend: null

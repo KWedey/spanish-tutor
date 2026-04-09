@@ -1,10 +1,10 @@
 ---
 generated: true
-source: "curriculum/pronunciation/linking.md"
-last_generated: "2026-04-07"
-sound_id: "linking"
-title: "Linking"
-status: "unseen"
+source: curriculum/pronunciation/linking.md
+last_generated: 2026-04-09
+sound_id: linking
+title: Linking
+status: unseen
 last_practiced: null
 tags: ["pronunciation", "unseen"]
 ---

@@ -1,18 +1,18 @@
 ---
 generated: true
-source: "curriculum/grammar/B-conversational/09-imperatives.md"
-last_generated: "2026-04-07"
-concept_id: "B-09-imperatives"
-title: "Imperatives"
-phase: "B"
-status: "unseen"
+source: curriculum/grammar/B-conversational/09-imperatives.md
+last_generated: 2026-04-09
+concept_id: B-09-imperatives
+title: Imperatives
+phase: B
+status: unseen
 error_rate_drills: null
 error_rate_production: null
 error_trend: null
 last_practiced: null
 practice_count: 0
 integration_tested: false
-prerequisites: ["[[Present Regular]]", "[[Present Irregular Common]]"]
+prerequisites: ["[[Present Regular]]", "[[Present Irregular Common]]", "[[Reflexive Verbs]]"]
 tags: ["grammar", "phase-b", "unseen"]
 ---
 %%Auto-generated from tutor state. Edits will be overwritten.%%

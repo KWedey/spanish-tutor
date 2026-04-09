@@ -1,12 +1,12 @@
 ---
 generated: true
-source: "curriculum/vocabulary/tier1-survival/numbers-time-dates.md"
-last_generated: "2026-04-07"
-cluster_id: "tier1-numbers-time-dates"
-title: "Numbers Time Dates"
+source: curriculum/vocabulary/tier1-survival/numbers-time-dates.md
+last_generated: 2026-04-09
+cluster_id: tier1-numbers-time-dates
+title: Numbers Time Dates
 tier: 1
-category: "survival"
-status: "unseen"
+category: survival
+status: unseen
 words_total: 77
 words_introduced: 0
 passive_known: 0

@@ -1,12 +1,12 @@
 ---
 generated: true
-source: "curriculum/vocabulary/tier4-abstract/humor-idioms.md"
-last_generated: "2026-04-07"
-cluster_id: "tier4-humor-idioms"
-title: "Humor Idioms"
+source: curriculum/vocabulary/tier4-abstract/humor-idioms.md
+last_generated: 2026-04-09
+cluster_id: tier4-humor-idioms
+title: Humor Idioms
 tier: 4
-category: "abstract"
-status: "unseen"
+category: abstract
+status: unseen
 words_total: 49
 words_introduced: 0
 passive_known: 0

@@ -1,12 +1,12 @@
 ---
 generated: true
-source: "curriculum/vocabulary/tier4-abstract/hypotheticals-debate.md"
-last_generated: "2026-04-07"
-cluster_id: "tier4-hypotheticals-debate"
-title: "Hypotheticals Debate"
+source: curriculum/vocabulary/tier4-abstract/hypotheticals-debate.md
+last_generated: 2026-04-09
+cluster_id: tier4-hypotheticals-debate
+title: Hypotheticals Debate
 tier: 4
-category: "abstract"
-status: "unseen"
+category: abstract
+status: unseen
 words_total: 47
 words_introduced: 0
 passive_known: 0

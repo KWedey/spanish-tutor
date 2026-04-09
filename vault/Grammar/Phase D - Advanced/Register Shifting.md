@@ -1,11 +1,11 @@
 ---
 generated: true
-source: "curriculum/grammar/D-advanced/05-register-shifting.md"
-last_generated: "2026-04-07"
-concept_id: "D-05-register-shifting"
-title: "Register Shifting"
-phase: "D"
-status: "unseen"
+source: curriculum/grammar/D-advanced/05-register-shifting.md
+last_generated: 2026-04-09
+concept_id: D-05-register-shifting
+title: Register Shifting
+phase: D
+status: unseen
 error_rate_drills: null
 error_rate_production: null
 error_trend: null
@@ -62,14 +62,14 @@ Usted is used with strangers, elders, authority figures, and in formal settings.
 | Subject pronoun | **vos** |
 | Object pronouns | **te** (same as tu) |
 | Possessive | **tu/tus** (same as tu) |
-| Verb conjugation | special forms: **hablas** or **hablas** (varies), typically **vos hablas** or **vos hablais** |
+| Verb conjugation | stressed final syllable: **vos hablás, vos comés, vos vivís** (varies by region) |
 
 Vos replaces tu in Argentina, Uruguay, Paraguay, and parts of Central America and Colombia. The conjugation varies by region:
 
 | Region | Present tense "hablar" | Present tense "comer" | Present tense "vivir" |
 |--------|----------------------|---------------------|---------------------|
-| Argentina/Uruguay | vos **hablas** | vos **comes** | vos **vivis** |
-| Central America | vos **hablas** | vos **comes** | vos **vivis** |
+| Argentina/Uruguay | vos **hablás** | vos **comés** | vos **vivís** |
+| Central America (varies) | vos **hablás** | vos **comés** | vos **vivís** |
 
 **For the learner:** Recognize vos when encountered. Production is only necessary if targeting an Argentine or Uruguayan dialect. The target dialect (Mexican Spanish) uses tu/usted exclusively.
 

@@ -1,11 +1,11 @@
 ---
 generated: true
-source: "curriculum/grammar/B-conversational/05-reflexive-verbs.md"
-last_generated: "2026-04-07"
-concept_id: "B-05-reflexive-verbs"
-title: "Reflexive Verbs"
-phase: "B"
-status: "unseen"
+source: curriculum/grammar/B-conversational/05-reflexive-verbs.md
+last_generated: 2026-04-09
+concept_id: B-05-reflexive-verbs
+title: Reflexive Verbs
+phase: B
+status: unseen
 error_rate_drills: null
 error_rate_production: null
 error_trend: null

@@ -1,12 +1,12 @@
 ---
 generated: true
-source: "curriculum/vocabulary/tier1-survival/food-restaurant.md"
-last_generated: "2026-04-07"
-cluster_id: "tier1-food-restaurant"
-title: "Food Restaurant"
+source: curriculum/vocabulary/tier1-survival/food-restaurant.md
+last_generated: 2026-04-09
+cluster_id: tier1-food-restaurant
+title: Food Restaurant
 tier: 1
-category: "survival"
-status: "unseen"
+category: survival
+status: unseen
 words_total: 64
 words_introduced: 0
 passive_known: 0

@@ -1,12 +1,12 @@
 ---
 generated: true
-source: "curriculum/vocabulary/tier3-social/plans-future.md"
-last_generated: "2026-04-07"
-cluster_id: "tier3-plans-future"
-title: "Plans Future"
+source: curriculum/vocabulary/tier3-social/plans-future.md
+last_generated: 2026-04-09
+cluster_id: tier3-plans-future
+title: Plans Future
 tier: 3
-category: "social"
-status: "unseen"
+category: social
+status: unseen
 words_total: 45
 words_introduced: 0
 passive_known: 0

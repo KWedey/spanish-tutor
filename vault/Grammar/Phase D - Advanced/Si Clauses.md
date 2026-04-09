@@ -1,11 +1,11 @@
 ---
 generated: true
-source: "curriculum/grammar/D-advanced/02-si-clauses.md"
-last_generated: "2026-04-07"
-concept_id: "D-02-si-clauses"
-title: "Si Clauses"
-phase: "D"
-status: "unseen"
+source: curriculum/grammar/D-advanced/02-si-clauses.md
+last_generated: 2026-04-09
+concept_id: D-02-si-clauses
+title: Si Clauses
+phase: D
+status: unseen
 error_rate_drills: null
 error_rate_production: null
 error_trend: null
