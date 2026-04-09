@@ -340,6 +340,51 @@ def generate_pronunciation_note(sound_id: str, data: dict) -> tuple[Path, str]:
 
 
 # ---------------------------------------------------------------------------
+# Cultural note generation
+# ---------------------------------------------------------------------------
+
+def cultural_source_path(concept_id: str) -> Path:
+    """Resolve a cultural concept ID (snake_case) to its curriculum source file."""
+    # Convert snake_case key to kebab-case filename
+    file_stem = concept_id.replace("_", "-")
+    return CURRICULUM_DIR / "cultural" / f"{file_stem}.md"
+
+
+def cultural_id_to_title(concept_id: str) -> str:
+    """Convert 'register_shifting' to 'Register Shifting'."""
+    return concept_id.replace("_", " ").title()
+
+
+def generate_cultural_note(concept_id: str, data: dict) -> tuple[Path, str]:
+    """Generate a cultural awareness note and return (output_path, content)."""
+    title = cultural_id_to_title(concept_id)
+    source_path = cultural_source_path(concept_id)
+
+    status = data.get("status", "unseen")
+    phase = data.get("introduced_at_phase", "B")
+    tags = ["cultural", f"phase-{phase.lower()}", status]
+
+    fm = {
+        "generated": True,
+        "source": str(source_path.relative_to(ROOT)),
+        "last_generated": today_str(),
+        "concept_id": concept_id,
+        "title": title,
+        "introduced_at_phase": phase,
+        "status": status,
+        "assessed_through": data.get("assessed_through", ""),
+        "signs_of_acquisition": data.get("signs_of_acquisition", ""),
+        "tags": tags,
+    }
+
+    body = read_source_file(source_path)
+    content = f"{yaml_frontmatter(fm)}\n{GENERATED_BANNER}\n\n{body}"
+
+    output_path = VAULT_DIR / "Cultural" / f"{title}.md"
+    return output_path, content
+
+
+# ---------------------------------------------------------------------------
 # Home.md
 # ---------------------------------------------------------------------------
 
@@ -717,6 +762,13 @@ def run_full(skill_map: dict, schedule: dict) -> None:
         write_vault_file(path, content, force=True)
         files_written += 1
 
+    # Cultural awareness notes
+    cultural = skill_map.get("cultural_awareness", {})
+    for concept_id, data in cultural.items():
+        path, content = generate_cultural_note(concept_id, data)
+        write_vault_file(path, content, force=True)
+        files_written += 1
+
     # Home
     path, content = generate_home(schedule, skill_map)
     write_vault_file(path, content, force=True)
@@ -857,11 +909,35 @@ def run_session(skill_map: dict, session_date: str) -> None:
         if update_frontmatter_in_file(note_path, fm_updates):
             updates += 1
 
-    # Regenerate Roadmap
+    # Update cultural awareness notes
+    cultural = skill_map.get("cultural_awareness", {})
+    for concept_id, data in cultural.items():
+        title = cultural_id_to_title(concept_id)
+        note_path = VAULT_DIR / "Cultural" / f"{title}.md"
+
+        status = data.get("status", "unseen")
+        phase = data.get("introduced_at_phase", "B")
+        tags = ["cultural", f"phase-{phase.lower()}", status]
+
+        fm_updates = {
+            "status": status,
+            "introduced_at_phase": phase,
+            "assessed_through": data.get("assessed_through", ""),
+            "signs_of_acquisition": data.get("signs_of_acquisition", ""),
+            "tags": tags,
+        }
+        if update_frontmatter_in_file(note_path, fm_updates):
+            updates += 1
+
+    # Regenerate Home and Roadmap
+    schedule = load_yaml(SCHEDULE_PATH) if SCHEDULE_PATH.exists() else {}
+    path, content = generate_home(schedule, skill_map)
+    write_vault_file(path, content, force=True)
+
     path, content = generate_roadmap(skill_map)
     write_vault_file(path, content, force=True)
 
-    print(f"Session update for {session_date}: {updates} notes updated, Roadmap regenerated")
+    print(f"Session update for {session_date}: {updates} notes updated, Home + Roadmap regenerated")
 
 
 # ---------------------------------------------------------------------------

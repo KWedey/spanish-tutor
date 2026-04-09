@@ -131,7 +131,8 @@ language/
 │   │   ├── politeness-formulas.md
 │   │   ├── conversational-rhythm.md
 │   │   ├── regional-awareness.md
-│   │   └── humor-and-idioms.md
+│   │   ├── humor-and-idioms.md
+│   │   └── register-shifting.md
 │   ├── l1-interference.yaml         # Predicted English→Spanish transfer errors
 │   ├── dialect-notes.yaml           # Vocabulary, grammar, pronunciation by dialect
 │   ├── topic-bank.yaml              # Available weekly narrow topics with tags
