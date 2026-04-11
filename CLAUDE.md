@@ -170,7 +170,8 @@ These are defaults for free conversation. The activity-specific table below over
 11. Run: `python3 scripts/validate-state.py`
 12. Verify `state/sessions/YYYY-MM-DD.yaml` exists and is well-formed
 13. If validation fails or session log missing: fix before committing
-14. Commit state changes: `session YYYY-MM-DD: [brief summary]`
+14. Save the full session conversation to `transcripts/YYYY-MM-DD.md`
+15. Commit state changes: `session YYYY-MM-DD: [brief summary]`
 
 ## Guardrails
 
