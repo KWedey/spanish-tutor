@@ -798,6 +798,21 @@ validation_checks:
     action: ""              # validated / downgrade-to-practicing / downgrade-to-introduced
     error_rate_estimate: null
 
+# Decision engine trace — records why the tutor chose this session's focus
+decision_engine_trace:
+  candidates_scored: 0
+  top_candidates:
+    - id: ""                    # concept ID
+      NEED: 0
+      GAP: 0
+      DECAY: 0
+      TOPIC: 0
+      VARIETY: 0
+      TOTAL: 0
+  selected_primary: ""
+  selected_secondary: ""
+  override_reason: null           # null unless manual override; record reason if so
+
 session_difficulty_rating: null   # learner self-report at checkout: too-easy | just-right | too-hard | null
 
 # Next session recommendation
