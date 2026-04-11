@@ -145,6 +145,7 @@ These are defaults for free conversation. The activity-specific table below over
 ## State Updates (Silent, After Every Session)
 
 1. Write session log to `state/sessions/YYYY-MM-DD.yaml` (use schema from `docs/system-design.md`)
+1b. Populate `decision_engine_trace` in the session log with scoring details from today's concept selection (candidates scored, top candidates with individual dimension scores, selected primary/secondary, override reason if any)
 2. Update `state/skill-map.yaml` with status changes, error rates, observations
 2b. Update `performance_scaffolded` and `performance_unscaffolded` for each practiced concept
 2c. Update `integration_tested_with` if concepts were combined in free practice (append tested concept IDs to the list)
