@@ -11,82 +11,120 @@ except ImportError:
     print("Error: PyYAML is required. Install with: pip install pyyaml", file=sys.stderr)
     sys.exit(1)
 
-ROOT = Path(__file__).resolve().parent.parent
-STATE_DIR = ROOT / "state"
+from shared import ROOT, STATE_DIR, load_schema, get_field_default
 _C = sys.stdout.isatty()
 green = lambda t: f"\033[32m{t}\033[0m" if _C else t
 yellow = lambda t: f"\033[33m{t}\033[0m" if _C else t
 red = lambda t: f"\033[31m{t}\033[0m" if _C else t
 
+# ---------------------------------------------------------------------------
+# Schema-driven template generation
+# ---------------------------------------------------------------------------
+
+# Schema-to-file mapping and header comments for state files generated from schemas.
+SCHEMA_TEMPLATES = {
+    "state/learner-profile.yaml": {
+        "schema": "learner-profile",
+        "header": (
+            "# Learner Profile — slow-changing facts about the learner\n"
+            "# Updated rarely, typically during first session and at phase transitions.\n"
+            "# Schema: schemas/learner-profile.schema.yaml\n"
+        ),
+    },
+    "state/schedule.yaml": {
+        "schema": "schedule",
+        "header": (
+            "# Schedule — the tutor's current plan\n"
+            "# Updated at the end of each session.\n"
+            "# Schema: schemas/schedule.schema.yaml\n"
+        ),
+    },
+    "state/system-health.yaml": {
+        "schema": "system-health",
+        "header": (
+            "# System Health — meta-metrics on tutoring system effectiveness\n"
+            "# Updated at end of each session. Reviewed in detail during weekly reviews.\n"
+            "# Schema: schemas/system-health.schema.yaml\n"
+        ),
+    },
+    "state/resource-tracker.yaml": {
+        "schema": "resource-tracker",
+        "header": (
+            "# Resource Tracker — which external resources are in active rotation\n"
+            "# Updated when resources are added, swapped, or engagement changes.\n"
+            "# Schema: schemas/resource-tracker.schema.yaml\n"
+        ),
+    },
+}
+
+
+def _yaml_value(value) -> str:
+    """Format a Python value for inline YAML output."""
+    if value is None:
+        return "null"
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, float):
+        return f"{value}" if value != int(value) else f"{value}"
+    if isinstance(value, int):
+        return str(value)
+    if isinstance(value, list):
+        return "[]"
+    if isinstance(value, str):
+        return f'"{value}"' if value == "" else value
+    return str(value)
+
+
+def _render_map_children(children: dict, indent: int) -> str:
+    """Render nested map children as YAML lines."""
+    lines = []
+    prefix = "  " * indent
+    for name, spec in children.items():
+        if not isinstance(spec, dict):
+            continue
+        default = get_field_default(spec)
+        if spec.get("type") == "map" and "children" in spec:
+            lines.append(f"{prefix}{name}:")
+            lines.append(_render_map_children(spec["children"], indent + 1))
+        else:
+            lines.append(f"{prefix}{name}: {_yaml_value(default)}")
+    return "\n".join(lines)
+
+
+def generate_template_from_schema(schema_name: str, header: str = "") -> str:
+    """Generate a default YAML template from a schema file.
+
+    Reads schemas/<schema_name>.schema.yaml and builds a YAML string
+    using default values from the schema's 'fields' section.
+    """
+    schema = load_schema(schema_name)
+    fields = schema.get("fields", {})
+
+    lines = []
+    if header:
+        lines.append(header)
+
+    for name, spec in fields.items():
+        if not isinstance(spec, dict):
+            continue
+        default = get_field_default(spec)
+        if spec.get("type") == "map" and "children" in spec:
+            lines.append(f"{name}:")
+            lines.append(_render_map_children(spec["children"], 1))
+        else:
+            lines.append(f"{name}: {_yaml_value(default)}")
+
+    return "\n".join(lines) + "\n"
+
+
 # Template files keyed by path relative to ROOT. skill-map.yaml is reset
 # in-place (too large for inline template) — see reset_skill_map().
+# Schema-driven templates are generated at runtime; parking-lot is static.
 TEMPLATES: dict[str, str] = {}
 
-TEMPLATES["state/learner-profile.yaml"] = (
-    "# Learner Profile — slow-changing facts about the learner\n"
-    "# Updated rarely, typically during first session and at phase transitions.\n"
-    "# Schema defined in docs/system-design.md\n\n"
-    "schema_version: 1\n\n"
-    "name: \"\"\nnative_language: English\ntarget_dialect: \"\"\nstarted: \"\"\n\n"
-    "primary_goal: \"\"\ntarget_level: \"\"\nmilestone_goals: []\ngraduation_criteria: \"\"\n\n"
-    "typical_weekday_minutes: 0\ntypical_weekend_minutes: 0\n"
-    "preferred_session_time: \"\"\nmax_new_concepts_per_week: 2\nweekly_review_day: \"\"\n\n"
-    "grammar_preference: \"\"\nerror_correction_preference: \"\"\n"
-    "vocabulary_retention_method: \"\"\nmotivation_style: \"\"\nenergy_pattern: \"\"\n\n"
-    "calibration:\n  self_report_accuracy: null\n  tendency: \"\"\n  trust_weight: 0.5\n\n"
-    "motivation:\n  current_level: \"\"\n  streak_days: 0\n  longest_streak: 0\n"
-    "  total_sessions: 0\n  days_since_last_milestone: 0\n  plateau_risk: false\n"
-    "  high_motivation_triggers: []\n  low_motivation_triggers: []\n  preferred_recovery: \"\"\n\n"
-    "input_hours:\n  listening_total: 0.0\n  reading_total: 0.0\n  last_updated: null\n\n"
-    "tools:\n  srs: \"\"\n  pronunciation: \"\"\n  conversation_partner: \"\"\n"
-    "  listening_primary: \"\"\n  reading_current: \"\"\n\nnotes: \"\"\n"
-)
-
-TEMPLATES["state/schedule.yaml"] = (
-    "# Schedule — the tutor's current plan\n"
-    "# Updated at the end of each session.\n"
-    "# Schema defined in docs/system-design.md\n\n"
-    "schema_version: 1\n\n"
-    "current_phase: A-foundation\ncurrent_week: 1\n"
-    "onboarding_complete: false\nautonomy_level: guided\n\n"
-    "active_grammar:\n  primary: \"\"\n  secondary: \"\"\n  maintenance: []\n\n"
-    "active_vocabulary:\n  primary: \"\"\n  review: []\n\n"
-    "active_pronunciation:\n  focus: \"\"\n\n"
-    "active_writing:\n  current_level: \"\"\n  journal_active: false\n\n"
-    "weekly_topic:\n  topic: \"\"\n  vocabulary_cluster: \"\"\n"
-    "  grammar_reinforcement: \"\"\n  started: \"\"\n\n"
-    "fluency_accuracy_balance: accuracy-leaning\n\n"
-    "fluency_days_this_week: 0\nlast_fluency_day: null\n\n"
-    "grammar_queue: []\nvocabulary_queue: []\n\n"
-    "sprint:\n  active: false\n  goal: \"\"\n  target_date: \"\"\n  focus_areas: []\n\n"
-    "carryover_concepts: []\n\n"
-    "anki_new_cards_per_session: 8\nanki_retirement_threshold_days: 60\n\n"
-    "adjustment_log: []\n"
-)
-
-TEMPLATES["state/system-health.yaml"] = (
-    "# System Health — meta-metrics on tutoring system effectiveness\n"
-    "# Updated at end of each session. Reviewed in detail during weekly reviews.\n"
-    "# Schema defined in docs/system-design.md\n\n"
-    "schema_version: 1\n\n"
-    "concepts_requiring_reteach_total: 0\naverage_sessions_to_acquire: 0\n"
-    "reteach_rate_30d: 0.0\n\n"
-    "homework_completion_rate_30d: 0.0\nhomework_reported_difficulty_avg: 0.0\n"
-    "assignment_skip_patterns: []\n\n"
-    "days_in_current_phase: 0\nconcepts_acquired_per_month: 0\n"
-    "concepts_in_practicing_simultaneously: 0\n\n"
-    "average_session_duration_30d: 0\nsession_frequency_30d: 0.0\n"
-    "learner_initiated_topics_30d: 0\nsessions_rated_too_easy_30d: 0\n"
-    "sessions_rated_too_hard_30d: 0\n\n"
-    "anki_estimated_deck_size: 0\nanki_estimated_daily_review_minutes: 0\n\n"
-    "last_validation_issues: []\nlast_system_review: null\n"
-)
-
-TEMPLATES["state/resource-tracker.yaml"] = (
-    "# Resource Tracker — which external resources are in active rotation\n"
-    "# Updated when resources are added, swapped, or engagement changes.\n\n"
-    "schema_version: 1\n\nactive_resources: []\n\nretired_resources: []\n"
-)
+# Generate schema-driven templates
+for _rel_path, _info in SCHEMA_TEMPLATES.items():
+    TEMPLATES[_rel_path] = generate_template_from_schema(_info["schema"], _info["header"])
 
 TEMPLATES["parking-lot.md"] = (
     "# Parking Lot — Things I Want to Learn\n\n"

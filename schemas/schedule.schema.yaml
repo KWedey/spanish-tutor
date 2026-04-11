@@ -1,0 +1,220 @@
+# Schema: Schedule
+# Source: docs/system-design.md section 4
+# This file is the authoritative schema for state/schedule.yaml.
+# Scripts read this file to validate and generate templates.
+
+fields:
+  schema_version:
+    type: int
+    required: true
+    default: 1
+    description: "Schema version number"
+
+  current_phase:
+    type: string
+    required: true
+    default: "A-foundation"
+    description: "Matches curriculum directory"
+    enum: ["A-foundation", "B-conversational", "C-intermediate", "D-advanced"]
+
+  current_week:
+    type: int
+    required: true
+    default: 1
+    description: "Current week number"
+
+  onboarding_complete:
+    type: bool
+    required: true
+    default: false
+    description: "True after session 10 (decision engine activates)"
+
+  last_session_date:
+    type: string
+    required: false
+    default: null
+    description: "Date of most recent session (YYYY-MM-DD). Used for gap detection."
+
+  autonomy_level:
+    type: string
+    required: false
+    default: "guided"
+    description: "guided, collaborative, learner-led, maintenance"
+    enum: ["guided", "collaborative", "learner-led", "maintenance"]
+
+  active_grammar:
+    type: map
+    required: false
+    default: null
+    description: "What grammar is being worked on right now"
+    children:
+      primary:
+        type: string
+        required: false
+        default: ""
+        description: "The main concept being learned"
+      secondary:
+        type: string
+        required: false
+        default: ""
+        description: "A reinforcement concept from a prior level"
+      maintenance:
+        type: list
+        required: false
+        default: []
+        description: "Acquired concepts due for spot-check"
+
+  active_vocabulary:
+    type: map
+    required: false
+    default: null
+    description: "What vocabulary is being worked on right now"
+    children:
+      primary:
+        type: string
+        required: false
+        default: ""
+        description: "Current cluster being built"
+      review:
+        type: list
+        required: false
+        default: []
+        description: "Clusters in SRS maintenance"
+
+  active_pronunciation:
+    type: map
+    required: false
+    default: null
+    description: "Current pronunciation focus"
+    children:
+      focus:
+        type: string
+        required: false
+        default: ""
+        description: "Current target sound or pattern"
+
+  active_writing:
+    type: map
+    required: false
+    default: null
+    description: "Current writing track"
+    children:
+      current_level:
+        type: string
+        required: false
+        default: ""
+        description: "sentence, paragraph, structured, extended"
+      journal_active:
+        type: bool
+        required: false
+        default: false
+        description: "Whether daily journal entries are assigned"
+
+  weekly_topic:
+    type: map
+    required: false
+    default: null
+    description: "Narrow input - weekly topic for content immersion"
+    children:
+      topic:
+        type: string
+        required: false
+        default: ""
+        description: "e.g., immigration in Latin America"
+      vocabulary_cluster:
+        type: string
+        required: false
+        default: ""
+        description: "Which vocab cluster this reinforces"
+      grammar_reinforcement:
+        type: string
+        required: false
+        default: ""
+        description: "Which grammar concept gets extra context"
+      started:
+        type: string
+        required: false
+        default: ""
+        description: "Date this topic block started"
+
+  fluency_accuracy_balance:
+    type: string
+    required: true
+    default: "accuracy-leaning"
+    description: "accuracy-leaning, balanced, fluency-leaning"
+    enum: ["accuracy-leaning", "balanced", "fluency-leaning"]
+
+  fluency_days_this_week:
+    type: int
+    required: false
+    default: 0
+    description: "Number of fluency days used this week"
+
+  last_fluency_day:
+    type: string
+    required: false
+    default: null
+    description: "Date of last fluency day"
+
+  grammar_queue:
+    type: list
+    required: false
+    default: []
+    description: "What grammar is next when current items are acquired"
+
+  vocabulary_queue:
+    type: list
+    required: false
+    default: []
+    description: "What vocabulary is next when current clusters are acquired"
+
+  sprint:
+    type: map
+    required: false
+    default: null
+    description: "Sprint mode - temporary reprioritization for a deadline"
+    children:
+      active:
+        type: bool
+        required: false
+        default: false
+        description: "Whether sprint mode is active"
+      goal:
+        type: string
+        required: false
+        default: ""
+        description: "e.g., travel to Mexico City"
+      target_date:
+        type: string
+        required: false
+        default: ""
+        description: "Sprint deadline"
+      focus_areas:
+        type: list
+        required: false
+        default: []
+        description: "What to prioritize during sprint"
+
+  carryover_concepts:
+    type: list
+    required: false
+    default: []
+    description: "Concepts from prior phase still in active practice"
+
+  anki_new_cards_per_session:
+    type: int
+    required: false
+    default: 8
+    description: "SRS new cards per session"
+
+  anki_retirement_threshold_days:
+    type: int
+    required: false
+    default: 60
+    description: "Days after which cards are retired"
+
+  adjustment_log:
+    type: list
+    required: false
+    default: []
+    description: "Log of schedule adjustments"

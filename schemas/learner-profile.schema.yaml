@@ -1,0 +1,253 @@
+# Schema: Learner Profile
+# Source: docs/system-design.md section 2
+# This file is the authoritative schema for state/learner-profile.yaml.
+# Scripts read this file to validate and generate templates.
+
+fields:
+  schema_version:
+    type: int
+    required: true
+    default: 1
+    description: "Schema version number"
+
+  name:
+    type: string
+    required: true
+    default: ""
+    description: "Learner name"
+
+  native_language:
+    type: string
+    required: true
+    default: "English"
+    description: "Learner's native language"
+
+  target_dialect:
+    type: string
+    required: true
+    default: ""
+    description: "e.g., Mexican, Colombian, Castilian — chosen in first session"
+
+  started:
+    type: string
+    required: false
+    default: ""
+    description: "Date of first session"
+
+  primary_goal:
+    type: string
+    required: false
+    default: ""
+    description: "e.g., conversational fluency for travel and social situations"
+
+  target_level:
+    type: string
+    required: false
+    default: ""
+    description: "e.g., B2, C1"
+
+  milestone_goals:
+    type: list
+    required: false
+    default: []
+    description: "Concrete motivations"
+
+  graduation_criteria:
+    type: string
+    required: false
+    default: ""
+    description: "What done looks like for this learner"
+
+  typical_weekday_minutes:
+    type: int
+    required: false
+    default: 0
+    description: "Total learning time including homework on weekdays"
+
+  typical_weekend_minutes:
+    type: int
+    required: false
+    default: 0
+    description: "Total learning time including homework on weekends"
+
+  preferred_session_time:
+    type: string
+    required: false
+    default: ""
+    description: "morning, afternoon, evening"
+
+  max_new_concepts_per_week:
+    type: int
+    required: false
+    default: 2
+    description: "Adjusted over time based on absorption rate"
+
+  weekly_review_day:
+    type: string
+    required: false
+    default: ""
+    description: "e.g., Sunday"
+
+  grammar_preference:
+    type: string
+    required: false
+    default: ""
+    description: "rules-first, examples-first, or mixed"
+
+  error_correction_preference:
+    type: string
+    required: false
+    default: ""
+    description: "inline, batched-at-end, or gentle-inline"
+
+  vocabulary_retention_method:
+    type: string
+    required: false
+    default: ""
+    description: "visual, contextual, auditory, kinesthetic"
+
+  motivation_style:
+    type: string
+    required: false
+    default: ""
+    description: "challenge-driven, encouragement-driven, data-driven"
+
+  energy_pattern:
+    type: string
+    required: false
+    default: ""
+    description: "e.g., high energy Mon-Wed, lower Thu-Fri"
+
+  calibration:
+    type: map
+    required: false
+    default: null
+    description: "How much to trust self-reports"
+    children:
+      self_report_accuracy:
+        type: float
+        required: false
+        default: null
+        description: "Correlation between self-reports and observed performance"
+      tendency:
+        type: string
+        required: false
+        default: ""
+        description: "overestimates, accurate, underestimates"
+      trust_weight:
+        type: float
+        required: false
+        default: 0.5
+        description: "0.0-1.0, how much to weight self-reports in decisions"
+
+  motivation:
+    type: map
+    required: false
+    default: null
+    description: "Motivation tracking"
+    children:
+      current_level:
+        type: string
+        required: false
+        default: ""
+        description: "high, medium, low, at-risk"
+      streak_days:
+        type: int
+        required: false
+        default: 0
+        description: "Consecutive days with a session"
+      longest_streak:
+        type: int
+        required: false
+        default: 0
+        description: "Longest consecutive session streak"
+      total_sessions:
+        type: int
+        required: false
+        default: 0
+        description: "Total number of sessions completed"
+      days_since_last_milestone:
+        type: int
+        required: false
+        default: 0
+        description: "How long since something felt like progress"
+      plateau_risk:
+        type: bool
+        required: false
+        default: false
+        description: "True if no advancement in 3+ weeks"
+      high_motivation_triggers:
+        type: list
+        required: false
+        default: []
+        description: "What energizes this learner"
+      low_motivation_triggers:
+        type: list
+        required: false
+        default: []
+        description: "What deflates them"
+      preferred_recovery:
+        type: string
+        required: false
+        default: ""
+        description: "What helps when motivation dips"
+
+  input_hours:
+    type: map
+    required: false
+    default: null
+    description: "Comprehensible input tracking"
+    children:
+      listening_total:
+        type: float
+        required: false
+        default: 0.0
+        description: "Cumulative hours of Spanish listening"
+      reading_total:
+        type: float
+        required: false
+        default: 0.0
+        description: "Cumulative hours of Spanish reading"
+      last_updated:
+        type: string
+        required: false
+        default: null
+        description: "Date of last update"
+
+  tools:
+    type: map
+    required: false
+    default: null
+    description: "External tools in use"
+    children:
+      srs:
+        type: string
+        required: false
+        default: ""
+        description: "e.g., Anki"
+      pronunciation:
+        type: string
+        required: false
+        default: ""
+        description: "e.g., Speechling"
+      conversation_partner:
+        type: string
+        required: false
+        default: ""
+        description: "e.g., italki tutor named Carlos"
+      listening_primary:
+        type: string
+        required: false
+        default: ""
+        description: "e.g., Dreaming Spanish"
+      reading_current:
+        type: string
+        required: false
+        default: ""
+        description: "e.g., Short Stories in Spanish (Olly Richards)"
+
+  notes:
+    type: string
+    required: false
+    default: ""
+    description: "Anything else relevant"

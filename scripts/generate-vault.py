@@ -19,37 +19,22 @@ except ImportError:
     print("Error: PyYAML is required. Install with: pip install pyyaml", file=sys.stderr)
     sys.exit(1)
 
+from shared import (ROOT, STATE_DIR, CURRICULUM_DIR, VAULT_DIR,
+                     PHASE_DIRS as PHASE_DIR_MAP, TIER_DIRS as TIER_DIR_MAP,
+                     load_yaml)
+
 # ---------------------------------------------------------------------------
 # Paths
 # ---------------------------------------------------------------------------
 
-ROOT = Path(__file__).resolve().parent.parent
-STATE_DIR = ROOT / "state"
-CURRICULUM_DIR = ROOT / "curriculum"
-VAULT_DIR = ROOT / "vault"
-
 SKILL_MAP_PATH = STATE_DIR / "skill-map.yaml"
 SCHEDULE_PATH = STATE_DIR / "schedule.yaml"
-
-PHASE_DIR_MAP = {
-    "A": "A-foundation",
-    "B": "B-conversational",
-    "C": "C-intermediate",
-    "D": "D-advanced",
-}
 
 PHASE_DISPLAY = {
     "A": "Phase A - Foundation",
     "B": "Phase B - Conversational",
     "C": "Phase C - Intermediate",
     "D": "Phase D - Advanced",
-}
-
-TIER_DIR_MAP = {
-    "1": "tier1-survival",
-    "2": "tier2-daily-life",
-    "3": "tier3-social",
-    "4": "tier4-abstract",
 }
 
 TIER_DISPLAY = {
@@ -80,12 +65,6 @@ GENERATED_BANNER = "%%Auto-generated from tutor state. Edits will be overwritten
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
-
-def load_yaml(path: Path) -> dict:
-    """Load a YAML file and return its contents as a dict."""
-    with open(path, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f) or {}
-
 
 def today_str() -> str:
     return date.today().isoformat()

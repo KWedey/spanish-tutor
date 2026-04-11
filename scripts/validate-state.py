@@ -7,20 +7,7 @@ try:
 except ImportError:
     print("Error: PyYAML required. Install with: pip install pyyaml", file=sys.stderr); sys.exit(1)
 
-ROOT = Path(__file__).resolve().parent.parent
-STATE = ROOT / "state"
-CURRICULUM = ROOT / "curriculum"
-PHASE_DIRS = {"A": "A-foundation", "B": "B-conversational", "C": "C-intermediate", "D": "D-advanced"}
-TIER_DIRS = {"1": "tier1-survival", "2": "tier2-daily-life", "3": "tier3-social", "4": "tier4-abstract"}
-
-HEALTH_COUNTERS = [
-    "concepts_requiring_reteach_total", "average_sessions_to_acquire", "reteach_rate_30d",
-    "homework_completion_rate_30d", "homework_reported_difficulty_avg", "days_in_current_phase",
-    "concepts_acquired_per_month", "concepts_in_practicing_simultaneously",
-    "average_session_duration_30d", "session_frequency_30d", "learner_initiated_topics_30d",
-    "sessions_rated_too_easy_30d", "sessions_rated_too_hard_30d",
-    "anki_estimated_deck_size", "anki_estimated_daily_review_minutes",
-]
+from shared import ROOT, STATE_DIR as STATE, CURRICULUM_DIR as CURRICULUM, PHASE_DIRS, TIER_DIRS, load_schema, get_required_fields
 
 results: list[tuple[str, str]] = []
 def pass_(msg): results.append(("PASS", msg))
@@ -49,11 +36,28 @@ def vocab_path(cid: str) -> Path:
 
 # --- 1. Required-field checks ------------------------------------------------
 
+def check_required_fields(data: dict, schema_name: str, file_label: str) -> None:
+    """Generic required-field checker driven by a schema file.
+
+    Loads schemas/<schema_name>.schema.yaml and checks that every field
+    marked required: true is present in *data*.
+    """
+    schema = load_schema(schema_name)
+    required = get_required_fields(schema)
+    missing = [f for f in required if f not in data]
+    if missing:
+        for f in missing:
+            fail(f"{file_label}: missing required field '{f}'")
+    else:
+        pass_(f"{file_label}: all {len(required)} required fields present")
+
+
 def check_learner_profile(data: dict, has_sessions: bool) -> None:
+    check_required_fields(data, "learner-profile", "learner-profile")
+    # Additional semantic check: warn if critical fields are empty after session 1
     for f in ("name", "native_language", "target_dialect"):
-        if f not in data:       fail(f"learner-profile: missing required field '{f}'")
-        elif has_sessions and not data[f]: warn(f"learner-profile: '{f}' is empty after session 1")
-        else:                   pass_(f"learner-profile: '{f}' present")
+        if f in data and has_sessions and not data[f]:
+            warn(f"learner-profile: '{f}' is empty after session 1")
 
 
 def check_skill_map(data: dict) -> None:
@@ -61,9 +65,15 @@ def check_skill_map(data: dict) -> None:
     if not grammar:
         fail("skill-map: 'grammar' section missing or empty")
     else:
+        # Load grammar entry template to get required fields
+        sm_schema = load_schema("skill-map")
+        grammar_required = [
+            name for name, spec in sm_schema.get("grammar_entry_template", {}).items()
+            if isinstance(spec, dict) and spec.get("required")
+        ]
         for cid, entry in grammar.items():
             if isinstance(entry, dict):
-                for f in ("status", "practice_count", "prerequisites"):
+                for f in grammar_required:
                     if f not in entry:
                         fail(f"skill-map grammar '{cid}': missing '{f}'")
         pass_(f"skill-map: checked {len(grammar)} grammar entries for required fields")
@@ -73,17 +83,11 @@ def check_skill_map(data: dict) -> None:
 
 
 def check_schedule(data: dict) -> None:
-    for f in ("current_phase", "onboarding_complete", "fluency_accuracy_balance"):
-        if f not in data: fail(f"schedule: missing required field '{f}'")
-        else:             pass_(f"schedule: '{f}' present")
+    check_required_fields(data, "schedule", "schedule")
 
 
 def check_system_health(data: dict) -> None:
-    missing = [f for f in HEALTH_COUNTERS if f not in data]
-    if missing:
-        for f in missing: fail(f"system-health: missing counter field '{f}'")
-    else:
-        pass_(f"system-health: all {len(HEALTH_COUNTERS)} counter fields present")
+    check_required_fields(data, "system-health", "system-health")
 
 
 # --- 2. Cross-reference checks -----------------------------------------------

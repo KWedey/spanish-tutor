@@ -1,0 +1,365 @@
+# Schema: Skill Map
+# Source: docs/system-design.md section 3
+# This file is the authoritative schema for state/skill-map.yaml.
+# Scripts read this file to validate and generate templates.
+#
+# Note: The skill-map has a complex structure with template entries for
+# grammar, vocabulary, pronunciation, etc. This schema defines the
+# per-entry templates. The full file structure is assembled by init-student.py.
+
+grammar_entry_template:
+  status:
+    type: string
+    required: true
+    default: "unseen"
+    description: "Current mastery status"
+    enum: ["unseen", "introduced", "practicing", "acquired", "automatic", "regressed"]
+  introduced_date:
+    type: string
+    required: false
+    default: null
+    description: "Date concept was first introduced"
+  last_practiced:
+    type: string
+    required: false
+    default: null
+    description: "Date of most recent practice"
+  practice_count:
+    type: int
+    required: true
+    default: 0
+    description: "Total times actively practiced"
+  error_rate_drills:
+    type: float
+    required: false
+    default: null
+    description: "Rolling avg over last 5 drill instances"
+  error_rate_production:
+    type: float
+    required: false
+    default: null
+    description: "Rolling avg over last 5 free production instances"
+  error_trend:
+    type: string
+    required: false
+    default: null
+    description: "improving, stable, declining (based on production rate)"
+    enum: [null, "improving", "stable", "declining"]
+  performance_scaffolded:
+    type: string
+    required: false
+    default: null
+    description: "null (untested), struggling, competent"
+    enum: [null, "struggling", "competent"]
+  performance_unscaffolded:
+    type: string
+    required: false
+    default: null
+    description: "null (untested), struggling, competent"
+    enum: [null, "struggling", "competent"]
+  integration_tested_with:
+    type: list
+    required: false
+    default: []
+    description: "List of concept IDs tested in combination"
+  prerequisites:
+    type: list
+    required: true
+    default: []
+    description: "Concept IDs that must be acquired first"
+  notes:
+    type: string
+    required: false
+    default: ""
+    description: "Free-text notes"
+
+vocabulary_entry_template:
+  status:
+    type: string
+    required: true
+    default: "unseen"
+    description: "Current mastery status"
+    enum: ["unseen", "introduced", "practicing", "acquired", "automatic", "regressed"]
+  words_total:
+    type: int
+    required: false
+    default: 0
+    description: "Populated from curriculum file"
+  words_introduced:
+    type: int
+    required: false
+    default: 0
+    description: "Number of words introduced so far"
+  passive_known:
+    type: int
+    required: false
+    default: 0
+    description: "Can recognize in reading/listening"
+  active_known:
+    type: int
+    required: false
+    default: 0
+    description: "Can produce in speaking/writing"
+  weak_production:
+    type: list
+    required: false
+    default: []
+    description: "Recognize but cannot produce"
+  weak_recognition:
+    type: list
+    required: false
+    default: []
+    description: "Cannot recognize at all"
+  last_practiced:
+    type: string
+    required: false
+    default: null
+    description: "Date of most recent practice"
+  notes:
+    type: string
+    required: false
+    default: ""
+    description: "Free-text notes"
+  error_tracking:
+    type: map
+    required: false
+    default: null
+    description: "Production error tracking for this cluster"
+    children:
+      error_rate_production:
+        type: float
+        required: false
+        default: null
+        description: "Rolling avg, last 5 in-session observations"
+      common_errors:
+        type: list
+        required: false
+        default: []
+        description: "e.g., gender: el mano -> la mano"
+      last_observed:
+        type: string
+        required: false
+        default: null
+        description: "Date of last in-session production observation"
+
+pronunciation_entry_template:
+  status:
+    type: string
+    required: true
+    default: "unseen"
+    description: "Current mastery status"
+    enum: ["unseen", "introduced", "practicing", "acquired", "automatic", "regressed"]
+  last_practiced:
+    type: string
+    required: false
+    default: null
+    description: "Date of most recent practice"
+  external_feedback:
+    type: string
+    required: false
+    default: ""
+    description: "Latest from Speechling or conversation partner"
+  notes:
+    type: string
+    required: false
+    default: ""
+    description: "Free-text notes"
+
+writing_entry_template:
+  status:
+    type: string
+    required: true
+    default: "unseen"
+    description: "Current mastery status"
+    enum: ["unseen", "introduced", "practicing", "acquired"]
+  last_practiced:
+    type: string
+    required: false
+    default: null
+    description: "Date of most recent practice"
+  notes:
+    type: string
+    required: false
+    default: ""
+    description: "Free-text notes"
+
+receptive_skills:
+  listening:
+    type: map
+    required: false
+    default: null
+    description: "Listening comprehension tracking"
+    children:
+      current_level:
+        type: string
+        required: false
+        default: "L1"
+        description: "L1-L5 scale"
+        enum: ["L1", "L2", "L3", "L4", "L5"]
+      comprehension_quality:
+        type: string
+        required: false
+        default: null
+        description: "gist / main_ideas / details / inference"
+        enum: [null, "gist", "main_ideas", "details", "inference"]
+      hours_at_level:
+        type: float
+        required: false
+        default: 0
+        description: "Hours of input at current level"
+      hours_total:
+        type: float
+        required: false
+        default: 0
+        description: "Cumulative listening input hours"
+      level_up_evidence:
+        type: list
+        required: false
+        default: []
+        description: "Dated observations supporting level advancement"
+      level_history:
+        type: list
+        required: false
+        default: []
+        description: "History of level changes"
+  reading:
+    type: map
+    required: false
+    default: null
+    description: "Reading comprehension tracking"
+    children:
+      current_level:
+        type: string
+        required: false
+        default: "R1"
+        description: "R1-R5 scale"
+        enum: ["R1", "R2", "R3", "R4", "R5"]
+      comprehension_quality:
+        type: string
+        required: false
+        default: null
+        description: "gist / main_ideas / details / inference"
+        enum: [null, "gist", "main_ideas", "details", "inference"]
+      lookup_frequency:
+        type: string
+        required: false
+        default: "frequent"
+        description: "frequent / occasional / rare / none"
+        enum: ["frequent", "occasional", "rare", "none"]
+      hours_at_level:
+        type: float
+        required: false
+        default: 0
+        description: "Hours of input at current level"
+      hours_total:
+        type: float
+        required: false
+        default: 0
+        description: "Cumulative reading input hours"
+      level_up_evidence:
+        type: list
+        required: false
+        default: []
+        description: "Dated observations supporting level advancement"
+      level_history:
+        type: list
+        required: false
+        default: []
+        description: "History of level changes"
+
+cultural_awareness_entry_template:
+  status:
+    type: string
+    required: true
+    default: "unseen"
+    description: "Current mastery status"
+    enum: ["unseen", "introduced", "practicing", "acquired"]
+  introduced_at_phase:
+    type: string
+    required: true
+    default: "B"
+    description: "Phase when this concept is introduced"
+  assessed_through:
+    type: string
+    required: false
+    default: ""
+    description: "How this concept is assessed"
+  signs_of_acquisition:
+    type: string
+    required: false
+    default: ""
+    description: "Observable indicators of acquisition"
+  notes:
+    type: string
+    required: false
+    default: ""
+    description: "Free-text notes"
+
+fluency_metrics:
+  speaking_pace:
+    type: string
+    required: false
+    default: ""
+    description: "slow-deliberate, moderate, natural-flow"
+  hesitation_frequency:
+    type: string
+    required: false
+    default: ""
+    description: "frequent, occasional, rare"
+  self_correction_rate:
+    type: string
+    required: false
+    default: ""
+    description: "high (good awareness), low (automatic or unaware)"
+  circumlocution:
+    type: string
+    required: false
+    default: ""
+    description: "How often they talk around words they don't know"
+  willingness_to_risk:
+    type: string
+    required: false
+    default: ""
+    description: "Avoids unfamiliar structures vs tries and fails"
+  thinking_language:
+    type: string
+    required: false
+    default: ""
+    description: "Still translating from English, or starting to think in Spanish"
+
+overall_estimates:
+  cefr_estimate:
+    type: string
+    required: false
+    default: "A0"
+    description: "Current CEFR estimate"
+  estimated_active_vocabulary:
+    type: int
+    required: false
+    default: 0
+    description: "Words the learner can produce"
+  estimated_passive_vocabulary:
+    type: int
+    required: false
+    default: 0
+    description: "Words the learner can recognize (always >= active)"
+  production_gap:
+    type: int
+    required: false
+    default: 0
+    description: "passive - active; large gap = needs more output practice"
+  strongest_skill:
+    type: string
+    required: false
+    default: null
+    description: "listening, reading, speaking, writing"
+  weakest_skill:
+    type: string
+    required: false
+    default: null
+    description: "listening, reading, speaking, writing"
+  last_formal_assessment:
+    type: string
+    required: false
+    default: null
+    description: "Date of last placement test or equivalent"

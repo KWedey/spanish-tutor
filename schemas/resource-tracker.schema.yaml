@@ -1,0 +1,58 @@
+# Schema: Resource Tracker
+# Source: docs/system-design.md section 4b
+# This file is the authoritative schema for state/resource-tracker.yaml.
+# Scripts read this file to validate and generate templates.
+
+fields:
+  schema_version:
+    type: int
+    required: true
+    default: 1
+    description: "Schema version number"
+
+  input_summary:
+    type: map
+    required: false
+    default: null
+    description: "Aggregated input tracking"
+    children:
+      total_listening_hours:
+        type: float
+        required: false
+        default: 0
+        description: "Cumulative listening hours"
+      total_reading_hours:
+        type: float
+        required: false
+        default: 0
+        description: "Cumulative reading hours"
+      current_listening_level:
+        type: string
+        required: false
+        default: "L1"
+        description: "Mirrors skill-map.receptive_skills.listening.current_level"
+        enum: ["L1", "L2", "L3", "L4", "L5"]
+      current_reading_level:
+        type: string
+        required: false
+        default: "R1"
+        description: "Mirrors skill-map.receptive_skills.reading.current_level"
+        enum: ["R1", "R2", "R3", "R4", "R5"]
+
+  resources:
+    type: list
+    required: false
+    default: []
+    description: "Active and tracked resources"
+
+  active_resources:
+    type: list
+    required: false
+    default: []
+    description: "Currently active resources (legacy/simplified format)"
+
+  retired_resources:
+    type: list
+    required: false
+    default: []
+    description: "Previously used resources no longer in rotation"
