@@ -144,6 +144,7 @@ These are defaults for free conversation. The activity-specific table below over
 
 ## State Updates (Silent, After Every Session)
 
+0. Snapshot current state before any writes: `python3 scripts/snapshot-state.py snapshot`
 1. Write session log to `state/sessions/YYYY-MM-DD.yaml` (use schema from `docs/system-design.md`)
 1b. Populate `decision_engine_trace` in the session log with scoring details from today's concept selection (candidates scored, top candidates with individual dimension scores, selected primary/secondary, override reason if any)
 2. Update `state/skill-map.yaml` with status changes, error rates, observations
