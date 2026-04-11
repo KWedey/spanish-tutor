@@ -21,7 +21,7 @@ except ImportError:
 
 from shared import (ROOT, STATE_DIR, CURRICULUM_DIR, VAULT_DIR,
                      PHASE_DIRS as PHASE_DIR_MAP, TIER_DIRS as TIER_DIR_MAP,
-                     load_yaml)
+                     load_yaml, yaml_value as _yaml_value)
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -162,26 +162,6 @@ def yaml_frontmatter(data: dict) -> str:
     return "\n".join(lines)
 
 
-def _yaml_value(value) -> str:
-    """Format a single value for YAML frontmatter."""
-    if value is None:
-        return "null"
-    if isinstance(value, bool):
-        return "true" if value else "false"
-    if isinstance(value, (int, float)):
-        return str(value)
-    if isinstance(value, str):
-        # Only quote strings that might be misinterpreted by YAML parsers
-        if value in ("true", "false", "null", "yes", "no", "") or \
-           any(c in value for c in (":", "#", "[", "]", "{", "}", ",")):
-            return f'"{value}"'
-        return value
-    if isinstance(value, list):
-        if not value:
-            return "[]"
-        items = ", ".join(f'"{v}"' if isinstance(v, str) else _yaml_value(v) for v in value)
-        return f"[{items}]"
-    return str(value)
 
 
 # ---------------------------------------------------------------------------

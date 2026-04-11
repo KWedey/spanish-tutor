@@ -12,8 +12,7 @@ except ImportError:
     print("Error: PyYAML is required. Install with: pip install pyyaml", file=sys.stderr)
     sys.exit(1)
 
-ROOT = Path(__file__).resolve().parent.parent
-STATE_DIR = ROOT / "state"
+from shared import ROOT, STATE_DIR
 CURRENT_VERSION = 1
 _C = sys.stdout.isatty()
 green = lambda t: f"\033[32m{t}\033[0m" if _C else t

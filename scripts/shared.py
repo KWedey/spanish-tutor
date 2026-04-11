@@ -83,3 +83,30 @@ def get_field_default(spec: dict):
     if field_type == "map" and default is None:
         return {}
     return default
+
+
+def yaml_value(value) -> str:
+    """Format a single Python value for inline YAML output.
+
+    Handles None, bool, int, float, str (with quoting for YAML-special
+    characters), and lists (inline format). Used by both vault generation
+    and template generation scripts.
+    """
+    if value is None:
+        return "null"
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, (int, float)):
+        return str(value)
+    if isinstance(value, str):
+        # Quote strings that might be misinterpreted by YAML parsers
+        if value in ("true", "false", "null", "yes", "no", "") or \
+           any(c in value for c in (":", "#", "[", "]", "{", "}", ",")):
+            return f'"{value}"'
+        return value
+    if isinstance(value, list):
+        if not value:
+            return "[]"
+        items = ", ".join(f'"{v}"' if isinstance(v, str) else yaml_value(v) for v in value)
+        return f"[{items}]"
+    return str(value)

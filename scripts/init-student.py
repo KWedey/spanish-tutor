@@ -11,7 +11,7 @@ except ImportError:
     print("Error: PyYAML is required. Install with: pip install pyyaml", file=sys.stderr)
     sys.exit(1)
 
-from shared import ROOT, STATE_DIR, load_schema, get_field_default
+from shared import ROOT, STATE_DIR, load_schema, get_field_default, yaml_value as _yaml_value
 _C = sys.stdout.isatty()
 green = lambda t: f"\033[32m{t}\033[0m" if _C else t
 yellow = lambda t: f"\033[33m{t}\033[0m" if _C else t
@@ -58,21 +58,6 @@ SCHEMA_TEMPLATES = {
 }
 
 
-def _yaml_value(value) -> str:
-    """Format a Python value for inline YAML output."""
-    if value is None:
-        return "null"
-    if isinstance(value, bool):
-        return "true" if value else "false"
-    if isinstance(value, float):
-        return f"{value}" if value != int(value) else f"{value}"
-    if isinstance(value, int):
-        return str(value)
-    if isinstance(value, list):
-        return "[]"
-    if isinstance(value, str):
-        return f'"{value}"' if value == "" else value
-    return str(value)
 
 
 def _render_map_children(children: dict, indent: int) -> str:

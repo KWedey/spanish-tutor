@@ -32,6 +32,11 @@ check_vocab_error_tracking = validate_mod.check_vocab_error_tracking
 check_resource_tracker = validate_mod.check_resource_tracker
 check_vocab_passive_active = validate_mod.check_vocab_passive_active
 check_acquired_zero_practice = validate_mod.check_acquired_zero_practice
+check_session_filenames = validate_mod.check_session_filenames
+check_carryover_concepts = validate_mod.check_carryover_concepts
+check_placement_validation_consistency = validate_mod.check_placement_validation_consistency
+check_integration_tested_with = validate_mod.check_integration_tested_with
+check_schedule_refs = validate_mod.check_schedule_refs
 
 
 @pytest.fixture(autouse=True)
@@ -255,3 +260,88 @@ class TestScheduleEnumValidation:
         fails = _fails()
         assert len(fails) >= 1
         assert any("E-expert" in f for f in fails)
+
+
+# ---------------------------------------------------------------------------
+# 13. session filename validation — non-date filename warns
+# ---------------------------------------------------------------------------
+
+class TestSessionFilenameNonDate:
+    def test_non_date_filename_warns(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(validate_mod, "STATE", tmp_path)
+        sdir = tmp_path / "sessions"
+        sdir.mkdir()
+        (sdir / "notes.yaml").write_text("key: value", encoding="utf-8")
+
+        check_session_filenames()
+
+        warns = _warns()
+        assert len(warns) >= 1
+        assert any("notes.yaml" in w for w in warns)
+
+
+# ---------------------------------------------------------------------------
+# 14. carryover concept with acquired status warns
+# ---------------------------------------------------------------------------
+
+class TestCarryoverAcquiredWarns:
+    def test_acquired_in_carryover_warns(self, skill_map_data):
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["status"] = "acquired"
+
+        sched = {"carryover_concepts": ["A-01-present-regular"]}
+
+        check_carryover_concepts(sched, sm)
+
+        warns = _warns()
+        assert len(warns) >= 1
+        assert any("acquired" in w for w in warns)
+
+
+# ---------------------------------------------------------------------------
+# 15. placement_validation active with onboarding incomplete fails
+# ---------------------------------------------------------------------------
+
+class TestPlacementValidationOnboardingIncomplete:
+    def test_active_pv_onboarding_false_fails(self):
+        sched = {
+            "placement_validation": {"active": True, "sessions_completed": 0},
+            "onboarding_complete": False,
+        }
+
+        check_placement_validation_consistency(sched)
+
+        fails = _fails()
+        assert len(fails) >= 1
+        assert any("onboarding" in f.lower() for f in fails)
+
+
+# ---------------------------------------------------------------------------
+# 16. integration_tested_with references non-existent concept
+# ---------------------------------------------------------------------------
+
+class TestIntegrationTestedWithBadRef:
+    def test_nonexistent_ref_fails(self, skill_map_data):
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["integration_tested_with"] = ["Z-99-fake-concept"]
+
+        check_integration_tested_with(sm)
+
+        fails = _fails()
+        assert len(fails) >= 1
+        assert any("Z-99-fake-concept" in f for f in fails)
+
+
+# ---------------------------------------------------------------------------
+# 17. schedule active_grammar.primary references missing concept
+# ---------------------------------------------------------------------------
+
+class TestScheduleRefsMissingConcept:
+    def test_primary_not_in_skill_map_fails(self, skill_map_data):
+        sched = {"active_grammar": {"primary": "X-99-nonexistent"}}
+
+        check_schedule_refs(sched, skill_map_data)
+
+        fails = _fails()
+        assert len(fails) >= 1
+        assert any("X-99-nonexistent" in f for f in fails)

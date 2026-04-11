@@ -119,3 +119,26 @@ class TestPathConstants:
 
     def test_root_contains_schemas(self):
         assert shared.SCHEMAS_DIR == shared.ROOT / "schemas"
+
+
+# ---------------------------------------------------------------------------
+# 6. get_field_default handles types and defaults
+# ---------------------------------------------------------------------------
+
+class TestGetFieldDefault:
+    def test_type_list_default_none_returns_none(self):
+        # default=None triggers early return before type coercion
+        result = shared.get_field_default({"type": "list", "default": None})
+        assert result is None
+
+    def test_type_map_default_none_returns_none(self):
+        result = shared.get_field_default({"type": "map", "default": None})
+        assert result is None
+
+    def test_explicit_default_returned(self):
+        result = shared.get_field_default({"type": "string", "default": "hello"})
+        assert result == "hello"
+
+    def test_no_default_key_returns_none(self):
+        result = shared.get_field_default({"type": "string"})
+        assert result is None
