@@ -3,11 +3,11 @@
 Stress-test validate-state.py against known corruption scenarios.
 
 For each scenario:
-  1. Back up state/ to a temp directory.
-  2. Apply a targeted corruption to one or more state files.
-  3. Run validate-state.py and capture stdout/exit code.
+  1. Copy the entire state/ directory to a temp location (never touch live state).
+  2. Apply a targeted corruption to the temp copy.
+  3. Run validate-state.py against the temp copy and capture stdout/exit code.
   4. Assert the validator emitted at least one [FAIL] or [WARN] line.
-  5. Restore state files from backup.
+  5. Temp directory is cleaned up automatically.
 
 Exit 0 — all scenarios were caught by the validator.
 Exit 1 — at least one scenario was NOT caught (validator blind spot).
@@ -16,6 +16,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import textwrap
 from pathlib import Path
 
 try:
@@ -27,6 +28,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parent.parent
 STATE = ROOT / "state"
 VALIDATOR = Path(__file__).resolve().parent / "validate-state.py"
+SCRIPTS_DIR = Path(__file__).resolve().parent
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -40,24 +42,40 @@ def dump(data: dict, path: Path) -> None:
     path.write_text(yaml.dump(data, default_flow_style=False, allow_unicode=True))
 
 
-def backup_state(tmp: Path) -> None:
-    """Copy every .yaml file directly inside state/ into tmp/."""
-    for f in STATE.iterdir():
-        if f.is_file() and f.suffix == ".yaml":
-            shutil.copy2(f, tmp / f.name)
+def copy_state_to_temp(tmp: Path) -> Path:
+    """Copy the entire state/ tree to tmp/state/ and return the new state path."""
+    dest = tmp / "state"
+    shutil.copytree(STATE, dest)
+    return dest
 
 
-def restore_state(tmp: Path) -> None:
-    """Restore every .yaml file from tmp/ back to state/."""
-    for f in tmp.iterdir():
-        if f.is_file() and f.suffix == ".yaml":
-            shutil.copy2(f, STATE / f.name)
+def run_validator(state_dir: Path) -> tuple[int, str]:
+    """Run validate-state.py against *state_dir* via TUTOR_STATE_DIR env override.
 
+    The validator imports STATE_DIR from shared.py which is hardcoded.
+    To redirect it to the temp copy without modifying shared.py, we run a
+    thin wrapper script that patches shared.STATE_DIR before importing the
+    validator module.
+    """
+    # Build a small wrapper that patches the state path before running the
+    # validator's main(). This avoids modifying shared.py (owned by another agent).
+    wrapper = textwrap.dedent(f"""\
+        import sys, importlib
+        from pathlib import Path
 
-def run_validator() -> tuple[int, str]:
-    """Run validate-state.py and return (exit_code, combined_output)."""
+        # Patch shared.STATE_DIR before validate-state.py imports it
+        sys.path.insert(0, {str(SCRIPTS_DIR)!r})
+        import shared
+        shared.STATE_DIR = Path({str(state_dir)!r})
+
+        # Now import and run the validator
+        spec = importlib.util.spec_from_file_location("validate_state", {str(VALIDATOR)!r})
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        mod.main()
+    """)
     result = subprocess.run(
-        [sys.executable, str(VALIDATOR), "--verbose"],
+        [sys.executable, "-c", wrapper, "--verbose"],
         capture_output=True,
         text=True,
     )
@@ -71,36 +89,36 @@ def validator_caught(output: str, exit_code: int) -> bool:
 
 # ---------------------------------------------------------------------------
 # Corruption functions
-# Each accepts no arguments beyond implicit access to STATE/ and mutates files
-# in place. The backup/restore wrapper around each call handles cleanup.
+# Each accepts a state_dir Path pointing to the TEMP copy of state/.
+# Mutations are applied only to temp files — live state is never touched.
 # ---------------------------------------------------------------------------
 
-def corrupt_bad_yaml() -> None:
+def corrupt_bad_yaml(state_dir: Path) -> None:
     """Inject a raw unmatched bracket that breaks YAML parsing."""
-    path = STATE / "skill-map.yaml"
+    path = state_dir / "skill-map.yaml"
     original = path.read_text()
     path.write_text(original + "\nunmatched: [\n")
 
 
-def corrupt_missing_field() -> None:
+def corrupt_missing_field(state_dir: Path) -> None:
     """Remove the required 'current_phase' key from schedule.yaml."""
-    path = STATE / "schedule.yaml"
+    path = state_dir / "schedule.yaml"
     data = load(path)
     data.pop("current_phase", None)
     dump(data, path)
 
 
-def corrupt_bad_enum() -> None:
+def corrupt_bad_enum(state_dir: Path) -> None:
     """Set fluency_accuracy_balance to a value outside the allowed enum."""
-    path = STATE / "schedule.yaml"
+    path = state_dir / "schedule.yaml"
     data = load(path)
     data["fluency_accuracy_balance"] = "invalid-value"
     dump(data, path)
 
 
-def corrupt_orphan_carryover() -> None:
+def corrupt_orphan_carryover(state_dir: Path) -> None:
     """Add a concept ID that does not exist in skill-map to carryover_concepts."""
-    path = STATE / "schedule.yaml"
+    path = state_dir / "schedule.yaml"
     data = load(path)
     carryover = list(data.get("carryover_concepts") or [])
     carryover.append("A-99-nonexistent-concept")
@@ -108,9 +126,9 @@ def corrupt_orphan_carryover() -> None:
     dump(data, path)
 
 
-def corrupt_bad_integration_ref() -> None:
+def corrupt_bad_integration_ref(state_dir: Path) -> None:
     """Add an invalid concept ID to integration_tested_with on the first grammar entry."""
-    path = STATE / "skill-map.yaml"
+    path = state_dir / "skill-map.yaml"
     data = load(path)
     grammar = data.get("grammar", {})
     if not grammar:
@@ -125,9 +143,9 @@ def corrupt_bad_integration_ref() -> None:
     dump(data, path)
 
 
-def corrupt_vocab_passive_lt_active() -> None:
+def corrupt_vocab_passive_lt_active(state_dir: Path) -> None:
     """Set active_known > passive_known in the first vocabulary cluster."""
-    path = STATE / "skill-map.yaml"
+    path = state_dir / "skill-map.yaml"
     data = load(path)
     vocab = data.get("vocabulary", {})
     if not vocab:
@@ -141,9 +159,9 @@ def corrupt_vocab_passive_lt_active() -> None:
     dump(data, path)
 
 
-def corrupt_bad_performance_enum() -> None:
+def corrupt_bad_performance_enum(state_dir: Path) -> None:
     """Set performance_scaffolded to 'excellent' — not in the allowed set."""
-    path = STATE / "skill-map.yaml"
+    path = state_dir / "skill-map.yaml"
     data = load(path)
     grammar = data.get("grammar", {})
     if not grammar:
@@ -156,9 +174,9 @@ def corrupt_bad_performance_enum() -> None:
     dump(data, path)
 
 
-def corrupt_validation_no_onboarding() -> None:
+def corrupt_validation_no_onboarding(state_dir: Path) -> None:
     """Set placement_validation.active=true while onboarding_complete=false."""
-    path = STATE / "schedule.yaml"
+    path = state_dir / "schedule.yaml"
     data = load(path)
     data["onboarding_complete"] = False
     pv = data.get("placement_validation") or {}
@@ -191,22 +209,20 @@ SCENARIOS: list[tuple[str, str, object]] = [
 def run_scenario(scenario_id: str, description: str, corrupt_fn) -> bool:
     """
     Execute one scenario. Returns True if the validator caught the corruption.
-    Uses a fresh temp dir per scenario so failures never bleed into each other.
+
+    Each scenario gets its own temp copy of state/ — live state is never touched.
+    The temp directory is cleaned up automatically when the context manager exits.
     """
-    with tempfile.TemporaryDirectory(prefix="lang-state-bak-") as tmp_str:
+    with tempfile.TemporaryDirectory(prefix="lang-state-test-") as tmp_str:
         tmp = Path(tmp_str)
-        backup_state(tmp)
         try:
-            corrupt_fn()
-            exit_code, output = run_validator()
+            temp_state = copy_state_to_temp(tmp)
+            corrupt_fn(temp_state)
+            exit_code, output = run_validator(temp_state)
             caught = validator_caught(output, exit_code)
         except Exception as exc:
-            # Corruption itself failed — restore and report as infrastructure error
-            restore_state(tmp)
-            print(f"[ERROR] {scenario_id}: corruption step raised an exception: {exc}")
+            print(f"[ERROR] {scenario_id}: raised an exception: {exc}")
             return False
-        finally:
-            restore_state(tmp)
 
     if caught:
         print(f"[PASS] {scenario_id}: Validator correctly detected — {description}")

@@ -19,10 +19,15 @@ green = lambda t: f"\033[32m{t}\033[0m" if _C else t
 yellow = lambda t: f"\033[33m{t}\033[0m" if _C else t
 red = lambda t: f"\033[31m{t}\033[0m" if _C else t
 
-# Migrations: version -> [(file, dot.field.path, default_value), ...]
+# Migrations: version -> list of migration entries.
+# Each entry is either:
+#   - A tuple (file, dot.field.path, default_value) — adds field if missing (legacy format)
+#   - A dict with "file", "transform" keys — callable receives (data) and returns modified data
 # Applied cumulatively from file's current schema_version to CURRENT_VERSION.
 
-MIGRATIONS: dict[int, list[tuple[str, str, object]]] = {
+MigrationEntry = tuple[str, str, object] | dict
+
+MIGRATIONS: dict[int, list[MigrationEntry]] = {
     1: [
         # schema_version itself (added to all state files)
         ("state/learner-profile.yaml", "schema_version", 1),
@@ -76,11 +81,28 @@ def load_state_file(rel_path: str) -> tuple[dict | None, str | None]:
 
 
 def save_state_file(rel_path: str, data: dict, original_text: str) -> None:
-    """Save a state file, preserving comment header from the original."""
-    hdr = []
+    """Save a state file, preserving comment header from the original.
+
+    Handles blank lines between comment blocks and between comments and the
+    first YAML key, as well as files that start with blank lines before comments.
+    """
+    hdr: list[str] = []
+    found_yaml_body = False
     for line in original_text.splitlines():
-        if line.startswith("#"): hdr.append(line)
-        else: break
+        stripped = line.strip()
+        if stripped.startswith("#"):
+            hdr.append(line)
+        elif stripped == "":
+            # Blank line — keep collecting; it may be between comment blocks
+            hdr.append(line)
+        else:
+            # First non-comment, non-blank line: YAML body starts here
+            found_yaml_body = True
+            break
+    if hdr:
+        # Strip trailing blank lines from header so we control the separator
+        while hdr and hdr[-1].strip() == "":
+            hdr.pop()
     header = "\n".join(hdr) + "\n\n" if hdr else ""
     body = yaml.dump(data, default_flow_style=False, allow_unicode=True, sort_keys=False)
     (ROOT / rel_path).write_text(header + body, encoding="utf-8")
@@ -91,7 +113,13 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true", help="Preview changes without writing")
     args = parser.parse_args()
 
-    all_files = sorted({f for migs in MIGRATIONS.values() for f, _, _ in migs})
+    def _entry_file(entry: MigrationEntry) -> str:
+        """Extract the target filename from a migration entry."""
+        if isinstance(entry, dict):
+            return entry["file"]
+        return entry[0]
+
+    all_files = sorted({_entry_file(e) for migs in MIGRATIONS.values() for e in migs})
     total_added = total_errors = 0
     if args.dry_run:
         print(yellow("DRY RUN — no files will be modified\n"))
@@ -108,16 +136,31 @@ def main() -> None:
         file_changes = 0
         for version in range(file_version + 1, CURRENT_VERSION + 1):
             if version not in MIGRATIONS: continue
-            for m_file, field_path, default in MIGRATIONS[version]:
-                if m_file != rel_path: continue
-                exists, _ = get_nested(data, field_path)
-                if not exists:
+            for entry in MIGRATIONS[version]:
+                if isinstance(entry, dict):
+                    # Callable transform entry: {"file": ..., "transform": callable}
+                    if entry["file"] != rel_path:
+                        continue
+                    label = entry.get("description", "transform")
                     if args.dry_run:
-                        print(green(f"    + {field_path} = {default}"))
+                        print(green(f"    ~ {label}"))
                     else:
-                        set_nested(data, field_path, default)
-                        print(green(f"    + {field_path}"))
+                        data = entry["transform"](data)
+                        print(green(f"    ~ {label}"))
                     file_changes += 1
+                else:
+                    # Additive tuple entry: (file, field_path, default)
+                    m_file, field_path, default = entry
+                    if m_file != rel_path:
+                        continue
+                    exists, _ = get_nested(data, field_path)
+                    if not exists:
+                        if args.dry_run:
+                            print(green(f"    + {field_path} = {default}"))
+                        else:
+                            set_nested(data, field_path, default)
+                            print(green(f"    + {field_path}"))
+                        file_changes += 1
         data["schema_version"] = CURRENT_VERSION
         if not args.dry_run and file_changes > 0:
             save_state_file(rel_path, data, original_text)

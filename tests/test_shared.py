@@ -27,6 +27,23 @@ class TestLoadYaml:
         assert result["key"] == "value"
         assert result["number"] == 42
 
+    def test_missing_file_returns_none(self, tmp_path):
+        """E-01: missing files return None instead of raising."""
+        f = tmp_path / "does-not-exist.yaml"
+
+        result = shared.load_yaml(f)
+
+        assert result is None
+
+    def test_malformed_yaml_returns_none(self, tmp_path):
+        """E-02: YAML parse errors return None instead of propagating."""
+        f = tmp_path / "bad.yaml"
+        f.write_text("key: [unterminated", encoding="utf-8")
+
+        result = shared.load_yaml(f)
+
+        assert result is None
+
 
 # ---------------------------------------------------------------------------
 # 2. load_yaml returns empty dict for empty file
@@ -142,3 +159,42 @@ class TestGetFieldDefault:
     def test_no_default_key_returns_none(self):
         result = shared.get_field_default({"type": "string"})
         assert result is None
+
+
+# ---------------------------------------------------------------------------
+# 7. atomic_write writes atomically
+# ---------------------------------------------------------------------------
+
+class TestAtomicWrite:
+    def test_writes_content_to_file(self, tmp_path):
+        target = tmp_path / "out.yaml"
+
+        shared.atomic_write(target, "key: value\n")
+
+        assert target.exists()
+        assert target.read_text(encoding="utf-8") == "key: value\n"
+
+    def test_creates_parent_dirs(self, tmp_path):
+        target = tmp_path / "sub" / "dir" / "file.yaml"
+
+        shared.atomic_write(target, "hello\n")
+
+        assert target.exists()
+        assert target.read_text(encoding="utf-8") == "hello\n"
+
+    def test_overwrites_existing_file(self, tmp_path):
+        target = tmp_path / "existing.yaml"
+        target.write_text("old content\n", encoding="utf-8")
+
+        shared.atomic_write(target, "new content\n")
+
+        assert target.read_text(encoding="utf-8") == "new content\n"
+
+    def test_no_temp_file_left_on_success(self, tmp_path):
+        target = tmp_path / "clean.yaml"
+
+        shared.atomic_write(target, "data\n")
+
+        remaining = list(tmp_path.iterdir())
+        assert len(remaining) == 1
+        assert remaining[0].name == "clean.yaml"

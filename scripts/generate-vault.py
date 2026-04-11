@@ -71,8 +71,14 @@ def today_str() -> str:
 
 
 def concept_id_to_title(concept_id: str) -> str:
-    """Convert a concept ID like 'A-01-present-regular' to 'Present Regular'."""
-    # Strip the phase prefix (e.g. "A-01-" or "A-00-")
+    """Convert a concept ID like 'A-01-present-regular' to 'Present Regular'.
+
+    Expected format: <phase_letter>-<NN>-<name-parts>
+    where phase_letter is A-D and NN is a two-digit number.
+    """
+    if not re.match(r'^[A-D]-\d{2}-.+', concept_id):
+        print(f"Warning: unexpected concept ID format '{concept_id}' "
+              f"(expected '<A-D>-<NN>-<name>')", file=sys.stderr)
     parts = concept_id.split("-", 2)
     if len(parts) >= 3:
         name_part = parts[2]
@@ -82,8 +88,14 @@ def concept_id_to_title(concept_id: str) -> str:
 
 
 def cluster_id_to_title(cluster_id: str) -> str:
-    """Convert 'tier1-greetings-introductions' to 'Greetings Introductions'."""
-    # Strip the tier prefix
+    """Convert 'tier1-greetings-introductions' to 'Greetings Introductions'.
+
+    Expected format: tier<N>-<name-parts>
+    where N is 1-4.
+    """
+    if not re.match(r'^tier[1-4]-.+', cluster_id):
+        print(f"Warning: unexpected cluster ID format '{cluster_id}' "
+              f"(expected 'tier<1-4>-<name>')", file=sys.stderr)
     parts = cluster_id.split("-", 1)
     if len(parts) >= 2:
         name_part = parts[1]
@@ -150,14 +162,44 @@ def write_vault_file(path: Path, content: str, force: bool = False) -> None:
         f.write(content)
 
 
+_FRONTMATTER_FIELD_ORDER = [
+    # Meta fields first
+    "generated", "source", "last_generated", "date",
+    # Identity fields
+    "concept_id", "cluster_id", "sound_id", "title",
+    # Classification fields
+    "phase", "tier", "category", "introduced_at_phase",
+    # Status and metrics
+    "status", "error_rate_drills", "error_rate_production", "error_trend",
+    "last_practiced", "practice_count",
+    # Vocabulary-specific
+    "words_total", "words_introduced", "passive_known", "active_known",
+    # Relational fields
+    "prerequisites", "integration_tested_with",
+    # Cultural-specific
+    "assessed_through", "signs_of_acquisition",
+    # Template / daily-note fields
+    "session_number", "energy_level", "available_time", "homework_completed",
+    "prompt", "word_count", "corrections",
+    # Always last
+    "tags",
+]
+
+
 def yaml_frontmatter(data: dict) -> str:
     """Render a dict as YAML frontmatter with --- delimiters.
 
-    Uses manual serialization for deterministic field ordering.
+    Uses a canonical field order so regeneration produces minimal git diffs.
+    Fields not in the canonical list are appended in alphabetical order.
     """
+    order_map = {name: i for i, name in enumerate(_FRONTMATTER_FIELD_ORDER)}
+    max_known = len(_FRONTMATTER_FIELD_ORDER)
+    sorted_keys = sorted(data.keys(),
+                         key=lambda k: (order_map.get(k, max_known), k))
+
     lines = ["---"]
-    for key, value in data.items():
-        lines.append(f"{key}: {_yaml_value(value)}")
+    for key in sorted_keys:
+        lines.append(f"{key}: {_yaml_value(data[key])}")
     lines.append("---")
     return "\n".join(lines)
 
@@ -500,7 +542,33 @@ def generate_roadmap(skill_map: dict) -> tuple[Path, str]:
 # Progress dashboards
 # ---------------------------------------------------------------------------
 
-def generate_grammar_progress() -> tuple[Path, str]:
+def generate_grammar_progress(skill_map: dict | None = None) -> tuple[Path, str]:
+    """Generate grammar progress overview with state-derived summary stats."""
+    grammar = (skill_map or {}).get("grammar", {})
+    total = len(grammar)
+    by_status: dict[str, int] = {}
+    for data in grammar.values():
+        s = data.get("status", "unseen")
+        by_status[s] = by_status.get(s, 0) + 1
+
+    summary_lines = []
+    if total:
+        acquired = by_status.get("acquired", 0) + by_status.get("automatic", 0)
+        summary_lines.append(f"**Overall:** {acquired}/{total} concepts acquired or automatic")
+        summary_lines.append("")
+        summary_lines.append("| Status | Count |")
+        summary_lines.append("|--------|-------|")
+        for status in ("unseen", "introduced", "practicing", "acquired", "automatic", "regressed"):
+            count = by_status.get(status, 0)
+            if count:
+                icon = STATUS_ICONS.get(status, "")
+                summary_lines.append(f"| {icon} {status} | {count} |")
+        summary_lines.append("")
+    else:
+        summary_lines.append("*No grammar concepts loaded yet.*")
+        summary_lines.append("")
+
+    summary = "\n".join(summary_lines)
     content = f"""\
 ---
 generated: true
@@ -510,6 +578,9 @@ tags: ["progress", "grammar"]
 {GENERATED_BANNER}
 
 # Grammar Progress
+
+{summary}
+## All Concepts
 
 ```dataview
 TABLE phase, status, error_rate_drills, error_rate_production, error_trend, practice_count, last_practiced
@@ -521,7 +592,37 @@ SORT concept_id ASC
     return VAULT_DIR / "Progress" / "Grammar Progress.md", content
 
 
-def generate_vocab_progress() -> tuple[Path, str]:
+def generate_vocab_progress(skill_map: dict | None = None) -> tuple[Path, str]:
+    """Generate vocabulary progress overview with state-derived summary stats."""
+    vocabulary = (skill_map or {}).get("vocabulary", {})
+    total_clusters = len(vocabulary)
+    total_words = sum(d.get("words_total", 0) for d in vocabulary.values())
+    total_active = sum(d.get("active_known", 0) for d in vocabulary.values())
+    total_passive = sum(d.get("passive_known", 0) for d in vocabulary.values())
+    by_status: dict[str, int] = {}
+    for data in vocabulary.values():
+        s = data.get("status", "unseen")
+        by_status[s] = by_status.get(s, 0) + 1
+
+    summary_lines = []
+    if total_clusters:
+        summary_lines.append(f"**Clusters:** {total_clusters} | "
+                             f"**Words:** {total_active} active / "
+                             f"{total_passive} passive / {total_words} total")
+        summary_lines.append("")
+        summary_lines.append("| Status | Clusters |")
+        summary_lines.append("|--------|----------|")
+        for status in ("unseen", "introduced", "practicing", "acquired", "automatic", "regressed"):
+            count = by_status.get(status, 0)
+            if count:
+                icon = STATUS_ICONS.get(status, "")
+                summary_lines.append(f"| {icon} {status} | {count} |")
+        summary_lines.append("")
+    else:
+        summary_lines.append("*No vocabulary clusters loaded yet.*")
+        summary_lines.append("")
+
+    summary = "\n".join(summary_lines)
     content = f"""\
 ---
 generated: true
@@ -531,6 +632,9 @@ tags: ["progress", "vocabulary"]
 {GENERATED_BANNER}
 
 # Vocabulary Progress
+
+{summary}
+## All Clusters
 
 ```dataview
 TABLE tier, category, status, words_total, words_introduced, passive_known, active_known, last_practiced
@@ -553,7 +657,10 @@ tags: ["progress", "weekly"]
 
 # Weekly Reports
 
-*Weekly reports will be generated here after each weekly review session.*
+*Weekly reports will be appended here after each weekly review session.*
+
+---
+
 """
     return VAULT_DIR / "Progress" / "Weekly Reports.md", content
 
@@ -570,6 +677,9 @@ tags: ["progress", "milestones"]
 # Milestones
 
 *Milestones will be recorded here as you achieve them.*
+
+---
+
 """
     return VAULT_DIR / "Progress" / "Milestones.md", content
 
@@ -738,10 +848,13 @@ def run_full(skill_map: dict, schedule: dict) -> None:
     write_vault_file(path, content, force=True)
     files_written += 1
 
-    # Progress dashboards
-    for gen_fn in (generate_grammar_progress, generate_vocab_progress,
-                   generate_weekly_reports, generate_milestones):
-        path, content = gen_fn()
+    # Progress dashboards (grammar/vocab receive skill_map for summary stats)
+    for path, content in (
+        generate_grammar_progress(skill_map),
+        generate_vocab_progress(skill_map),
+        generate_weekly_reports(),
+        generate_milestones(),
+    ):
         write_vault_file(path, content, force=True)
         files_written += 1
 
@@ -889,7 +1002,14 @@ def run_session(skill_map: dict, session_date: str) -> None:
             updates += 1
 
     # Regenerate Home and Roadmap
-    schedule = load_yaml(SCHEDULE_PATH) if SCHEDULE_PATH.exists() else {}
+    if SCHEDULE_PATH.exists():
+        try:
+            schedule = load_yaml(SCHEDULE_PATH)
+        except yaml.YAMLError as exc:
+            print(f"Warning: malformed schedule.yaml: {exc}", file=sys.stderr)
+            schedule = {}
+    else:
+        schedule = {}
     path, content = generate_home(schedule, skill_map)
     write_vault_file(path, content, force=True)
 
@@ -933,7 +1053,17 @@ def main():
         sys.exit(1)
 
     skill_map = load_yaml(SKILL_MAP_PATH)
-    schedule = load_yaml(SCHEDULE_PATH) if SCHEDULE_PATH.exists() else {}
+
+    if SCHEDULE_PATH.exists():
+        try:
+            schedule = load_yaml(SCHEDULE_PATH)
+        except yaml.YAMLError as exc:
+            print(f"Error: malformed schedule.yaml at {SCHEDULE_PATH}: {exc}",
+                  file=sys.stderr)
+            print("Continuing with empty schedule defaults.", file=sys.stderr)
+            schedule = {}
+    else:
+        schedule = {}
 
     if args.full:
         run_full(skill_map, schedule)

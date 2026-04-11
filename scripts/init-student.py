@@ -164,7 +164,8 @@ def reset_skill_map() -> None:
         if key in (data.get("receptive_skills") or {}):
             data["receptive_skills"][key] = {f: (None if f != "notes" else "") for f in data["receptive_skills"][key]}
     for entry in (data.get("cultural_awareness") or {}).values():
-        entry["status"] = "unseen"
+        if isinstance(entry, dict):
+            entry["status"] = "unseen"
     for key in (data.get("fluency_metrics") or {}):
         data["fluency_metrics"][key] = ""
     oe = data.get("overall_estimates") or {}
