@@ -78,7 +78,7 @@ Load the appropriate guide:
 - Standard session (post-onboarding)? Also read `curriculum/tutor-guides/input-orchestration.md`
 - `placement_validation.active` is true and `placement_validation.sessions_completed < 3`? Also read `curriculum/tutor-guides/placement-validation.md`
 - All prerequisites for next phase show "acquired" for 2+ consecutive sessions? Also read `curriculum/tutor-guides/phase-transition-guide.md`
-- Phase B+ and cultural concept is due? Check `cultural_awareness` in skill-map: if any concept has status "unseen" and `introduced_at_phase` ≤ current phase, load relevant file from `curriculum/cultural/` (politeness-formulas at Phase B, conversational-rhythm and humor-and-idioms at Phase C, regional-awareness at Phase B). Cultural concepts are secondary — scored with NEED capped at 5 in the decision engine.
+- Phase B+ and cultural concept is due? Check `cultural_awareness` in skill-map: if any concept has status "unseen" and `introduced_at_phase` ≤ current phase, load relevant file from `curriculum/cultural/` (politeness-formulas at Phase B, conversational-rhythm and humor-and-idioms at Phase C, regional-awareness at Phase B). Cultural concepts are secondary — non-functional concepts (`regional-awareness`, `humor-and-idioms`) are scored with NEED capped at 5 in the decision engine; functional concepts (`politeness-formulas`, `register-shifting`) use their full NEED score.
 - Active pronunciation focus in `schedule.yaml`? Also read `curriculum/pronunciation/[focus].md` for the current target sound.
 
 **Do NOT greet the learner until steps 1-4 are complete.**

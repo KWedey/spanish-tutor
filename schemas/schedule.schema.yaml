@@ -29,6 +29,12 @@ fields:
     default: false
     description: "True after session 10 (decision engine activates)"
 
+  current_onboarding_session:
+    type: int
+    required: false
+    default: 1
+    description: "Current onboarding session number (1-10). Agent reads this directly; incremented at end of each onboarding session."
+
   last_session_date:
     type: string
     required: false
