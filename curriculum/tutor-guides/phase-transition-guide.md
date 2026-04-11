@@ -29,10 +29,14 @@ Loaded when: All prerequisites for the next phase show "acquired" for 2+ consecu
 
 **Critical dependency note:** While A-03 (Gender Agreement) is not a hard prerequisite for Phase B entry, it IS a prerequisite for B-06 (Direct Object Pronouns) and B-10 (Comparatives/Superlatives). If A-03 is carried over, it must reach "acquired" status before B-06 is introduced. The decision engine enforces this via prerequisite filtering, but the tutor should prioritize A-03 consolidation in early Phase B sessions.
 
-## B → C Assessment (20-25 min)
+## B → C Assessment (25-30 min)
 
 **Production (12 min):** "Tell me about something that happened last week, and what you're planning for this weekend."
 - Tests: preterite/imperfect contrast, future (ir+a), object pronouns, reflexives
+
+**Writing (5 min):** Brief narration task. "Write me a short paragraph about what you did last weekend — 4-6 sentences."
+- Tests: written accuracy under time pressure, spelling conventions, accent marks
+- Compare written error rate to spoken error rate — divergence reveals whether errors are knowledge gaps (appear in both) or production pressure artifacts (spoken only)
 
 **Receptive (8 min):** Listen to 2-min podcast excerpt at natural speed. Answer comprehension questions in Spanish.
 
@@ -40,13 +44,19 @@ Loaded when: All prerequisites for the next phase show "acquired" for 2+ consecu
 - B-01, B-04 at <10% production error
 - Appropriate past tense selection >80% of the time
 - Can narrate event sequence without reverting to present tense
+- Writing sample shows functional accuracy (minor errors acceptable; systematic grammar errors = not ready)
 
 **Borderline:** Extend 2-3 weeks. If only one prerequisite weak, focused sprint.
 
-## C → D Assessment (25-30 min)
+## C → D Assessment (30-38 min)
 
 **Production (15 min):** "What would change about your city if you were mayor? I disagree with your first point — convince me."
 - Tests: subjunctive triggers, conditional, por/para, compound tenses, opinion defense
+
+**Writing (8 min):** Opinion piece. "Write a short response to this question: '¿Es mejor vivir en una ciudad grande o un pueblo pequeño?' Give your opinion with at least two reasons."
+- Tests: written argumentation, connector usage, subjunctive in writing, register consistency
+- At C→D, writing should show paragraph structure, opinion markers (creo que, me parece, aunque), and at least one subjunctive trigger used correctly
+- Compare to spoken production — if writing is significantly weaker, the learner may need more writing practice before Phase D
 
 **Receptive (10 min):** Read short opinion article (~300 words). Summarize argument and state agreement/disagreement in Spanish.
 
@@ -54,6 +64,7 @@ Loaded when: All prerequisites for the next phase show "acquired" for 2+ consecu
 - C-01, C-04, C-06 at <10% production error
 - Uses subjunctive unprompted in at least 2 contexts
 - Can sustain an argument with connectors
+- Writing sample demonstrates structured argumentation with appropriate connectors and at least one correct subjunctive usage
 
 **Borderline:** Extend 2-4 weeks. Subjunctive is the usual blocker — if that's the gap, dedicated subjunctive sprint.
 

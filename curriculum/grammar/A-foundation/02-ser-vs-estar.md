@@ -128,6 +128,14 @@ Present 12 sentences on screen or paper — 6 using ser, 6 using estar. Do not e
 - Estoy comiendo.
 - La puerta está abierta.
 
+### Stage 1b: Comprehension Check (optional, 1-2 min)
+Before drilling, verify the learner grasped the conceptual distinction — not just the sorting exercise. Ask 2-3 quick concept-check questions:
+- "If I want to say where someone IS right now, which verb do I use?" (expected: estar)
+- "If I want to say what someone's JOB is, which verb?" (expected: ser)
+- "Why do you think 'Es aburrido' and 'Está aburrido' mean different things?" (expected: ser = characteristic, estar = state)
+
+If the learner cannot answer these, revisit the sorting activity with different examples before proceeding to drills. Ser/estar is high-severity L1 interference — drilling a misunderstood distinction will reinforce confusion.
+
 ### Stage 2: Controlled Practice
 Fill-in-the-blank drills. Provide sentences with a blank where ser or estar should go. Start with clear-cut cases, then gradually introduce ambiguous adjectives (listo, aburrido, rico) where the verb choice changes meaning.
 

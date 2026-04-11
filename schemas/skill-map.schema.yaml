@@ -3,9 +3,20 @@
 # This file is the authoritative schema for state/skill-map.yaml.
 # Scripts read this file to validate and generate templates.
 #
-# Note: The skill-map has a complex structure with template entries for
-# grammar, vocabulary, pronunciation, etc. This schema defines the
-# per-entry templates. The full file structure is assembled by init-student.py.
+# Structure convention: Unlike other schemas that use a flat `fields:` wrapper,
+# the skill-map schema uses named entry templates (grammar_entry_template,
+# vocabulary_entry_template, etc.) because the skill-map file contains
+# repeating entries under category keys (grammar, vocabulary, pronunciation,
+# writing, cultural_awareness). Each template defines the per-entry fields.
+# Top-level non-repeating sections (receptive_skills, fluency_metrics,
+# overall_estimates) are defined inline. The full file structure is assembled
+# by init-student.py using these templates.
+
+schema_version:
+  type: int
+  required: true
+  default: 1
+  description: "Schema version number"
 
 grammar_entry_template:
   status:

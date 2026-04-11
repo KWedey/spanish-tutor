@@ -34,7 +34,9 @@ language/
 ├── parking-lot.md                   # Learner-editable list of questions and gaps
 ├── docs/
 │   ├── system-design.md             # This document
-│   └── resource-ecosystem.md        # External tools catalog
+│   ├── resource-ecosystem.md        # External tools catalog
+│   ├── session-log-example.yaml     # Annotated session log with all fields
+│   └── progress-report-template.md  # Template for weekly progress reports
 ├── curriculum/
 │   ├── tutor-guides/                # Conditional reference docs (loaded per session type)
 │   │   ├── first-session.md         # Read only on session 1
@@ -66,7 +68,9 @@ language/
 │   │   │   ├── 04-articles-prepositions.md
 │   │   │   ├── 05-basic-questions.md
 │   │   │   ├── 06-gustar-type-verbs.md
-│   │   │   └── 07-present-irregular-common.md
+│   │   │   ├── 07-present-irregular-common.md
+│   │   │   ├── 08-numbers-quantifiers.md
+│   │   │   └── 09-accent-stress-rules.md
 │   │   ├── B-conversational/
 │   │   │   ├── 01-preterite-regular.md
 │   │   │   ├── 02-preterite-irregular.md
@@ -138,6 +142,8 @@ language/
 │   ├── topic-bank.yaml              # Available weekly narrow topics with tags
 │   ├── journal-prompts.yaml         # Writing prompts keyed to grammar/vocabulary
 │   ├── media-bank.yaml              # External content recommendations by phase/topic
+│   ├── listening-progression.yaml   # Listening level definitions and advancement criteria
+│   ├── reading-progression.yaml     # Reading level definitions and advancement criteria
 │   └── activities/                  # Activity type templates
 │       ├── conversation-prompts.md
 │       ├── translation-exercises.md
@@ -149,6 +155,7 @@ language/
 │       ├── storytelling.md
 │       ├── role-play-scenarios.md
 │       ├── error-correction.md
+│       ├── pronunciation-practice.md
 │       └── grammar-in-context.md
 ```
 
@@ -175,11 +182,30 @@ Activity templates in `curriculum/activities/` are **supplementary reference mat
 │   └── YYYY-WNN.md
 ├── resources/
 │   └── resource-catalog.yaml        # Structured catalog of all external tools
+├── schemas/                         # YAML schema definitions for state files
+│   ├── learner-profile.schema.yaml
+│   ├── skill-map.schema.yaml
+│   ├── schedule.schema.yaml
+│   ├── session-log.schema.yaml
+│   ├── resource-tracker.schema.yaml
+│   └── system-health.schema.yaml
 ├── scripts/                         # Automation and maintenance
+│   ├── setup.py                     # One-command setup for new users
 │   ├── init-student.py              # Reset learner state to blank templates
 │   ├── validate-state.py            # State file integrity checks
 │   ├── generate-vault.py            # Generate/update Obsidian vault
-│   └── migrate-state.py             # Schema version migrations
+│   ├── migrate-state.py             # Schema version migrations
+│   ├── snapshot-state.py            # Backup/restore state snapshots
+│   └── shared.py                    # Shared utilities for scripts
+├── tests/                           # Test suite for scripts
+│   ├── conftest.py
+│   ├── test_init_student.py
+│   ├── test_validate_state.py
+│   ├── test_generate_vault.py
+│   ├── test_migrate_state.py
+│   ├── test_snapshot_state.py
+│   └── test_shared.py
+├── transcripts/                     # Full session conversation logs
 ├── STUDENT-GUIDE.md                 # Learner-facing program overview
 └── vault/                           # Obsidian knowledge base (auto-generated)
     ├── Home.md, Roadmap.md, Getting Started.md
@@ -197,7 +223,7 @@ Activity templates in `curriculum/activities/` are **supplementary reference mat
 
 ### 1. CLAUDE.md — Tutor Operating Instructions
 
-The CLAUDE.md is kept concise (~150 lines) to minimize agent cognitive load. It contains only what every session needs:
+The CLAUDE.md is kept concise (~200 lines) to minimize agent cognitive load. It contains only what every session needs:
 
 - **Session startup protocol** — what to read and in what order before responding
 - **State validation checks** — detect and recover from corrupted or inconsistent state
@@ -216,13 +242,18 @@ Detailed protocols live in `curriculum/tutor-guides/` and are loaded conditional
 | `weekly-review-guide.md` | Today is the designated weekly review day |
 | `emotional-intelligence.md` | Motivation is low/at-risk or emotional signal detected |
 | `l1-interference-protocol.md` | Introducing a new grammar concept |
-| `fluency-activities.md` | Phase C+ and today includes a fluency activity |
+| `fluency-activities.md` | Phase B+ and today includes a fluency activity |
 | `sprint-mode.md` | `sprint.active` is true in schedule.yaml |
 | `real-world-debrief.md` | Learner mentions a real-world Spanish encounter |
 | `placement-validation.md` | `placement_validation.active` is true (sessions 2-4, Early B+ placement) |
 | `error-recovery.md` | State validation fails during startup |
+| `input-orchestration.md` | Standard sessions (post-onboarding) — comprehensible input selection and debrief |
+| `session-variety.md` | Occasionally on standard sessions — alternative formats (Game Day, Storytelling, etc.) |
+| `phase-transition-guide.md` | All prerequisites for next phase show "acquired" for 2+ consecutive sessions |
 
-This split means a standard session loads CLAUDE.md (~150 lines) + relevant state files. Only on special session types does the agent load additional protocol docs.
+This split means a standard session loads CLAUDE.md (~200 lines) + relevant state files. Only on special session types does the agent load additional protocol docs.
+
+**Note on large state files:** As the learner progresses, `skill-map.yaml` grows significantly. The tutor should read the full file during startup but can selectively focus on active-phase concepts and concepts in "practicing" or "regressed" status for decision-making. Concepts in "automatic" status only need attention during spot-check scheduling.
 
 See the CLAUDE.md draft (separate document) for full specification.
 
@@ -370,6 +401,14 @@ grammar:
 **Spot-check definition:** A brief (< 2 minute), low-pressure assessment of a near-acquired or automatic concept, embedded within another activity (e.g., "By the way, how would you say X?"). Goal: detect regression without disrupting flow. If error rate > 20% during spot-check, escalate to Stage 3 practice in the next session.
 
 **Updated advancement rule:** "Acquired" requires `error_rate_production < 0.10` AND `error_rate_drills < 0.10` AND `performance_unscaffolded = "competent"` AND demonstrated in 3+ separate sessions.
+
+**Minimum observation count:** Error rates should not be used for advancement decisions until at least 8-10 observations have been collected per context (drill and production counted separately). Below this threshold, rely on qualitative `performance_scaffolded` / `performance_unscaffolded` assessments. Small sample sizes can produce misleadingly low error rates (e.g., 0/2 correct looks like 0% but is not meaningful).
+
+**Error rate recency weighting:** Not all observations are equally trustworthy. Apply confidence weighting based on how recently the data was collected:
+- **Full confidence (within 7 days):** Use error rates directly for advancement decisions.
+- **Moderate confidence (8-30 days):** Error rates are informative but should be confirmed with a fresh observation before triggering status changes (advancement or regression).
+- **Low confidence (31-60 days):** Consider rates stale. Collect fresh data before any advancement decision. Flag during weekly review.
+- **Expired (60+ days):** Rates are unreliable. Treat the concept as needing a fresh assessment. (This aligns with the staleness rule for `last_practiced` above.)
 
 vocabulary:
   tier1-greetings-introductions:
@@ -1382,7 +1421,7 @@ Phase 2: Main Lesson (15-25 min)
 │   ├── Identify the specific failure pattern
 │   ├── Targeted drills on the exact weak point
 │   └── Re-test in a different context
-└── If fluency day (Phase C+):
+└── If fluency day (Phase B+):
     ├── Timed monologue: "Talk about X for 2 minutes without stopping"
     ├── Speed translation: rapid-fire English→Spanish
     └── Track pace, hesitation, and risk-taking (not just accuracy)

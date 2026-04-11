@@ -1,0 +1,9 @@
+state/
+scripts/
+schemas/
+docs/
+tests/
+curriculum/
+.claude/
+.git/
+.planning/

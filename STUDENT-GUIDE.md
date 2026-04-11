@@ -71,7 +71,7 @@ Your tutor checks this at the start of every session and works relevant items in
 
 ## The Journal
 
-Starting around Phase B (after your first ~10 sessions), your tutor will assign daily journal entries. You write 3-7 sentences in Spanish in the `journal/` folder. Your tutor reviews them at the start of the next session — correcting errors, noting improvement, and using what you write to assess your progress.
+Starting after onboarding (around session 11+), your tutor will assign daily journal entries. You write 3-7 sentences in Spanish in the `journal/` folder. Your tutor reviews them at the start of the next session — correcting errors, noting improvement, and using what you write to assess your progress.
 
 The journal is one of the highest-value tools in the system: because you have time to think while writing, your errors reveal genuine gaps rather than performance pressure mistakes.
 
@@ -102,6 +102,7 @@ The system defines "done" based on your personal goals. When you consistently op
 - **Use the parking lot.** The more you engage between sessions, the more the tutor can help.
 - **Trust the process.** There will be plateaus. The system is designed for them — it'll change approach when something isn't working.
 - **Be honest.** If something's boring, say so. If you didn't do homework, say so. The tutor adapts — but only if it knows the truth.
+- **Set calendar reminders.** Especially once you reach maintenance mode (weekly or biweekly sessions), a recurring calendar reminder helps you keep the habit alive. Daily Anki review benefits from a reminder too.
 
 ## Your Data
 

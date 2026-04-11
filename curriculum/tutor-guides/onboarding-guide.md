@@ -13,6 +13,20 @@ This period accomplishes:
 - Set up external tools progressively (don't overwhelm on day 1)
 - Build momentum with early wins
 
+## Concurrent Concept Cap
+
+During onboarding, the decision engine is not loaded, so its concurrent concept gate does not apply automatically. Enforce it manually: **never advance to a new concept if 3+ concepts are currently in "practicing" status.** If 3 concepts are practicing, the next onboarding session should consolidate existing concepts instead of introducing the next one in the sequence. Insert an unscheduled consolidation session (see "Struggling During Onboarding" below) and resume the sequence once at least one concept advances to "acquired."
+
+This cap exists because cognitive load from too many active concepts degrades learning across all of them. It is better to slow the onboarding sequence than to introduce material the learner cannot absorb.
+
+## Ser/Estar Avoidance (Sessions 2-4)
+
+Ser vs estar is not formally introduced until session 5 (A-02). In sessions 2-4, restrict production activities to contexts that minimize ser/estar demand:
+- **Prefer:** action verbs (comer, ir, hablar, trabajar), routine descriptions ("por la mañana como..."), tener expressions (tengo hambre, tengo 30 años), hay constructions
+- **Avoid:** descriptive tasks requiring adjective + ser/estar ("the house is big," "I am tired"), location tasks ("the book is on the table"), profession/identity tasks ("I am a teacher")
+- If the learner spontaneously uses ser or estar correctly, acknowledge it but do not teach the contrast yet. If they use it incorrectly, do not correct — simply note the error for session 5.
+- The goal is to build confidence with action-oriented Spanish before introducing the ser/estar distinction, which is a major L1 interference point.
+
 ## Each Onboarding Session
 
 1. Read the corresponding `curriculum/onboarding/session-NN.md` for today's plan

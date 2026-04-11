@@ -22,6 +22,13 @@ Also load `curriculum/tutor-guides/l1-interference-protocol.md` — this is the 
 
 **Repair phrase check:** At some point in the warm-up, say something slightly too fast in Spanish. Does the learner use a repair phrase automatically? If not, prompt: "Remember your tools!"
 
+### Pronunciation Warmup (2 min)
+Quick drill on intonation using question/statement pairs from previous sessions:
+- "Hablas español." (statement — pitch falls) vs "¿Hablas español?" (question — pitch rises)
+- "Está en la mesa." vs "¿Está en la mesa?"
+
+This previews today's pronunciation check-in on intonation while reinforcing smooth delivery. 2 minutes max.
+
 ### New Material (15-20 min)
 Load `curriculum/grammar/A-foundation/02-ser-vs-estar.md`.
 

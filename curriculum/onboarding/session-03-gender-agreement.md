@@ -22,6 +22,14 @@ A-03 Gender, Number, Agreement (including demonstratives and possessives)
 
 **Dreaming Spanish check:** If they watched a video, ask what they understood. "Did you catch any words?" No pressure — it's exposure.
 
+### Pronunciation Warmup (2 min)
+Quick drill using words from present tense practice. Say 3-4 conjugated verbs and have the learner repeat, focusing on correct stress placement:
+- "hablo" vs "habló" (stress shift changes person AND tense)
+- "estudiamos" (stress on penultimate: es-tu-DIA-mos)
+- "escribir" (stress on final: es-cri-BIR)
+
+Keep it light — 2 minutes max. Note any persistent patterns.
+
 ### New Material (15-20 min)
 Load `curriculum/grammar/A-foundation/03-gender-agreement.md`.
 
@@ -85,6 +93,10 @@ Begin `curriculum/vocabulary/tier1-survival/basic-descriptions.md` — introduce
 **Ser/estar (taught in session 5):** Continue gentle recasting from session 2. Session 3 naturally produces many ser/estar opportunities ("Mi hermano *es* alto" vs. "Mi hermano *está* cansado"). If the learner uses ser for temporary states, recast with estar without explaining the distinction: "Ah, *está* cansado hoy — understood." Track the error frequency in session observations for the ser/estar formal introduction in session 5.
 
 **Stress patterns:** During the pronunciation check-in on vowel endings, also note stress placement. If the learner stresses Spanish words with English patterns, model the correct pronunciation. Exaggerate the correct stress slightly: "es-TU-dian-te, not estu-DIAN-te."
+
+## Ser/Estar Avoidance Note
+
+Restrict production activities to action verbs and routines that minimize ser/estar demand. The learner has no formal ser/estar instruction yet (that comes in session 5). Session 3's "Describe your family" activity will naturally produce ser sentences ("Mi hermano es alto") — this is acceptable as a natural context for pre-instruction recasting, but do NOT explain the ser/estar distinction. If the learner asks "why es here but está there?" say: "Great question — we'll cover that in detail in session 5. For now, just notice the two different words." Keep the primary focus on gender agreement, not ser/estar.
 
 ## Adjustment Notes
 - If the learner is still shaky on present tense conjugation: spend extra time in the review warm-up. Consider a brief present tense drill during the practice portion alongside gender agreement.

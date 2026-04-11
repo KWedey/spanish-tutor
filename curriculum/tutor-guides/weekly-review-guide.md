@@ -70,17 +70,24 @@ If the learner is in Phase D and `days_in_current_phase` (from system-health.yam
 4. Options: adjust graduation criteria, set a concrete target date, shift to maintenance mode if the learner is satisfied with current level, or identify specific blockers to address.
 5. Re-check every 4 weeks until resolved.
 
-### 9. Motivation Check
+### 9. Session Calibration Review
+
+Review the week's `session_difficulty_rating` values. Track the `just_right_streak` counter in `schedule.yaml`:
+- If all sessions this week were "just-right," increment the streak. At 3+ consecutive just-right ratings, note: current calibration is working. Do not adjust challenge level up or down unless the learner explicitly requests it or a phase transition is approaching.
+- If any session was "too-easy" or "too-hard," reset the streak to 0. Two consecutive "too-easy" → plan to increase challenge next week. Two consecutive "too-hard" → plan to reduce load next week.
+- Record the streak value and any calibration adjustment in the weekly summary.
+
+### 10. Motivation Check
 What's feeling good? What's feeling tedious? Check for plateau risk.
 
-### 10. Maintenance
+### 11. Maintenance
 - Archive daily session logs older than 60 days to `state/sessions/archive/` (see Session Archive section below)
 - Reset `fluency_days_this_week: 0` in schedule.yaml
 - Update `input_hours` in learner-profile.yaml (sum listening/reading minutes from this week's assignments)
 - Run `python3 scripts/validate-state.py` to catch any data inconsistencies
 - Update schedule.yaml with next week's plan
 
-### 11. Fun Activity
+### 12. Fun Activity
 End with something enjoyable — a song, a short video, a game, casual conversation about something they care about. Weekly review should feel like a celebration, not an audit.
 
 ## Session Archive

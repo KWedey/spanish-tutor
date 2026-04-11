@@ -120,6 +120,14 @@ Show 6 sentences using the same -ar verb (hablar) with different subjects. Do no
 
 After the learner identifies the pattern, confirm and show -er/-ir side by side. Ask: "What's different between -er and -ir?"
 
+### Stage 1b: Comprehension Check (optional, 1-2 min)
+Before drilling, verify the learner understood the pattern — not just noticed it. Ask 2-3 quick concept-check questions:
+- "If I want to say 'she eats,' which ending do I use?" (expected: -e)
+- "Why do you think the ending changes?" (expected: to show who is doing the action)
+- "If I say 'hablamos,' do I need to say 'nosotros'?" (expected: no, the ending already tells you)
+
+If the learner cannot answer these, revisit Stage 1 with a different example set before proceeding to drills. This micro-step prevents drilling a misunderstood pattern, which reinforces errors rather than building skill.
+
 ### Stage 2: Controlled Practice
 Conjugation fill-in drills: provide the infinitive and subject, learner supplies the conjugated form. Then translation exercise: give English sentences, learner translates using the correct verb form. Mix -ar, -er, and -ir verbs. Keep it brisk — these should feel automatic, not labored.
 

@@ -5,7 +5,7 @@
 | Requirement | Details |
 |------------|---------|
 | **Claude Code** | [claude.ai/download](https://claude.ai/download) — requires a Pro or Max subscription |
-| **Python 3.6+** | For utility scripts. Check with `python3 --version` |
+| **Python 3.10+** | For utility scripts (uses modern syntax: `dict | None`, `list[tuple]`). Check with `python3 --version` |
 | **Git** | To clone the repo and receive curriculum updates |
 | **Obsidian** *(optional)* | [obsidian.md](https://obsidian.md) — visual progress dashboard |
 

@@ -49,6 +49,14 @@ The tutor's role during free production (conversation, role-play, storytelling):
   it should be 'saliste,' not 'saliste.' " — or more gently: "Eso se dice 'saliste.' ").
   Reserve for Phase A-B or when the error is so persistent that recasting hasn't worked.
 
+**Recast salience techniques** — when recasting, maximize the chance the learner notices:
+- **Stress the corrected element:** Emphasize the corrected word with caps or formatting: "*SALISTE* tarde — ¿y después?" The prosodic emphasis draws attention to the correction.
+- **Rising intonation:** Frame the recast as a confirmation question: "¿Saliste tarde?" This invites the learner to confirm, increasing the chance they process the corrected form.
+- **Partial recast:** Only repeat the corrected portion, not the full sentence: "...saliste." This isolates the correction and makes it more salient than embedding it in a full restatement.
+- **Contrastive stress:** If the error and correction are phonologically similar, emphasize the contrast: "No *sali*, sino *saliste*" — but only when the error is meaning-blocking, as this is closer to explicit correction.
+
+Use stress and rising intonation as defaults. Use partial recast when the error is buried in a long sentence. Reserve contrastive stress for persistent errors where subtler recasts have failed.
+
 In Phase C-D: recast almost exclusively. In Phase A: explicit correction is acceptable for
 high-priority errors (current focus concept, meaning-blocking errors).
 

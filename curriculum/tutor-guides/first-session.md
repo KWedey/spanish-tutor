@@ -141,7 +141,7 @@ Grammar production is the primary signal. Vocabulary and reading are secondary �
 
 #### Grammar Concept Pre-Population
 
-**Below placement level:** `acquired` with `performance_unscaffolded: competent`. Grammar is hierarchical — producing above a level implies mastery of that level. If the inference is wrong, the validation protocol catches it.
+**Below placement level:** `acquired` with `performance_unscaffolded: null` (untested). Grammar is hierarchical — producing above a level implies mastery of that level, but unscaffolded performance has not actually been observed for these concepts. Setting the field to null signals "inferred, not verified." If the inference is wrong, the validation protocol catches it.
 
 **Guardrail exception:** Placement-acquired concepts are exempt from the "practiced in 3+ separate sessions" acquisition requirement. The validation protocol serves as verification in lieu of observed practice sessions.
 

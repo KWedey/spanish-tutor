@@ -4,10 +4,21 @@
 The grammar of register shifting (tú/usted/vos forms, vocabulary changes, verb mood shifts) is taught in D-05. This cultural guide addresses the harder half: **knowing when to shift**. Native speakers develop this instinct from childhood through thousands of social interactions. For an English speaker, whose language uses one "you" for everyone, this social antenna must be consciously built. Getting the forms right but the timing wrong — calling your friend's grandmother "tú" or your close colleague "usted" — creates awkwardness that no amount of grammatical accuracy can fix. This guide develops the learner's ability to read social situations and make real-time register decisions.
 
 ## When to Teach
-- Phase: D (cultural awareness component)
-- Parallel to: D-05-register-shifting (grammar forms)
-- Prerequisites: Learner can already produce both tú and usted forms accurately. This guide assumes the mechanics are in place and focuses entirely on social deployment.
+- Phase: B (introduced) through D (mastered)
+- Parallel to: D-05-register-shifting (grammar forms — full forms taught in Phase D)
+- Prerequisites: At Phase B, the learner only needs basic tú/usted conjugation awareness (present tense). Full command of both paradigms is NOT required at introduction — the cultural awareness starts building before the grammar is complete.
 - Enablers: Experience with Spanish speakers (even through media) helps contextualize the social rules.
+
+### Progression by Phase
+
+**Phase B — Basic tú/usted pragmatics:**
+Introduce the concept that Spanish has two "you" forms with different social weight. Teach the default rule: "When in doubt, use usted." Cover the most common situations (strangers, elders, service interactions vs. friends and peers). The learner only needs present tense tú/usted forms at this stage. Focus on recognition and the "safe default" habit.
+
+**Phase C — Softeners and politeness strategies:**
+Build on the tú/usted foundation with register-adjacent skills: softening requests ("¿Podría...?" vs "¿Puedes...?"), recognizing the "tú offer," and handling mixed-register group situations. The learner now has enough grammar (conditional, subjunctive) to produce polite forms. Introduce the four-factor decision framework (age, hierarchy, setting, warmth).
+
+**Phase D — Full register control:**
+With all verb forms available (past subjunctive, conditional perfect, etc.), the learner can now produce the full spectrum of register shifts. Focus on dynamic shifting within conversations, register as social tool (humor, emphasis, confrontation), and the nuanced situations that confuse English speakers. This is where the complete teaching sequence below is delivered.
 
 ## Key Patterns
 

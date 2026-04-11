@@ -155,6 +155,38 @@ fields:
     default: []
     description: "Placement validation spot-checks (sessions 2-4 only)"
 
+  decision_engine_trace:
+    type: map
+    required: false
+    default: null
+    description: "Records why the tutor chose this session's focus — scoring details from concept selection"
+    children:
+      candidates_scored:
+        type: int
+        required: false
+        default: 0
+        description: "Number of concepts evaluated by the decision engine"
+      top_candidates:
+        type: list
+        required: false
+        default: []
+        description: "Top-scoring candidates with individual dimension scores: {id, NEED, GAP, DECAY, TOPIC, VARIETY, TOTAL}"
+      selected_primary:
+        type: string
+        required: false
+        default: ""
+        description: "Concept ID selected as primary focus"
+      selected_secondary:
+        type: string
+        required: false
+        default: ""
+        description: "Concept ID selected as secondary focus"
+      override_reason:
+        type: string
+        required: false
+        default: null
+        description: "Null unless manual override; record reason if so"
+
   session_difficulty_rating:
     type: string
     required: false

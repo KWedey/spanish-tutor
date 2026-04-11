@@ -49,6 +49,31 @@ If the learner mentions real-world Spanish use during the break, switch to `real
 5. Do NOT introduce any new concepts for the first 3 sessions — focus exclusively on recovery.
 6. Flag in system-health.yaml: `extended_absence: true`, `absence_days: N`, `concepts_regressed: N`.
 
+## Short Gap with Continued Study — Shortcut
+
+If gap is 3-5 days AND the most recent session log shows homework completed AND `parking-lot.md` has new entries added during the gap, skip the full return protocol. Instead:
+1. Run a standard session with a brief check-in: "Welcome back — looks like you kept at it. How'd the homework go?"
+2. Verify homework claims naturally (as in a standard session).
+3. Address 1-2 parking lot items during warm-up.
+4. Proceed with normal decision engine flow.
+
+The full return diagnostic is unnecessary when evidence shows the learner stayed engaged during a short gap.
+
+## Partial Session + Gap
+
+If the most recent session log has `session_status: partial` AND the gap is 3+ days:
+1. Run the return diagnostic first (per the appropriate tier above) to assess current retention.
+2. After diagnostic, check what was interrupted in the partial session's `session_activities` and `next_session.recommended_focus`.
+3. If the diagnostic shows the interrupted content was retained, resume it as the primary focus.
+4. If the diagnostic shows regression on the interrupted content, treat it as a regressed concept — reteach with a different approach rather than resuming mid-activity.
+
+## Maintenance Learner Returns
+
+If `autonomy_level` is `maintenance` in the learner profile, also load `maintenance-mode.md` and reference its regression handling section. Maintenance learners have different expectations and recovery patterns:
+- They may have been self-studying during the gap (check parking lot for evidence).
+- Their regression profile differs — well-automated concepts are more durable, but disused production skills decay faster.
+- Use the maintenance-mode regression protocol for triage, not the standard return diagnostic.
+
 ## All Tiers — Common Protocol
 
 - Read last 3 session logs to remember where things stood.

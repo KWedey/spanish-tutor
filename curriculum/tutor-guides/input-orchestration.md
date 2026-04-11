@@ -39,7 +39,7 @@ From `curriculum/media-bank.yaml`, select resources whose `level_range` includes
 ### Step 4 — Calibrate to available time
 
 Input homework must fit within the learner's available homework time. Input's share grows with phase:
-- **Phase A:** Input is supplementary — most time goes to Anki and exercises
+- **Phase A:** Input is required from session 3 onward. Include a 3-5 min in-session "tutor speaks Spanish" segment where the tutor narrates or describes something in simple Spanish with context support (gestures described in brackets, cognates, visual descriptions). This counts toward listening hours. Outside of the in-session segment, most homework time goes to Anki and exercises
 - **Phase B:** Input becomes a regular assignment, roughly equal with Anki and exercises
 - **Phase C:** Input is the primary homework — Anki decreases as vocabulary self-sustains through exposure
 - **Phase D:** Input dominates — Anki is maintenance only
@@ -124,6 +124,8 @@ All three must be met:
 
 Hour minimums prevent premature level-up from a few good sessions. But a learner consistently excelling before the hour target should not be held back — use judgment.
 
+**Reduced L2 minimum:** The L2 minimum hours threshold is 10-15 hours (not 20). Count in-session tutor Spanish toward listening hours — the tutor's Spanish narration segments, Spanish-language instructions, and conversation practice all contribute to comprehensible input. The two-consecutive-weeks criterion and comprehension quality checks are the real advancement gates, not the hour count alone.
+
 When leveling up:
 1. Update `receptive_skills.[listening/reading].current_level` in skill-map
 2. Record the level change in `level_up_evidence` with date and observation
@@ -151,7 +153,27 @@ After each session, update:
 | `skill-map > receptive_skills` | Update `hours_at_level` and `hours_total` from debrief data. Update `comprehension_quality` to reflect most recent assessment. Add to `level_up_evidence` if relevant. |
 | `skill-map > vocabulary_clusters` | Increment `passive_known` for clusters containing words extracted during debrief. Add confirmed production gaps to `weak_production` if the same word appears in `production_gaps_observed` across 2+ sessions. |
 
-## 6. Input → Production Pipeline
+## 6. Passive Vocabulary Inference
+
+Estimate passive vocabulary growth from comprehensible input: approximately +3-5 words per 10 minutes of comprehended input at the learner's current level. This supplements learner-reported vocabulary counts, which capture only consciously noticed words.
+
+**Usage:**
+- After each debrief, estimate passive vocabulary gain: `(duration_minutes / 10) * 4` (midpoint of 3-5 range) for input at the learner's level. Reduce to `* 2` for i+1 level input (harder material = less absorbed). Increase to `* 5` for i-1 level input (easier = more reinforcement).
+- Add the estimate to `passive_known` for relevant vocabulary clusters. This is an approximation — the learner won't consciously know all these words, but they are building recognition.
+- Do not use this estimate for production readiness. Only learner-demonstrated vocabulary (extracted during debrief or observed in conversation) counts toward `active_known` or `weak_production`.
+
+## 6b. Receptive-Productive Gap Guidance
+
+When receptive skills (listening/reading level) exceed productive skills (speaking/writing ability) by 1+ levels, this gap is an asset, not a problem. The learner understands more than they can produce — a natural and productive state.
+
+**Leverage the gap:**
+- Assign more input homework at the receptive level to widen exposure. The learner is primed to absorb vocabulary and structures they already comprehend passively.
+- During production practice, draw on vocabulary and structures the learner has encountered in input. They will recognize these and produce them more readily than "cold" vocabulary.
+- The gap typically narrows naturally as production catches up through conversation practice. If the gap exceeds 2 levels, increase conversation time and production-focused homework to accelerate the catch-up.
+
+**Do not:** slow down input progression to wait for production to catch up. Receptive skills pulling ahead is the natural acquisition order and should be encouraged.
+
+## 7. Input → Production Pipeline
 
 When the decision engine selects vocabulary clusters for practice (Step 6b in decision-engine.md), boost clusters where passive input exposure has been logged:
 

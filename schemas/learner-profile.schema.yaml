@@ -251,3 +251,50 @@ fields:
     required: false
     default: ""
     description: "Anything else relevant"
+
+  initial_placement:
+    type: map
+    required: false
+    default: null
+    description: "Initial placement results (populated in first session for non-beginners)"
+    children:
+      level:
+        type: string
+        required: false
+        default: ""
+        description: "pre-A / early-A / late-A / early-B / mid-B / early-C / mid-C"
+      date:
+        type: string
+        required: false
+        default: null
+        description: "Date of placement assessment"
+      self_report:
+        type: string
+        required: false
+        default: ""
+        description: "beginner / intermediate / advanced (learner's self-assessment)"
+      grammar_result:
+        type: string
+        required: false
+        default: ""
+        description: "Placement level derived from grammar prompts"
+      vocabulary_observation:
+        type: string
+        required: false
+        default: ""
+        description: "minimal / narrow / broad / deep"
+      reading_result:
+        type: string
+        required: false
+        default: ""
+        description: "below-expected / at-expected / above-expected"
+      confidence:
+        type: string
+        required: false
+        default: ""
+        description: "high / medium / low"
+      evidence_summary:
+        type: string
+        required: false
+        default: ""
+        description: "Tutor's rationale for placement decision"

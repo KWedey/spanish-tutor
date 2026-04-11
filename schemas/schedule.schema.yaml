@@ -213,6 +213,56 @@ fields:
     default: 60
     description: "Days after which cards are retired"
 
+  session_number:
+    type: int
+    required: false
+    default: 0
+    description: "Current session number (sequential counter across all sessions)"
+
+  topic_history:
+    type: list
+    required: false
+    default: []
+    description: "List of {topic_id, week, date_started} — tracks which weekly narrow topics have been used and when, for FRESHNESS scoring in the decision engine"
+
+  placement_validation:
+    type: map
+    required: false
+    default: null
+    description: "Placement validation state (active during sessions 2-4 for learners who skip onboarding)"
+    children:
+      active:
+        type: bool
+        required: false
+        default: false
+        description: "Whether placement validation is currently active"
+      confidence:
+        type: string
+        required: false
+        default: null
+        description: "high / medium / low / validated"
+        enum: [null, "high", "medium", "low", "validated"]
+      sessions_completed:
+        type: int
+        required: false
+        default: 0
+        description: "Number of validation sessions completed"
+      listening_baseline_set:
+        type: bool
+        required: false
+        default: false
+        description: "Whether the listening baseline has been established"
+      total_downgrades:
+        type: int
+        required: false
+        default: 0
+        description: "Number of concept downgrades during validation"
+      queue:
+        type: list
+        required: false
+        default: []
+        description: "Validation queue — populated during session 1 for Early B+ placements. Each entry: {concept_id, priority, status, checked_in_session, notes}"
+
   adjustment_log:
     type: list
     required: false

@@ -29,5 +29,11 @@ If the same L1 interference error appears 3+ sessions in a row:
 
 If it persists beyond 5+ sessions:
 1. Mark as "fossilized risk" in skill-map notes
-2. Implement an over-correction period: explicitly practice the correct form 10+ times per session
-3. Ask the learner to self-monitor for this specific error in their daily self-narration
+2. **Awareness-raising phase first (1-2 sessions):** Do NOT jump to intensive drilling — drilling fossilized errors can increase resistance and frustration. Instead:
+   - Help the learner notice the pattern themselves: "I want you to listen for something in these sentences. What do you notice?"
+   - Use contrastive examples side-by-side (correct vs incorrect) and ask the learner to identify which is right and why
+   - Have the learner find and correct the error in written examples (noticing in others before fixing in self)
+   - Goal: the learner should be able to articulate the rule and recognize their own error pattern before drilling begins
+3. **Practice phase (2-3 sessions):** Guided production with explicit self-monitoring. The learner produces, pauses, and checks: "Did I use the right form?" Correct 80%+ of their own errors before moving to drilling.
+4. **Drilling phase:** Only after awareness is established, implement targeted drilling: practice the correct form 10+ times per session in varied contexts
+5. Ask the learner to self-monitor for this specific error in their daily self-narration

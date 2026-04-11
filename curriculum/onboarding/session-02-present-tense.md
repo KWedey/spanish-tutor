@@ -16,6 +16,14 @@ A-01 Present Tense Regular (-ar, -er, -ir)
 
 **Quick greeting exchange:** Open with a Spanish greeting. Does the learner respond naturally?
 
+### Pronunciation Warmup (2 min)
+Quick vowel review using words from previous sessions. Say 3-4 words and have the learner repeat, focusing on pure vowels with no English glide:
+- "gracias" (clean /a/, no schwa on final syllable)
+- "por favor" (crisp /o/, no diphthong)
+- "entiendo" (pure /e/ and /i/, no "ee" glide on the /e/)
+
+This is maintenance, not instruction — keep it light and encouraging. Note any persistent patterns from session 1.
+
 ### New Material (15-20 min)
 Load `curriculum/grammar/A-foundation/01-present-regular.md`.
 
@@ -74,6 +82,10 @@ These concepts haven't been formally taught yet, but the learner will produce er
 **Ser/estar (taught in session 5):** If the learner produces sentences like "Soy cansado" (I am tired) or "Es en la mesa" (It is on the table), recast naturally: "Ah, *estoy* cansado — sí, yo también estoy cansado." Don't explain why — just model the correct form. If they ask, say: "Good catch — we'll cover that in a few sessions. For now, just notice that some 'I am' sentences use a different word."
 
 **Stress patterns (taught in A-09):** During the pronunciation check-in, if the learner applies English stress to Spanish words (e.g., saying "te-LE-fo-no" instead of "te-LÉ-fo-no"), model the correct stress without explaining the rules: "Listen — te-LÉ-fo-no. Hear where the strong beat falls?" Stress rules come later; for now, build awareness through imitation.
+
+## Ser/Estar Avoidance Note
+
+Restrict production activities to action verbs and routines that minimize ser/estar demand. The learner has no formal ser/estar instruction yet (that comes in session 5). If an activity prompt would naturally elicit "I am..." sentences (descriptions, states, identity), redirect toward action-oriented alternatives: "What do you DO in the morning?" not "What ARE you like?" If the learner produces ser/estar naturally, use gentle recasting per the pre-instruction awareness notes above, but do not explain the distinction.
 
 ## Adjustment Notes
 - If repair phrases are NOT solid: spend an extra 3-5 min drilling them before starting new material. Repair phrases must be automatic by session 5.

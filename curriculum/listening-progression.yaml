@@ -78,11 +78,13 @@ levels:
         - Comprehension debrief consistently shows gist-level understanding
         - Can name the topic and 1-2 specifics from assigned content
         - Self-reports "just right" or "too easy" for 2+ consecutive weeks
-      minimum_hours: 20
+      minimum_hours: 12  # Reduced from 20 — at typical homework pace (45 min/week), 20 hours = ~27 weeks, which is too conservative. 10-15 hours is sufficient if comprehension debriefs show consistent gist understanding. Count in-session tutor Spanish toward hours.
       consecutive_weeks_at_target: 2
     notes: >
       This is where most early learners spend significant time. Multi-pass listening
       is strongly recommended. Prescriptive assignments — tutor selects specific episodes.
+      Count in-session tutor Spanish toward listening hours — the learner is processing
+      comprehensible input during every session, not just during homework.
 
   L3:
     name: Moderate, semi-structured speech

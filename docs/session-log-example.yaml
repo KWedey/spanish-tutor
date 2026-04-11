@@ -28,6 +28,17 @@ assignment_review:
     verification_result: "Asked '¿De qué trataba el video?' — produced 3 accurate summary sentences"
     skill_updates: []
 
+input_reviewed:
+  - resource: "Dreaming Spanish"
+    type: listening
+    duration_minutes: 8
+    passes: 1
+    comprehension_assessment: main_ideas
+    vocabulary_extracted: [mercado, verduras, precio, regatear]
+    production_gaps_observed: [regatear, oferta]
+    difficulty_self_report: just_right
+    level_at_time: L2
+
 session_activities:
   - type: grammar-drill
     target_concepts: [A-02-ser-vs-estar]
@@ -65,6 +76,14 @@ session_activities:
     fluency_observations: "Moderate pace, 3-4 second pauses for verb conjugation, willing to attempt complex sentences"
     notes: ""
 
+interleaved_concepts:
+  - concept_id: A-01-present-regular
+    interleave_context: "Embedded present tense conjugation review in ser/estar drills"
+    errors_observed: 0
+  - concept_id: tier1-food-restaurant
+    interleave_context: "Used food vocabulary as context for ser/estar conversation practice"
+    errors_observed: 1
+
 skill_map_updates:
   - concept: A-02-ser-vs-estar
     field: error_rate_drills
@@ -90,6 +109,8 @@ assignments:
     estimated_minutes: 15
     priority: required
     narrow_topic_aligned: true
+    retrieval_target: ""
+    input_minutes: 0
     notes: "Focus on production — say each word aloud before flipping"
   - type: listening
     resource: Dreaming Spanish
@@ -98,14 +119,18 @@ assignments:
     estimated_minutes: 10
     priority: recommended
     narrow_topic_aligned: false
+    retrieval_target: A-03-gender-agreement
+    input_minutes: 7
     notes: "Pay attention to how they describe people (ser) vs how they feel (estar)"
   - type: writing
     resource: journal
-    task: "Write 5 sentences describing your favorite restaurant — use both ser and estar"
+    task: "Write 5 sentences describing your favorite restaurant — use both ser and estar. Include 2 sentences using gender agreement with food vocabulary."
     target_skill: A-02-ser-vs-estar
     estimated_minutes: 10
     priority: recommended
     narrow_topic_aligned: true
+    retrieval_target: A-03-gender-agreement
+    input_minutes: 0
     notes: "Prompt: ¿Cómo es tu restaurante favorito? ¿Cómo está la comida?"
 
 journal_review:
@@ -126,6 +151,36 @@ learner_observations:
   self_assessment: "Feels like ser/estar is starting to click"
   calibration_note: "Slightly overestimates — still 28% production errors, but trend is positive"
   autonomy_readiness: "Not yet — still needs structured practice for ser/estar"
+
+decision_engine_trace:
+  candidates_scored: 6
+  top_candidates:
+    - id: A-02-ser-vs-estar
+      NEED: 9
+      GAP: 7
+      DECAY: 2
+      TOPIC: 1
+      VARIETY: 0
+      TOTAL: 19
+    - id: A-03-gender-agreement
+      NEED: 7
+      GAP: 5
+      DECAY: 5
+      TOPIC: 0
+      VARIETY: 2
+      TOTAL: 15
+    - id: A-01-present-regular
+      NEED: 6
+      GAP: 3
+      DECAY: 5
+      TOPIC: 0
+      VARIETY: 1
+      TOTAL: 13
+  selected_primary: A-02-ser-vs-estar
+  selected_secondary: tier1-food-restaurant
+  override_reason: null
+
+session_difficulty_rating: just-right
 
 next_session:
   recommended_focus: A-02-ser-vs-estar

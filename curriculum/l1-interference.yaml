@@ -51,7 +51,7 @@ interference_patterns:
         intended: "I'm constipated"
         right: "Estoy estreñido"
         explanation: "constipado = having a cold"
-    preempt_at: vocabulary-introduction
+    preempt_at: vocabulary-introduction  # Not a grammar concept ID — triggered when introducing new vocabulary clusters containing false cognates
     severity: high
     persistence: "Memorable once learned, but embarrassing if not"
 
@@ -76,7 +76,7 @@ interference_patterns:
     common_errors:
       - wrong: "Es caliente afuera"
         right: "Hace calor afuera"
-    preempt_at: tier2-weather-seasons
+    preempt_at: tier2-weather-seasons  # Not a grammar concept ID — triggered when introducing the weather/seasons vocabulary cluster
     severity: low
     persistence: "Corrects quickly once taught"
 
@@ -195,3 +195,55 @@ interference_patterns:
     preempt_at: C-09-diminutives-augmentatives
     severity: low
     persistence: "Resolves with exposure and encouragement to try"
+
+  - id: personal-a-omission
+    english_cause: "English doesn't mark animate direct objects with a preposition"
+    common_errors:
+      - wrong: "Veo mi mamá"
+        right: "Veo a mi mamá"
+        explanation: "Spanish requires 'a' before human (animate) direct objects"
+      - wrong: "Llamo mi hermano"
+        right: "Llamo a mi hermano"
+        explanation: "Personal 'a' is required even with family members"
+    preempt_at: A-04-articles-prepositions
+    severity: medium
+    persistence: "Moderate — no English equivalent means it must be explicitly learned"
+
+  - id: reflexive-pronoun-omission
+    english_cause: "English often drops reflexive pronouns or uses non-reflexive equivalents"
+    common_errors:
+      - wrong: "Yo levanto a las siete"
+        right: "Me levanto a las siete"
+        explanation: "Levantarse is reflexive — the action is done to oneself"
+      - wrong: "Ella ducha por la mañana"
+        right: "Ella se ducha por la mañana"
+        explanation: "Ducharse requires the reflexive pronoun"
+    preempt_at: B-05-reflexive-verbs
+    severity: medium
+    persistence: "Persistent — English speakers don't think of 'getting up' as doing something to themselves"
+
+  - id: ser-in-progressive
+    english_cause: "English uses 'to be' for progressive; learners reach for ser instead of estar"
+    common_errors:
+      - wrong: "Soy comiendo"
+        right: "Estoy comiendo"
+        explanation: "Progressive always uses estar + gerund, never ser"
+      - wrong: "Ella es hablando por teléfono"
+        right: "Ella está hablando por teléfono"
+        explanation: "Ser is never used for ongoing actions"
+    preempt_at: B-08-estar-gerund-progressive
+    severity: high
+    persistence: "Can fossilize if not caught early — reinforces ser/estar distinction in a new context"
+
+  - id: english-question-word-order
+    english_cause: "English inverts subject/verb in questions; Spanish often doesn't require inversion"
+    common_errors:
+      - wrong: "¿Por qué tú quieres ir?"
+        right: "¿Por qué quieres ir?"
+        explanation: "Acceptable but overly English-influenced — natural Spanish drops the subject pronoun"
+      - wrong: "¿Dónde tú vives?"
+        right: "¿Dónde vives?"
+        explanation: "Subject pronoun is redundant when verb conjugation makes the subject clear"
+    preempt_at: A-05-basic-questions
+    severity: low
+    persistence: "Usually self-corrects with exposure to natural question patterns"

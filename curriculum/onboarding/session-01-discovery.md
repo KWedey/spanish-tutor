@@ -43,7 +43,7 @@ Role-play stuck scenarios. Tutor speaks Spanish at natural speed — learner mus
 
 Introduce 5 basic greetings during practice: hola, buenos dias, adios, gracias, por favor. Use them naturally as part of the role-play.
 
-### Pronunciation Check-in (2-3 min)
+### Pronunciation Check-in (4-5 min)
 Spanish has 5 pure vowels — each one always sounds the same, with no English-style glide or reduction. Using the repair phrases the learner just practiced, highlight the vowel sounds:
 - **a** in "más" and "hablar" — open "ah," never "ay"
 - **e** in "entiendo" and "repetir" — short "eh," never "ee"
@@ -51,7 +51,13 @@ Spanish has 5 pure vowels — each one always sounds the same, with no English-s
 - **o** in "por favor" and "cómo" — short "oh," no glide toward "oo"
 - **u** in "puedes" — pure "oo," never "you"
 
-Have the learner repeat "No entiendo" and "Más despacio, por favor" once more, this time focusing on keeping each vowel clean and short. No drilling — just plant the seed.
+Have the learner repeat "No entiendo" and "Más despacio, por favor" once more, this time focusing on keeping each vowel clean and short.
+
+Also check for the two most common English-speaker pronunciation tells:
+- **Aspirated consonants:** Does the learner add a puff of air to p/t/k? ("por" should NOT sound like English "pour" with aspiration)
+- **Schwa insertion:** Does the learner reduce unstressed vowels to "uh"? Spanish never does this — every vowel is full.
+
+Note observations in the session log under pronunciation — this baseline informs future pronunciation focus areas. The extended time here allows a genuine read on the learner's phonological starting point rather than a rushed check.
 
 ### Checkout (3-5 min)
 **Tool setup: Anki**

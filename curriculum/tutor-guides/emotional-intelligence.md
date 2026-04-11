@@ -30,6 +30,18 @@ Loaded when: `motivation.current_level` is "low" or "at-risk", or when the tutor
 - Frame errors as data: "Interesting — you went with ser there. Let's think about why estar fits better here."
 - Show trajectory: "Look at your journal from three weeks ago — you're writing twice as much now."
 
+## SDT Diagnostic for Motivation Drops
+
+When motivation drops (current_level changes to "low" or "at-risk"), diagnose which Self-Determination Theory need is underserved before intervening. The wrong intervention can make things worse — boosting fun when the problem is feeling incompetent, or adding challenge when the problem is feeling controlled.
+
+| Need | Signals | Intervention |
+|------|---------|-------------|
+| **Autonomy** (learner feels controlled) | "I don't want to do this exercise," pushing back on homework, disengaging from prescribed activities, asking "do I have to?" | Increase choice: offer 2-3 activity options instead of assigning one. Let learner pick tomorrow's topic. Reduce prescriptive homework. Ask: "What would you want to practice?" |
+| **Competence** (learner feels incompetent) | "I'll never get this," avoiding production, comparing to others, frustration after errors, reluctance to try new things | Reduce difficulty temporarily. Highlight specific recent progress with evidence. Assign tasks with high success probability. Revisit something they're good at before tackling the struggle area. |
+| **Relatedness** (learner feels disconnected) | Going through the motions, minimal engagement in conversation topics, homework done mechanically, no parking lot entries | Connect material to their life: goals, interests, upcoming events. Ask about their world. Use their real context in examples. If they have Spanish-speaking connections, bring those into the learning. |
+
+Run this diagnostic before applying the general interventions below. Tag the identified deficit in the session log under `learner_observations.motivation_deficit`.
+
 ## Motivation Interventions
 
 | Situation | Intervention |

@@ -3,6 +3,8 @@
 ## Overview
 The preterite (pretérito indefinido) is the first past tense and a major milestone. It expresses completed, bounded actions — things that started and finished at a specific point in the past. With the preterite, the learner can narrate events, tell stories, and describe what happened. This unlocks storytelling, which is the core of conversational Spanish.
 
+> **Phase B density note:** Phase B is the densest phase with 11 grammar concepts (B-01 through B-11). Set expectations with the learner about timeline early in this phase. Progress may feel slower than Phase A — this is normal and expected. Phase A had 10 concepts but many were lightweight (communication repair, numbers, stress rules). Phase B concepts are all verb-heavy and interconnected, requiring more practice cycles before acquisition. The tutor should monitor cognitive load and adjust pacing. If the learner expresses frustration about "not progressing," reframe: Phase B is where the real conversational foundation is built, and depth matters more than speed here.
+
 ## When to Teach
 - Phase: B
 - Prerequisites: A-01-present-regular
@@ -110,6 +112,14 @@ Show 6 sentences about yesterday using the same -ar verb (hablar). Do not explai
 - Mis amigos **hablaron** toda la noche.
 
 Then show the same structure with comer. Ask: "What's different between -ar and -er preterite? What's the same?"
+
+### Stage 1b: Comprehension Check (optional, 1-2 min)
+Before drilling, verify the learner understood the core concept — that these are NEW endings for COMPLETED past actions, not variations of present tense. Ask 2-3 quick concept-check questions:
+- "What makes preterite different from present tense?" (expected: it's about finished/completed past actions)
+- "If I say 'hablamos,' how do you know if it's present or past?" (expected: context / time markers)
+- "Where does the stress fall in 'habló' vs 'hablo'?" (expected: last syllable for habló, first for hablo)
+
+If the learner cannot answer these, revisit Stage 1 comparison before drilling. The preterite is the learner's first new tense — confirming the concept before drilling prevents mechanical memorization without understanding.
 
 ### Stage 2: Controlled Practice
 Conjugation drills: provide infinitive + subject + time marker, learner supplies the preterite form. Then translation: give English past-tense sentences, learner translates. Mix -ar, -er, and -ir verbs. Include time markers in every sentence to reinforce the completed-action meaning.

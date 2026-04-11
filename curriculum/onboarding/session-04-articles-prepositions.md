@@ -18,6 +18,14 @@ Correct and explain any errors. This warm-up also primes the article concepts.
 
 **Homework verification:** Review the 5 description sentences from session 3. Check for gender/number agreement. Ask a follow-up: "You wrote your brother is tall — is he also funny?"
 
+### Pronunciation Warmup (2 min)
+Quick drill on connected speech using article + noun pairs from previous sessions:
+- "el libro" (smooth link: "el-LI-bro," no pause between article and noun)
+- "la mesa" (smooth link: "la-ME-sa")
+- "los gatos negros" (chain all three words without gaps)
+
+Keep it light — 2 minutes max. Building the habit of smooth word linking.
+
 ### New Material (15-20 min)
 Load `curriculum/grammar/A-foundation/04-articles-prepositions.md`.
 
@@ -80,6 +88,10 @@ Continue `curriculum/vocabulary/tier1-survival/basic-descriptions.md` — add lo
 **Ser/estar (taught next session):** This is the last session before formal ser/estar instruction. The learner has now had 3 sessions of gentle recasting. In the session observations, note: (1) how often they self-correct after recasting, (2) which ser/estar contexts are most confusing (likely temporary states and location). This data directly informs the session 5 lesson plan — share it with the ser/estar introduction as baseline error patterns.
 
 **Stress patterns:** Continue modeling correct stress. By session 4, the learner should be developing an ear for where stress falls, even without knowing the rules. If they're consistently getting stress right through imitation, note this as a positive signal — A-09 will be easier.
+
+## Ser/Estar Avoidance Note
+
+Restrict production activities to action verbs and routines that minimize ser/estar demand. The learner has no formal ser/estar instruction yet (that comes next session). Session 4's location practice ("Where is your phone?") will naturally produce estar sentences ("está en la mesa") — this is expected and valuable as pre-instruction exposure. Continue gentle recasting per the pre-instruction awareness notes above. Do NOT explain the ser/estar distinction — that is the entire focus of session 5. If the learner is noticing the two forms on their own, acknowledge it: "You're picking up on something important — we'll dig into it next session."
 
 ## Adjustment Notes
 - If gender agreement is still shaky: weave extra gender practice into the article drills (every article requires correct gender). This session naturally reinforces A-03.

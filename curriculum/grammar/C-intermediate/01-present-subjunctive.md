@@ -6,6 +6,7 @@ The subjunctive is not a tense -- it is an entirely new **mood**. While indicati
 ## When to Teach
 - Phase: C
 - Prerequisites: A-01-present-regular, A-07-common-irregular-present
+- Soft prerequisite: B-04-preterite-vs-imperfect (aspect awareness). While not strictly required for subjunctive forms, a learner who has internalized the preterite/imperfect distinction (completed vs. ongoing) has already practiced thinking about verb meaning beyond tense. This "aspect awareness" transfers directly to mood selection: just as the learner learned to ask "is this completed or ongoing?" for past tense, they now ask "is this real or unreal?" for mood. Learners who skip B-04 can still learn subjunctive, but they tend to struggle more with the conceptual shift because they haven't practiced selecting verb forms based on meaning rather than time.
 - L1 interference to preempt: subjunctive-avoidance (HIGH severity)
 
 ## The Pattern

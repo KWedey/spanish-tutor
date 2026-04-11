@@ -112,6 +112,114 @@ fields:
     default: []
     description: "Issues found during last validation run"
 
+  placement_validation_metrics:
+    type: map
+    required: false
+    default: null
+    description: "Placement validation effectiveness (populated after validation period closes)"
+    children:
+      placement_level:
+        type: string
+        required: false
+        default: null
+        description: "Where the learner was placed"
+      initial_confidence:
+        type: string
+        required: false
+        default: null
+        description: "high / medium / low"
+      total_concepts_validated:
+        type: int
+        required: false
+        default: 0
+        description: "Number of concepts validated during placement"
+      total_downgrades:
+        type: int
+        required: false
+        default: 0
+        description: "Number of concept downgrades during validation"
+      final_assessment:
+        type: string
+        required: false
+        default: null
+        description: "placement-confirmed / placement-adjusted"
+        enum: [null, "placement-confirmed", "placement-adjusted"]
+      validation_completed:
+        type: string
+        required: false
+        default: null
+        description: "Date validation period closed"
+
+  goal_tracking:
+    type: map
+    required: false
+    default: null
+    description: "Goal progress tracking"
+    children:
+      primary_goal_progress:
+        type: string
+        required: false
+        default: ""
+        description: "Qualitative: on-track / behind / ahead / at-risk"
+      estimated_weeks_remaining:
+        type: int
+        required: false
+        default: null
+        description: "Rough estimate based on current acquisition rate and remaining concepts"
+      concepts_remaining_for_next_phase:
+        type: int
+        required: false
+        default: 0
+        description: "Number of concepts still needed before phase transition"
+      concepts_remaining_for_target_level:
+        type: int
+        required: false
+        default: 0
+        description: "Number of concepts still needed to reach target CEFR level"
+      current_acquisition_rate:
+        type: float
+        required: false
+        default: 0.0
+        description: "Concepts acquired per week (30-day rolling average)"
+      last_goal_review:
+        type: string
+        required: false
+        default: null
+        description: "Date of last weekly review goal check"
+      milestone_progress:
+        type: list
+        required: false
+        default: []
+        description: "List of {goal, status: pending|achieved|at-risk, target_date, notes}"
+
+  session_difficulty_tracking:
+    type: map
+    required: false
+    default: null
+    description: "Tracks recent session difficulty ratings for calibration logic"
+    children:
+      last_rating:
+        type: string
+        required: false
+        default: null
+        description: "Most recent session difficulty rating"
+        enum: [null, "too-easy", "just-right", "too-hard"]
+      consecutive_too_easy:
+        type: int
+        required: false
+        default: 0
+        description: "Count of consecutive too-easy ratings (2+ triggers challenge increase)"
+      consecutive_too_hard:
+        type: int
+        required: false
+        default: 0
+        description: "Count of consecutive too-hard ratings (2+ triggers load reduction)"
+      recent_ratings:
+        type: list
+        required: false
+        default: []
+        description: "Last 5 session difficulty ratings for trend analysis"
+
   last_system_review:
     type: string
     required: false

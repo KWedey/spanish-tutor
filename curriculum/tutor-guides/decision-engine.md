@@ -36,15 +36,17 @@ After checking, increment `sessions_in_carryover` for each carryover concept tha
 
 All concepts in current phase with status: introduced, practicing, regressed, or acquired (for maintenance). Plus `carryover_concepts` from `schedule.yaml`. Plus maintenance from all previous phases (with decaying priority).
 
-**Cultural concepts:** Also gather `cultural_awareness` concepts from skill-map whose `introduced_at_phase` matches the current phase or earlier. Score them using the same formula but with NEED capped at 5 (cultural concepts are secondary to grammar). Cultural concepts are never the primary focus — they supplement grammar work during conversation practice or as a secondary concept.
+**Cultural concepts:** Also gather `cultural_awareness` concepts from skill-map whose `introduced_at_phase` matches the current phase or earlier. Score them using the same formula but with NEED capped at 5 for non-functional cultural concepts (`regional-awareness`, `humor-and-idioms`). Functional cultural concepts (`politeness-formulas`, `register-shifting`) use their full NEED score — see the NEED table for details. Cultural concepts are never the primary focus — they supplement grammar work during conversation practice or as a secondary concept.
 
 **Filter:** Exclude any concept where prerequisites are not met. A prerequisite is "met" when its status is "acquired" or "automatic". Status "practicing" or below means the prerequisite is not met and the dependent concept cannot be introduced.
 
 ## Step 2 — Score Each Candidate
 
 ```
-PRIORITY = NEED + GAP + DECAY + TOPIC_BOOST - VARIETY_PENALTY
+PRIORITY = NEED + GAP + DECAY_ADJUSTED + TOPIC_BOOST - VARIETY_PENALTY
 ```
+
+> `DECAY_ADJUSTED` accounts for concept durability — see DECAY section below for the formula.
 
 ### NEED (0-10)
 
@@ -56,9 +58,9 @@ PRIORITY = NEED + GAP + DECAY + TOPIC_BOOST - VARIETY_PENALTY
 | Current phase maintenance | 2 |
 | Previous phase maintenance | 1 |
 | Two+ phases back maintenance | 0.5 |
-| Cultural concept (any phase) | min(base score, 5) |
+| Cultural concept (any phase) | See note below |
 
-> **Note:** Cultural concepts use the same base scoring as grammar concepts of their type, but the NEED score is capped at 5. This ensures cultural work never displaces grammar as the primary focus.
+> **Note:** Cultural concepts use the same base scoring as grammar concepts of their type, but the NEED score is capped at 5 for non-functional cultural concepts (`regional-awareness`, `humor-and-idioms`). **Exception:** `politeness-formulas` and `register-shifting` are functionally equivalent to grammar for communication — they use their full base NEED score with no cap. These concepts directly affect whether the learner can communicate appropriately and should compete on equal footing with grammar.
 
 ### GAP (0-10) — uses `error_rate_production`
 
@@ -72,6 +74,15 @@ PRIORITY = NEED + GAP + DECAY + TOPIC_BOOST - VARIETY_PENALTY
 | Practicing, production error <15% | 3 |
 | Acquired, not integration-tested | 2 |
 | Acquired + integration-tested | 0 |
+
+**Minimum observation count:** Error rates require a minimum of 8-10 observations per context (drill, production) before they can be used for advancement decisions. Below this threshold, the error rate is unreliable — rely on qualitative assessment (`performance_scaffolded` / `performance_unscaffolded`) instead and require an additional session of observation before advancing. When observation count is below threshold, use the qualitative field to estimate GAP: `struggling` = treat as >30%, `developing` = treat as 15-30%, `competent` = treat as <15%.
+
+**Error trend minimum data:** Do not compute `error_trend` (improving, stable, declining) until 5+ sessions of data exist for a concept. Below that threshold, report `error_trend: insufficient_data` in the skill map. Computing a trend from 2-3 data points produces misleading signals that can cause premature advancement or unnecessary intervention.
+
+**Recency weighting for error rates:** Observations are not equally reliable over time. Apply confidence weighting:
+- **Within 7 days:** Full confidence. Use error rates as-is for scoring and advancement.
+- **8-30 days ago:** Moderate confidence. Error rates inform scoring but should not be the sole basis for advancement decisions. Supplement with a spot-check if advancing.
+- **31-60 days ago:** Low confidence. Error rates are stale — re-verify with at least one production observation before using for any advancement decision. If the concept hasn't been practiced in 31+ days, the DECAY score already captures urgency; don't also trust the old error rate for status changes.
 
 ### Vocabulary GAP Scoring
 
@@ -99,6 +110,14 @@ Vocabulary clusters where `passive_known` has increased in the last 2 sessions (
 | 8-14 | 7 |
 | 15+ | 9 |
 
+**Durability adjustment:** Well-practiced concepts are more resistant to decay. After computing the raw DECAY score, apply:
+
+```
+DECAY_ADJUSTED = DECAY * (1 - min(practice_count / 20, 0.7))
+```
+
+A concept practiced 20+ times gets only 30% of the raw decay score. A concept practiced 10 times gets 50%. A concept practiced only twice gets 90%. Use `DECAY_ADJUSTED` in the final PRIORITY formula instead of raw DECAY.
+
 ### TOPIC_BOOST (0-3)
 
 | Alignment with weekly narrow topic | Score |
@@ -117,6 +136,7 @@ Same activity type 3 days in a row → penalize that type by 5. Prefer alternati
 - **Low motivation / at-risk:** Boost easy wins (high-confidence concepts), add novelty. Double NEED for fun/interesting concepts.
 - **Parking lot items:** If a parking lot item aligns with a candidate concept, boost that concept by +3. If the item suggests a concept not in the candidate list but prerequisites are met, it can override secondary concept selection.
 - **Sprint override:** If `sprint.active` is true, only score concepts in `sprint.focus_areas`. All others excluded.
+- **Just-right streak preservation:** Track consecutive "just-right" `session_difficulty_rating` values across sessions. If the streak reaches 3+, preserve current calibration — do not increase or decrease challenge level. The current balance is working. Only break the streak intentionally (e.g., sprint mode activation, phase transition approaching, or learner explicitly requesting more challenge). Reset the counter when a "too-easy" or "too-hard" rating is logged. Record `just_right_streak` in `schedule.yaml`.
 
 ## Step 4 — Select Top 1-2 Concepts
 
@@ -168,6 +188,7 @@ Don't create separate review activities. Embed prior concepts in the primary con
 - Never interleave a concept the learner hasn't reached Stage 3+ on
 - Never interleave more than 3 concepts in a single activity
 - If the primary concept is brand new (Stage 1-2, first session), interleave at most 1 acquired concept
+- **Interleaving-only trap:** If a concept has been interleaved (practiced as secondary) 5+ times but has not been the primary focus in the same period, elevate it to primary in the next session. Interleaving alone is insufficient for advancement — the concept needs dedicated primary attention to progress through stages.
 
 ### Recording
 
@@ -232,6 +253,54 @@ Frequency: no more than 1 alternative format per week. The standard session is t
 - **"New concept ready to introduce"**: NEED=10, GAP=10, DECAY=0 → score 20. Highest. Route: Stage 1 (noticing).
 - **"Post-return regression on gender agreement"**: GAP=10, DECAY=9, NEED=7 → score 26. Urgent. Dedicated recovery.
 - **"Parking lot: learner asked about conditional"**: If C-04 prerequisites met, boost by +3 and consider as primary.
+
+## Worked Scoring Examples
+
+### Example 1 — High-priority practicing concept
+
+Concept A-02 (Ser vs Estar): Phase A prerequisite, practicing for 3 sessions, production error rate 35%, last practiced 2 days ago, weekly topic is "daily routines" (adjacent), practice_count=6.
+
+| Dimension | Calculation | Score |
+|-----------|------------|-------|
+| NEED | Phase prerequisite | 10 |
+| GAP | Practicing, production error >30% | 8 |
+| DECAY | 2 days ago → raw 2, durability: 2 * (1 - min(6/20, 0.7)) = 2 * 0.7 = 1.4 | 1.4 |
+| TOPIC_BOOST | Adjacent to weekly topic | 1 |
+| VARIETY_PENALTY | Different activity type from last 2 days | 0 |
+| **PRIORITY** | 10 + 8 + 1.4 + 1 - 0 | **20.4** |
+
+Selected as primary because highest total and production errors need targeted Stage 2 practice.
+
+### Example 2 — Maintenance concept with high decay
+
+Concept B-01 (Preterite Regular): Previously acquired, last practiced 12 days ago, production error rate <15%, weekly topic unrelated, practice_count=18.
+
+| Dimension | Calculation | Score |
+|-----------|------------|-------|
+| NEED | Previous phase maintenance | 1 |
+| GAP | Acquired + integration-tested | 0 |
+| DECAY | 12 days → raw 7, durability: 7 * (1 - min(18/20, 0.7)) = 7 * 0.3 = 2.1 | 2.1 |
+| TOPIC_BOOST | No connection | 0 |
+| VARIETY_PENALTY | None | 0 |
+| **PRIORITY** | 1 + 0 + 2.1 + 0 - 0 | **3.1** |
+
+Low priority despite 12-day gap because the concept is well-practiced (high durability dampens DECAY) and already acquired. Suitable as an interleaving target, not a primary focus.
+
+### Example 3 — Competing concepts with parking lot boost
+
+Concept C-01 (Subjunctive Triggers): Current phase concept, practicing, production error 20%, last practiced 5 days ago, practice_count=8. Concept C-04 (Conditional): Current phase concept, practicing, production error 25%, last practiced 1 day ago, practice_count=4. Learner asked about conditional in parking lot.
+
+| | C-01 Subjunctive | C-04 Conditional |
+|---|---|---|
+| NEED | 7 | 7 |
+| GAP | Production 15-30% → 5 | Production 15-30% → 5 |
+| DECAY | 5 days → raw 5, durability: 5 * (1 - 0.4) = 3.0 | 1 day → raw 0, durability: 0 * 0.8 = 0 |
+| TOPIC_BOOST | 0 | 0 |
+| Parking lot | — | +3 |
+| VARIETY_PENALTY | 0 | 0 |
+| **PRIORITY** | **15.0** | **15.0** |
+
+Tie. Parking lot boost makes C-04 competitive despite being practiced yesterday. Tie-break: prefer higher learner interest — the parking lot question signals interest in C-04, so select it as primary. C-01 becomes secondary or interleaving target.
 
 ## Naturally-Acquired Concepts
 
