@@ -21,55 +21,262 @@ The most critical issues cluster around **agent reliability**: the tutor agent m
 
 ---
 
-## Priority-Ordered Implementation Plan
+## Implementation Plan — Execution Waves
 
-### Tier 1 — Fix Before First Session (Critical + Blocking Major)
+All findings are fixable before the first session. Waves are grouped by **file ownership** so agents can work in parallel without conflicts. Each wave's agents are independent — launch them simultaneously. Wave 2 depends on Wave 1 schemas. Wave 3 depends on Wave 2 code.
 
-1. **Remove injected skill routing section from CLAUDE.md** (A-22) — lines 205-224 are gstack tooling, not tutoring
-2. **Resolve Phase B+/C+ fluency contradiction** (A-28/S-02) — system-design.md says C+, everything else says B+
-3. **Fix fluency day routing to also load decision engine** (A-08) — routing table prevents decision engine loading on fluency days, contradicting guardrail
-4. **Add onboarding + return session handling** (A-07) — learner returning mid-onboarding gets no regression check
-5. **Clarify weekly review day and fluency day routing conditions** (A-01, A-02) — agent cannot determine these without undocumented lookups
-6. **Fix acquired error threshold: 0.15 → 0.10** (E-05) — validator allows concepts to be "acquired" at 15% error rate when spec says 10%
-7. **Add `micro` session status to schema or replace with duration check** (A-21) — CLAUDE.md references undefined status value
-8. **Unify `load_yaml` and add error handling** (E-01, E-02) — duplicate definitions, no YAML error handling in shared version
-9. **Add session log validation to validate-state.py** (E-03) — session logs are never validated against schema
+### Wave 1 — Parallel File Edits (no code, all independent)
 
-### Tier 2 — Fix Before Session 10 (Major, Affects Onboarding/Early Sessions)
+Launch 7 agents simultaneously. Each owns a non-overlapping set of files.
 
-10. **Create post-session automation script** (A-11) — reduce 15-step manual protocol to ~7 steps by automating vault gen, validation, archival, commit
-11. **Add `current_onboarding_session` to schedule.yaml** (A-09) — agent cannot reliably determine which onboarding session to load
-12. **Split CLAUDE.md Step 4 into pre-session and runtime triggers** (A-04) — real-world debrief is runtime, not startup
-13. **Move Step 1b (partial session check) after Step 3 (routing)** (A-05) — continuity check runs before session type is determined
-14. **Add missing L1 interference patterns** (P-21) — personal-a, reflexive omission, ser-in-progressive, question word order
-15. **Align schemas with actual state files** (E-10, E-11, E-12) — learner-profile missing `initial_placement`, schedule missing `placement_validation` and `topic_history`, system-health missing 3 map sections
-16. **Add `decision_engine_trace` to session-log schema** (E-13/S-03)
-17. **Fix test fixtures to match real schemas** (E-15) — test data diverges from production structure
-18. **Add tests for untested validator functions** (E-16) — ~50% of check functions have zero coverage
-19. **Correct Python version requirement: 3.6+ → 3.10+** (E-32) — code uses PEP 604/585 syntax
-20. **Add pytest to dev dependencies** (E-31)
+#### Agent 1: CLAUDE.md Overhaul (~26 findings)
 
-### Tier 3 — Fix Before Session 30 (Major, Affects Post-Onboarding Quality)
+Owns: `CLAUDE.md`
 
-21. **Increase comprehensible input in Phase A** (P-01) — input is "supplementary" when SLA research says it should be primary
-22. **Address ser/estar delayed introduction risk** (P-05) — 3 sessions of unguided production before instruction, high fossilization risk
-23. **Increase error rate sample size for acquisition decisions** (P-09) — rates based on as few as 3-5 observations
-24. **Fix max-3-correction rule to differentiate recasts vs explicit** (P-12) — unlimited recasts are fine; 3 explicit corrections is the real cap
-25. **Reduce L2 listening minimum hours: 20 → 10-15** (P-15) — current minimum is ~27 weeks at L2
-26. **Weight DECAY scoring by concept durability** (P-18) — well-practiced concepts get same decay as fragile ones
-27. **Raise cultural competence priority for politeness/register** (P-27) — NEED cap of 5 makes cultural concepts nearly invisible
-28. **Move register shifting introduction from Phase D to Phase B** (P-28) — tú/usted pragmatics needed from first real-world interaction
-29. **Shift Phase A language ratio from 80/20 to 60/40 English/Spanish** (P-24)
-30. **Fix placement pre-population: set `performance_unscaffolded` to null, not "competent"** (P-31)
-31. **Add maintenance-mode check to return session guide** (S-14)
-32. **Clarify error correction override scope** (A-29) — activity table vs conversation practice phase
-33. **Update system-design.md directory tree and conditional load table** (S-01, S-07)
-34. **Add atomic write protection for state files** (E-20)
-35. **Implement 60-day session log archival script** (E-21/S-17)
+| ID | Fix |
+|----|-----|
+| A-22 | Delete lines 205-224 (injected gstack skill routing section) |
+| A-01 | Routing table: change weekly review condition to "Today's day-of-week matches `weekly_review_day` in `learner-profile.yaml`" |
+| A-02 | Add Step 2b or inline 3-line fluency-day determination formula in Step 3 |
+| A-07 | Add sub-condition to onboarding row: "If gap >= 3 days, also load `return-session.md` for diagnostic" |
+| A-08 | Change fluency row to load BOTH `fluency-activities.md` AND `decision-engine.md` |
+| A-04 | Split Step 4 into "Step 4a — Pre-session conditional loads" and "Mid-session triggers" section under Standard Session Flow |
+| A-05 | Move Step 1b to after Step 3, or add explicit reconciliation note about partial-session + routing interaction |
+| A-09 | Change onboarding row to: "Load `curriculum/onboarding/session-NN.md` where NN = `current_onboarding_session` from `schedule.yaml`" |
+| A-21 | Replace `session_status: micro` reference with duration check (`duration_minutes < 15`) |
+| A-17 | Reframe repair phrase guardrail: "Highest-priority concept through session 5. If not automatic by session 5, continue as primary focus." |
+| A-29 | Add to Conversation Practice section: "During free conversation (Stage 4), follow general rules. Override table applies only during structured Main Lesson activities." |
+| P-12 | Change correction rule: "max 3 explicit corrections per segment; recasts unlimited. Scale to length: 2-3 for 5 min, up to 5 for 10 min." |
+| P-24 | Language of Instruction table: Phase A from 80/20 to 60/40 English/Spanish |
+| A-19 | Correct "~150 lines" claim. Add note about selective skill-map reading as learner progresses. |
+| A-06 | Step 1 item 9: change "yesterday" to "most recent journal entry written since last session" |
+| A-10 | Document whether maintenance-mode learners still get weekly reviews |
+| A-15 | Renumber step 7b as its own step (unrelated to step 7) |
+| A-18 | Change guardrail to exact field names: "error_rate_drills < 0.10 AND error_rate_production < 0.10" |
+| A-23 | Change cross-ref from `docs/system-design.md` to `decision-engine.md, loaded at startup` |
+| A-24 | Add: "Scale proportionally to stated time. Under 25 min: drop Conversation Practice, embed observation into Main Lesson." |
+| A-27 | Add: "If logs exist but `last_session_date` null, set from most recent log and log the fix." |
+| A-30 | Add "(in `learner-profile.yaml`)" to weekly review routing row |
+| A-32 | Move `last_session_date` update from step 3b to after step 7 |
+| A-33 | Merge Core Philosophy and Tone into single "Voice & Approach" section |
+| A-34 | Remove Return Protocol section (2 lines, duplicates routing table) |
+| A-35 | Consolidate Error Correction bullets into table with one-line preamble |
 
-### Tier 4 — Improve Over Time (Minor + Suggestions)
+**Verification:** After all edits, count final line count and confirm no internal contradictions in routing table.
 
-Items 36-93 listed in the detailed findings below.
+#### Agent 2: Tutor Guides (~18 findings)
+
+Owns: all files in `curriculum/tutor-guides/`
+
+| ID | File | Fix |
+|----|------|-----|
+| P-18 | `decision-engine.md` | Add durability weighting: `DECAY_ADJUSTED = DECAY * (1 - min(practice_count / 20, 0.7))` |
+| P-27 | `decision-engine.md` | Remove NEED cap for politeness-formulas and register-shifting. Keep cap for regional-awareness and humor-idioms. |
+| P-19 | `decision-engine.md` | Add: if concept interleaved 5+ times but never primary in same period, elevate to primary |
+| A-20 | `decision-engine.md` | Add 2-3 worked scoring examples for agents to pattern-match against |
+| P-01 | `input-orchestration.md` | Section 1 Step 4: change Phase A from "supplementary" to "required from session 3." Add 3-5 min in-session tutor-speaks-Spanish segment. |
+| P-15 | `input-orchestration.md` | Reduce L2 minimum hours from 20 to 10-15. Add note about counting in-session tutor Spanish. |
+| P-16 | `input-orchestration.md` | Add passive vocab inference formula: +3-5 words per 10 min comprehended input at level |
+| P-34 | `input-orchestration.md` | Add note: when receptive > productive by 1+ level, assign more input homework |
+| P-31 | `first-session.md` | Change placement pre-population: set `performance_unscaffolded: null` (untested) instead of "competent" |
+| P-05 | `onboarding-guide.md` | Add ser/estar avoidance guidance for sessions 2-4: restrict production to contexts minimizing ser/estar demand |
+| A-16 | `onboarding-guide.md` | Add concurrent concept cap (max 3 practicing) explicitly |
+| S-14 | `return-session.md` | Add: if `autonomy_level` is `maintenance`, also load `maintenance-mode.md` regression section |
+| A-26 | `return-session.md` | Add: if gap 3-5 days AND homework completed AND parking-lot has entries, run standard session with brief check-in |
+| S-16 | `return-session.md` | Add: if partial session + 3-day gap, run return diagnostic first, then resume interrupted content if retained |
+| P-22 | `l1-interference-protocol.md` | Add awareness-raising phase before intensive drilling for fossilized errors |
+| P-13 | `error-correction.md` (in activities/) | Add recast salience techniques: stress corrected element, rising intonation, partial recast |
+| P-29 | `emotional-intelligence.md` | Add SDT diagnostic when motivation drops: autonomy, competence, or relatedness deficit? |
+| P-32 | `phase-transition-guide.md` | Add brief writing component to B→C (5 min narration) and C→D (8 min opinion piece) |
+| P-30 | `weekly-review-guide.md` | Add "just-right streak" counter: 3+ consecutive just-right = preserve calibration |
+| P-09 | `decision-engine.md` or `weekly-review-guide.md` | Require min 8-10 observations per context before using error rate for advancement. Below threshold: rely on qualitative + extra session. |
+| P-10 | `decision-engine.md` | Don't compute error_trend until 5+ sessions of data. Below: "insufficient data." |
+| P-20 | `decision-engine.md` | Add recency weight: 7 days full confidence, 8-30 moderate, 31-60 low + verify |
+
+#### Agent 3: Curriculum Data Files (~10 findings)
+
+Owns: `curriculum/l1-interference.yaml`, `curriculum/listening-progression.yaml`, `curriculum/reading-progression.yaml`, `curriculum/onboarding/session-*.md`, `curriculum/grammar/` concept files, `curriculum/cultural/`
+
+| ID | File | Fix |
+|----|------|-----|
+| P-21 | `l1-interference.yaml` | Add 4 entries: personal-a omission (preempt A-04), reflexive pronoun omission (preempt B-05), ser-in-progressive (preempt B-08), question word order (preempt A-05) |
+| S-09 | `l1-interference.yaml` | Fix `preempt_at: vocabulary-introduction` and `tier2-weather-seasons` — either map to real concept IDs or add comment explaining convention |
+| P-15 | `listening-progression.yaml` | Reduce L2 minimum hours from 20 to 10-15 |
+| P-28 | `curriculum/cultural/register-shifting.md` + `state/skill-map.yaml` cultural section | Move `introduced_at_phase` from D to B for register_shifting. Add progression notes: basic tú/usted at B, softeners at C, full control at D. |
+| P-33 | `curriculum/onboarding/session-01-discovery.md` | Extend pronunciation check-in from 2-3 min to 4-5 min |
+| P-33 | `curriculum/onboarding/session-02.md` through `session-05.md` | Add recurring 2-min pronunciation warmup segment |
+| P-05 | `curriculum/onboarding/session-02.md` through `session-04.md` | Add explicit ser/estar avoidance notes: restrict activities to action verbs and routines |
+| P-03 | Sample grammar concept files | Add optional comprehension-check micro-step between Stage 1 and Stage 2 |
+| P-08 | `curriculum/grammar/C-intermediate/01-present-subjunctive.md` | Add B-04 as soft prerequisite with note |
+| P-06 | `curriculum/grammar/B-conversational/` | Add note about Phase B being densest phase — set expectations |
+
+#### Agent 4: Schema Files (~8 findings)
+
+Owns: all files in `schemas/`
+
+| ID | File | Fix |
+|----|------|-----|
+| E-10 | `schemas/learner-profile.schema.yaml` | Add `initial_placement` map with 8 children (level, date, self_report, grammar_result, vocabulary_observation, reading_result, confidence, evidence_summary) |
+| E-11 | `schemas/schedule.schema.yaml` | Add `placement_validation` map, `topic_history` list, `session_number` field |
+| E-12 | `schemas/system-health.schema.yaml` | Add `placement_validation_metrics`, `goal_tracking`, `session_difficulty_tracking` maps |
+| E-13/S-03 | `schemas/session-log.schema.yaml` | Add `decision_engine_trace` field |
+| S-05 | `schemas/skill-map.schema.yaml` | Add `schema_version` field |
+| E-14 | `schemas/skill-map.schema.yaml` | Add `fields` wrapper or document the different structure convention |
+| A-21 | `schemas/session-log.schema.yaml` | Either add `micro` as valid `session_status` enum value, or remove if CLAUDE.md switches to duration check |
+
+#### Agent 5: Documentation (~10 findings)
+
+Owns: `docs/system-design.md`, `docs/session-log-example.yaml`, `docs/progress-report-template.md`, `STUDENT-GUIDE.md`, `SETUP.md`, `requirements.txt`
+
+| ID | File | Fix |
+|----|------|-----|
+| S-01 | `docs/system-design.md` | Add `schemas/`, `transcripts/`, `tests/`, undocumented files to directory tree |
+| S-02/A-28 | `docs/system-design.md` | Change line 219 from "Phase C+" to "Phase B+" |
+| S-06 | `docs/system-design.md` | Add A-08 and A-09 to directory tree |
+| S-07 | `docs/system-design.md` | Add `input-orchestration.md`, `session-variety.md`, `phase-transition-guide.md` to conditional load table |
+| S-24 | `docs/system-design.md` | Add `pronunciation-practice.md` to activities tree |
+| A-19 | `docs/system-design.md` | Correct "~150 lines" to actual count |
+| P-09 | `docs/system-design.md` | Add minimum observation count requirement to assessment section |
+| P-20 | `docs/system-design.md` | Add error rate recency weighting description |
+| S-04 | `docs/session-log-example.yaml` | Add `input_reviewed`, `interleaved_concepts`, `session_difficulty_rating`, `decision_engine_trace`, assignment-level `retrieval_target`/`input_minutes` |
+| S-20 | `STUDENT-GUIDE.md` | Change "Starting around Phase B" to "Starting after onboarding (around session 11+)" for journaling |
+| P-25 | `STUDENT-GUIDE.md` | Add recommendation for learner to set calendar reminders for maintenance sessions |
+| E-32 | `SETUP.md` | Change Python 3.6+ to Python 3.10+ |
+| E-31 | Create `requirements-dev.txt` | Add `pytest>=7.0` |
+
+#### Agent 6: Vault & Obsidian Config (~5 findings)
+
+Owns: `vault/`, `.obsidianignore`
+
+| ID | File | Fix |
+|----|------|-----|
+| S-11 | `vault/Home.md` | Fix broken `[[Parking Lot]]` wiki-link — change to `[[parking-lot|Parking Lot]]` |
+| S-13 | `vault/Getting Started.md` | Upgrade Templater from "recommended" to "required", or add manual date fallback |
+| S-21 | Create `.obsidianignore` | Hide system dirs from learner: `state/`, `scripts/`, `schemas/`, `docs/`, `tests/`, `curriculum/`, `.claude/`, `.git/` |
+| P-02 | `vault/` or tutor guide | Add typed-fluency metric note (response latency vs oral benchmarks) |
+
+#### Agent 7: State Files (~3 findings)
+
+Owns: `state/schedule.yaml`, `state/skill-map.yaml`
+
+| ID | File | Fix |
+|----|------|-----|
+| A-09 | `state/schedule.yaml` | Add `current_onboarding_session: 1` field |
+| P-28 | `state/skill-map.yaml` | Update register_shifting `introduced_at_phase` from D to B |
+| E-22 | `state/schedule.yaml` | Add `session_number: 0` if it should be the single source of truth |
+
+---
+
+### Wave 2 — Script Changes (after Wave 1 schemas are final)
+
+Launch 5 agents simultaneously.
+
+#### Agent 8: validate-state.py + shared.py (~10 findings)
+
+Owns: `scripts/validate-state.py`, `scripts/shared.py`
+
+| ID | Fix |
+|----|-----|
+| E-01 | Unify `load_yaml` into single version in `shared.py` that handles missing files (return `None`). Remove duplicate in validate-state.py. |
+| E-02 | Add `try/except yaml.YAMLError` to `shared.load_yaml` |
+| E-03 | Add `check_session_log()` function: load each session file, check against schema, validate required fields and enum values |
+| E-04 | Add `check_required_fields(data, "resource-tracker", "resource-tracker")` to resource-tracker validation |
+| E-05 | Change acquired error threshold from > 0.15 to > 0.10 |
+| E-06 | Refactor `results` from module-level global to parameter or class |
+| E-29 | Extend `check_schedule_refs` to validate secondary, maintenance, vocabulary, pronunciation refs |
+| E-30 | Add cross-validation between resource-tracker and skill-map for receptive skill levels |
+| S-18 | Add pronunciation cross-reference validation to `check_curriculum_cross_refs` |
+
+#### Agent 9: generate-vault.py (~5 findings)
+
+Owns: `scripts/generate-vault.py`
+
+| ID | Fix |
+|----|-----|
+| E-07 | Add nested dict handling to `yaml_frontmatter()` or guard against nested values |
+| E-09 | Add format validation to ID-to-title functions with meaningful error on unexpected format |
+| E-24 | Preserve original frontmatter field order or sort deterministically to minimize git diffs |
+| E-27 | Add YAML error handling for schedule file load |
+| S-12/S-22 | Add `vault/Progress/` file generation (Grammar Progress, Vocabulary Progress, Weekly Reports, Milestones) to `--full` mode |
+
+#### Agent 10: init-student.py + migrate-state.py (~3 findings)
+
+Owns: `scripts/init-student.py`, `scripts/migrate-state.py`
+
+| ID | Fix |
+|----|-----|
+| E-08 | Add `isinstance(entry, dict)` guard for cultural_awareness entries in `reset_skill_map` |
+| E-25 | Extend migration entry format to support callable transforms alongside additive entries |
+| E-26 | Fix header preservation to handle blank lines between comments and YAML body |
+
+#### Agent 11: New Scripts — post-session.sh + archive-sessions.py (~3 findings)
+
+Owns: new files `scripts/post-session.sh`, `scripts/archive-sessions.py`
+
+| ID | Fix |
+|----|-----|
+| A-11 | Create `scripts/post-session.sh` that automates: vault generation, 60-day archival, state validation, session log verification, and git commit. Reduce agent's post-session protocol from 15 steps to ~7. |
+| E-21/S-17 | Create `scripts/archive-sessions.py` (or integrate as `--archive` flag): move session logs older than 60 days to `state/sessions/archive/` |
+| E-20 | Add atomic write helper to `shared.py`: write to temp file, then `os.rename()`. Update all state-writing scripts to use it. |
+
+#### Agent 12: test-error-recovery.py (~1 finding)
+
+Owns: `scripts/test-error-recovery.py`
+
+| ID | Fix |
+|----|-----|
+| E-28 | Copy state directory to temp location before mutating. Run validator against temp path. (Requires making validator's STATE path configurable via flag or env var — coordinate with Agent 8.) |
+
+---
+
+### Wave 3 — Tests (after Wave 2 code is final)
+
+Launch 2 agents simultaneously.
+
+#### Agent 13: Test Fixture Alignment + New Validator Tests
+
+Owns: `tests/conftest.py`, `tests/test_validate_state.py`
+
+| ID | Fix |
+|----|-----|
+| E-15 | Align `MINIMAL_LEARNER_PROFILE`, `MINIMAL_SYSTEM_HEALTH`, and other fixtures with actual schema required fields |
+| E-16 | Add tests for: `check_required_fields`, `check_learner_profile`, `check_schedule`, `check_system_health`, `check_curriculum_cross_refs`, `check_schedule_refs`, `check_carryover_concepts`, `check_integration_tested_with`, `check_session_filenames`, `check_placement_validation_consistency` |
+| E-19 | Add `MINIMAL_SESSION_LOG` fixture |
+| E-03 | Add tests for new `check_session_log` function |
+
+#### Agent 14: Other Test Fixes
+
+Owns: `tests/test_generate_vault.py`, `tests/test_migrate_state.py`
+
+| ID | Fix |
+|----|-----|
+| E-17 | Replace real skill-map dependency with synthetic fixture in `test_generates_expected_file_count` |
+| E-18 | Add integration test that calls `migrate_mod.main()` end-to-end with monkeypatched args |
+
+---
+
+### Wave 4 — Final Verification
+
+Single agent. After all waves complete:
+
+1. Run `python3 scripts/validate-state.py` — all checks pass
+2. Run `python3 -m pytest tests/ -v` — all tests pass (including new ones)
+3. Run `python3 scripts/generate-vault.py --full` — vault generates cleanly
+4. Verify CLAUDE.md has no internal contradictions (routing table consistent with guardrails)
+5. Verify all schema files match their corresponding state files
+6. Commit all changes with descriptive message
+
+---
+
+### Agent Count Summary
+
+| Wave | Agents | Parallel? | Depends On |
+|------|--------|-----------|------------|
+| Wave 1 | 7 | Yes, all parallel | Nothing |
+| Wave 2 | 5 | Yes, all parallel | Wave 1 (schemas) |
+| Wave 3 | 2 | Yes, both parallel | Wave 2 (code) |
+| Wave 4 | 1 | Sequential | Waves 1-3 |
+| **Total** | **15 agents** | | |
 
 ---
 
