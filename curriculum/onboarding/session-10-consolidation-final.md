@@ -84,7 +84,7 @@ After: 2-3 corrections on the most impactful patterns. Then: specific, genuine f
 Full review across all tier-1 clusters: `curriculum/vocabulary/tier1-survival/greetings-introductions.md`, `curriculum/vocabulary/tier1-survival/numbers-time-dates.md`, `curriculum/vocabulary/tier1-survival/basic-descriptions.md`, `curriculum/vocabulary/tier1-survival/directions-transportation.md`, `curriculum/vocabulary/tier1-survival/food-restaurant.md`. No new vocabulary introduced — assess breadth and retention across all clusters.
 
 ## Learner Observation Targets
-- **Per-concept status:** This is the definitive baseline for all Phase A concepts. For each one (A-00 through A-07), note: status (introduced/practicing/approaching acquired), performance_scaffolded, performance_unscaffolded, integration_tested.
+- **Per-concept status:** This is the definitive baseline for all Phase A concepts. For each one (A-00 through A-07), note: status (introduced/practicing/approaching acquired), performance_scaffolded, performance_unscaffolded, integration_tested_with.
 - **Strongest and weakest concepts:** Which concepts does the learner use confidently? Which require visible effort? This drives the decision engine priority for the first adaptive session.
 - **Readiness for Phase B:** Are any Phase A concepts approaching "acquired"? Are prerequisites for Phase B concepts (A-01, A-02, A-04) solidifying?
 - **Learner autonomy:** Does the learner self-correct? Do they ask questions about patterns they notice? Do they push themselves to use new vocabulary? Autonomy signals readiness for reduced scaffolding.

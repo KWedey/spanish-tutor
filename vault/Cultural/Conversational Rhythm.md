@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/cultural/conversational-rhythm.md
-last_generated: 2026-04-09
+last_generated: 2026-04-10
 concept_id: conversational_rhythm
 title: Conversational Rhythm
 introduced_at_phase: C

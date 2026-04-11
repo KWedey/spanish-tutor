@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/D-advanced/03-subjunctive-all-tenses.md
-last_generated: 2026-04-09
+last_generated: 2026-04-10
 concept_id: D-03-subjunctive-all-tenses
 title: Subjunctive All Tenses
 phase: D
@@ -11,7 +11,7 @@ error_rate_production: null
 error_trend: null
 last_practiced: null
 practice_count: 0
-integration_tested: false
+integration_tested_with: []
 prerequisites: ["[[Past Subjunctive]]", "[[Compound Tenses]]"]
 tags: ["grammar", "phase-d", "unseen"]
 ---

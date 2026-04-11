@@ -244,7 +244,7 @@ def generate_grammar_note(concept_id: str, data: dict) -> tuple[Path, str]:
         "error_trend": data.get("error_trend"),
         "last_practiced": data.get("last_practiced"),
         "practice_count": data.get("practice_count", 0),
-        "integration_tested": data.get("integration_tested", False),
+        "integration_tested_with": data.get("integration_tested_with", []),
         "prerequisites": prereq_links,
         "tags": tags,
     }
@@ -861,7 +861,7 @@ def run_session(skill_map: dict, session_date: str) -> None:
             "error_trend": data.get("error_trend"),
             "last_practiced": data.get("last_practiced"),
             "practice_count": data.get("practice_count", 0),
-            "integration_tested": data.get("integration_tested", False),
+            "integration_tested_with": data.get("integration_tested_with", []),
             "prerequisites": prereqs,
             "tags": tags,
         }

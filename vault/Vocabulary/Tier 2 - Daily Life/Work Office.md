@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/vocabulary/tier2-daily-life/work-office.md
-last_generated: 2026-04-09
+last_generated: 2026-04-10
 cluster_id: tier2-work-office
 title: Work Office
 tier: 2

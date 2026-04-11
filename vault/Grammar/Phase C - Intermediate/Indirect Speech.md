@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/C-intermediate/08-indirect-speech.md
-last_generated: 2026-04-09
+last_generated: 2026-04-10
 concept_id: C-08-indirect-speech
 title: Indirect Speech
 phase: C
@@ -11,7 +11,7 @@ error_rate_production: null
 error_trend: null
 last_practiced: null
 practice_count: 0
-integration_tested: false
+integration_tested_with: []
 prerequisites: ["[[Present Subjunctive]]", "[[Subjunctive Triggers]]", "[[Preterite Vs Imperfect]]"]
 tags: ["grammar", "phase-c", "unseen"]
 ---

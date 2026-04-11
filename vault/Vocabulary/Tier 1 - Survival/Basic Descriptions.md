@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/vocabulary/tier1-survival/basic-descriptions.md
-last_generated: 2026-04-09
+last_generated: 2026-04-10
 cluster_id: tier1-basic-descriptions
 title: Basic Descriptions
 tier: 1

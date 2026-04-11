@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/vocabulary/tier3-social/hobbies-interests.md
-last_generated: 2026-04-09
+last_generated: 2026-04-10
 cluster_id: tier3-hobbies-interests
 title: Hobbies Interests
 tier: 3

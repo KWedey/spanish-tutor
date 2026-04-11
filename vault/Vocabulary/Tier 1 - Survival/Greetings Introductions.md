@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/vocabulary/tier1-survival/greetings-introductions.md
-last_generated: 2026-04-09
+last_generated: 2026-04-10
 cluster_id: tier1-greetings-introductions
 title: Greetings Introductions
 tier: 1

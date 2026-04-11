@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/A-foundation/03-gender-agreement.md
-last_generated: 2026-04-09
+last_generated: 2026-04-10
 concept_id: A-03-gender-agreement
 title: Gender Agreement
 phase: A
@@ -11,7 +11,7 @@ error_rate_production: null
 error_trend: null
 last_practiced: null
 practice_count: 0
-integration_tested: false
+integration_tested_with: []
 prerequisites: []
 tags: ["grammar", "phase-a", "unseen"]
 ---

@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/vocabulary/tier2-daily-life/weather-seasons.md
-last_generated: 2026-04-09
+last_generated: 2026-04-10
 cluster_id: tier2-weather-seasons
 title: Weather Seasons
 tier: 2

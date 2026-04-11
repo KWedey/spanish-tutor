@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/pronunciation/r-single.md
-last_generated: 2026-04-09
+last_generated: 2026-04-10
 sound_id: r-single
 title: R Single
 status: unseen

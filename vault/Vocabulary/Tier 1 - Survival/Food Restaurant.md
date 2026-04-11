@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/vocabulary/tier1-survival/food-restaurant.md
-last_generated: 2026-04-09
+last_generated: 2026-04-10
 cluster_id: tier1-food-restaurant
 title: Food Restaurant
 tier: 1

@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/cultural/register-shifting.md
-last_generated: 2026-04-09
+last_generated: 2026-04-10
 concept_id: register_shifting
 title: Register Shifting
 introduced_at_phase: D

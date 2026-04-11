@@ -3,7 +3,7 @@
 ## Purpose
 
 Integration testing — determines whether concepts that are individually solid remain accurate when
-used simultaneously. Assesses the `integration_tested` field in the skill map. A concept is not
+used simultaneously. Assesses the `integration_tested_with` field in the skill map. A concept is not
 ready to be marked "acquired" if it breaks down when cognitive load increases.
 
 Use after two or more concepts have each reached `performance_scaffolded: competent`. The question
@@ -18,7 +18,7 @@ ones.
 ## Setup
 
 1. Identify which concepts to combine. Use concepts that are individually at `scaffolded: competent`
-   but have `integration_tested: false`.
+   but have an empty `integration_tested_with` list.
 2. Choose a topic or task that naturally requires ALL selected concepts — don't force it.
 3. Give clear task instructions without reminding the learner which grammar rules apply. If they
    need a reminder, the integration test isn't valid yet.
@@ -36,9 +36,9 @@ ones.
 
 **Assessment logic:**
 - Accuracy on Concept A alone: competent
-- Accuracy on Concept A while also managing Concept B: if errors appear → `integration_tested` stays
-  false. Continue combined practice.
-- If no new errors emerge in 2-3 integration attempts → `integration_tested: true`
+- Accuracy on Concept A while also managing Concept B: if errors appear → do not add to
+  `integration_tested_with`. Continue combined practice.
+- If no new errors emerge in 2-3 integration attempts → add tested concept IDs to `integration_tested_with`
 
 ## Example Combinations by Phase
 
@@ -81,8 +81,8 @@ observations:
 ```
 
 Update skill map:
-- If both concepts are competent under integration: set `integration_tested: true` for both
-- If one or both slip: keep `integration_tested: false`, add targeted note on what combination
+- If both concepts are competent under integration: add each concept's ID to the other's `integration_tested_with` list
+- If one or both slip: do not update `integration_tested_with`, add targeted note on what combination
   caused the breakdown
 
 ## Variations
@@ -97,8 +97,8 @@ Update skill map:
 ## Common Failure Patterns
 
 - **Regression under load:** Learner uses correct gender agreement in isolation but drops endings
-  when managing verb conjugation at the same time. → More integrated drilling before marking
-  `integration_tested`.
+  when managing verb conjugation at the same time. → More integrated drilling before updating
+  `integration_tested_with`.
 - **Concept avoidance:** Learner uses simpler vocabulary or sentence structures to avoid the
   difficult combination. → Maneuver the topic to require the avoided structure.
 - **Serial correctness:** Learner gets one concept right per sentence but not both. → Not yet

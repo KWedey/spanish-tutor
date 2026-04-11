@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/vocabulary/tier2-daily-life/health-body.md
-last_generated: 2026-04-09
+last_generated: 2026-04-10
 cluster_id: tier2-health-body
 title: Health Body
 tier: 2

@@ -111,7 +111,7 @@ SKILL_MAP_HEADER = (
 ZERO_GRAMMAR = dict(status="unseen", introduced_date=None, last_practiced=None,
     practice_count=0, error_rate_drills=None, error_rate_production=None,
     error_trend=None, performance_scaffolded=None, performance_unscaffolded=None,
-    integration_tested=False)
+    integration_tested_with=[])
 
 ZERO_VOCAB = dict(status="unseen", words_introduced=0, passive_known=0, active_known=0,
     weak_production=[], weak_recognition=[], last_practiced=None)

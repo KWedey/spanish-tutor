@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/pronunciation/rr-trill.md
-last_generated: 2026-04-09
+last_generated: 2026-04-10
 sound_id: rr-trill
 title: Rr Trill
 status: unseen

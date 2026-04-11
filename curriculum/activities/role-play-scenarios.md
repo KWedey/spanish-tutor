@@ -75,7 +75,7 @@ role_play_assessment:
 
 Also note for the skill map:
 - `performance_unscaffolded` for any active concepts exercised in free production
-- `integration_tested: true` if multiple concepts were combined successfully
+- Update `integration_tested_with` with tested concept IDs if multiple concepts were combined successfully
 
 ## Variations
 

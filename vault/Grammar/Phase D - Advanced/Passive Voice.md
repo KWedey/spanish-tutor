@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/D-advanced/04-passive-voice.md
-last_generated: 2026-04-09
+last_generated: 2026-04-10
 concept_id: D-04-passive-voice
 title: Passive Voice
 phase: D
@@ -11,7 +11,7 @@ error_rate_production: null
 error_trend: null
 last_practiced: null
 practice_count: 0
-integration_tested: false
+integration_tested_with: []
 prerequisites: ["[[Preterite Regular]]"]
 tags: ["grammar", "phase-d", "unseen"]
 ---

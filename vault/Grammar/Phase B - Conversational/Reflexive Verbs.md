@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/B-conversational/05-reflexive-verbs.md
-last_generated: 2026-04-09
+last_generated: 2026-04-10
 concept_id: B-05-reflexive-verbs
 title: Reflexive Verbs
 phase: B
@@ -11,7 +11,7 @@ error_rate_production: null
 error_trend: null
 last_practiced: null
 practice_count: 0
-integration_tested: false
+integration_tested_with: []
 prerequisites: ["[[Present Regular]]"]
 tags: ["grammar", "phase-b", "unseen"]
 ---
