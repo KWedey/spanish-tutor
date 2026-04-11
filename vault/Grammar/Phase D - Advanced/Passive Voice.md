@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/D-advanced/04-passive-voice.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 concept_id: D-04-passive-voice
 title: Passive Voice
 phase: D

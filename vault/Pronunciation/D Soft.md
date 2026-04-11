@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/pronunciation/d-soft.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 sound_id: d-soft
 title: D Soft
 status: unseen

@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/pronunciation/ll-y-sound.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 sound_id: ll-y-sound
 title: Ll Y Sound
 status: unseen

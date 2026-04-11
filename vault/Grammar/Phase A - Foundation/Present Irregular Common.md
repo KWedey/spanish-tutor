@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/A-foundation/07-present-irregular-common.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 concept_id: A-07-present-irregular-common
 title: Present Irregular Common
 phase: A

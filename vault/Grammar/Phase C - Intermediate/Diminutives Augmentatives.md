@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/C-intermediate/09-diminutives-augmentatives.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 concept_id: C-09-diminutives-augmentatives
 title: Diminutives Augmentatives
 phase: C

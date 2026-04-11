@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/vocabulary/tier4-abstract/hypotheticals-debate.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 cluster_id: tier4-hypotheticals-debate
 title: Hypotheticals Debate
 tier: 4

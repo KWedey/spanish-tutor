@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/C-intermediate/02-subjunctive-triggers.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 concept_id: C-02-subjunctive-triggers
 title: Subjunctive Triggers
 phase: C

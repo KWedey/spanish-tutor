@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/D-advanced/05-register-shifting.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 concept_id: D-05-register-shifting
 title: Register Shifting
 phase: D

@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/B-conversational/04-preterite-vs-imperfect.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 concept_id: B-04-preterite-vs-imperfect
 title: Preterite Vs Imperfect
 phase: B

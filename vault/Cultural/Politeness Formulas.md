@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/cultural/politeness-formulas.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 concept_id: politeness_formulas
 title: Politeness Formulas
 introduced_at_phase: B

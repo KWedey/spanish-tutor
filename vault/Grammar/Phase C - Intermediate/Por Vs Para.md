@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/C-intermediate/05-por-vs-para.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 concept_id: C-05-por-vs-para
 title: Por Vs Para
 phase: C

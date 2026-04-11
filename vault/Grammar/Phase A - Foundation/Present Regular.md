@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/A-foundation/01-present-regular.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 concept_id: A-01-present-regular
 title: Present Regular
 phase: A

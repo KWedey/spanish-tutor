@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/vocabulary/tier3-social/storytelling-narration.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 cluster_id: tier3-storytelling-narration
 title: Storytelling Narration
 tier: 3

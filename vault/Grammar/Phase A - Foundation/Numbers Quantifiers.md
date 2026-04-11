@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/A-foundation/08-numbers-quantifiers.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 concept_id: A-08-numbers-quantifiers
 title: Numbers Quantifiers
 phase: A

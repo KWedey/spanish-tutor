@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/pronunciation/vowel-sounds.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 sound_id: vowel-sounds
 title: Vowel Sounds
 status: unseen

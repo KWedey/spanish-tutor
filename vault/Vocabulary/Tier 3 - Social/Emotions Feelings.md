@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/vocabulary/tier3-social/emotions-feelings.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 cluster_id: tier3-emotions-feelings
 title: Emotions Feelings
 tier: 3

@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/B-conversational/08-estar-gerund-progressive.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 concept_id: B-08-estar-gerund-progressive
 title: Estar Gerund Progressive
 phase: B

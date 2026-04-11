@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/vocabulary/tier1-survival/directions-transportation.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 cluster_id: tier1-directions-transportation
 title: Directions Transportation
 tier: 1

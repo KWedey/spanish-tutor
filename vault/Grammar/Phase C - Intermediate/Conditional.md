@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/C-intermediate/04-conditional.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 concept_id: C-04-conditional
 title: Conditional
 phase: C

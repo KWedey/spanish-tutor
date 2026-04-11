@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/D-advanced/03-subjunctive-all-tenses.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 concept_id: D-03-subjunctive-all-tenses
 title: Subjunctive All Tenses
 phase: D

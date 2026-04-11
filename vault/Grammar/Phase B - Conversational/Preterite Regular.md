@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/B-conversational/01-preterite-regular.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 concept_id: B-01-preterite-regular
 title: Preterite Regular
 phase: B

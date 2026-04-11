@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/D-advanced/02-si-clauses.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 concept_id: D-02-si-clauses
 title: Si Clauses
 phase: D

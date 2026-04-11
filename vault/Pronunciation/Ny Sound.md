@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/pronunciation/ny-sound.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 sound_id: ny-sound
 title: Ny Sound
 status: unseen

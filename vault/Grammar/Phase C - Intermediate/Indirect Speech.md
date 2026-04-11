@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/grammar/C-intermediate/08-indirect-speech.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 concept_id: C-08-indirect-speech
 title: Indirect Speech
 phase: C

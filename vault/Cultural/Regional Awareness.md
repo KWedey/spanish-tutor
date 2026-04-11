@@ -1,7 +1,7 @@
 ---
 generated: true
 source: curriculum/cultural/regional-awareness.md
-last_generated: 2026-04-10
+last_generated: 2026-04-11
 concept_id: regional_awareness
 title: Regional Awareness
 introduced_at_phase: B
