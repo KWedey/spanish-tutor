@@ -380,7 +380,7 @@ tags: ["dashboard"]
 
 ```dataview
 TASK
-FROM "Daily"
+FROM "vault/Daily"
 SORT file.name DESC
 LIMIT 1
 ```
@@ -389,7 +389,7 @@ LIMIT 1
 
 ```dataview
 TABLE status, last_practiced, error_rate_production
-FROM "Grammar" OR "Vocabulary"
+FROM "vault/Grammar" OR "vault/Vocabulary"
 WHERE status != "unseen" AND status != "automatic"
 SORT status ASC
 ```
@@ -513,7 +513,7 @@ tags: ["progress", "grammar"]
 
 ```dataview
 TABLE phase, status, error_rate_drills, error_rate_production, error_trend, practice_count, last_practiced
-FROM "Grammar"
+FROM "vault/Grammar"
 WHERE generated = true
 SORT concept_id ASC
 ```
@@ -534,7 +534,7 @@ tags: ["progress", "vocabulary"]
 
 ```dataview
 TABLE tier, category, status, words_total, words_introduced, passive_known, active_known, last_practiced
-FROM "Vocabulary"
+FROM "vault/Vocabulary"
 WHERE generated = true
 SORT cluster_id ASC
 ```
