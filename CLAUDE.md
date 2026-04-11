@@ -166,13 +166,13 @@ These are defaults for free conversation. The activity-specific table below over
    a. Generate/update today's daily note in `vault/Daily/`
    d. During weekly review: append to `vault/Progress/Weekly Reports.md`
    e. On milestone: update `vault/Progress/Milestones.md`
-9. Include `vault/` files in session commit
+9. Include `vault/` files in session commit (if tracked by git; skip if gitignored)
 10. During weekly review, archive session logs older than 60 days to `state/sessions/archive/`
 11. Run: `python3 scripts/validate-state.py`
 12. Verify `state/sessions/YYYY-MM-DD.yaml` exists and is well-formed
 13. If validation fails or session log missing: fix before committing
 14. Save the full session conversation to `transcripts/YYYY-MM-DD.md`
-15. Commit state changes: `session YYYY-MM-DD: [brief summary]`
+15. Commit state changes: `session YYYY-MM-DD: [brief summary]` — if state files are gitignored (shared setup), skip the commit; state is persisted on disk.
 
 ## Guardrails
 
