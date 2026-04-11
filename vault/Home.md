@@ -18,7 +18,7 @@ tags: ["dashboard"]
 
 ```dataview
 TASK
-FROM "Daily"
+FROM "vault/Daily"
 SORT file.name DESC
 LIMIT 1
 ```
@@ -27,7 +27,7 @@ LIMIT 1
 
 ```dataview
 TABLE status, last_practiced, error_rate_production
-FROM "Grammar" OR "Vocabulary"
+FROM "vault/Grammar" OR "vault/Vocabulary"
 WHERE status != "unseen" AND status != "automatic"
 SORT status ASC
 ```

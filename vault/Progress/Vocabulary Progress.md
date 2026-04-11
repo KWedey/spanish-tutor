@@ -9,7 +9,7 @@ tags: ["progress", "vocabulary"]
 
 ```dataview
 TABLE tier, category, status, words_total, words_introduced, passive_known, active_known, last_practiced
-FROM "Vocabulary"
+FROM "vault/Vocabulary"
 WHERE generated = true
 SORT cluster_id ASC
 ```

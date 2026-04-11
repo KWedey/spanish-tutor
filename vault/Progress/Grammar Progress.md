@@ -9,7 +9,7 @@ tags: ["progress", "grammar"]
 
 ```dataview
 TABLE phase, status, error_rate_drills, error_rate_production, error_trend, practice_count, last_practiced
-FROM "Grammar"
+FROM "vault/Grammar"
 WHERE generated = true
 SORT concept_id ASC
 ```
