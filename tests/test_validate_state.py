@@ -21,6 +21,11 @@ validate_mod = importlib.import_module("validate-state")
 # Grab references to the ValidationResults instance and functions
 results = validate_mod.results
 load_yaml_validated = validate_mod.load_yaml_validated
+check_required_fields = validate_mod.check_required_fields
+check_learner_profile = validate_mod.check_learner_profile
+check_skill_map = validate_mod.check_skill_map
+check_schedule = validate_mod.check_schedule
+check_system_health = validate_mod.check_system_health
 check_acquired_consistency = validate_mod.check_acquired_consistency
 check_performance_enums = validate_mod.check_performance_enums
 check_schedule_enums = validate_mod.check_schedule_enums
@@ -558,3 +563,225 @@ class TestPronunciationCrossRef:
 
         fails = _fails()
         assert any("nonexistent-sound" in f for f in fails)
+
+
+# ---------------------------------------------------------------------------
+# 22. E-16: check_required_fields — generic required-field checker
+# ---------------------------------------------------------------------------
+
+class TestCheckRequiredFields:
+    def test_all_required_fields_present_passes(self, system_health_data):
+        check_required_fields(system_health_data, "system-health", "system-health", results)
+
+        fails = _fails()
+        assert len(fails) == 0
+        passes = _passes()
+        assert any("required fields present" in p for p in passes)
+
+    def test_missing_required_field_fails(self):
+        # system-health has ~15 required fields; provide only schema_version
+        data = {"schema_version": 1}
+        check_required_fields(data, "system-health", "system-health", results)
+
+        fails = _fails()
+        assert len(fails) >= 1
+        assert any("missing required field" in f for f in fails)
+
+    def test_reports_each_missing_field(self):
+        data = {}  # missing everything including schema_version
+        check_required_fields(data, "learner-profile", "learner-profile", results)
+
+        fails = _fails()
+        # learner-profile requires: schema_version, name, native_language, target_dialect
+        assert len(fails) >= 4
+        assert any("schema_version" in f for f in fails)
+        assert any("name" in f for f in fails)
+
+
+# ---------------------------------------------------------------------------
+# 23. E-16: check_learner_profile
+# ---------------------------------------------------------------------------
+
+class TestCheckLearnerProfile:
+    def test_valid_profile_passes(self, profile_data):
+        check_learner_profile(profile_data, has_sessions=False, res=results)
+
+        fails = _fails()
+        assert len(fails) == 0
+
+    def test_missing_required_field_fails(self):
+        data = {"schema_version": 1}  # missing name, native_language, target_dialect
+        check_learner_profile(data, has_sessions=False, res=results)
+
+        fails = _fails()
+        assert len(fails) >= 1
+        assert any("missing required field" in f for f in fails)
+
+    def test_empty_name_after_session_warns(self, profile_data):
+        profile_data["name"] = ""
+        check_learner_profile(profile_data, has_sessions=True, res=results)
+
+        warns = _warns()
+        assert any("'name' is empty" in w for w in warns)
+
+    def test_empty_name_before_sessions_no_warn(self, profile_data):
+        profile_data["name"] = ""
+        check_learner_profile(profile_data, has_sessions=False, res=results)
+
+        warns = _warns()
+        assert not any("'name' is empty" in w for w in warns)
+
+    def test_empty_target_dialect_after_session_warns(self, profile_data):
+        profile_data["target_dialect"] = ""
+        check_learner_profile(profile_data, has_sessions=True, res=results)
+
+        warns = _warns()
+        assert any("'target_dialect' is empty" in w for w in warns)
+
+
+# ---------------------------------------------------------------------------
+# 24. E-16: check_schedule
+# ---------------------------------------------------------------------------
+
+class TestCheckSchedule:
+    def test_valid_schedule_passes(self, schedule_data):
+        check_schedule(schedule_data, results)
+
+        fails = _fails()
+        assert len(fails) == 0
+
+    def test_missing_required_field_fails(self):
+        data = {"schema_version": 1}  # missing current_phase, current_week, onboarding_complete, fluency_accuracy_balance
+        check_schedule(data, results)
+
+        fails = _fails()
+        assert len(fails) >= 1
+        assert any("missing required field" in f for f in fails)
+
+    def test_missing_all_fields_reports_multiple(self):
+        data = {}
+        check_schedule(data, results)
+
+        fails = _fails()
+        # schedule requires: schema_version, current_phase, current_week,
+        # onboarding_complete, fluency_accuracy_balance
+        assert len(fails) >= 5
+
+
+# ---------------------------------------------------------------------------
+# 25. E-16: check_system_health
+# ---------------------------------------------------------------------------
+
+class TestCheckSystemHealth:
+    def test_valid_system_health_passes(self, system_health_data):
+        check_system_health(system_health_data, results)
+
+        fails = _fails()
+        assert len(fails) == 0
+
+    def test_missing_required_field_fails(self):
+        data = {"schema_version": 1}
+        check_system_health(data, results)
+
+        fails = _fails()
+        assert len(fails) >= 1
+        assert any("missing required field" in f for f in fails)
+
+    def test_missing_all_fields_reports_many(self):
+        data = {}
+        check_system_health(data, results)
+
+        fails = _fails()
+        # system-health has ~16 required fields
+        assert len(fails) >= 15
+
+
+# ---------------------------------------------------------------------------
+# 26. E-16: check_curriculum_cross_refs (additional coverage)
+# ---------------------------------------------------------------------------
+
+class TestCurriculumCrossRefsExtended:
+    def test_no_schedule_still_checks_grammar_vocab(self, skill_map_data, tmp_path, monkeypatch):
+        """Cross-refs should check grammar/vocab even when schedule is None."""
+        monkeypatch.setattr(validate_mod, "CURRICULUM", tmp_path / "curriculum")
+        monkeypatch.setattr(validate_mod, "ROOT", tmp_path)
+
+        check_curriculum_cross_refs(skill_map_data, None, results)
+
+        # With no curriculum files on disk, grammar concepts should fail
+        fails = _fails()
+        assert any("A-01-present-regular" in f or "curriculum file" in f for f in fails)
+
+    def test_existing_pronunciation_file_passes(self, skill_map_data, tmp_path, monkeypatch):
+        monkeypatch.setattr(validate_mod, "CURRICULUM", tmp_path / "curriculum")
+        monkeypatch.setattr(validate_mod, "ROOT", tmp_path)
+        pron_dir = tmp_path / "curriculum" / "pronunciation"
+        pron_dir.mkdir(parents=True)
+        (pron_dir / "vowel-sounds.md").write_text("# Vowel Sounds", encoding="utf-8")
+
+        sched = {"active_pronunciation": {"focus": "vowel-sounds"}}
+
+        check_curriculum_cross_refs(skill_map_data, sched, results)
+
+        passes = _passes()
+        assert any("vowel-sounds" in p for p in passes)
+
+
+# ---------------------------------------------------------------------------
+# 27. E-03: session log validation (additional: empty sessions directory)
+# ---------------------------------------------------------------------------
+
+class TestSessionLogEmpty:
+    def test_empty_sessions_dir_passes(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(validate_mod, "STATE", tmp_path)
+        sdir = tmp_path / "sessions"
+        sdir.mkdir()
+
+        check_session_logs(results)
+
+        fails = _fails()
+        assert len(fails) == 0
+        passes = _passes()
+        assert any("No session logs to validate" in p for p in passes)
+
+
+# ---------------------------------------------------------------------------
+# 28. E-16: check_skill_map
+# ---------------------------------------------------------------------------
+
+class TestCheckSkillMap:
+    def test_valid_skill_map_passes(self, skill_map_data):
+        check_skill_map(skill_map_data, results)
+
+        fails = _fails()
+        assert len(fails) == 0
+
+    def test_missing_grammar_section_fails(self):
+        data = {"schema_version": 1, "vocabulary": {"tier1": {}}}
+        check_skill_map(data, results)
+
+        fails = _fails()
+        assert any("grammar" in f and "missing" in f for f in fails)
+
+    def test_missing_vocabulary_section_fails(self):
+        data = {"schema_version": 1, "grammar": {"A-01-present-regular": {"status": "unseen", "practice_count": 0, "prerequisites": []}}}
+        check_skill_map(data, results)
+
+        fails = _fails()
+        assert any("vocabulary" in f and "missing" in f for f in fails)
+
+    def test_grammar_entry_missing_required_field_fails(self):
+        data = {
+            "schema_version": 1,
+            "grammar": {
+                "A-01-present-regular": {
+                    "status": "unseen",
+                    # missing practice_count and prerequisites
+                },
+            },
+            "vocabulary": {"tier1": {}},
+        }
+        check_skill_map(data, results)
+
+        fails = _fails()
+        assert any("A-01-present-regular" in f and "missing" in f for f in fails)

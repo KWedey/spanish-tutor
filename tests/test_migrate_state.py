@@ -161,3 +161,149 @@ class TestMigrationAddsMissingFields:
         for field_path, default in fields_for_file:
             exists, value = get_nested(loaded, field_path)
             assert exists, f"Field '{field_path}' should have been added by migration"
+
+
+# ---------------------------------------------------------------------------
+# 6. Integration test for main()
+# ---------------------------------------------------------------------------
+
+class TestMainIntegration:
+    """End-to-end test that calls main() and verifies state files are migrated."""
+
+    def _write_state_file(self, state_dir: Path, filename: str, data: dict,
+                          comment_header: str = "") -> Path:
+        """Write a YAML state file, optionally with a comment header."""
+        path = state_dir / filename
+        content = ""
+        if comment_header:
+            content = comment_header + "\n"
+        content += yaml.dump(data, default_flow_style=False, allow_unicode=True,
+                             sort_keys=False)
+        path.write_text(content, encoding="utf-8")
+        return path
+
+    def test_main_migrates_old_files(self, tmp_path, monkeypatch):
+        """main() upgrades version-0 state files to CURRENT_VERSION."""
+        state_dir = tmp_path / "state"
+        state_dir.mkdir()
+
+        # Create version-0 files (missing schema_version means version 0)
+        lp_header = "# Learner Profile\n# Tracks learner identity and preferences"
+        self._write_state_file(state_dir, "learner-profile.yaml",
+                               {"name": "Integration Tester", "native_language": "English"},
+                               comment_header=lp_header)
+        self._write_state_file(state_dir, "skill-map.yaml",
+                               {"grammar": {}, "vocabulary": {}})
+        self._write_state_file(state_dir, "schedule.yaml",
+                               {"current_phase": "A-foundation", "current_week": 1})
+        self._write_state_file(state_dir, "system-health.yaml",
+                               {"last_session": None, "total_sessions": 0})
+        self._write_state_file(state_dir, "resource-tracker.yaml",
+                               {"resources": []})
+
+        # Monkeypatch ROOT so the script resolves paths against tmp_path
+        monkeypatch.setattr(migrate_mod, "ROOT", tmp_path)
+        # Monkeypatch sys.argv to simulate: migrate-state.py (no --dry-run)
+        monkeypatch.setattr("sys.argv", ["migrate-state.py"])
+
+        migrate_mod.main()
+
+        # Verify all files now have schema_version == CURRENT_VERSION
+        for filename in ("learner-profile.yaml", "skill-map.yaml", "schedule.yaml",
+                         "system-health.yaml", "resource-tracker.yaml"):
+            path = state_dir / filename
+            assert path.exists(), f"{filename} should still exist after migration"
+            data = yaml.safe_load(path.read_text(encoding="utf-8"))
+            assert data["schema_version"] == CURRENT_VERSION, (
+                f"{filename} should be at version {CURRENT_VERSION}, "
+                f"got {data.get('schema_version')}"
+            )
+
+        # Verify migration-specific fields were added to learner-profile
+        lp = yaml.safe_load((state_dir / "learner-profile.yaml").read_text(encoding="utf-8"))
+        assert "input_hours" in lp, "input_hours should be added by migration v1"
+        assert lp["input_hours"]["listening_total"] == 0.0
+        assert lp["input_hours"]["reading_total"] == 0.0
+
+        # Verify schedule got its new fields
+        sched = yaml.safe_load((state_dir / "schedule.yaml").read_text(encoding="utf-8"))
+        assert "fluency_days_this_week" in sched
+        assert sched["fluency_days_this_week"] == 0
+        assert "last_fluency_day" in sched
+
+        # Verify original data was preserved (not wiped)
+        assert lp["name"] == "Integration Tester"
+        assert sched["current_phase"] == "A-foundation"
+
+    def test_main_preserves_comment_header(self, tmp_path, monkeypatch):
+        """main() preserves comment headers from original files."""
+        state_dir = tmp_path / "state"
+        state_dir.mkdir()
+
+        header = "# Schedule Configuration\n# Updated by tutor after each session"
+        self._write_state_file(state_dir, "schedule.yaml",
+                               {"current_phase": "A-foundation"},
+                               comment_header=header)
+        # Create remaining required files at current version so they are skipped
+        for fname in ("learner-profile.yaml", "skill-map.yaml",
+                      "system-health.yaml", "resource-tracker.yaml"):
+            self._write_state_file(state_dir, fname, {"schema_version": CURRENT_VERSION})
+
+        monkeypatch.setattr(migrate_mod, "ROOT", tmp_path)
+        monkeypatch.setattr("sys.argv", ["migrate-state.py"])
+
+        migrate_mod.main()
+
+        content = (state_dir / "schedule.yaml").read_text(encoding="utf-8")
+        assert content.startswith("# Schedule Configuration\n"), (
+            "Comment header should be preserved after migration"
+        )
+        assert "# Updated by tutor after each session" in content
+
+    def test_main_dry_run_does_not_modify(self, tmp_path, monkeypatch):
+        """main() with --dry-run previews changes without writing."""
+        state_dir = tmp_path / "state"
+        state_dir.mkdir()
+
+        original_data = {"current_phase": "A-foundation"}
+        self._write_state_file(state_dir, "schedule.yaml", original_data)
+        # Create remaining required files at current version
+        for fname in ("learner-profile.yaml", "skill-map.yaml",
+                      "system-health.yaml", "resource-tracker.yaml"):
+            self._write_state_file(state_dir, fname, {"schema_version": CURRENT_VERSION})
+
+        original_content = (state_dir / "schedule.yaml").read_text(encoding="utf-8")
+
+        monkeypatch.setattr(migrate_mod, "ROOT", tmp_path)
+        monkeypatch.setattr("sys.argv", ["migrate-state.py", "--dry-run"])
+
+        migrate_mod.main()
+
+        after_content = (state_dir / "schedule.yaml").read_text(encoding="utf-8")
+        assert after_content == original_content, (
+            "--dry-run should not modify any files"
+        )
+
+    def test_main_skips_up_to_date_files(self, tmp_path, monkeypatch):
+        """main() leaves already-current files unchanged."""
+        state_dir = tmp_path / "state"
+        state_dir.mkdir()
+
+        for fname in ("learner-profile.yaml", "skill-map.yaml", "schedule.yaml",
+                      "system-health.yaml", "resource-tracker.yaml"):
+            self._write_state_file(state_dir, fname, {"schema_version": CURRENT_VERSION})
+
+        originals = {}
+        for fname in ("learner-profile.yaml", "skill-map.yaml", "schedule.yaml",
+                      "system-health.yaml", "resource-tracker.yaml"):
+            originals[fname] = (state_dir / fname).read_text(encoding="utf-8")
+
+        monkeypatch.setattr(migrate_mod, "ROOT", tmp_path)
+        monkeypatch.setattr("sys.argv", ["migrate-state.py"])
+
+        migrate_mod.main()
+
+        for fname, original in originals.items():
+            assert (state_dir / fname).read_text(encoding="utf-8") == original, (
+                f"{fname} should not be modified when already at current version"
+            )

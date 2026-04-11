@@ -158,41 +158,132 @@ class TestConceptIdToTitle:
 # ---------------------------------------------------------------------------
 
 class TestRunFullFileCount:
+    """Verify run_full generates the expected number of vault files.
+
+    Uses a synthetic skill-map fixture so the test is self-contained and
+    does not break when the real state/skill-map.yaml changes.
+    """
+
+    SYNTHETIC_SKILL_MAP = {
+        "schema_version": 1,
+        "grammar": {
+            "A-01-present-regular": {
+                "status": "unseen", "introduced_date": None,
+                "last_practiced": None, "practice_count": 0,
+                "error_rate_drills": None, "error_rate_production": None,
+                "error_trend": None, "performance_scaffolded": None,
+                "performance_unscaffolded": None,
+                "integration_tested_with": [], "prerequisites": [], "notes": "",
+            },
+            "A-02-ser-vs-estar": {
+                "status": "practicing", "introduced_date": "2026-04-01",
+                "last_practiced": "2026-04-09", "practice_count": 3,
+                "error_rate_drills": 0.15, "error_rate_production": 0.20,
+                "error_trend": "improving", "performance_scaffolded": "competent",
+                "performance_unscaffolded": "struggling",
+                "integration_tested_with": [], "prerequisites": ["A-01-present-regular"], "notes": "",
+            },
+            "B-01-preterite-regular": {
+                "status": "unseen", "introduced_date": None,
+                "last_practiced": None, "practice_count": 0,
+                "error_rate_drills": None, "error_rate_production": None,
+                "error_trend": None, "performance_scaffolded": None,
+                "performance_unscaffolded": None,
+                "integration_tested_with": [], "prerequisites": ["A-01-present-regular"], "notes": "",
+            },
+        },
+        "vocabulary": {
+            "tier1-greetings-introductions": {
+                "status": "unseen", "words_total": 30, "words_introduced": 0,
+                "passive_known": 0, "active_known": 0,
+                "weak_production": [], "weak_recognition": [],
+                "last_practiced": None,
+                "error_tracking": {"error_rate_production": 0.0, "common_errors": []},
+            },
+            "tier2-food-drink": {
+                "status": "unseen", "words_total": 25, "words_introduced": 0,
+                "passive_known": 0, "active_known": 0,
+                "weak_production": [], "weak_recognition": [],
+                "last_practiced": None,
+                "error_tracking": {"error_rate_production": 0.0, "common_errors": []},
+            },
+        },
+        "pronunciation": {
+            "vowel-sounds": {
+                "status": "unseen", "last_practiced": None, "external_feedback": "",
+            },
+        },
+        "cultural_awareness": {
+            "politeness_formulas": {
+                "status": "unseen", "introduced_at_phase": "B",
+                "assessed_through": "", "signs_of_acquisition": "",
+            },
+            "regional_awareness": {
+                "status": "unseen", "introduced_at_phase": "B",
+                "assessed_through": "", "signs_of_acquisition": "",
+            },
+        },
+        "receptive_skills": {
+            "listening": {
+                "current_level": "L1", "hours_at_level": 0,
+                "hours_total": 0, "comprehension_quality": None,
+            },
+            "reading": {
+                "current_level": "R1", "hours_at_level": 0,
+                "hours_total": 0, "comprehension_quality": None, "lookup_frequency": None,
+            },
+        },
+    }
+
+    # 3 grammar + 2 vocab + 1 pronunciation + 2 cultural = 8 dynamic
+    # 9 static: Home, Roadmap, Grammar Progress, Vocab Progress,
+    #           Weekly Reports, Milestones, Daily Note template,
+    #           Journal template, Getting Started
+    EXPECTED_GRAMMAR = 3
+    EXPECTED_VOCAB = 2
+    EXPECTED_PRONUNCIATION = 1
+    EXPECTED_CULTURAL = 2
+    EXPECTED_STATIC = 9
+    EXPECTED_TOTAL = (EXPECTED_GRAMMAR + EXPECTED_VOCAB
+                      + EXPECTED_PRONUNCIATION + EXPECTED_CULTURAL
+                      + EXPECTED_STATIC)  # 17
+
     def test_generates_expected_file_count(self, tmp_path, monkeypatch):
-        """run_full with the real skill-map should generate 84 files."""
-        # Load the real skill-map for accurate count
-        real_skill_map_path = Path(__file__).resolve().parent.parent / "state" / "skill-map.yaml"
-        if not real_skill_map_path.exists():
-            pytest.skip("Real skill-map.yaml not found")
-
-        with open(real_skill_map_path, encoding="utf-8") as f:
-            real_skill_map = yaml.safe_load(f)
-
+        """run_full with synthetic skill-map generates the correct number of files."""
+        skill_map = copy.deepcopy(self.SYNTHETIC_SKILL_MAP)
         schedule = copy.deepcopy(MINIMAL_SCHEDULE)
 
-        # Redirect VAULT_DIR to tmp_path
         monkeypatch.setattr(gv, "VAULT_DIR", tmp_path / "vault")
 
-        run_full(real_skill_map, schedule)
+        run_full(skill_map, schedule)
 
-        # Count all .md files written
         all_files = list((tmp_path / "vault").rglob("*.md"))
-        # 30 grammar + 21 vocab + 12 pronunciation + 5 cultural + 16 other
-        # (Home, Roadmap, 4 progress, 2 templates, Getting Started = 9 static)
-        # Other count = 1 Home + 1 Roadmap + 4 progress + 2 templates + 1 Getting Started = 9
-        # But the spec says 16 "other" — let's just assert we get the expected total
-        grammar_count = len(real_skill_map.get("grammar", {}))
-        vocab_count = len(real_skill_map.get("vocabulary", {}))
-        pronunciation_count = len(real_skill_map.get("pronunciation", {}))
-        cultural_count = len(real_skill_map.get("cultural_awareness", {}))
-        static_count = 9  # Home, Roadmap, Grammar Progress, Vocab Progress, Weekly Reports, Milestones, Daily Note template, Journal template, Getting Started
-        expected_total = grammar_count + vocab_count + pronunciation_count + cultural_count + static_count
 
-        assert len(all_files) == expected_total, (
-            f"Expected {expected_total} files "
-            f"({grammar_count}g + {vocab_count}v + {pronunciation_count}p + {cultural_count}c + {static_count}s), "
-            f"got {len(all_files)}"
+        assert len(all_files) == self.EXPECTED_TOTAL, (
+            f"Expected {self.EXPECTED_TOTAL} files "
+            f"({self.EXPECTED_GRAMMAR}g + {self.EXPECTED_VOCAB}v "
+            f"+ {self.EXPECTED_PRONUNCIATION}p + {self.EXPECTED_CULTURAL}c "
+            f"+ {self.EXPECTED_STATIC}s), got {len(all_files)}"
         )
+
+    def test_file_categories_match(self, tmp_path, monkeypatch):
+        """Verify each category produces the right number of files."""
+        skill_map = copy.deepcopy(self.SYNTHETIC_SKILL_MAP)
+        schedule = copy.deepcopy(MINIMAL_SCHEDULE)
+        vault = tmp_path / "vault"
+        monkeypatch.setattr(gv, "VAULT_DIR", vault)
+
+        run_full(skill_map, schedule)
+
+        grammar_files = list((vault / "Grammar").rglob("*.md")) if (vault / "Grammar").exists() else []
+        vocab_files = list((vault / "Vocabulary").rglob("*.md")) if (vault / "Vocabulary").exists() else []
+        pronunciation_files = list((vault / "Pronunciation").rglob("*.md")) if (vault / "Pronunciation").exists() else []
+        cultural_files = list((vault / "Cultural").rglob("*.md")) if (vault / "Cultural").exists() else []
+
+        assert len(grammar_files) == self.EXPECTED_GRAMMAR
+        assert len(vocab_files) == self.EXPECTED_VOCAB
+        assert len(pronunciation_files) == self.EXPECTED_PRONUNCIATION
+        assert len(cultural_files) == self.EXPECTED_CULTURAL
 
 
 # ---------------------------------------------------------------------------

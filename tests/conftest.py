@@ -115,17 +115,86 @@ MINIMAL_LEARNER_PROFILE = {
     "name": "Test Learner",
     "native_language": "English",
     "target_dialect": "Mexican",
-    "goals": ["travel"],
-    "initial_placement": {"level": None},
+    "initial_placement": {
+        "level": None,
+        "date": None,
+        "self_report": "",
+        "grammar_result": "",
+        "vocabulary_observation": "",
+        "reading_result": "",
+        "confidence": "",
+        "evidence_summary": "",
+    },
 }
 
 MINIMAL_SYSTEM_HEALTH = {
     "schema_version": 1,
-    "last_session": None,
-    "total_sessions": 0,
-    "consecutive_days": 0,
-    "state_errors": [],
-    "auto_fixes": [],
+    "concepts_requiring_reteach_total": 0,
+    "average_sessions_to_acquire": 0,
+    "reteach_rate_30d": 0.0,
+    "homework_completion_rate_30d": 0.0,
+    "homework_reported_difficulty_avg": 0.0,
+    "days_in_current_phase": 0,
+    "concepts_acquired_per_month": 0,
+    "concepts_in_practicing_simultaneously": 0,
+    "average_session_duration_30d": 0,
+    "session_frequency_30d": 0.0,
+    "learner_initiated_topics_30d": 0,
+    "sessions_rated_too_easy_30d": 0,
+    "sessions_rated_too_hard_30d": 0,
+    "anki_estimated_deck_size": 0,
+    "anki_estimated_daily_review_minutes": 0,
+    "last_validation_issues": [],
+    "placement_validation_metrics": {
+        "placement_level": None,
+        "initial_confidence": None,
+        "total_concepts_validated": 0,
+        "total_downgrades": 0,
+        "final_assessment": None,
+        "validation_completed": None,
+    },
+    "goal_tracking": {
+        "primary_goal_progress": "",
+        "estimated_weeks_remaining": None,
+        "concepts_remaining_for_next_phase": 0,
+        "concepts_remaining_for_target_level": 0,
+        "current_acquisition_rate": 0.0,
+        "last_goal_review": None,
+        "milestone_progress": [],
+    },
+    "session_difficulty_tracking": {
+        "last_rating": None,
+        "consecutive_too_easy": 0,
+        "consecutive_too_hard": 0,
+        "recent_ratings": [],
+    },
+    "last_system_review": None,
+}
+
+MINIMAL_SESSION_LOG = {
+    "date": "2026-04-10",
+    "session_number": 5,
+    "duration_minutes": 30,
+    "session_type": "standard",
+    "session_status": "complete",
+    "learner_energy": "medium",
+    "gap_days": 1,
+    "session_activities": [],
+    "skill_map_updates": [],
+    "assignments": [],
+    "decision_engine_trace": {
+        "candidates_scored": 3,
+        "top_candidates": [],
+        "selected_primary": "A-01-present-regular",
+        "selected_secondary": "",
+        "override_reason": None,
+    },
+    "session_difficulty_rating": "just-right",
+    "next_session": {
+        "recommended_focus": "A-01-present-regular",
+        "reason": "Continue practice",
+        "session_type": "normal",
+    },
 }
 
 MINIMAL_RESOURCE_TRACKER = {
@@ -177,6 +246,18 @@ def schedule_data():
 def profile_data():
     import copy
     return copy.deepcopy(MINIMAL_LEARNER_PROFILE)
+
+
+@pytest.fixture
+def system_health_data():
+    import copy
+    return copy.deepcopy(MINIMAL_SYSTEM_HEALTH)
+
+
+@pytest.fixture
+def session_log_data():
+    import copy
+    return copy.deepcopy(MINIMAL_SESSION_LOG)
 
 
 @pytest.fixture
