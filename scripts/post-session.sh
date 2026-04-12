@@ -167,6 +167,25 @@ except yaml.YAMLError as e:
 fi
 
 # ---------------------------------------------------------------------------
+# Transcript check (soft — WARN only, does not block commit)
+# ---------------------------------------------------------------------------
+
+TRANSCRIPT="$ROOT/transcripts/$DATE.md"
+
+step "Checking for session transcript at transcripts/$DATE.md"
+if $DRY_RUN; then
+    printf "${YELLOW}[dry-run]${RESET} Would verify: %s\n" "$TRANSCRIPT"
+else
+    if [[ ! -f "$TRANSCRIPT" ]]; then
+        warn "Session transcript not found: transcripts/$DATE.md"
+    elif [[ $(wc -c < "$TRANSCRIPT") -lt 100 ]]; then
+        warn "Session transcript is suspiciously small (<100 bytes): transcripts/$DATE.md"
+    else
+        info "Session transcript found: transcripts/$DATE.md"
+    fi
+fi
+
+# ---------------------------------------------------------------------------
 # Step 5: Check session log protocol compliance
 # ---------------------------------------------------------------------------
 #
