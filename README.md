@@ -1,8 +1,8 @@
 # Spanish Fluency Tutor
 
-A personal Spanish tutor that runs in your terminal. It tracks your progress in plain YAML files, adapts sessions to your energy and goals, assigns homework using real tools (Anki, Dreaming Spanish, Language Transfer), and picks up exactly where you left off every session.
+A personal Spanish tutor that runs in your terminal. It tracks your progress in plain text files on your machine, adapts sessions to your energy and goals, assigns homework using real tools (Anki, Dreaming Spanish, Language Transfer), and picks up exactly where you left off every session.
 
-The tutor is [Claude Code](https://claude.ai/download) — Anthropic's CLI — running against a curated curriculum, a schema-validated learner state, and a 19-step post-session protocol. You own all the data. It lives in this folder. Nothing is uploaded anywhere.
+The tutor is [Claude Code](https://claude.ai/download) — Anthropic's CLI — running against a curated Spanish curriculum. Your progress lives in this folder as plain text files and picks up exactly where you left off every session.
 
 ## Quick start
 
@@ -36,6 +36,8 @@ Your first session walks you through onboarding — goals, target dialect, sched
 - **L1 interference tracking** — common English→Spanish mistakes are preempted before they become habits
 - **Weekly reviews** that summarize progress and adjust the plan
 - **A feedback channel** (`feedback/`) and a parking lot (`parking-lot.md`) for dropping notes between sessions
+
+You don't need Anki, Dreaming Spanish, or any other external tool installed before your first session — the tutor walks you through setup gradually as you progress through phases.
 
 ## Requirements
 
