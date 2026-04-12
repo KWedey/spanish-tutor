@@ -1,6 +1,7 @@
 """Tests for scripts/generate-vault.py vault generation functions."""
 import copy
 import importlib
+import re
 import sys
 from pathlib import Path
 
@@ -284,6 +285,69 @@ class TestRunFullFileCount:
         assert len(vocab_files) == self.EXPECTED_VOCAB
         assert len(pronunciation_files) == self.EXPECTED_PRONUNCIATION
         assert len(cultural_files) == self.EXPECTED_CULTURAL
+
+
+# ---------------------------------------------------------------------------
+# 6b. run_full with all-None receptive data — H2 regression guard
+# ---------------------------------------------------------------------------
+
+class TestRunFullNoneFormatting:
+    """The H2 bug shipped because the SYNTHETIC_SKILL_MAP fixture used
+    populated receptive levels (L1/R1), so the None path was never exercised.
+    This test builds a skill map with every receptive field set to None and
+    asserts no literal 'None' string appears in Home.md or Roadmap.md — the
+    two files that interpolate receptive values into their body text.
+    """
+
+    @staticmethod
+    def _none_receptive_skill_map():
+        sm = copy.deepcopy(TestRunFullFileCount.SYNTHETIC_SKILL_MAP)
+        sm["receptive_skills"] = {
+            "listening": {
+                "current_level": None,
+                "hours_at_level": None,
+                "hours_total": None,
+                "comprehension_quality": None,
+            },
+            "reading": {
+                "current_level": None,
+                "hours_at_level": None,
+                "hours_total": None,
+                "comprehension_quality": None,
+                "lookup_frequency": None,
+            },
+        }
+        return sm
+
+    def test_no_literal_none_in_home(self, tmp_path, monkeypatch):
+        skill_map = self._none_receptive_skill_map()
+        schedule = copy.deepcopy(MINIMAL_SCHEDULE)
+        vault = tmp_path / "vault"
+        monkeypatch.setattr(gv, "VAULT_DIR", vault)
+
+        run_full(skill_map, schedule)
+
+        home_content = (vault / "Home.md").read_text(encoding="utf-8")
+        matches = re.findall(r"\bNone\b", home_content)
+        assert matches == [], (
+            f"Home.md contains literal 'None' {len(matches)} time(s) — "
+            f"the H2 formatting bug has regressed.\n--- Home.md ---\n{home_content}"
+        )
+
+    def test_no_literal_none_in_roadmap(self, tmp_path, monkeypatch):
+        skill_map = self._none_receptive_skill_map()
+        schedule = copy.deepcopy(MINIMAL_SCHEDULE)
+        vault = tmp_path / "vault"
+        monkeypatch.setattr(gv, "VAULT_DIR", vault)
+
+        run_full(skill_map, schedule)
+
+        roadmap_content = (vault / "Roadmap.md").read_text(encoding="utf-8")
+        matches = re.findall(r"\bNone\b", roadmap_content)
+        assert matches == [], (
+            f"Roadmap.md contains literal 'None' {len(matches)} time(s) — "
+            f"the H2 formatting bug has regressed.\n--- Roadmap.md ---\n{roadmap_content}"
+        )
 
 
 # ---------------------------------------------------------------------------
