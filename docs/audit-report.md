@@ -1,5 +1,10 @@
 # Spanish Fluency Tutor — Comprehensive Audit Report
 
+> **Status: historical snapshot.** This audit was captured on 2026-04-11.
+> Many findings have since been resolved in commits `eece2e3..088f8a0`
+> (the C1-C3 and H1-H6 punchlist). Read this document as a record of what
+> was found, not as a current punchlist.
+
 **Date:** 2026-04-11
 **Scope:** Pedagogical methodology, engineering quality, agent reliability, structural consistency
 **Status:** All state files empty (no sessions conducted yet)
