@@ -45,6 +45,39 @@ def run_script(name, args=None):
     return result
 
 
+def has_existing_state():
+    """Detect whether the repo already holds real learner data.
+
+    A learner profile with a populated name, any session log, or any
+    journal entry counts as existing state. Returns False on a pristine
+    template checkout so a fresh install can initialize normally.
+    """
+    profile_path = ROOT / "state" / "learner-profile.yaml"
+    if profile_path.exists():
+        try:
+            import yaml
+            data = yaml.safe_load(profile_path.read_text(encoding="utf-8")) or {}
+            name = data.get("name")
+            if name and str(name).strip():
+                return True
+        except Exception:
+            pass
+
+    sessions_dir = ROOT / "state" / "sessions"
+    if sessions_dir.exists():
+        for f in sessions_dir.iterdir():
+            if f.is_file() and f.suffix == ".yaml":
+                return True
+
+    journal_dir = ROOT / "journal"
+    if journal_dir.exists():
+        for f in journal_dir.iterdir():
+            if f.is_file() and f.suffix == ".md" and f.name != ".gitkeep":
+                return True
+
+    return False
+
+
 def main():
     print(bold("\n=== Spanish Fluency Tutor — Setup ===\n"))
 
@@ -53,7 +86,12 @@ def main():
     check_pyyaml()
 
     print("\nInitializing learner state...")
-    run_script("init-student.py", ["--force"])
+    if has_existing_state():
+        print(yellow("  Existing learner state detected — skipping init."))
+        print("  Re-running vault generation and validation only.")
+        print("  Use `python3 scripts/init-student.py` directly to reset.")
+    else:
+        run_script("init-student.py", ["--force"])
 
     print("\nGenerating Obsidian vault...")
     run_script("generate-vault.py", ["--full"])
