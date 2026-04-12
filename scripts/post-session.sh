@@ -2,8 +2,9 @@
 # post-session.sh — Automate mechanical post-session steps.
 #
 # Runs vault generation, session archival, state validation, session log
-# verification, and (optionally) git commit. Reduces the tutor agent's
-# post-session responsibility from ~15 manual steps to ~7.
+# well-formedness + protocol-compliance checks, and (optionally) git commit.
+# Reduces the tutor agent's post-session responsibility from ~15 manual steps
+# to ~7.
 #
 # Usage:
 #   scripts/post-session.sh 2026-04-11
@@ -58,7 +59,8 @@ while [[ $# -gt 0 ]]; do
             echo "  2. Archive session logs older than 60 days"
             echo "  3. Validate state files"
             echo "  4. Verify session log exists and is well-formed"
-            echo "  5. Git commit all changes"
+            echo "  5. Check session log protocol compliance"
+            echo "  6. Git commit all changes"
             echo ""
             echo "Options:"
             echo "  --dry-run     Show what would be done without executing"
@@ -109,7 +111,7 @@ run() {
 # Step 1: Generate/update vault content
 # ---------------------------------------------------------------------------
 
-step "Step 1/5: Generating vault content for $DATE"
+step "Step 1/6: Generating vault content for $DATE"
 run python3 "$ROOT/scripts/generate-vault.py" --session --date "$DATE"
 if ! $DRY_RUN; then info "Vault generation complete"; fi
 
@@ -117,7 +119,7 @@ if ! $DRY_RUN; then info "Vault generation complete"; fi
 # Step 2: Archive old session logs
 # ---------------------------------------------------------------------------
 
-step "Step 2/5: Archiving session logs older than 60 days"
+step "Step 2/6: Archiving session logs older than 60 days"
 run python3 "$ROOT/scripts/archive-sessions.py"
 if ! $DRY_RUN; then info "Session archival complete"; fi
 
@@ -125,7 +127,7 @@ if ! $DRY_RUN; then info "Session archival complete"; fi
 # Step 3: Validate state files
 # ---------------------------------------------------------------------------
 
-step "Step 3/5: Validating state files"
+step "Step 3/6: Validating state files"
 run python3 "$ROOT/scripts/validate-state.py"
 if ! $DRY_RUN; then info "State validation passed"; fi
 
@@ -135,7 +137,7 @@ if ! $DRY_RUN; then info "State validation passed"; fi
 
 SESSION_LOG="$ROOT/state/sessions/$DATE.yaml"
 
-step "Step 4/5: Verifying session log at state/sessions/$DATE.yaml"
+step "Step 4/6: Verifying session log at state/sessions/$DATE.yaml"
 if $DRY_RUN; then
     printf "${YELLOW}[dry-run]${RESET} Would verify: %s\n" "$SESSION_LOG"
 else
@@ -165,13 +167,35 @@ except yaml.YAMLError as e:
 fi
 
 # ---------------------------------------------------------------------------
-# Step 5: Git commit
+# Step 5: Check session log protocol compliance
+# ---------------------------------------------------------------------------
+#
+# Deeper than Step 4 (YAML well-formedness). This catches silent protocol
+# drift — the tutor agent skipping steps in the 19-step post-session
+# protocol. Missing expected fields → FAIL. Empty expected fields → WARN
+# (use --strict on check-session-log.py directly to treat empties as fails).
+
+step "Step 5/6: Checking session log protocol compliance"
+if $DRY_RUN; then
+    printf "${YELLOW}[dry-run]${RESET} Would run: scripts/check-session-log.py %s\n" "$DATE"
+else
+    if python3 "$ROOT/scripts/check-session-log.py" "$DATE"; then
+        info "Session log protocol check passed"
+    else
+        error "Session log is missing fields expected for its session type."
+        error "Populate them in state/sessions/$DATE.yaml before committing."
+        exit 1
+    fi
+fi
+
+# ---------------------------------------------------------------------------
+# Step 6: Git commit
 # ---------------------------------------------------------------------------
 
 if $NO_COMMIT; then
-    step "Step 5/5: Skipping git commit (--no-commit)"
+    step "Step 6/6: Skipping git commit (--no-commit)"
 else
-    step "Step 5/5: Committing changes"
+    step "Step 6/6: Committing changes"
     if $DRY_RUN; then
         printf "${YELLOW}[dry-run]${RESET} Would run: git add + git commit\n"
     else

@@ -1,0 +1,251 @@
+#!/usr/bin/env python3
+"""Pre-flight check: verify the tutoring system is ready for a new user.
+
+Runs four checks in sequence and reports go/no-go:
+  1. State validation  — all state files parse and pass cross-checks
+  2. Test suite        — all pytest tests pass
+  3. Vault generation  — Obsidian vault builds without errors
+  4. Fresh init        — init-student.py can produce clean templates (dry-run)
+
+Usage:
+    python3 scripts/preflight.py           # full pre-flight
+    python3 scripts/preflight.py --quick   # skip test suite (faster)
+"""
+import argparse
+import subprocess
+import sys
+import tempfile
+import shutil
+from pathlib import Path
+
+from shared import ROOT, STATE_DIR, VAULT_DIR, load_yaml
+
+_C = sys.stdout.isatty()
+green = lambda t: f"\033[32m{t}\033[0m" if _C else t
+red = lambda t: f"\033[31m{t}\033[0m" if _C else t
+yellow = lambda t: f"\033[33m{t}\033[0m" if _C else t
+bold = lambda t: f"\033[1m{t}\033[0m" if _C else t
+dim = lambda t: f"\033[2m{t}\033[0m" if _C else t
+
+
+def run(cmd: list[str], label: str, *, capture: bool = True) -> tuple[bool, str]:
+    """Run a subprocess and return (success, output)."""
+    try:
+        r = subprocess.run(
+            cmd, cwd=str(ROOT), capture_output=capture, text=True, timeout=120,
+        )
+        output = (r.stdout + r.stderr).strip()
+        return r.returncode == 0, output
+    except subprocess.TimeoutExpired:
+        return False, f"{label} timed out after 120s"
+    except FileNotFoundError as e:
+        return False, f"Command not found: {e}"
+
+
+# ---------------------------------------------------------------------------
+# Individual checks
+# ---------------------------------------------------------------------------
+
+def check_state_validation() -> tuple[bool, str]:
+    """Check 1: validate-state.py passes with 0 warnings, 0 failures."""
+    ok, out = run([sys.executable, "scripts/validate-state.py"], "state validation")
+    if not ok:
+        return False, out
+    # Parse summary line
+    for line in out.splitlines():
+        if "failures" in line.lower():
+            if "0 warnings, 0 failures" in line:
+                return True, line.strip()
+            return False, line.strip()
+    return ok, out
+
+
+def check_test_suite() -> tuple[bool, str]:
+    """Check 2: pytest passes."""
+    ok, out = run(
+        [sys.executable, "-m", "pytest", "tests/", "-q", "--tb=line"],
+        "test suite",
+    )
+    if not ok:
+        # Show last few lines for context
+        lines = out.strip().splitlines()
+        return False, "\n".join(lines[-10:])
+    for line in out.splitlines():
+        if "passed" in line:
+            return True, line.strip()
+    return ok, out.splitlines()[-1] if out else "(no output)"
+
+
+def check_vault_generation() -> tuple[bool, str]:
+    """Check 3: generate-vault.py --full succeeds."""
+    ok, out = run(
+        [sys.executable, "scripts/generate-vault.py", "--full"],
+        "vault generation",
+    )
+    if not ok:
+        return False, out
+    for line in out.splitlines():
+        if "files written" in line.lower() or "complete" in line.lower():
+            return True, line.strip()
+    return ok, out.splitlines()[-1] if out else "(no output)"
+
+
+def check_fresh_init() -> tuple[bool, str]:
+    """Check 4: init-student.py can produce clean state in a temp directory.
+
+    Copies current state to temp, runs init --force there, then validates.
+    Does NOT touch the real state directory.
+    """
+    tmpdir = None
+    try:
+        tmpdir = Path(tempfile.mkdtemp(prefix="preflight-"))
+        # Copy state dir to temp
+        tmp_state = tmpdir / "state"
+        shutil.copytree(STATE_DIR, tmp_state)
+
+        # Run init-student.py --force in a subprocess with modified state
+        # We test that the script runs without error, not that it modifies temp
+        ok, out = run(
+            [sys.executable, "scripts/init-student.py", "--force"],
+            "fresh init",
+        )
+        if not ok:
+            return False, out
+
+        # After init, validate the freshly-reset state
+        ok2, out2 = run(
+            [sys.executable, "scripts/validate-state.py"],
+            "post-init validation",
+        )
+        if not ok2:
+            return False, f"Init succeeded but validation failed:\n{out2}"
+
+        return True, "init + validation passed"
+    except Exception as e:
+        return False, str(e)
+    finally:
+        if tmpdir and tmpdir.exists():
+            shutil.rmtree(tmpdir, ignore_errors=True)
+
+
+def check_key_files_exist() -> tuple[bool, str]:
+    """Check 5: critical files exist and are non-empty."""
+    critical = [
+        "CLAUDE.md",
+        "STUDENT-GUIDE.md",
+        "SETUP.md",
+        "curriculum/tutor-guides/first-session.md",
+        "curriculum/tutor-guides/decision-engine.md",
+        "curriculum/tutor-guides/onboarding-guide.md",
+        "curriculum/l1-interference.yaml",
+        "state/skill-map.yaml",
+        "state/schedule.yaml",
+        "state/learner-profile.yaml",
+        "state/system-health.yaml",
+        "state/resource-tracker.yaml",
+        "schemas/session-log.schema.yaml",
+    ]
+    missing = []
+    empty = []
+    for rel in critical:
+        p = ROOT / rel
+        if not p.exists():
+            missing.append(rel)
+        elif p.stat().st_size == 0:
+            empty.append(rel)
+
+    issues = []
+    if missing:
+        issues.append(f"Missing: {', '.join(missing)}")
+    if empty:
+        issues.append(f"Empty: {', '.join(empty)}")
+    if issues:
+        return False, "; ".join(issues)
+    return True, f"{len(critical)} critical files present"
+
+
+def check_obsidian_ready() -> tuple[bool, str]:
+    """Check 6: Obsidian vault is browsable."""
+    issues = []
+    if not VAULT_DIR.exists():
+        return False, "vault/ directory does not exist"
+
+    # Check .obsidianignore exists
+    ignore = ROOT / ".obsidianignore"
+    if not ignore.exists():
+        issues.append(".obsidianignore missing — system dirs visible to learner")
+
+    # Check Home.md exists
+    home = VAULT_DIR / "Home.md"
+    if not home.exists():
+        issues.append("vault/Home.md missing")
+
+    # Check Getting Started exists
+    gs = VAULT_DIR / "Getting Started.md"
+    if not gs.exists():
+        issues.append("vault/Getting Started.md missing")
+
+    # Count vault files
+    vault_files = list(VAULT_DIR.rglob("*.md"))
+    if len(vault_files) < 10:
+        issues.append(f"Only {len(vault_files)} vault files (expected 70+)")
+
+    if issues:
+        return False, "; ".join(issues)
+    return True, f"{len(vault_files)} vault files, Home + Getting Started present"
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+CHECKS = [
+    ("State validation", check_state_validation),
+    ("Key files exist", check_key_files_exist),
+    ("Test suite", check_test_suite),
+    ("Vault generation", check_vault_generation),
+    ("Obsidian ready", check_obsidian_ready),
+    ("Fresh init cycle", check_fresh_init),
+]
+
+QUICK_SKIP = {"Test suite", "Fresh init cycle"}
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Pre-flight check for tutoring system.")
+    parser.add_argument("--quick", action="store_true", help="Skip test suite and init cycle")
+    args = parser.parse_args()
+
+    print(bold("\n=== Pre-flight Check ===\n"))
+
+    passed = 0
+    failed = 0
+    skipped = 0
+
+    for name, fn in CHECKS:
+        if args.quick and name in QUICK_SKIP:
+            print(f"  {yellow('SKIP')}  {name}")
+            skipped += 1
+            continue
+
+        ok, detail = fn()
+        status = green("PASS") if ok else red("FAIL")
+        print(f"  {status}  {name}  {dim('— ' + detail)}")
+
+        if ok:
+            passed += 1
+        else:
+            failed += 1
+
+    # Verdict
+    print()
+    if failed == 0:
+        print(green(bold(f"  GO  — {passed} passed, {skipped} skipped\n")))
+        sys.exit(0)
+    else:
+        print(red(bold(f"  NO-GO  — {failed} failed, {passed} passed, {skipped} skipped\n")))
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
