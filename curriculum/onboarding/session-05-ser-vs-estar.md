@@ -54,7 +54,7 @@ Use a mnemonic if it helps the learner's style. Some find DOCTOR/PLACE useful (s
 **Mixed identity and state conversation:**
 "Tell me about yourself — who you are, where you're from, what you do — AND how you're feeling right now."
 
-This forces mixing ser (identity: soy Kyle, soy de..., soy...) with estar (state: estoy cansado, estoy contento, estoy en...). Listen carefully for confusion between the two. Do NOT interrupt to correct. Note errors for review.
+This forces mixing ser (identity: soy [name], soy de..., soy...) with estar (state: estoy cansado, estoy contento, estoy en...). Listen carefully for confusion between the two. Do NOT interrupt to correct. Note errors for review.
 
 After the conversation: give 2-3 corrections on ser/estar specifically. Highlight any correct uses: "You said 'estoy cansado' — that's exactly right. Tired is a temporary state, so it's estar."
 

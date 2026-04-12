@@ -27,8 +27,13 @@ state/.snapshot/
 state/learner-profile.yaml
 state/schedule.yaml
 state/skill-map.yaml
+!state/skill-map.template.yaml
 state/system-health.yaml
 state/resource-tracker.yaml
+
+# Learner feedback files — personal notes about the program experience
+feedback/*.md
+!feedback/TEMPLATE.md
 
 # Session logs and archives
 state/sessions/*

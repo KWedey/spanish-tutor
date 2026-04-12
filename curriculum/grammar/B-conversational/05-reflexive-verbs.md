@@ -48,7 +48,7 @@ The pronoun goes **before** the conjugated verb. The verb itself conjugates norm
 
 | Infinitive | Meaning | Example |
 |-----------|---------|---------|
-| llamarse | to be called | Me llamo Kyle. |
+| llamarse | to be called | Me llamo Ana. |
 | sentarse (e→ie) | to sit down | Siéntate aquí. |
 | sentirse (e→ie) | to feel | Me siento bien hoy. |
 | irse | to leave / to go away | Ya me voy. |

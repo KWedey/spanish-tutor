@@ -143,10 +143,25 @@ ZERO_PRONUN = dict(status="unseen", last_practiced=None, external_feedback="")
 
 
 def reset_skill_map() -> None:
-    """Load skill-map.yaml, zero all progress values, and rewrite."""
+    """Load skill-map.yaml, zero all progress values, and rewrite.
+
+    On a fresh clone the working file is gitignored and therefore absent —
+    in that case we bootstrap from state/skill-map.template.yaml (which is
+    tracked). The template is pristine already, but we still run the zero
+    pass so that a stale or hand-edited template can't leak progress values.
+    """
     path = STATE_DIR / "skill-map.yaml"
+    template = STATE_DIR / "skill-map.template.yaml"
     if not path.exists():
-        print(red(f"  MISSING: {path.relative_to(ROOT)}")); return
+        if template.exists():
+            path.write_text(template.read_text(encoding="utf-8"), encoding="utf-8")
+            print(yellow(f"  BOOTSTRAPPED from {template.relative_to(ROOT)}"))
+        else:
+            print(red(
+                f"  MISSING: {path.relative_to(ROOT)} (and no template at "
+                f"{template.relative_to(ROOT)})"
+            ))
+            return
     data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     for entry in (data.get("grammar") or {}).values():
         if isinstance(entry, dict):
