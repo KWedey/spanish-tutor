@@ -16,8 +16,8 @@ bold = lambda t: f"\033[1m{t}\033[0m" if _C else t
 
 def check_python():
     v = sys.version_info
-    if v < (3, 6):
-        print(red(f"Python 3.6+ required (found {v.major}.{v.minor})"))
+    if v < (3, 10):
+        print(red(f"Python 3.10+ required (found {v.major}.{v.minor}). Install from https://python.org"))
         sys.exit(1)
     print(green(f"  Python {v.major}.{v.minor}.{v.micro}"))
 

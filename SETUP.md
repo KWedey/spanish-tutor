@@ -13,7 +13,7 @@
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/KWedey/spanish-tutor.git
+git clone https://github.com/KWedey/spanish-tutor.git language
 cd language
 
 # 2. Run setup (installs dependencies, initializes state, generates vault)
