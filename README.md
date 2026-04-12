@@ -50,7 +50,7 @@ Your first session walks you through onboarding — goals, target dialect, sched
 
 - **[STUDENT-GUIDE.md](STUDENT-GUIDE.md)** — how the system works, what tools you'll use, what to expect over time, what to do when something goes wrong
 - **[SETUP.md](SETUP.md)** — detailed setup, scripts reference, handing off to a new learner
-- **[docs/first-session-dryrun.md](docs/first-session-dryrun.md)** — manual checklist for verifying a fresh install before the first real session
+- **[docs/first-session-dryrun.md](docs/first-session-dryrun.md)** — developer-only: manual checklist for a fresh-install QA pass before handing the project to a test user
 - **[CLAUDE.md](CLAUDE.md)** — the system prompt driving the tutor (useful if you want to understand or modify the tutor's behavior)
 
 ## How your data works

@@ -1,5 +1,7 @@
 # First-Session Dry Run
 
+> **Audience: developers verifying a fresh install before handing the project to a test user.** If you are the test user, skip this file and go directly to [STUDENT-GUIDE.md](../STUDENT-GUIDE.md).
+
 A manual checklist for verifying a fresh install end-to-end before handing the system to a real learner. Run this from a **fresh clone** — don't reuse a checkout that's already been initialized.
 
 Budget ~60-90 minutes end-to-end. Most of that is the simulated first session itself.
