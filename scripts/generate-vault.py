@@ -389,6 +389,23 @@ def generate_cultural_note(concept_id: str, data: dict) -> tuple[Path, str]:
 # Home.md
 # ---------------------------------------------------------------------------
 
+def _has_active_concepts(skill_map: dict) -> bool:
+    """True if any grammar/vocabulary concept has a trackable status."""
+    for section in ('grammar_concepts', 'vocabulary_clusters'):
+        for cdata in (skill_map.get(section) or {}).values():
+            if isinstance(cdata, dict) and cdata.get('status', 'unseen') not in ('unseen', 'automatic'):
+                return True
+    return False
+
+
+def _has_daily_notes() -> bool:
+    """True if vault/Daily/ contains at least one .md file."""
+    daily_dir = VAULT_DIR / "Daily"
+    if not daily_dir.exists():
+        return False
+    return any(f.suffix == '.md' for f in daily_dir.iterdir() if f.is_file())
+
+
 def generate_home(schedule: dict, skill_map: dict) -> tuple[Path, str]:
     phase = schedule.get("current_phase", "A-foundation")
     week = schedule.get("current_week", 1)
@@ -400,6 +417,28 @@ def generate_home(schedule: dict, skill_map: dict) -> tuple[Path, str]:
     reading_quality = reading.get('comprehension_quality') or 'not assessed'
     listening_hours = listening.get('hours_total') or 0
     reading_hours = reading.get('hours_total') or 0
+
+    if _has_daily_notes():
+        homework_section = """\
+```dataview
+TASK
+FROM "vault/Daily"
+SORT file.name DESC
+LIMIT 1
+```"""
+    else:
+        homework_section = "*— will populate after your first session —*"
+
+    if _has_active_concepts(skill_map):
+        concepts_section = """\
+```dataview
+TABLE status, last_practiced, error_rate_production
+FROM "vault/Grammar" OR "vault/Vocabulary"
+WHERE status != "unseen" AND status != "automatic"
+SORT status ASC
+```"""
+    else:
+        concepts_section = "*— will populate after your first session —*"
 
     content = f"""\
 ---
@@ -420,21 +459,11 @@ tags: ["dashboard"]
 
 ## Today's Homework
 
-```dataview
-TASK
-FROM "vault/Daily"
-SORT file.name DESC
-LIMIT 1
-```
+{homework_section}
 
 ## Active Concepts
 
-```dataview
-TABLE status, last_practiced, error_rate_production
-FROM "vault/Grammar" OR "vault/Vocabulary"
-WHERE status != "unseen" AND status != "automatic"
-SORT status ASC
-```
+{concepts_section}
 
 ## Recent Milestones
 
