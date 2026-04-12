@@ -9,7 +9,13 @@
 | **Git** | To clone the repo and receive curriculum updates |
 | **Obsidian** *(optional)* | [obsidian.md](https://obsidian.md) — visual progress dashboard |
 
+> **Note:** Claude Code runs against Anthropic's API — you need an internet connection to run sessions. The Python scripts (setup, preflight, validation) work offline.
+
+Tested with Claude Code 2.1.101.
+
 ## Quick Start
+
+You'll run a few commands in a terminal. On macOS, open Terminal.app (press Cmd+Space, type "Terminal"). On Windows, use PowerShell or Git Bash. On Linux, your usual terminal. The commands below can be copy-pasted.
 
 ```bash
 # 1. Clone the repo
