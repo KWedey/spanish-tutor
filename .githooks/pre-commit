@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Pre-commit hook: blocks accidental commits of personal learner data.
+#
+# Files in state/sessions/, journal/, transcripts/, etc. are gitignored by
+# default. This hook catches the case where someone bypasses .gitignore
+# (e.g., git add -f). To override intentionally: git commit --no-verify
+
+set -e
+
+MATCHED_FILES=()
+while IFS= read -r file; do
+    case "$file" in
+        state/sessions/*.yaml)      MATCHED_FILES+=("$file") ;;
+        state/summaries/*.yaml)     MATCHED_FILES+=("$file") ;;
+        state/milestones/*.yaml)    MATCHED_FILES+=("$file") ;;
+        journal/*.md)
+            [[ "$(basename "$file")" != ".gitkeep" ]] && MATCHED_FILES+=("$file") ;;
+        transcripts/*.md)
+            [[ "$(basename "$file")" != ".gitkeep" ]] && MATCHED_FILES+=("$file") ;;
+        progress-reports/*.md)
+            [[ "$(basename "$file")" != ".gitkeep" ]] && MATCHED_FILES+=("$file") ;;
+        feedback/*.md)
+            base="$(basename "$file")"
+            [[ "$base" != "TEMPLATE.md" && "$base" != ".gitkeep" ]] && MATCHED_FILES+=("$file") ;;
+        parking-lot.md)             MATCHED_FILES+=("$file") ;;
+    esac
+done < <(git diff --cached --name-only)
+
+if [[ ${#MATCHED_FILES[@]} -gt 0 ]]; then
+    echo ""
+    echo "Refusing to commit personal learner data:"
+    echo ""
+    for f in "${MATCHED_FILES[@]}"; do
+        echo "  $f"
+    done
+    echo ""
+    echo "These files are gitignored by default for a reason. If this"
+    echo "is truly intentional, re-run with: git commit --no-verify"
+    echo ""
+    exit 1
+fi

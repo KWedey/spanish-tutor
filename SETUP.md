@@ -105,6 +105,10 @@ python3 scripts/generate-vault.py --full  # regenerates the vault
 
 This deletes the previous learner's profile, skill map, schedule, sessions, and vault content. Back up anything you want to keep first (`journal/`, `transcripts/`, `state/sessions/`) — `init-student.py --force` does not preserve it.
 
+## Safety
+
+This repo ships a pre-commit hook at `.githooks/pre-commit` that blocks accidental commits of personal data (session logs, journal entries, transcripts). `setup.py` enables it automatically. If you need to override it for a specific commit, use `git commit --no-verify`.
+
 ## First Session
 
 See [STUDENT-GUIDE.md](STUDENT-GUIDE.md) for a full overview of how the system works, what tools you'll use, and what to expect over time.
