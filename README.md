@@ -82,6 +82,10 @@ See [SETUP.md](SETUP.md#handing-off-to-a-new-learner) for details.
 
 This is a personal tutoring system built for a single learner and now being shared with a small test group. It's functional but not battle-tested across many users. If you hit a bug, drop a note in `feedback/` or open an issue.
 
+## Getting Help
+
+Hit a bug or have feedback? Open an issue at https://github.com/KWedey/spanish-tutor/issues, or drop a note in `feedback/` and mention it at the start of your next session.
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

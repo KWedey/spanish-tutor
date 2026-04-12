@@ -19,7 +19,10 @@ cd language
 # 2. Run setup (installs dependencies, initializes state, generates vault)
 python3 scripts/setup.py
 
-# 3. Start your first session
+# 3. Verify everything is ready
+python3 scripts/preflight.py
+
+# 4. Start your first session
 claude
 ```
 

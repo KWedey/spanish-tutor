@@ -83,6 +83,10 @@ Drop a file named `YYYY-MM-DD-short-title.md` with whatever's on your mind. Ther
 
 Feedback about the program goes here. Spanish questions still go in `parking-lot.md`.
 
+## Pausing and Resuming
+
+You can quit a session any time — just close the terminal or Ctrl-C. Next time you run `claude`, the tutor picks up where you left off. If you miss a day, a week, or longer, the tutor notices and adjusts — you don't have to apologize for breaks. Nothing is lost.
+
 ## When Something Goes Wrong
 
 Occasionally the tutor might do something you don't agree with — mark a concept as "acquired" when you don't feel you've got it, assign homework you already did, or write something weird into your state files. Everything is recoverable.
@@ -127,3 +131,7 @@ The system defines "done" based on your personal goals. When you consistently op
 ## Your Data
 
 Everything is stored locally on your machine in this project folder. You can inspect any file at any time — there are no black boxes. Your progress, your errors, your homework history — it's all in readable YAML files. You own all of it.
+
+## Getting Help
+
+Hit a bug or have feedback? Open an issue at https://github.com/KWedey/spanish-tutor/issues, or drop a note in `feedback/` and mention it at the start of your next session.
