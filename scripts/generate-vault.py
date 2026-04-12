@@ -394,12 +394,12 @@ def generate_home(schedule: dict, skill_map: dict) -> tuple[Path, str]:
     week = schedule.get("current_week", 1)
     listening = skill_map.get('receptive_skills', {}).get('listening', {})
     reading = skill_map.get('receptive_skills', {}).get('reading', {})
-    listening_level = listening.get('current_level', 'L1')
-    reading_level = reading.get('current_level', 'R1')
+    listening_level = listening.get('current_level') or '—'
+    reading_level = reading.get('current_level') or '—'
     listening_quality = listening.get('comprehension_quality') or 'not assessed'
     reading_quality = reading.get('comprehension_quality') or 'not assessed'
-    listening_hours = listening.get('hours_total', 0)
-    reading_hours = reading.get('hours_total', 0)
+    listening_hours = listening.get('hours_total') or 0
+    reading_hours = reading.get('hours_total') or 0
 
     content = f"""\
 ---
@@ -443,7 +443,7 @@ SORT status ASC
 ## Quick Links
 
 - [[Roadmap]]
-- [[Parking Lot]]
+- [[parking-lot|Parking Lot]]
 - [[Progress/Grammar Progress|Grammar Progress]]
 - [[Progress/Vocabulary Progress|Vocabulary Progress]]
 
@@ -522,8 +522,8 @@ def generate_roadmap(skill_map: dict) -> tuple[Path, str]:
         lines.append("")
 
     # Input levels section
-    listening_level = skill_map.get('receptive_skills', {}).get('listening', {}).get('current_level', 'L1')
-    reading_level = skill_map.get('receptive_skills', {}).get('reading', {}).get('current_level', 'R1')
+    listening_level = skill_map.get('receptive_skills', {}).get('listening', {}).get('current_level') or '—'
+    reading_level = skill_map.get('receptive_skills', {}).get('reading', {}).get('current_level') or '—'
     lines.append("## Input Levels")
     lines.append("")
     lines.append("### Listening")
