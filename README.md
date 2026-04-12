@@ -11,7 +11,7 @@ The tutor is [Claude Code](https://claude.ai/download) — Anthropic's CLI — r
 #    https://claude.ai/download
 
 # 2. Clone this repo
-git clone <repo-url> language
+git clone https://github.com/KWedey/spanish-tutor.git language
 cd language
 
 # 3. Run setup — installs dependencies, initializes your learner state,
@@ -71,7 +71,7 @@ All of these are gitignored by default — they won't accidentally leak if you p
 **Do not share the same folder between two learners.** Each learner gets their own fresh clone:
 
 ```bash
-git clone <repo-url> spanish-for-alice
+git clone https://github.com/KWedey/spanish-tutor.git spanish-for-alice
 cd spanish-for-alice
 python3 scripts/setup.py
 ```

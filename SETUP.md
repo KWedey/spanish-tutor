@@ -13,7 +13,7 @@
 
 ```bash
 # 1. Clone the repo
-git clone <repo-url>
+git clone https://github.com/KWedey/spanish-tutor.git
 cd language
 
 # 2. Run setup (installs dependencies, initializes state, generates vault)
@@ -80,7 +80,7 @@ Instead, give them a fresh clone:
 
 ```bash
 # Each learner gets their own copy
-git clone <repo-url> spanish-for-alice
+git clone https://github.com/KWedey/spanish-tutor.git spanish-for-alice
 cd spanish-for-alice
 python3 scripts/setup.py
 ```

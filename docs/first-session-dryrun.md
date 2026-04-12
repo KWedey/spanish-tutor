@@ -9,7 +9,7 @@ Budget ~60-90 minutes end-to-end. Most of that is the simulated first session it
 ## Part 1 — Installation (~5 min)
 
 ```bash
-git clone <repo-url> language-dryrun
+git clone https://github.com/KWedey/spanish-tutor.git language-dryrun
 cd language-dryrun
 python3 scripts/setup.py
 ```
