@@ -45,13 +45,74 @@ def run_script(name, args=None):
     return result
 
 
+# Pristine parking-lot.md contents. Must match TEMPLATES["parking-lot.md"] in
+# scripts/init-student.py — the sync is guarded by
+# tests/test_setup.py::test_parking_lot_template_matches_init_student.
+PARKING_LOT_TEMPLATE = (
+    "# Parking Lot — Things I Want to Learn\n\n"
+    "Add anything here between sessions. Your tutor will review this at the\n"
+    "start of each session and work items into lessons.\n\n"
+    "## Urgent (need before an upcoming real-world situation)\n\n\n"
+    "## Questions\n\n\n## Words & Phrases I Encountered\n\n\n## Completed\n\n"
+)
+
+
+def _dir_has_file(rel_path: str, suffix: str) -> bool:
+    """True if ROOT/rel_path contains any non-.gitkeep file with the given suffix."""
+    d = ROOT / rel_path
+    if not d.exists():
+        return False
+    for f in d.iterdir():
+        if not f.is_file() or f.name == ".gitkeep":
+            continue
+        if f.suffix == suffix:
+            return True
+    return False
+
+
 def has_existing_state():
     """Detect whether the repo already holds real learner data.
 
-    A learner profile with a populated name, any session log, or any
-    journal entry counts as existing state. Returns False on a pristine
-    template checkout so a fresh install can initialize normally.
+    Returns True on any of:
+      - A session log in state/sessions/
+      - A journal entry in journal/
+      - An archived session in state/sessions/archive/
+      - A weekly summary in state/summaries/
+      - A milestone in state/milestones/
+      - A progress report in progress-reports/
+      - parking-lot.md modified from its pristine template
+      - state/learner-profile.yaml with a populated name
+
+    init-student.py wipes all of these directories on reset, so any one of
+    them counts as user data that must be preserved. Cheap directory
+    iteration runs first; the YAML parse is the most expensive check and
+    runs last.
     """
+    # Directory-level checks — no file content read.
+    if _dir_has_file("state/sessions", ".yaml"):
+        return True
+    if _dir_has_file("journal", ".md"):
+        return True
+    if _dir_has_file("state/sessions/archive", ".yaml"):
+        return True
+    if _dir_has_file("state/summaries", ".yaml"):
+        return True
+    if _dir_has_file("state/milestones", ".yaml"):
+        return True
+    if _dir_has_file("progress-reports", ".md"):
+        return True
+
+    # Parking lot: compare against pristine template. rstrip so a trailing
+    # newline drift between platforms doesn't trigger a false positive.
+    parking_lot = ROOT / "parking-lot.md"
+    if parking_lot.exists():
+        try:
+            if parking_lot.read_text(encoding="utf-8").rstrip() != PARKING_LOT_TEMPLATE.rstrip():
+                return True
+        except OSError:
+            pass
+
+    # Profile: most expensive check (YAML parse) — runs last.
     profile_path = ROOT / "state" / "learner-profile.yaml"
     if profile_path.exists():
         try:
@@ -62,18 +123,6 @@ def has_existing_state():
                 return True
         except Exception:
             pass
-
-    sessions_dir = ROOT / "state" / "sessions"
-    if sessions_dir.exists():
-        for f in sessions_dir.iterdir():
-            if f.is_file() and f.suffix == ".yaml":
-                return True
-
-    journal_dir = ROOT / "journal"
-    if journal_dir.exists():
-        for f in journal_dir.iterdir():
-            if f.is_file() and f.suffix == ".md" and f.name != ".gitkeep":
-                return True
 
     return False
 
