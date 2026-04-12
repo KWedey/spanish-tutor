@@ -42,16 +42,16 @@ def _seed_pristine(root: Path, setup_module) -> None:
     (root / "state" / "sessions" / "archive").mkdir(exist_ok=True)
     (root / "state" / "summaries").mkdir(exist_ok=True)
     (root / "state" / "milestones").mkdir(exist_ok=True)
+    (root / "state" / "offline-guides").mkdir(exist_ok=True)
     (root / "journal").mkdir(exist_ok=True)
     (root / "progress-reports").mkdir(exist_ok=True)
 
-    # Gitkeep placeholders so iterdir returns something non-empty but
-    # doesn't trigger the "has data" branches
     for rel in (
         "state/sessions/.gitkeep",
         "state/sessions/archive/.gitkeep",
         "state/summaries/.gitkeep",
         "state/milestones/.gitkeep",
+        "state/offline-guides/.gitkeep",
         "journal/.gitkeep",
         "progress-reports/.gitkeep",
     ):
@@ -62,6 +62,9 @@ def _seed_pristine(root: Path, setup_module) -> None:
     )
     (root / "state" / "learner-profile.yaml").write_text(
         "name: \"\"\n", encoding="utf-8"
+    )
+    (root / "state" / "resource-tracker.yaml").write_text(
+        "schema_version: 1\nresources: []\n", encoding="utf-8"
     )
 
 
@@ -109,6 +112,34 @@ class TestHasExistingState:
         _seed_pristine(tmp_path, setup_module)
         (tmp_path / "state" / "sessions" / "archive" / "2026-03-01.yaml").write_text(
             "date: 2026-03-01\n", encoding="utf-8"
+        )
+        monkeypatch.setattr(setup_module, "ROOT", tmp_path)
+        assert setup_module.has_existing_state() is True
+
+    def test_parking_lot_mid_edit_returns_true(self, tmp_path, monkeypatch, setup_module):
+        """User edits the Urgent section (middle of file, not trailing append)."""
+        _seed_pristine(tmp_path, setup_module)
+        content = setup_module.PARKING_LOT_TEMPLATE.replace(
+            "## Urgent (need before an upcoming real-world situation)\n\n\n",
+            "## Urgent (need before an upcoming real-world situation)\n\n"
+            "- Trip to Mexico in 2 weeks\n\n",
+        )
+        (tmp_path / "parking-lot.md").write_text(content, encoding="utf-8")
+        monkeypatch.setattr(setup_module, "ROOT", tmp_path)
+        assert setup_module.has_existing_state() is True
+
+    def test_offline_guide_returns_true(self, tmp_path, monkeypatch, setup_module):
+        _seed_pristine(tmp_path, setup_module)
+        (tmp_path / "state" / "offline-guides" / "restaurant-phrases.md").write_text(
+            "# Restaurant phrases\n", encoding="utf-8"
+        )
+        monkeypatch.setattr(setup_module, "ROOT", tmp_path)
+        assert setup_module.has_existing_state() is True
+
+    def test_resource_with_entries_returns_true(self, tmp_path, monkeypatch, setup_module):
+        _seed_pristine(tmp_path, setup_module)
+        (tmp_path / "state" / "resource-tracker.yaml").write_text(
+            "schema_version: 1\nresources:\n  - id: dreaming-spanish\n", encoding="utf-8"
         )
         monkeypatch.setattr(setup_module, "ROOT", tmp_path)
         assert setup_module.has_existing_state() is True

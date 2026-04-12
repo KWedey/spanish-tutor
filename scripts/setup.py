@@ -57,15 +57,18 @@ PARKING_LOT_TEMPLATE = (
 )
 
 
-def _dir_has_file(rel_path: str, suffix: str) -> bool:
-    """True if ROOT/rel_path contains any non-.gitkeep file with the given suffix."""
+def _dir_has_file(rel_path: str, suffix: str | None = None) -> bool:
+    """True if ROOT/rel_path contains any non-.gitkeep file.
+
+    If `suffix` is given, only files with that extension count.
+    """
     d = ROOT / rel_path
     if not d.exists():
         return False
     for f in d.iterdir():
         if not f.is_file() or f.name == ".gitkeep":
             continue
-        if f.suffix == suffix:
+        if suffix is None or f.suffix == suffix:
             return True
     return False
 
@@ -80,13 +83,14 @@ def has_existing_state():
       - A weekly summary in state/summaries/
       - A milestone in state/milestones/
       - A progress report in progress-reports/
+      - Any file in state/offline-guides/
       - parking-lot.md modified from its pristine template
       - state/learner-profile.yaml with a populated name
+      - state/resource-tracker.yaml with any entries in `resources`
 
-    init-student.py wipes all of these directories on reset, so any one of
-    them counts as user data that must be preserved. Cheap directory
-    iteration runs first; the YAML parse is the most expensive check and
-    runs last.
+    init-student.py wipes all of these on reset, so any one of them
+    counts as user data that must be preserved. Cheap directory iteration
+    runs first; YAML parses are the most expensive checks and run last.
     """
     # Directory-level checks — no file content read.
     if _dir_has_file("state/sessions", ".yaml"):
@@ -101,6 +105,8 @@ def has_existing_state():
         return True
     if _dir_has_file("progress-reports", ".md"):
         return True
+    if _dir_has_file("state/offline-guides"):
+        return True
 
     # Parking lot: compare against pristine template. rstrip so a trailing
     # newline drift between platforms doesn't trigger a false positive.
@@ -112,7 +118,7 @@ def has_existing_state():
         except OSError:
             pass
 
-    # Profile: most expensive check (YAML parse) — runs last.
+    # YAML parses — most expensive checks go last.
     profile_path = ROOT / "state" / "learner-profile.yaml"
     if profile_path.exists():
         try:
@@ -120,6 +126,19 @@ def has_existing_state():
             data = yaml.safe_load(profile_path.read_text(encoding="utf-8")) or {}
             name = data.get("name")
             if name and str(name).strip():
+                return True
+        except Exception:
+            pass
+
+    # Resource tracker: any populated `resources` list counts as user data.
+    # The pristine template has `resources: []`; init-student would wipe
+    # anything the learner added.
+    rt_path = ROOT / "state" / "resource-tracker.yaml"
+    if rt_path.exists():
+        try:
+            import yaml
+            data = yaml.safe_load(rt_path.read_text(encoding="utf-8")) or {}
+            if data.get("resources"):
                 return True
         except Exception:
             pass
