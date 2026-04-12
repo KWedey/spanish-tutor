@@ -72,6 +72,30 @@ python3 scripts/init-student.py
 python3 scripts/generate-vault.py --full
 ```
 
+## Handing Off to a New Learner
+
+The system stores one learner's state per checkout. If you want a second person to use it (a family member, a friend, a new student after an old one finishes), **do not share the same folder** — the tutor reads a single set of state files and can't tell two learners apart.
+
+Instead, give them a fresh clone:
+
+```bash
+# Each learner gets their own copy
+git clone <repo-url> spanish-for-alice
+cd spanish-for-alice
+python3 scripts/setup.py
+```
+
+Each clone has its own `state/`, `vault/`, `journal/`, `transcripts/`, `feedback/`, and `parking-lot.md`. Curriculum updates (`git pull`) still work in every clone — only the learner-specific files diverge.
+
+**If you want to reuse an existing checkout for a new learner** (not recommended, but possible):
+
+```bash
+python3 scripts/init-student.py --force   # wipes state back to blank templates
+python3 scripts/generate-vault.py --full  # regenerates the vault
+```
+
+This deletes the previous learner's profile, skill map, schedule, sessions, and vault content. Back up anything you want to keep first (`journal/`, `transcripts/`, `state/sessions/`) — `init-student.py --force` does not preserve it.
+
 ## First Session
 
 See [STUDENT-GUIDE.md](STUDENT-GUIDE.md) for a full overview of how the system works, what tools you'll use, and what to expect over time.

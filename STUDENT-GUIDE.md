@@ -75,6 +75,26 @@ Starting after onboarding (around session 11+), your tutor will assign daily jou
 
 The journal is one of the highest-value tools in the system: because you have time to think while writing, your errors reveal genuine gaps rather than performance pressure mistakes.
 
+## Giving Feedback
+
+There's a `feedback/` folder for anything you want the tutor to know about the *experience* — pacing, what's clicking, what isn't, how you're feeling about the program. Your tutor reads this at the start of every session.
+
+Drop a file named `YYYY-MM-DD-short-title.md` with whatever's on your mind. There's a `TEMPLATE.md` in the folder with prompts if you're not sure what to write. Even one sentence is useful — "this feels too slow" is real signal.
+
+Feedback about the program goes here. Spanish questions still go in `parking-lot.md`.
+
+## When Something Goes Wrong
+
+Occasionally the tutor might do something you don't agree with — mark a concept as "acquired" when you don't feel you've got it, assign homework you already did, or write something weird into your state files. Everything is recoverable.
+
+**If a session goes sideways:** tell the tutor directly. Say "I don't think I've actually acquired ser vs estar" or "that wasn't what happened in our last session." The tutor will defer to your assessment and adjust.
+
+**If you want to undo the last session entirely:** ask the tutor to roll back. Say "please roll back the state changes from this session" — the tutor will run `python3 scripts/snapshot-state.py rollback` and restore the previous state. Your session log stays (for transparency), but skill-map, schedule, and profile return to how they were before.
+
+**If the tutor seems confused or contradicts itself:** drop a note in `feedback/` and start a fresh session. The tutor re-reads all state at the start of every session, so most confusion resolves itself with a restart.
+
+You can't break anything permanently. Every state change is snapshotted automatically before writes.
+
 ## What to Expect Over Time
 
 ### Phase A — Foundation (weeks 1-6)
