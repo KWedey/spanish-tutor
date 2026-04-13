@@ -207,13 +207,71 @@ def clear_directory(rel_path: str) -> int:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Reset all student data to clean templates.")
-    parser.add_argument("--force", action="store_true", help="Skip confirmation prompt")
+    parser.add_argument("--force", action="store_true",
+                        help="Skip the interactive confirmation prompt (snapshot is always taken)")
     args = parser.parse_args()
 
-    if not args.force:
-        if input("This will erase all learning progress. Continue? [y/N] ").strip().lower() != "y":
-            print("Aborted."); sys.exit(0)
+    # --- Step 0: Detect prior learner state (D-09 gate) ---
+    from shared import load_yaml
+    profile_path = ROOT / "state" / "learner-profile.yaml"
+    profile_data = load_yaml(profile_path) or {}
+    name = profile_data.get("name")
+    has_prior_learner = bool(name and str(name).strip())
 
+    if has_prior_learner:
+        # --- Step 1: Snapshot BEFORE any writes (D-07, unconditional even under --force) ---
+        print(yellow("\n=== Taking recovery snapshot ==="))
+        snapshot_result = subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / "snapshot-state.py"), "snapshot"],
+            cwd=str(ROOT),
+        )
+        if snapshot_result.returncode != 0:
+            print(red("Snapshot failed — cannot safely reset. Aborting."))
+            sys.exit(1)
+
+        # --- Step 2: Gather pre-wipe state for display ---
+        schedule_data = load_yaml(ROOT / "state" / "schedule.yaml") or {}
+        last_session = schedule_data.get("last_session_date", None)
+        if not last_session:
+            # Fall back to most recent session log filename
+            session_dir = ROOT / "state" / "sessions"
+            if session_dir.exists():
+                logs = sorted(f.stem for f in session_dir.glob("*.yaml") if f.name != ".gitkeep")
+                last_session = logs[-1] if logs else "unknown"
+            else:
+                last_session = "unknown"
+
+        session_count = 0
+        session_dir = ROOT / "state" / "sessions"
+        if session_dir.exists():
+            session_count = len([f for f in session_dir.glob("*.yaml") if f.name != ".gitkeep"])
+
+        journal_count = 0
+        journal_dir = ROOT / "journal"
+        if journal_dir.exists():
+            journal_count = len([f for f in journal_dir.glob("*.md") if f.name != ".gitkeep"])
+
+        snapshot_path = str((ROOT / "state" / ".snapshot").relative_to(ROOT)) + "/"
+
+        # --- Step 3: Confirmation (D-08 type-to-confirm, D-10 --force skips prompt) ---
+        if not args.force:
+            print(f"\nAbout to erase all progress for: {name}")
+            print(f"  Last session: {last_session}")
+            print(f"  {session_count} session log(s) will be cleared")
+            print(f"  {journal_count} journal entry/entries will be cleared")
+            print(f"  Recovery snapshot saved to: {snapshot_path}")
+            print(f'\nType the learner name "{name}" or "RESET" to confirm:')
+            answer = input("> ").strip()
+            if answer != str(name) and answer != "RESET":
+                print("Aborted.")
+                sys.exit(0)
+        else:
+            print(yellow(f"  --force: skipping confirmation for learner '{name}'"))
+    else:
+        # --- Fresh install path (D-09): no snapshot, no prompt ---
+        print(green("No prior learner detected — initializing clean state."))
+
+    # --- Proceed with writes (unchanged from original) ---
     print("\n=== Resetting state files ===")
     for rel_path, content in TEMPLATES.items():
         (ROOT / rel_path).write_text(content, encoding="utf-8")
