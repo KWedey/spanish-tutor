@@ -162,3 +162,135 @@ class TestSnapshotExclusion:
         second = snapshots[-1]
         nested = list(second.rglob(".snapshot"))
         assert len(nested) == 0
+
+
+# ---------------------------------------------------------------------------
+# 6. Suffix-tolerant timestamp parsing
+# ---------------------------------------------------------------------------
+
+class TestSuffixedTimestamps:
+    def test_parses_plain_timestamp(self):
+        """_snapshot_timestamp handles standard YYYYMMDD-HHMMSS names."""
+        p = Path("20260413-141500")
+        result = snapshot_state._snapshot_timestamp(p)
+        assert result is not None
+        assert result.year == 2026
+        assert result.month == 4
+
+    def test_parses_suffixed_timestamp(self):
+        """_snapshot_timestamp strips single-letter suffix before parsing."""
+        p = Path("20260413-141500-a")
+        result = snapshot_state._snapshot_timestamp(p)
+        assert result is not None
+        assert result.year == 2026
+
+    def test_rejects_tmpdir_name(self):
+        """_snapshot_timestamp returns None for .tmp-* dir names."""
+        p = Path(".tmp-12345-20260413-141500")
+        result = snapshot_state._snapshot_timestamp(p)
+        assert result is None
+
+
+# ---------------------------------------------------------------------------
+# 7. Atomic rename — no .tmp-* left after success, collision uses suffix
+# ---------------------------------------------------------------------------
+
+class TestAtomicRename:
+    def test_no_tmpdir_remains_after_snapshot(self, mock_state):
+        """After successful snapshot, no .tmp-* directory should exist."""
+        snapshot_state.cmd_snapshot()
+        snap_dir = mock_state / ".snapshot"
+        tmpdirs = [d for d in snap_dir.iterdir() if d.name.startswith(".tmp-")]
+        assert len(tmpdirs) == 0
+
+    def test_collision_uses_suffix(self, mock_state):
+        """When timestamp dir already exists, snapshot uses -a suffix."""
+        # Create the first snapshot
+        snapshot_state.cmd_snapshot()
+        snapshots_before = snapshot_state._list_snapshots()
+        assert len(snapshots_before) == 1
+
+        # Force collision by pre-creating the expected timestamp dir
+        from datetime import datetime as _dt
+        stamp = _dt.now().strftime(snapshot_state.TIMESTAMP_FMT)
+        collision_dir = mock_state / ".snapshot" / stamp
+        collision_dir.mkdir(parents=True, exist_ok=True)
+
+        snapshot_state.cmd_snapshot()
+        all_snapshots = snapshot_state._list_snapshots()
+        # Should have at least 2 snapshots (first + collision-suffixed or later timestamp)
+        assert len(all_snapshots) >= 2
+
+    def test_suffixed_snapshot_in_list(self, mock_state):
+        """A suffixed snapshot dir appears in _list_snapshots."""
+        snap_dir = mock_state / ".snapshot"
+        snap_dir.mkdir(parents=True, exist_ok=True)
+        suffixed = snap_dir / "20260413-141500-a"
+        suffixed.mkdir()
+        (suffixed / "schedule.yaml").write_text("test: true\n")
+
+        snapshots = snapshot_state._list_snapshots()
+        names = [s.name for s in snapshots]
+        assert "20260413-141500-a" in names
+
+
+# ---------------------------------------------------------------------------
+# 8. Orphan sweep — old orphans removed, recent ones preserved
+# ---------------------------------------------------------------------------
+
+class TestOrphanSweep:
+    def test_sweeps_old_orphan(self, mock_state):
+        """Orphan .tmp-* dirs older than 1 hour are removed."""
+        snap_dir = mock_state / ".snapshot"
+        snap_dir.mkdir(parents=True, exist_ok=True)
+
+        # Create an old orphan (timestamp 2 hours ago)
+        from datetime import datetime as _dt, timedelta as _td
+        old_stamp = (_dt.now() - _td(hours=2)).strftime(snapshot_state.TIMESTAMP_FMT)
+        orphan = snap_dir / f".tmp-99999-{old_stamp}"
+        orphan.mkdir()
+        (orphan / "junk.yaml").write_text("orphan\n")
+
+        snapshot_state._sweep_orphan_tmpdirs()
+        assert not orphan.exists()
+
+    def test_keeps_recent_orphan(self, mock_state):
+        """Orphan .tmp-* dirs newer than 1 hour are left alone."""
+        snap_dir = mock_state / ".snapshot"
+        snap_dir.mkdir(parents=True, exist_ok=True)
+
+        from datetime import datetime as _dt
+        recent_stamp = _dt.now().strftime(snapshot_state.TIMESTAMP_FMT)
+        orphan = snap_dir / f".tmp-99999-{recent_stamp}"
+        orphan.mkdir()
+
+        snapshot_state._sweep_orphan_tmpdirs()
+        assert orphan.exists()
+
+    def test_cmd_snapshot_sweeps_orphans(self, mock_state):
+        """cmd_snapshot calls _sweep_orphan_tmpdirs at the top."""
+        snap_dir = mock_state / ".snapshot"
+        snap_dir.mkdir(parents=True, exist_ok=True)
+
+        from datetime import datetime as _dt, timedelta as _td
+        old_stamp = (_dt.now() - _td(hours=2)).strftime(snapshot_state.TIMESTAMP_FMT)
+        orphan = snap_dir / f".tmp-99999-{old_stamp}"
+        orphan.mkdir()
+        (orphan / "junk.yaml").write_text("orphan\n")
+
+        snapshot_state.cmd_snapshot()
+        assert not orphan.exists()
+
+    def test_cmd_clean_sweeps_orphans(self, mock_state):
+        """cmd_clean also sweeps orphan .tmp-* dirs."""
+        snap_dir = mock_state / ".snapshot"
+        snap_dir.mkdir(parents=True, exist_ok=True)
+
+        from datetime import datetime as _dt, timedelta as _td
+        old_stamp = (_dt.now() - _td(hours=2)).strftime(snapshot_state.TIMESTAMP_FMT)
+        orphan = snap_dir / f".tmp-99999-{old_stamp}"
+        orphan.mkdir()
+        (orphan / "junk.yaml").write_text("orphan\n")
+
+        snapshot_state.cmd_clean()
+        assert not orphan.exists()
