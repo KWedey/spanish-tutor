@@ -1,7 +1,5 @@
 # Your Spanish Learning Program
 
-**TL;DR** — Install Claude Code, run `python3 scripts/setup.py`, run `python3 scripts/preflight.py` to verify, then type `claude` in this folder and have a conversation. The tutor handles everything else. Read the rest of this guide when you want reference details — not before your first session.
-
 Welcome! This is your personal Spanish tutoring system. Here's everything you need to know about how it works, what to expect, and how to get the most out of it.
 
 ## How It Works
@@ -35,7 +33,7 @@ These are introduced gradually — you won't set them all up on day 1.
 | Tool | What it does | When you start |
 |------|-------------|---------------|
 | **Anki** | Flashcard app with spaced repetition — you review daily and the app knows what you're about to forget | Session 1 |
-| **Dreaming Spanish** | YouTube videos in Spanish at your level — watch without pausing; it trains your ear for natural speech speed. Skip unknown words; comprehension grows with volume, not with lookups | Session 3 |
+| **Dreaming Spanish** | YouTube videos in Spanish at your level — just watch, don't pause, don't look things up | Session 3 |
 | **SpanishDict** | Online dictionary and conjugation reference — bookmark it | Session 3 |
 | **Language Transfer** | Free audio course that builds grammar intuition | Session 5 |
 | **Graded readers** | Short stories written at controlled difficulty levels | Session 5 |
@@ -50,6 +48,8 @@ Optional tools (the tutor will suggest these when you're ready):
 ## Your Study Companion (Obsidian Vault)
 
 After your first session, you'll set up **Obsidian** — a note-taking app that shows you a visual dashboard of your progress. With the optional **Terminal** plugin, you can also run your tutoring sessions inside Obsidian — your vault notes on one side, your tutor conversation on the other, all in one window. You can also run sessions in your regular terminal.
+
+**Important: don't put the vault inside a cloud-synced folder** -- iCloud, Dropbox, OneDrive, and Google Drive all run sync processes that race with Obsidian's writes and can corrupt `.md` files when two devices write simultaneously. You'll see the damage in the vault's `.trash/` folder. Store the vault in a folder that isn't synced: on macOS, use `~/Documents/language-vault` (iCloud Desktop & Documents sync is opt-in and off by default); on Windows, use `%USERPROFILE%\Documents\language-vault` (OneDrive Documents redirection is a separate configuration toggle, also off by default). If you must use a cloud-synced location, pause sync while Obsidian is open.
 
 Open Obsidian and you'll see:
 
