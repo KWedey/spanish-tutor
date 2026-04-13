@@ -8,6 +8,7 @@ Commands:
   clean      Remove snapshots older than 7 days
 """
 import argparse
+import os
 import shutil
 import sys
 from datetime import datetime, timedelta
@@ -34,9 +35,17 @@ TIMESTAMP_FMT = "%Y%m%d-%H%M%S"
 # ---------------------------------------------------------------------------
 
 def _snapshot_timestamp(snapshot_path: Path) -> datetime | None:
-    """Parse timestamp from a snapshot directory name."""
+    """Parse timestamp from a snapshot directory name.
+
+    Handles both plain timestamps ('20260413-141500') and collision-suffixed
+    names ('20260413-141500-a', '20260413-141500-b').
+    """
+    name = snapshot_path.name
+    # Strip single-letter collision suffix if present
+    if len(name) == len("20260413-141500") + 2 and name[-2] == '-' and name[-1].isalpha():
+        name = name[:-2]
     try:
-        return datetime.strptime(snapshot_path.name, TIMESTAMP_FMT)
+        return datetime.strptime(name, TIMESTAMP_FMT)
     except ValueError:
         return None
 
@@ -69,10 +78,39 @@ def _state_files() -> list[Path]:
 # Commands
 # ---------------------------------------------------------------------------
 
+def _sweep_orphan_tmpdirs(dry_run: bool = False) -> None:
+    """Remove .tmp-* directories under SNAPSHOT_DIR older than 1 hour."""
+    if not SNAPSHOT_DIR.exists():
+        return
+    cutoff = datetime.now() - timedelta(hours=1)
+    for item in SNAPSHOT_DIR.iterdir():
+        if not item.is_dir() or not item.name.startswith(".tmp-"):
+            continue
+        # Parse timestamp from .tmp-<pid>-YYYYMMDD-HHMMSS
+        parts = item.name.split("-")
+        if len(parts) >= 4:
+            ts_str = parts[-2] + "-" + parts[-1]
+            try:
+                ts = datetime.strptime(ts_str, TIMESTAMP_FMT)
+                if ts < cutoff:
+                    if dry_run:
+                        print(yellow(f"[dry-run] Would sweep orphan: {item.name}"))
+                    else:
+                        shutil.rmtree(item)
+                        print(yellow(f"Swept orphan temp dir: {item.name}"))
+            except ValueError:
+                pass  # unparseable name — leave alone
+
+
 def cmd_snapshot(dry_run: bool = False) -> int:
-    """Create a timestamped snapshot of state/."""
+    """Create a timestamped snapshot of state/ using atomic rename."""
+    # Step 0: sweep orphan .tmp-* dirs from previous crashed runs
+    _sweep_orphan_tmpdirs(dry_run=dry_run)
+
     stamp = datetime.now().strftime(TIMESTAMP_FMT)
-    dest = SNAPSHOT_DIR / stamp
+    tmp_name = f".tmp-{os.getpid()}-{stamp}"
+    tmp_dest = SNAPSHOT_DIR / tmp_name
+    final_dest = SNAPSHOT_DIR / stamp
     files = _state_files()
 
     if not files:
@@ -80,23 +118,41 @@ def cmd_snapshot(dry_run: bool = False) -> int:
         return 1
 
     if dry_run:
-        print(yellow(f"[dry-run] Would create snapshot at: {dest.relative_to(ROOT)}"))
+        print(yellow(f"[dry-run] Would create snapshot at: {final_dest.relative_to(ROOT)}"))
         for f in files:
             print(f"  {dim(str(f.relative_to(STATE_DIR)))}")
         print(yellow(f"[dry-run] {len(files)} file(s) would be copied."))
         return 0
 
-    dest.mkdir(parents=True, exist_ok=True)
+    tmp_dest.mkdir(parents=True, exist_ok=True)
     copied = 0
-    for f in files:
-        rel = f.relative_to(STATE_DIR)
-        target = dest / rel
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(f, target)
-        copied += 1
+    try:
+        for f in files:
+            rel = f.relative_to(STATE_DIR)
+            target = tmp_dest / rel
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(f, target)
+            copied += 1
 
-    print(green(f"Snapshot created: {dest.relative_to(ROOT)} ({copied} files)"))
-    return 0
+        # Atomic rename: find an available final name (collision handling)
+        dest = final_dest
+        if dest.exists():
+            for suffix in "abcdefghijklmnopqrstuvwxyz":
+                candidate = SNAPSHOT_DIR / f"{stamp}-{suffix}"
+                if not candidate.exists():
+                    dest = candidate
+                    break
+            else:
+                shutil.rmtree(tmp_dest)
+                print(red(f"Snapshot collision: could not find free name for {stamp}"))
+                return 1
+
+        shutil.move(str(tmp_dest), str(dest))
+        print(green(f"Snapshot created: {dest.relative_to(ROOT)} ({copied} files)"))
+        return 0
+    except BaseException:
+        # Leave tmp_dest for orphan sweep; don't hide original exception
+        raise
 
 
 def cmd_rollback(dry_run: bool = False) -> int:
@@ -158,6 +214,7 @@ def cmd_list() -> int:
 
 def cmd_clean(dry_run: bool = False, max_age_days: int = 7) -> int:
     """Remove snapshots older than max_age_days."""
+    _sweep_orphan_tmpdirs(dry_run=dry_run)
     snapshots = _list_snapshots()
     cutoff = datetime.now() - timedelta(days=max_age_days)
     to_remove = []
