@@ -8,21 +8,41 @@
 set -e
 
 MATCHED_FILES=()
+MATCHED_CATS=()
 while IFS= read -r file; do
     case "$file" in
-        state/sessions/*.yaml)      MATCHED_FILES+=("$file") ;;
-        state/summaries/*.yaml)     MATCHED_FILES+=("$file") ;;
-        state/milestones/*.yaml)    MATCHED_FILES+=("$file") ;;
+        state/sessions/*.yaml)      MATCHED_FILES+=("$file"); MATCHED_CATS+=("session-log") ;;
+        state/summaries/*.yaml)     MATCHED_FILES+=("$file"); MATCHED_CATS+=("summary") ;;
+        state/milestones/*.yaml)    MATCHED_FILES+=("$file"); MATCHED_CATS+=("milestone") ;;
         journal/*.md)
-            [[ "$(basename "$file")" != ".gitkeep" ]] && MATCHED_FILES+=("$file") ;;
+            [[ "$(basename "$file")" != ".gitkeep" ]] && MATCHED_FILES+=("$file") && MATCHED_CATS+=("journal") ;;
         transcripts/*.md)
-            [[ "$(basename "$file")" != ".gitkeep" ]] && MATCHED_FILES+=("$file") ;;
+            [[ "$(basename "$file")" != ".gitkeep" ]] && MATCHED_FILES+=("$file") && MATCHED_CATS+=("transcript") ;;
         progress-reports/*.md)
-            [[ "$(basename "$file")" != ".gitkeep" ]] && MATCHED_FILES+=("$file") ;;
+            [[ "$(basename "$file")" != ".gitkeep" ]] && MATCHED_FILES+=("$file") && MATCHED_CATS+=("progress-report") ;;
         feedback/*.md)
             base="$(basename "$file")"
-            [[ "$base" != "TEMPLATE.md" && "$base" != ".gitkeep" ]] && MATCHED_FILES+=("$file") ;;
-        parking-lot.md)             MATCHED_FILES+=("$file") ;;
+            [[ "$base" != "TEMPLATE.md" && "$base" != ".gitkeep" ]] && MATCHED_FILES+=("$file") && MATCHED_CATS+=("feedback") ;;
+        parking-lot.md)             MATCHED_FILES+=("$file"); MATCHED_CATS+=("parking-lot") ;;
+        # --- LEAK-01/02/04/05: individual state files ---
+        state/learner-profile.yaml)  MATCHED_FILES+=("$file"); MATCHED_CATS+=("personal-state") ;;
+        state/schedule.yaml)         MATCHED_FILES+=("$file"); MATCHED_CATS+=("personal-state") ;;
+        state/system-health.yaml)    MATCHED_FILES+=("$file"); MATCHED_CATS+=("personal-state") ;;
+        state/resource-tracker.yaml) MATCHED_FILES+=("$file"); MATCHED_CATS+=("personal-state") ;;
+        # --- LEAK-03: skill-map (template MUST come BEFORE the blocking pattern) ---
+        state/skill-map.template.yaml) ;;   # explicitly allowed
+        state/skill-map.yaml)        MATCHED_FILES+=("$file"); MATCHED_CATS+=("personal-state") ;;
+        # --- LEAK-06: snapshot dir ---
+        state/.snapshot/*)            MATCHED_FILES+=("$file"); MATCHED_CATS+=("snapshot") ;;
+        # --- LEAK-07: offline guides except .gitkeep ---
+        state/offline-guides/*)
+            [[ "$(basename "$file")" != ".gitkeep" ]] && \
+                MATCHED_FILES+=("$file") && MATCHED_CATS+=("offline-guide") ;;
+        # --- LEAK-08: generated vault markdown (BOTH depth levels needed) ---
+        vault/*.md)                   MATCHED_FILES+=("$file"); MATCHED_CATS+=("vault-generated") ;;
+        vault/**/*.md)                MATCHED_FILES+=("$file"); MATCHED_CATS+=("vault-generated") ;;
+        # --- LEAK-13: planning state ---
+        .planning/*)                  MATCHED_FILES+=("$file"); MATCHED_CATS+=("planning") ;;
     esac
 done < <(git diff --cached --name-only)
 
@@ -30,8 +50,8 @@ if [[ ${#MATCHED_FILES[@]} -gt 0 ]]; then
     echo ""
     echo "Refusing to commit personal learner data:"
     echo ""
-    for f in "${MATCHED_FILES[@]}"; do
-        echo "  $f"
+    for i in "${!MATCHED_FILES[@]}"; do
+        echo "  ${MATCHED_FILES[$i]}  [${MATCHED_CATS[$i]}]"
     done
     echo ""
     echo "These files are gitignored by default for a reason. If this"
