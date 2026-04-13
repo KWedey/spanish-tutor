@@ -45,18 +45,6 @@ def run_script(name, args=None):
     return result
 
 
-def configure_git_hooks():
-    """Point git's hook path to .githooks/ (idempotent)."""
-    try:
-        subprocess.run(
-            ["git", "config", "core.hooksPath", ".githooks"],
-            cwd=str(ROOT), check=True, capture_output=True, text=True,
-        )
-        print(green("  Git hooks configured (.githooks/)"))
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        print(yellow("  Could not configure git hooks (is git installed?)"))
-
-
 # Pristine parking-lot.md contents. Must match TEMPLATES["parking-lot.md"] in
 # scripts/init-student.py — the sync is guarded by
 # tests/test_setup.py::test_parking_lot_template_matches_init_student.
@@ -178,9 +166,6 @@ def main():
 
     print("\nValidating state...")
     result = run_script("validate-state.py")
-
-    print("\nConfiguring safety hooks...")
-    configure_git_hooks()
 
     print(bold(green("\n=== Setup complete! ===\n")))
     print("Next steps:\n")
