@@ -8,6 +8,8 @@ The tutor is [Claude Code](https://claude.ai/download) — Anthropic's CLI — r
 
 ```bash
 # 1. Install Claude Code (Pro or Max subscription required)
+#    macOS/Linux:        curl -fsSL https://claude.ai/install.sh | bash
+#    Windows PowerShell: irm https://claude.ai/install.ps1 | iex
 #    https://claude.ai/download
 
 # 2. Clone this repo
@@ -16,12 +18,12 @@ cd language
 
 # 3. Run setup — installs dependencies, initializes your learner state,
 #    generates the Obsidian vault
-python3 scripts/setup.py
+python3 scripts/setup.py    # Windows: setup.bat
 
 # 4. Verify everything is ready
-python3 scripts/preflight.py
+python3 scripts/preflight.py    # Windows: py scripts/preflight.py
 
-# 5. Start your first session
+# 5. Start your first session (must run from inside the language/ folder)
 claude
 ```
 
@@ -42,7 +44,7 @@ Your first session walks you through onboarding — goals, target dialect, sched
 | Requirement | Details |
 |-------------|---------|
 | Claude Code | [claude.ai/download](https://claude.ai/download) — Pro or Max subscription |
-| Python 3.10+ | For setup and maintenance scripts |
+| Python 3.10+ | For setup and maintenance scripts. Check with `python3 --version` (macOS/Linux) or `py --version` (Windows) |
 | Git | To clone and receive curriculum updates |
 | Obsidian *(optional)* | [obsidian.md](https://obsidian.md) — visual progress dashboard |
 
