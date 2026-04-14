@@ -161,3 +161,62 @@ class TestHasExistingState:
             setup_module.PARKING_LOT_TEMPLATE
             == init_module.TEMPLATES["parking-lot.md"]
         )
+
+
+def _make_version(major, minor, micro=0, releaselevel="final", serial=0):
+    """Return a fake version_info tuple compatible with sys.version_info's
+    attribute access (.major, .minor, .micro) and tuple comparison (v < (3, 10)).
+
+    ``type(sys.version_info)(...)`` is not constructable on all Python versions
+    (raises TypeError on 3.14+). We use a namedtuple so both attribute access
+    and tuple comparison work correctly.
+    """
+    import collections
+    _VersionInfo = collections.namedtuple(
+        "version_info", ["major", "minor", "micro", "releaselevel", "serial"]
+    )
+    return _VersionInfo(major, minor, micro, releaselevel, serial)
+
+
+class TestCheckPython:
+    def test_check_python_clear_error(self, setup_module, monkeypatch, capsys):
+        """WIN-05: check_python() must emit a clear, actionable error on Python < 3.10.
+
+        The error message must name the version floor (Python 3.10+), the version
+        that was found, and the install URL — so a Windows user on Python 3.8 sees
+        a helpful message, not a SyntaxError stack trace.
+        """
+        # Stub sys.version_info on the loaded setup_module's sys reference.
+        # setup_module imports `sys` at module level, so patch the module's sys.
+        fake_version = _make_version(3, 8, 0, "final", 0)
+        monkeypatch.setattr(setup_module.sys, "version_info", fake_version)
+
+        with pytest.raises(SystemExit) as excinfo:
+            setup_module.check_python()
+
+        assert excinfo.value.code == 1
+        captured = capsys.readouterr()
+        combined = captured.out + captured.err
+        assert "Python 3.10+ required" in combined, (
+            f"error message missing version floor; got: {combined!r}"
+        )
+        assert "https://python.org" in combined, (
+            f"error message missing install URL; got: {combined!r}"
+        )
+        assert "found 3.8" in combined, (
+            f"error message missing actual version; got: {combined!r}"
+        )
+
+    def test_check_python_at_floor_passes(self, setup_module, monkeypatch, capsys):
+        """WIN-05 negative case: Python 3.10 (at the floor) must not exit."""
+        fake_version = _make_version(3, 10, 0, "final", 0)
+        monkeypatch.setattr(setup_module.sys, "version_info", fake_version)
+
+        # Must NOT raise SystemExit.
+        setup_module.check_python()
+
+        captured = capsys.readouterr()
+        combined = captured.out + captured.err
+        assert "Python 3.10.0" in combined, (
+            f"version confirmation missing; got: {combined!r}"
+        )
