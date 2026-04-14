@@ -75,8 +75,8 @@ Your state files, session logs, and journal entries are untouched.
 To reset all progress and start fresh:
 
 ```bash
-python3 scripts/init-student.py
-python3 scripts/generate-vault.py --full
+python3 scripts/init-student.py    # Windows: py scripts/init-student.py
+python3 scripts/generate-vault.py --full    # Windows: py scripts/generate-vault.py --full
 ```
 
 ## Handing Off to a New Learner
@@ -89,7 +89,7 @@ Instead, give them a fresh clone:
 # Each learner gets their own copy
 git clone https://github.com/KWedey/spanish-tutor.git spanish-for-alice
 cd spanish-for-alice
-python3 scripts/setup.py
+python3 scripts/setup.py    # Windows: setup.bat
 ```
 
 Each clone has its own `state/`, `vault/`, `journal/`, `transcripts/`, `feedback/`, and `parking-lot.md`. Curriculum updates (`git pull`) still work in every clone — only the learner-specific files diverge.
@@ -97,8 +97,8 @@ Each clone has its own `state/`, `vault/`, `journal/`, `transcripts/`, `feedback
 **If you want to reuse an existing checkout for a new learner** (not recommended, but possible):
 
 ```bash
-python3 scripts/init-student.py --force   # wipes state back to blank templates
-python3 scripts/generate-vault.py --full  # regenerates the vault
+python3 scripts/init-student.py --force   # wipes state back to blank templates | Windows: py scripts/init-student.py --force
+python3 scripts/generate-vault.py --full  # regenerates the vault | Windows: py scripts/generate-vault.py --full
 ```
 
 This deletes the previous learner's profile, skill map, schedule, sessions, and vault content. Back up anything you want to keep first (`journal/`, `transcripts/`, `state/sessions/`) — `init-student.py --force` does not preserve it.
