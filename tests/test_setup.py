@@ -220,3 +220,143 @@ class TestCheckPython:
         assert "Python 3.10.0" in combined, (
             f"version confirmation missing; got: {combined!r}"
         )
+
+
+class TestSetupBatExitCode:
+    """Regression test for CR-01: setup.bat exit code propagation.
+
+    The 2026-04-13 code review (02-REVIEW.md) found that ``exit /b %ERRORLEVEL%``
+    inside a parenthesized ``if`` block is expanded at parse time by cmd.exe,
+    not at execution time. The block is only entered when its outer condition
+    succeeded (``where py`` or ``where python`` returned 0), so %ERRORLEVEL%
+    is substituted as 0 before the inner ``py scripts\\setup.py %*`` ever runs.
+    Both success branches then always exit 0, masking every sys.exit(1) path
+    in setup.py. See 02-REVIEW.md CR-01 for the full analysis.
+
+    The fix is to restructure setup.bat with goto labels so each
+    ``exit /b %ERRORLEVEL%`` line lives OUTSIDE any parenthesized block.
+    Outside the block, cmd.exe expands %ERRORLEVEL% at execution time, which
+    correctly reflects the exit code of the preceding py/python command.
+
+    This test is static content-based because setup.bat cannot run on macOS
+    or Linux. The runtime verification on Windows is a human verification
+    step (see 02-VERIFICATION.md).
+    """
+
+    REPO_ROOT = SCRIPTS_DIR.parent
+    SETUP_BAT = REPO_ROOT / "setup.bat"
+
+    def _read_setup_bat(self):
+        assert self.SETUP_BAT.exists(), (
+            f"setup.bat missing at {self.SETUP_BAT} — "
+            "it must live at the project root per WIN-04."
+        )
+        return self.SETUP_BAT.read_text(encoding="utf-8")
+
+    def test_setup_bat_exit_code_propagation_uses_goto(self):
+        """CR-01 regression: setup.bat must use goto-based structure.
+
+        Asserts the fix from 02-REVIEW.md is present and the buggy
+        parenthesized-if pattern is absent. This locks setup.bat against
+        re-introduction of the exit-code-masking bug.
+        """
+        content = self._read_setup_bat()
+        lines = content.splitlines()
+
+        # Normalize for assertions — strip only trailing CR (file is CRLF on disk
+        # but splitlines() handles both CRLF and LF correctly; be defensive).
+        stripped_lines = [line.rstrip("\r") for line in lines]
+
+        # 1. Goto labels must be present as standalone lines.
+        assert ":use_py" in stripped_lines, (
+            "CR-01 regression: :use_py label missing from setup.bat. "
+            "See 02-REVIEW.md CR-01 for the canonical goto-based fix."
+        )
+        assert ":use_python" in stripped_lines, (
+            "CR-01 regression: :use_python label missing from setup.bat. "
+            "See 02-REVIEW.md CR-01 for the canonical goto-based fix."
+        )
+        assert ":no_python" in stripped_lines, (
+            "CR-01 regression: :no_python label missing from setup.bat. "
+            "See 02-REVIEW.md CR-01 for the canonical goto-based fix."
+        )
+
+        # 2. Goto branches must be present (the probes must branch to labels,
+        #    not open parenthesized blocks).
+        assert "if %ERRORLEVEL% equ 0 goto :use_py" in stripped_lines, (
+            "CR-01 regression: 'if %ERRORLEVEL% equ 0 goto :use_py' branch missing."
+        )
+        assert "if %ERRORLEVEL% equ 0 goto :use_python" in stripped_lines, (
+            "CR-01 regression: 'if %ERRORLEVEL% equ 0 goto :use_python' branch missing."
+        )
+        assert "goto :no_python" in stripped_lines, (
+            "CR-01 regression: 'goto :no_python' fall-through missing."
+        )
+
+        # 3. No parenthesized if-block opens may exist anywhere in the file.
+        #    The CR-01 bug pattern is `if ... (` on one line with
+        #    `exit /b %ERRORLEVEL%` on a later line inside the block.
+        #    We forbid the generalized form: any `if` line ending with `(`.
+        paren_if_lines = [
+            (i, line) for i, line in enumerate(stripped_lines)
+            if line.strip().startswith("if ") and line.strip().endswith("(")
+        ]
+        assert not paren_if_lines, (
+            "CR-01 regression: parenthesized if block(s) found in setup.bat. "
+            "cmd.exe expands %ERRORLEVEL% at parse time inside such blocks, "
+            "masking setup.py's exit code. Use the goto-based structure from "
+            f"02-REVIEW.md CR-01. Offending lines: {paren_if_lines}"
+        )
+
+        # 4. Exactly two `exit /b %ERRORLEVEL%` lines (one per success branch).
+        exit_errorlevel_lines = [
+            line for line in stripped_lines
+            if line.strip() == "exit /b %ERRORLEVEL%"
+        ]
+        assert len(exit_errorlevel_lines) == 2, (
+            f"CR-01 regression: expected exactly 2 'exit /b %ERRORLEVEL%' "
+            f"lines (one for the py branch, one for the python fallback), "
+            f"got {len(exit_errorlevel_lines)}."
+        )
+
+        # 5. Each `exit /b %ERRORLEVEL%` line must NOT be inside a parenthesized
+        #    block. We already assert no `if ... (` exists, so this is belt+suspenders:
+        #    walk the file and verify no open-paren is currently "in scope" when
+        #    an `exit /b %ERRORLEVEL%` line is encountered.
+        depth = 0
+        for i, line in enumerate(stripped_lines):
+            stripped = line.strip()
+            # Approximate: count raw ( and ) at line-trailing / leading positions.
+            if stripped.endswith("("):
+                depth += 1
+            if stripped == ")":
+                depth -= 1
+            if stripped == "exit /b %ERRORLEVEL%":
+                assert depth == 0, (
+                    f"CR-01 regression: line {i} 'exit /b %ERRORLEVEL%' is "
+                    f"inside a parenthesized block (depth={depth}). cmd.exe "
+                    f"will expand %ERRORLEVEL% at parse time — see 02-REVIEW.md CR-01."
+                )
+
+        # 6. The three locked error lines (from 02-VERIFICATION.md human
+        #    verification step 2) must still be present verbatim.
+        assert "echo Error: Python not found on PATH." in stripped_lines, (
+            "Locked error line missing: 'echo Error: Python not found on PATH.'"
+        )
+        assert "echo Install Python 3.10+ from https://python.org" in stripped_lines, (
+            "Locked error line missing: 'echo Install Python 3.10+ from https://python.org'"
+        )
+        assert 'echo During installation, check "Add Python to PATH".' in stripped_lines, (
+            "Locked error line missing: 'echo During installation, check \"Add Python to PATH\".'"
+        )
+
+        # 7. Final exit /b 1 (the "no python found" error path) is still present.
+        assert "exit /b 1" in stripped_lines, (
+            "Final 'exit /b 1' error path missing — the no-python-found branch "
+            "must still exit 1."
+        )
+
+        # 8. File starts with @echo off (no BOM, no leading whitespace).
+        assert stripped_lines[0] == "@echo off", (
+            f"setup.bat first line must be '@echo off', got: {stripped_lines[0]!r}"
+        )
