@@ -75,7 +75,7 @@ All of these are gitignored by default — they won't accidentally leak if you p
 ```bash
 git clone https://github.com/KWedey/spanish-tutor.git spanish-for-alice
 cd spanish-for-alice
-python3 scripts/setup.py
+python3 scripts/setup.py    # Windows: setup.bat
 ```
 
 See [SETUP.md](SETUP.md#handing-off-to-a-new-learner) for details.
