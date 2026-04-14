@@ -5,7 +5,7 @@
 | Requirement | Details |
 |------------|---------|
 | **Claude Code** | [claude.ai/download](https://claude.ai/download) — requires a Pro or Max subscription |
-| **Python 3.10+** | For utility scripts (uses modern syntax: `dict | None`, `list[tuple]`). Check with `python3 --version` |
+| **Python 3.10+** | For utility scripts (uses modern syntax: `dict | None`, `list[tuple]`). Check with `python3 --version` (macOS/Linux) or `py --version` (Windows) |
 | **Git** | To clone the repo and receive curriculum updates |
 | **Obsidian** *(optional)* | [obsidian.md](https://obsidian.md) — visual progress dashboard |
 
@@ -17,10 +17,10 @@ git clone https://github.com/KWedey/spanish-tutor.git language
 cd language
 
 # 2. Run setup (installs dependencies, initializes state, generates vault)
-python3 scripts/setup.py
+python3 scripts/setup.py    # Windows: setup.bat
 
 # 3. Verify everything is ready
-python3 scripts/preflight.py
+python3 scripts/preflight.py    # Windows: py scripts/preflight.py
 
 # 4. Start your first session
 claude
@@ -42,6 +42,8 @@ After setup, you can open this folder as an Obsidian vault for a visual dashboar
 1. Install [Obsidian](https://obsidian.md)
 2. Open vault → select this project folder
 3. Install the **Dataview** community plugin when prompted (used for progress tables)
+
+**Vault location on Windows:** Put the vault at `%USERPROFILE%\Documents\language-vault` — this avoids the OneDrive Documents redirection that would trigger cloud sync. Open Obsidian → Open folder as vault → navigate to that path. See [STUDENT-GUIDE.md](STUDENT-GUIDE.md#your-study-companion-obsidian-vault) for the full cloud-sync warning and macOS guidance.
 
 You don't need Obsidian to use the system. Everything works from the terminal alone.
 
@@ -65,6 +67,8 @@ Your state files, session logs, and journal entries are untouched.
 | `scripts/validate-state.py` | Validate state file integrity | `python3 scripts/validate-state.py [--verbose]` |
 | `scripts/generate-vault.py` | Generate/update Obsidian vault | `python3 scripts/generate-vault.py --full` |
 | `scripts/migrate-state.py` | Run schema migrations | `python3 scripts/migrate-state.py [--dry-run]` |
+
+**Windows users:** replace `python3` with `py` (if installed) or `python` — e.g., `py scripts/init-student.py --force`.
 
 ## Starting Over
 
