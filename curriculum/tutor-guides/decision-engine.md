@@ -32,6 +32,38 @@ Run at session start for each concept in `schedule.yaml > carryover_concepts`. C
 
 After checking, increment `sessions_in_carryover` for each carryover concept that was practiced this session. Update `escalation_stage` if a threshold was crossed.
 
+## Step 0c — Regression Escalation Check
+
+Run at session start for each concept whose status transitioned from `acquired` or `automatic` back to `practicing` or `regressed` within the last session. Check `regression_session_count` against the ladder.
+
+### Prerequisite Regression (is_prerequisite: true)
+
+| Sessions in regression | Stage | Action |
+|----|----|----|
+| 1 | normal | Log. Targeted re-practice in next session's Main Lesson. |
+| 2 | flagged | Flag in system-health. Read `recast_uptake_stats`. If `recasts_given >= 5` and uptake rate < 60%, suspect mode mismatch. Read `error_trend` for pattern. |
+| 3 | approach_changed | **Mandatory approach switch.** Read `recast_uptake_stats`: **low uptake** (recasts_given >= 5, landed/given < 0.60) -> escalate correction MODE (recast -> explicit -> metalinguistic per error-correction.md Metalinguistic Feedback Protocol). **High uptake but re-erring** (landed/given >= 0.60) -> change CONTEXT or MODALITY (written <-> spoken; isolated drill <-> integrated conversation). **Insufficient data** (recasts_given < 5) -> default to context/modality change. Update `current_approach` in skill-map notes. |
+| 4 | sprint | Auto-trigger a single-session dedicated re-teach plus one week of daily micro-drills. Log sprint rationale in `adjustment_log`. |
+| 5+ | surfaced | Surface to learner warmly: "[Concept] has slipped back -- it happens. Let's talk about what changed." Use learner input to redesign. Log as fossilized risk if 3+ cycles of re-acquisition have failed. |
+
+### Non-Prerequisite Regression (is_prerequisite: false)
+
+| Sessions in regression | Stage | Action |
+|----|----|----|
+| 1-2 | normal | Log. Targeted re-practice. |
+| 3 | flagged | Flag in system-health. Review error patterns. |
+| 5 | approach_changed | Same approach-switch logic as prerequisite stage 3. |
+| 7 | sprint_or_deprioritize | If the concept is low-value for current goals, deprioritize (move out of active list) with a note. Otherwise sprint. |
+| 9+ | surfaced | Surface to learner. |
+
+**Key principle:** Each escalation step changes the approach, not just the intensity. Repeating the same thing harder does not fix a regression -- the Han (2004) fossilization research is explicit about this. The `approach_changed` stage reads `recast_uptake_stats` (from skill-map, aggregated by post-session.sh) to choose the switch, making "change approach" an auditable data-driven decision rather than a vague instruction.
+
+**Data-insufficiency fallback:** When `recast_uptake_stats.recasts_given < 5`, there is not enough data to determine uptake rate. In this case, the approach switch defaults to "change context/modality" rather than "escalate mode" -- this is a safe fallback that does not require uptake data.
+
+**Cross-link:** `curriculum/activities/error-correction.md` Escalation Protocol (3/5/8 sessions -> change approach / fossilized risk / directly inform) is the EXECUTION side of regression handling -- what to do mid-activity. This ladder is the DECISION side -- concept selection and scoring. Both can fire simultaneously on the same concept without conflict.
+
+After checking, update `regression_session_count` for each regressed concept. Update `escalation_stage` if a threshold was crossed.
+
 ## Step 1 — Gather Candidates
 
 All concepts in current phase with status: introduced, practicing, regressed, or acquired (for maintenance). Plus `carryover_concepts` from `schedule.yaml`. Plus maintenance from all previous phases (with decaying priority).
@@ -43,7 +75,7 @@ All concepts in current phase with status: introduced, practicing, regressed, or
 ## Step 2 — Score Each Candidate
 
 ```
-PRIORITY = NEED + GAP + DECAY_ADJUSTED + TOPIC_BOOST - VARIETY_PENALTY
+PRIORITY = NEED + GAP + DECAY_ADJUSTED + TOPIC_BOOST + INTEREST - VARIETY_PENALTY
 ```
 
 > `DECAY_ADJUSTED` accounts for concept durability — see DECAY section below for the formula.
@@ -126,6 +158,27 @@ A concept practiced 20+ times gets only 30% of the raw decay score. A concept pr
 | Adjacent (topic uses related vocabulary) | 1 |
 | No connection | 0 |
 
+### INTEREST (0-3)
+
+Tutor-inferred learner interest in this concept. Captured post-session from four signal sources. Missing or stale (> 28 days since last inferred) = 0.
+
+| Signal strength | Score |
+|----------------|-------|
+| Learner asked about it unprompted, referenced it in a real-world debrief, or wrote about it in journal within the last 2 sessions | 3 |
+| Concept aligns with a recent parking-lot item or topic the learner showed enthusiasm for in the last 2 weeks | 2 |
+| No explicit signal but concept sits in a topical cluster the learner has engaged with | 1 |
+| No signal, OR last inferred > 28 days ago (stale decay) | 0 |
+
+**Signal sources:** `parking-lot.md` mentions, session-log `learner_observations` engagement notes, real-world debrief outputs (from `real-world-debrief.md`), journal entries referencing the concept.
+
+**Stale decay:** If `learner_interest.last_inferred` is more than 28 days ago, the scoring engine treats the stored score as 0 regardless of the stored value. The next post-session update rewrites `signal_source: stale` with `score: 0`. This prevents a 6-month-old parking-lot item from influencing today's scoring.
+
+**Storage:** Per-concept in `state/skill-map.yaml` as `learner_interest: {score, last_inferred, signal_source}`. Applies to grammar concepts, vocabulary clusters, and cultural concepts (per D-03).
+
+**Cap:** Maximum contribution is 3. Cannot exceed. This is enforced by `validate-state.py` (score > 3 = FAIL). The additive cap ensures a regressed concept (NEED 10 + GAP 10 = 20 baseline) always beats a maximally interesting but non-regressed concept (NEED 7 + GAP 3 + INTEREST 3 = 13). Interest guides the engine toward what the learner cares about; it does not override repair priority.
+
+> Example: C-03 (subjunctive) — learner asked about it unprompted last session and wrote about it in their journal → `INTEREST=3`.
+
 ### VARIETY_PENALTY (0-5)
 
 Same activity type 3 days in a row → penalize that type by 5. Prefer alternation.
@@ -137,6 +190,7 @@ Same activity type 3 days in a row → penalize that type by 5. Prefer alternati
 - **Parking lot items:** If a parking lot item aligns with a candidate concept, boost that concept by +3. If the item suggests a concept not in the candidate list but prerequisites are met, it can override secondary concept selection.
 - **Sprint override:** If `sprint.active` is true, only score concepts in `sprint.focus_areas`. All others excluded.
 - **Just-right streak preservation:** Track consecutive "just-right" `session_difficulty_rating` values across sessions. If the streak reaches 3+, preserve current calibration — do not increase or decrease challenge level. The current balance is working. Only break the streak intentionally (e.g., sprint mode activation, phase transition approaching, or learner explicitly requesting more challenge). Reset the counter when a "too-easy" or "too-hard" rating is logged. Record `just_right_streak` in `schedule.yaml`.
+- **Stale interest decay:** When reading `learner_interest.score` for any concept, check `last_inferred`. If > 28 days ago, treat as 0. This applies automatically in Step 2 scoring — Step 3 does not need to override, but the decay is noted here for completeness.
 
 ## Step 4 — Select Top 1-2 Concepts
 
@@ -266,8 +320,9 @@ Concept A-02 (Ser vs Estar): Phase A prerequisite, practicing for 3 sessions, pr
 | GAP | Practicing, production error >30% | 8 |
 | DECAY | 2 days ago → raw 2, durability: 2 * (1 - min(6/20, 0.7)) = 2 * 0.7 = 1.4 | 1.4 |
 | TOPIC_BOOST | Adjacent to weekly topic | 1 |
+| INTEREST | No explicit signal | 0 |
 | VARIETY_PENALTY | Different activity type from last 2 days | 0 |
-| **PRIORITY** | 10 + 8 + 1.4 + 1 - 0 | **20.4** |
+| **PRIORITY** | 10 + 8 + 1.4 + 1 + 0 - 0 | **20.4** |
 
 Selected as primary because highest total and production errors need targeted Stage 2 practice.
 
@@ -281,8 +336,9 @@ Concept B-01 (Preterite Regular): Previously acquired, last practiced 12 days ag
 | GAP | Acquired + integration-tested | 0 |
 | DECAY | 12 days → raw 7, durability: 7 * (1 - min(18/20, 0.7)) = 7 * 0.3 = 2.1 | 2.1 |
 | TOPIC_BOOST | No connection | 0 |
+| INTEREST | No signal | 0 |
 | VARIETY_PENALTY | None | 0 |
-| **PRIORITY** | 1 + 0 + 2.1 + 0 - 0 | **3.1** |
+| **PRIORITY** | 1 + 0 + 2.1 + 0 + 0 - 0 | **3.1** |
 
 Low priority despite 12-day gap because the concept is well-practiced (high durability dampens DECAY) and already acquired. Suitable as an interleaving target, not a primary focus.
 
@@ -296,11 +352,28 @@ Concept C-01 (Subjunctive Triggers): Current phase concept, practicing, producti
 | GAP | Production 15-30% → 5 | Production 15-30% → 5 |
 | DECAY | 5 days → raw 5, durability: 5 * (1 - 0.4) = 3.0 | 1 day → raw 0, durability: 0 * 0.8 = 0 |
 | TOPIC_BOOST | 0 | 0 |
+| INTEREST | No signal → 0 | Parking-lot question → 2 |
 | Parking lot | — | +3 |
 | VARIETY_PENALTY | 0 | 0 |
-| **PRIORITY** | **15.0** | **15.0** |
+| **PRIORITY** | **15.0** | **17.0** |
 
-Tie. Parking lot boost makes C-04 competitive despite being practiced yesterday. Tie-break: prefer higher learner interest — the parking lot question signals interest in C-04, so select it as primary. C-01 becomes secondary or interleaving target.
+C-04 wins. The parking-lot boost (+3) and interest signal (INTEREST=2) combined give C-04 a clear lead. C-01 becomes secondary or interleaving target. Tie-break rule (prefer higher learner interest) is not needed here — C-04 wins on score alone.
+
+### Example 4 — Regression beats high interest (ENGINE-02 demonstration)
+
+Concept A-02 (Ser vs Estar): Phase A prerequisite, REGRESSED (was acquired, now regressed), production error rate 40%, last practiced 3 days ago, practice_count=15, INTEREST=0. Concept C-05 (Por vs Para): Current phase concept, practicing, production error 18%, last practiced 5 days ago, practice_count=4, learner asked about it unprompted two sessions ago, INTEREST=3.
+
+| | A-02 (Regressed) | C-05 (High Interest) |
+|---|---|---|
+| NEED | Phase prerequisite → 10 | Current phase → 7 |
+| GAP | Regressed → 10 | Production 15-30% → 5 |
+| DECAY | 3 days → raw 2, durability: 2 * (1 - 0.7) = 0.6 | 5 days → raw 5, durability: 5 * (1 - 0.2) = 4.0 |
+| TOPIC_BOOST | 0 | 0 |
+| INTEREST | No signal → 0 | Asked unprompted → 3 |
+| VARIETY_PENALTY | 0 | 0 |
+| **PRIORITY** | **20.6** | **19.0** |
+
+A-02 wins despite having zero interest. The regression (NEED=10, GAP=10) creates a baseline of 20 that even maximum INTEREST=3 cannot overcome for a non-regressed concept. This is the additive cap working as designed: interest guides the engine when priorities are comparable, but never overrides a true regression.
 
 ## Naturally-Acquired Concepts
 
