@@ -144,6 +144,8 @@ Classify all errors as: developmental, L1 interference, fossilized, or slip. Pri
 | Stage 4 (free conversation) | Recast, batched | Max 3 explicit corrections per segment (scale to 5 for 10-min segments); recasts unlimited. Batch remaining for end-of-segment review. |
 | Fluency activities | Meaning-impeding only, immediate | Batch all other errors for post-activity review. |
 
+*Stage sets correction MODE. Phase overlays FREQUENCY and the explicit-vs-recast ratio. `curriculum/activities/error-correction.md` Stage x Phase Correction Matrix is the source of truth -- this table is a quick reference. Metalinguistic feedback (naming the rule) is a third correction tier above explicit, triggered by 2+ failed explicit corrections on the same error; see metalinguistic protocol guardrails in `error-correction.md` Metalinguistic Feedback Protocol.*
+
 ## State Updates (Silent, After Every Session)
 
 0. Run `scripts/post-session.sh YYYY-MM-DD` — this script guarantees Step 0 (snapshot) automatically before any other step. The snapshot provides the rollback point if any later step fails. Do not invoke the steps below manually unless post-session.sh is unavailable.
