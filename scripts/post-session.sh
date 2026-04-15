@@ -108,6 +108,22 @@ run() {
 }
 
 # ---------------------------------------------------------------------------
+# Step 0: Snapshot state (must run before any writes; provides rollback point)
+# ---------------------------------------------------------------------------
+
+step "Step 0/6: Snapshotting state before writes"
+if $DRY_RUN; then
+    printf "${YELLOW}[dry-run]${RESET} Skipping snapshot (dry-run writes nothing)\n"
+else
+    if ! python3 "$ROOT/scripts/snapshot-state.py" snapshot; then
+        error "Snapshot failed — post-session aborted. State was not modified."
+        error "Fix the snapshot error before running post-session.sh again."
+        exit 1
+    fi
+    info "State snapshot created"
+fi
+
+# ---------------------------------------------------------------------------
 # Step 1: Generate/update vault content
 # ---------------------------------------------------------------------------
 
