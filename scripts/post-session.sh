@@ -183,6 +183,36 @@ except yaml.YAMLError as e:
 fi
 
 # ---------------------------------------------------------------------------
+# Step 4.5: Transcript presence check (FAIL for session_number > 1)
+# ---------------------------------------------------------------------------
+
+step "Step 4.5/6: Checking transcript file for $DATE"
+if $DRY_RUN; then
+    printf "${YELLOW}[dry-run]${RESET} Would check: transcripts/%s.md\n" "$DATE"
+else
+    TRANSCRIPT="$ROOT/transcripts/$DATE.md"
+    SESSION_NUMBER=$(python3 -c "
+import sys, yaml
+with open('$SESSION_LOG') as f:
+    data = yaml.safe_load(f)
+print(data.get('session_number', 1))
+" 2>/dev/null)
+
+    if [[ ! -f "$TRANSCRIPT" ]]; then
+        if [[ "$SESSION_NUMBER" -gt 1 ]]; then
+            error "Transcript file not found: transcripts/$DATE.md"
+            error "Session number is $SESSION_NUMBER (>1) — transcript is required."
+            error "Save the session conversation to transcripts/$DATE.md before re-running."
+            exit 1
+        else
+            warn "Transcript file not found: transcripts/$DATE.md (session 1 — exempt)"
+        fi
+    else
+        info "Transcript found: transcripts/$DATE.md"
+    fi
+fi
+
+# ---------------------------------------------------------------------------
 # Step 5: Check session log protocol compliance
 # ---------------------------------------------------------------------------
 #
