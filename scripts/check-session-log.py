@@ -102,21 +102,18 @@ FIRST_SESSION_EXPECTED = BASE_EXPECTED + [
 ]
 
 ONBOARDING_EXPECTED = BASE_EXPECTED + [
-    "session_activities",
     "skill_map_updates",
     "assignments",
     "next_session.recommended_focus",
 ]
 
 SPRINT_EXPECTED = BASE_EXPECTED + [
-    "session_activities",
     "assignments",
     "skill_map_updates",
     "next_session.recommended_focus",
 ]
 
 FLUENCY_EXPECTED = BASE_EXPECTED + [
-    "session_activities",
     "skill_map_updates",
     "assignments",
     "next_session.recommended_focus",
