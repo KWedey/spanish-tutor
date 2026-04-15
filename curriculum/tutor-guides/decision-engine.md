@@ -32,6 +32,38 @@ Run at session start for each concept in `schedule.yaml > carryover_concepts`. C
 
 After checking, increment `sessions_in_carryover` for each carryover concept that was practiced this session. Update `escalation_stage` if a threshold was crossed.
 
+## Step 0c — Regression Escalation Check
+
+Run at session start for each concept whose status transitioned from `acquired` or `automatic` back to `practicing` or `regressed` within the last session. Check `regression_session_count` against the ladder.
+
+### Prerequisite Regression (is_prerequisite: true)
+
+| Sessions in regression | Stage | Action |
+|----|----|----|
+| 1 | normal | Log. Targeted re-practice in next session's Main Lesson. |
+| 2 | flagged | Flag in system-health. Read `recast_uptake_stats`. If `recasts_given >= 5` and uptake rate < 60%, suspect mode mismatch. Read `error_trend` for pattern. |
+| 3 | approach_changed | **Mandatory approach switch.** Read `recast_uptake_stats`: **low uptake** (recasts_given >= 5, landed/given < 0.60) -> escalate correction MODE (recast -> explicit -> metalinguistic per error-correction.md Metalinguistic Feedback Protocol). **High uptake but re-erring** (landed/given >= 0.60) -> change CONTEXT or MODALITY (written <-> spoken; isolated drill <-> integrated conversation). **Insufficient data** (recasts_given < 5) -> default to context/modality change. Update `current_approach` in skill-map notes. |
+| 4 | sprint | Auto-trigger a single-session dedicated re-teach plus one week of daily micro-drills. Log sprint rationale in `adjustment_log`. |
+| 5+ | surfaced | Surface to learner warmly: "[Concept] has slipped back -- it happens. Let's talk about what changed." Use learner input to redesign. Log as fossilized risk if 3+ cycles of re-acquisition have failed. |
+
+### Non-Prerequisite Regression (is_prerequisite: false)
+
+| Sessions in regression | Stage | Action |
+|----|----|----|
+| 1-2 | normal | Log. Targeted re-practice. |
+| 3 | flagged | Flag in system-health. Review error patterns. |
+| 5 | approach_changed | Same approach-switch logic as prerequisite stage 3. |
+| 7 | sprint_or_deprioritize | If the concept is low-value for current goals, deprioritize (move out of active list) with a note. Otherwise sprint. |
+| 9+ | surfaced | Surface to learner. |
+
+**Key principle:** Each escalation step changes the approach, not just the intensity. Repeating the same thing harder does not fix a regression -- the Han (2004) fossilization research is explicit about this. The `approach_changed` stage reads `recast_uptake_stats` (from skill-map, aggregated by post-session.sh) to choose the switch, making "change approach" an auditable data-driven decision rather than a vague instruction.
+
+**Data-insufficiency fallback:** When `recast_uptake_stats.recasts_given < 5`, there is not enough data to determine uptake rate. In this case, the approach switch defaults to "change context/modality" rather than "escalate mode" -- this is a safe fallback that does not require uptake data.
+
+**Cross-link:** `curriculum/activities/error-correction.md` Escalation Protocol (3/5/8 sessions -> change approach / fossilized risk / directly inform) is the EXECUTION side of regression handling -- what to do mid-activity. This ladder is the DECISION side -- concept selection and scoring. Both can fire simultaneously on the same concept without conflict.
+
+After checking, update `regression_session_count` for each regressed concept. Update `escalation_stage` if a threshold was crossed.
+
 ## Step 1 — Gather Candidates
 
 All concepts in current phase with status: introduced, practicing, regressed, or acquired (for maintenance). Plus `carryover_concepts` from `schedule.yaml`. Plus maintenance from all previous phases (with decaying priority).
