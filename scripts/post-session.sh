@@ -164,10 +164,10 @@ else
     fi
 
     # Basic YAML well-formedness check via Python
-    if ! python3 -c "
+    if ! python3 - "$SESSION_LOG" <<'PYEOF'
 import sys, yaml
 try:
-    with open('$SESSION_LOG') as f:
+    with open(sys.argv[1]) as f:
         data = yaml.safe_load(f)
     if not isinstance(data, dict):
         print('Session log is not a YAML mapping', file=sys.stderr)
@@ -175,7 +175,8 @@ try:
 except yaml.YAMLError as e:
     print(f'Session log has invalid YAML: {e}', file=sys.stderr)
     sys.exit(1)
-"; then
+PYEOF
+    then
         error "Session log is not valid YAML: state/sessions/$DATE.yaml"
         exit 1
     fi
@@ -192,12 +193,13 @@ if $DRY_RUN; then
     printf "${YELLOW}[dry-run]${RESET} Would check: transcripts/%s.md\n" "$DATE"
 else
     TRANSCRIPT="$ROOT/transcripts/$DATE.md"
-    SESSION_NUMBER=$(python3 -c "
+    SESSION_NUMBER=$(python3 - "$SESSION_LOG" <<'PYEOF'
 import sys, yaml
-with open('$SESSION_LOG') as f:
+with open(sys.argv[1]) as f:
     data = yaml.safe_load(f)
 print(data.get('session_number', 1))
-" 2>/dev/null)
+PYEOF
+    )
 
     if [[ ! -f "$TRANSCRIPT" ]]; then
         if [[ "$SESSION_NUMBER" -gt 1 ]]; then
@@ -247,12 +249,13 @@ step "Step 5b/7: Aggregating recast_uptake_stats into skill-map"
 if $DRY_RUN; then
     printf "${YELLOW}[dry-run]${RESET} Would aggregate recasts from %s\n" "$SESSION_LOG"
 else
-    if ! python3 - <<PYEOF
+    if ! python3 - "$SESSION_LOG" "$ROOT/state/skill-map.yaml" "$DATE" <<'PYEOF'
 import yaml, sys
 from pathlib import Path
 
-LOG = Path("$SESSION_LOG")
-SM  = Path("$ROOT/state/skill-map.yaml")
+LOG  = Path(sys.argv[1])
+SM   = Path(sys.argv[2])
+DATE = sys.argv[3]
 
 with LOG.open() as f:
     session = yaml.safe_load(f) or {}
@@ -279,7 +282,7 @@ for r in recasts:
     stats["recasts_given"] = (stats.get("recasts_given") or 0) + 1
     if uptake in ("landed", "missed", "partial"):
         stats[uptake] = (stats.get(uptake) or 0) + 1
-    stats["last_updated"] = "$DATE"
+    stats["last_updated"] = DATE
     aggregated += 1
 
 with SM.open("w") as f:
