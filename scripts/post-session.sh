@@ -60,6 +60,7 @@ while [[ $# -gt 0 ]]; do
             echo "  3. Validate state files"
             echo "  4. Verify session log exists and is well-formed"
             echo "  5. Check session log protocol compliance"
+            echo "  5b. Aggregate recast_uptake_stats into skill-map"
             echo "  6. Git commit all changes"
             echo ""
             echo "Options:"
@@ -111,7 +112,7 @@ run() {
 # Step 0: Snapshot state (must run before any writes; provides rollback point)
 # ---------------------------------------------------------------------------
 
-step "Step 0/6: Snapshotting state before writes"
+step "Step 0/7: Snapshotting state before writes"
 if $DRY_RUN; then
     printf "${YELLOW}[dry-run]${RESET} Skipping snapshot (dry-run writes nothing)\n"
 else
@@ -127,7 +128,7 @@ fi
 # Step 1: Generate/update vault content
 # ---------------------------------------------------------------------------
 
-step "Step 1/6: Generating vault content for $DATE"
+step "Step 1/7: Generating vault content for $DATE"
 run python3 "$ROOT/scripts/generate-vault.py" --session --date "$DATE"
 if ! $DRY_RUN; then info "Vault generation complete"; fi
 
@@ -135,7 +136,7 @@ if ! $DRY_RUN; then info "Vault generation complete"; fi
 # Step 2: Archive old session logs
 # ---------------------------------------------------------------------------
 
-step "Step 2/6: Archiving session logs older than 60 days"
+step "Step 2/7: Archiving session logs older than 60 days"
 run python3 "$ROOT/scripts/archive-sessions.py"
 if ! $DRY_RUN; then info "Session archival complete"; fi
 
@@ -143,7 +144,7 @@ if ! $DRY_RUN; then info "Session archival complete"; fi
 # Step 3: Validate state files
 # ---------------------------------------------------------------------------
 
-step "Step 3/6: Validating state files"
+step "Step 3/7: Validating state files"
 run python3 "$ROOT/scripts/validate-state.py"
 if ! $DRY_RUN; then info "State validation passed"; fi
 
@@ -153,7 +154,7 @@ if ! $DRY_RUN; then info "State validation passed"; fi
 
 SESSION_LOG="$ROOT/state/sessions/$DATE.yaml"
 
-step "Step 4/6: Verifying session log at state/sessions/$DATE.yaml"
+step "Step 4/7: Verifying session log at state/sessions/$DATE.yaml"
 if $DRY_RUN; then
     printf "${YELLOW}[dry-run]${RESET} Would verify: %s\n" "$SESSION_LOG"
 else
@@ -186,7 +187,7 @@ fi
 # Step 4.5: Transcript presence check (FAIL for session_number > 1)
 # ---------------------------------------------------------------------------
 
-step "Step 4.5/6: Checking transcript file for $DATE"
+step "Step 4.5/7: Checking transcript file for $DATE"
 if $DRY_RUN; then
     printf "${YELLOW}[dry-run]${RESET} Would check: transcripts/%s.md\n" "$DATE"
 else
@@ -221,7 +222,7 @@ fi
 # protocol. Missing expected fields → FAIL. Empty expected fields → WARN
 # (use --strict on check-session-log.py directly to treat empties as fails).
 
-step "Step 5/6: Checking session log protocol compliance"
+step "Step 5/7: Checking session log protocol compliance"
 if $DRY_RUN; then
     printf "${YELLOW}[dry-run]${RESET} Would run: scripts/check-session-log.py %s\n" "$DATE"
 else
@@ -235,13 +236,71 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# Step 6: Git commit
+# Step 5b: Aggregate recast_uptake_stats into skill-map (D-07)
+# ---------------------------------------------------------------------------
+#
+# Folds today's recasts[] entries from the session log into each grammar
+# concept's recast_uptake_stats counters in skill-map.yaml. Additive write
+# on top of the Step 0 snapshot — if this fails, snapshot provides rollback.
+
+step "Step 5b/7: Aggregating recast_uptake_stats into skill-map"
+if $DRY_RUN; then
+    printf "${YELLOW}[dry-run]${RESET} Would aggregate recasts from %s\n" "$SESSION_LOG"
+else
+    if ! python3 - <<PYEOF
+import yaml, sys
+from pathlib import Path
+
+LOG = Path("$SESSION_LOG")
+SM  = Path("$ROOT/state/skill-map.yaml")
+
+with LOG.open() as f:
+    session = yaml.safe_load(f) or {}
+recasts = session.get("recasts") or []
+if not recasts:
+    print("No recasts to aggregate")
+    sys.exit(0)
+
+with SM.open() as f:
+    sm = yaml.safe_load(f) or {}
+grammar = sm.setdefault("grammar", {})
+
+aggregated = 0
+for r in recasts:
+    cid = r.get("concept_id")
+    uptake = r.get("uptake")
+    if not cid or cid not in grammar:
+        continue
+    entry = grammar[cid]
+    stats = entry.setdefault("recast_uptake_stats", {
+        "recasts_given": 0, "landed": 0, "missed": 0, "partial": 0,
+        "last_updated": None,
+    })
+    stats["recasts_given"] = (stats.get("recasts_given") or 0) + 1
+    if uptake in ("landed", "missed", "partial"):
+        stats[uptake] = (stats.get(uptake) or 0) + 1
+    stats["last_updated"] = "$DATE"
+    aggregated += 1
+
+with SM.open("w") as f:
+    yaml.safe_dump(sm, f, sort_keys=False, allow_unicode=True)
+print(f"Aggregated {aggregated} recasts into skill-map")
+PYEOF
+    then
+        error "Recast aggregation failed"
+        exit 1
+    fi
+    info "Recast aggregation complete"
+fi
+
+# ---------------------------------------------------------------------------
+# Step 7: Git commit
 # ---------------------------------------------------------------------------
 
 if $NO_COMMIT; then
-    step "Step 6/6: Skipping git commit (--no-commit)"
+    step "Step 7/7: Skipping git commit (--no-commit)"
 else
-    step "Step 6/6: Committing changes"
+    step "Step 7/7: Committing changes"
     if $DRY_RUN; then
         printf "${YELLOW}[dry-run]${RESET} Would run: git add + git commit\n"
     else
