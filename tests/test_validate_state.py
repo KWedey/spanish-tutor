@@ -43,6 +43,18 @@ check_session_logs = validate_mod.check_session_logs
 check_resource_skill_map_levels = validate_mod.check_resource_skill_map_levels
 check_curriculum_cross_refs = validate_mod.check_curriculum_cross_refs
 
+# ENGINE Phase 4 function references (will raise AttributeError until implemented — RED state)
+check_learner_interest_range = getattr(validate_mod, "check_learner_interest_range", None)
+check_recast_uptake_stats_consistency = getattr(validate_mod, "check_recast_uptake_stats_consistency", None)
+check_learner_interest_staleness = getattr(validate_mod, "check_learner_interest_staleness", None)
+
+_missing_engine_fns = pytest.mark.skipif(
+    check_learner_interest_range is None
+    or check_recast_uptake_stats_consistency is None
+    or check_learner_interest_staleness is None,
+    reason="ENGINE Phase 4 validate-state functions not yet implemented — RED phase"
+)
+
 
 @pytest.fixture(autouse=True)
 def clear_results():
@@ -929,3 +941,131 @@ class TestLastSessionDateDriftDryRun:
         # Should be a WARN (dry-run detected drift)
         warns = _warns()
         assert any("dry-run" in w for w in warns)
+
+
+# ---------------------------------------------------------------------------
+# ENGINE Phase 4 tests
+# ---------------------------------------------------------------------------
+
+@_missing_engine_fns
+class TestLearnerInterestRange:
+    """ENGINE-02 / D-02: learner_interest.score must be 0-3."""
+
+    def test_score_in_range_passes(self, skill_map_data):
+        """Score of 2 should pass validation."""
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["learner_interest"] = {
+            "score": 2, "last_inferred": "2026-04-15", "signal_source": "debrief"
+        }
+        res = validate_mod.ValidationResults()
+        check_learner_interest_range(sm, res)
+        assert not any(level == "FAIL" for level, _ in res._items), \
+            "ENGINE-02: score=2 should not FAIL"
+
+    def test_score_above_3_fails(self, skill_map_data):
+        """Score of 5 must FAIL."""
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["learner_interest"] = {
+            "score": 5, "last_inferred": "2026-04-15", "signal_source": "debrief"
+        }
+        res = validate_mod.ValidationResults()
+        check_learner_interest_range(sm, res)
+        assert any(level == "FAIL" for level, _ in res._items), \
+            "ENGINE-02: score=5 must FAIL (exceeds 0-3 cap)"
+
+    def test_score_negative_fails(self, skill_map_data):
+        """Negative score must FAIL."""
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["learner_interest"] = {
+            "score": -1, "last_inferred": "2026-04-15", "signal_source": "debrief"
+        }
+        res = validate_mod.ValidationResults()
+        check_learner_interest_range(sm, res)
+        assert any(level == "FAIL" for level, _ in res._items), \
+            "ENGINE-02: score=-1 must FAIL"
+
+    def test_missing_field_does_not_fail(self, skill_map_data):
+        """Missing learner_interest field is backward-compatible (D-10)."""
+        sm = skill_map_data
+        # No learner_interest field at all
+        res = validate_mod.ValidationResults()
+        check_learner_interest_range(sm, res)
+        assert not any(level == "FAIL" for level, _ in res._items), \
+            "D-10: missing learner_interest must NOT fail"
+
+    def test_vocabulary_concept_checked(self, skill_map_data):
+        """learner_interest range check applies to vocabulary too (D-03)."""
+        sm = skill_map_data
+        # Add learner_interest to a vocabulary entry with out-of-range score
+        first_vocab = next(iter(sm.get("vocabulary", {})))
+        sm["vocabulary"][first_vocab]["learner_interest"] = {
+            "score": 4, "last_inferred": "2026-04-15", "signal_source": "engagement"
+        }
+        res = validate_mod.ValidationResults()
+        check_learner_interest_range(sm, res)
+        assert any(level == "FAIL" for level, _ in res._items), \
+            "ENGINE-02/D-03: vocabulary score=4 must FAIL"
+
+
+@_missing_engine_fns
+class TestRecastUptakeStatsConsistency:
+    """D-07: landed + missed + partial must be <= recasts_given."""
+
+    def test_consistent_stats_pass(self, skill_map_data):
+        """3 + 2 + 1 = 6 <= 8 should pass."""
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["recast_uptake_stats"] = {
+            "recasts_given": 8, "landed": 3, "missed": 2, "partial": 1,
+            "last_updated": "2026-04-15"
+        }
+        res = validate_mod.ValidationResults()
+        check_recast_uptake_stats_consistency(sm, res)
+        assert not any(level == "FAIL" for level, _ in res._items), \
+            "D-07: 3+2+1 <= 8 should pass"
+
+    def test_inconsistent_stats_fail(self, skill_map_data):
+        """5 + 3 + 2 = 10 > 8 must FAIL."""
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["recast_uptake_stats"] = {
+            "recasts_given": 8, "landed": 5, "missed": 3, "partial": 2,
+            "last_updated": "2026-04-15"
+        }
+        res = validate_mod.ValidationResults()
+        check_recast_uptake_stats_consistency(sm, res)
+        assert any(level == "FAIL" for level, _ in res._items), \
+            "D-07: 5+3+2=10 > 8 must FAIL"
+
+    def test_missing_stats_does_not_fail(self, skill_map_data):
+        """Missing recast_uptake_stats is backward-compatible (D-10)."""
+        sm = skill_map_data
+        res = validate_mod.ValidationResults()
+        check_recast_uptake_stats_consistency(sm, res)
+        assert not any(level == "FAIL" for level, _ in res._items), \
+            "D-10: missing recast_uptake_stats must NOT fail"
+
+
+@_missing_engine_fns
+class TestLearnerInterestStaleness:
+    """D-03: staleness > 28 days should WARN (not FAIL)."""
+
+    def test_stale_interest_warns(self, skill_map_data):
+        """Interest last inferred 35 days ago should WARN."""
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["learner_interest"] = {
+            "score": 2, "last_inferred": "2026-03-01", "signal_source": "debrief"
+        }
+        res = validate_mod.ValidationResults()
+        check_learner_interest_staleness(sm, res)
+        assert any(level == "WARN" for level, _ in res._items), \
+            "D-03: stale interest (>28 days) should WARN"
+
+    def test_fresh_interest_no_warn(self, skill_map_data):
+        """Interest inferred 5 days ago should not WARN."""
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["learner_interest"] = {
+            "score": 2, "last_inferred": "2026-04-10", "signal_source": "debrief"
+        }
+        res = validate_mod.ValidationResults()
+        check_learner_interest_staleness(sm, res)
+        assert not any(level == "WARN" for level, _ in res._items), \
+            "D-03: fresh interest should not WARN"

@@ -28,6 +28,14 @@ BASE_EXPECTED = check_mod.BASE_EXPECTED
 check_log = check_mod.check_log
 get_nested = check_mod.get_nested
 
+# ENGINE Phase 4 function reference (will raise AttributeError until implemented — RED state)
+check_recasts_required = getattr(check_mod, "check_recasts_required", None)
+
+_missing_recasts_fn = pytest.mark.skipif(
+    check_recasts_required is None,
+    reason="check_recasts_required not yet implemented — RED phase"
+)
+
 # Grab the individual constants (will exist after implementation)
 # We test via EXPECTED_BY_TYPE dict lookup instead, which is more robust.
 
@@ -384,3 +392,86 @@ class TestFluency:
 
         result = check_log("2026-04-15", strict=False)
         assert result == 0, "fluency log with all fields should PASS"
+
+
+# ---------------------------------------------------------------------------
+# ENGINE Phase 4: Conditional recasts enforcement (D-06)
+# ---------------------------------------------------------------------------
+
+@_missing_recasts_fn
+class TestRecasts:
+    """D-06: recasts field conditionally required based on session content."""
+
+    def test_stage3_no_recasts_fails(self):
+        """Session with stage-3 activity missing recasts field should FAIL."""
+        log = _make_session_log("standard", {
+            "session_activities": [
+                {"type": "guided-production", "stage": "stage-3", "concept": "C-03"}
+            ],
+        })
+        # Ensure no recasts field
+        log.pop("recasts", None)
+        assert check_recasts_required(log) is True, \
+            "D-06: stage-3 activity should trigger recasts required"
+
+    def test_stage3_empty_recasts_passes(self):
+        """Session with stage-3 and recasts: [] should PASS."""
+        log = _make_session_log("standard", {
+            "session_activities": [
+                {"type": "guided-production", "stage": "stage-3", "concept": "C-03"}
+            ],
+            "recasts": [],
+        })
+        # check_recasts_required returns True (field IS required),
+        # but the field IS present with empty list, so validator should PASS
+        assert "recasts" in log, "Fixture must include recasts field"
+
+    def test_fluency_no_recasts_fails(self):
+        """Fluency session missing recasts should FAIL (D-06 short-circuit)."""
+        log = _make_session_log("fluency", {
+            "session_activities": [{"type": "fluency-storytelling"}],
+        })
+        log.pop("recasts", None)
+        assert check_recasts_required(log) is True, \
+            "D-06: fluency session_type should short-circuit to required"
+
+    def test_stage1_only_no_recasts_passes(self):
+        """Stage-1-only session without recasts should NOT require it."""
+        log = _make_session_log("standard", {
+            "session_activities": [
+                {"type": "drill", "stage": "stage-1"}
+            ],
+        })
+        log.pop("recasts", None)
+        assert check_recasts_required(log) is False, \
+            "D-06: stage-1 only should NOT require recasts"
+
+    def test_stage4_requires_recasts(self):
+        """Stage-4 free conversation should require recasts."""
+        log = _make_session_log("standard", {
+            "session_activities": [
+                {"type": "conversation", "stage": "stage-4"}
+            ],
+        })
+        assert check_recasts_required(log) is True, \
+            "D-06: stage-4 activity should require recasts"
+
+    def test_conversation_type_requires_recasts(self):
+        """Activity type 'conversation' without explicit stage should require recasts."""
+        log = _make_session_log("standard", {
+            "session_activities": [
+                {"type": "conversation"}
+            ],
+        })
+        assert check_recasts_required(log) is True, \
+            "D-06: conversation activity type should trigger required"
+
+    def test_recast_substring_in_notes_requires(self):
+        """Free-text 'recast' substring in activity notes should trigger required."""
+        log = _make_session_log("standard", {
+            "session_activities": [
+                {"type": "drill", "stage": "stage-2", "notes": "did some recasting"}
+            ],
+        })
+        assert check_recasts_required(log) is True, \
+            "D-06: 'recast' substring in notes should trigger required"
