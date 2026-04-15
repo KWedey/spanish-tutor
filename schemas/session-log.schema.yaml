@@ -78,6 +78,35 @@ fields:
     default: []
     description: "Prior concepts woven into primary concept practice"
 
+  recasts:
+    type: list
+    required: false
+    default: []
+    description: "D-05: per-event recast log. Empty list = positive assertion of 'no recasts occurred.' Required when session contains Stage 3/4, fluency, or conversation practice (see check-session-log.py D-06)."
+    item_shape:
+      concept_id:
+        type: string
+        required: true
+        description: "Grammar concept being corrected (skill-map key)"
+      error_form:
+        type: string
+        required: true
+        description: "What the learner said"
+      corrected_form:
+        type: string
+        required: true
+        description: "The recast the tutor provided"
+      uptake:
+        type: string
+        required: true
+        description: "Whether learner incorporated the corrected form"
+        enum: ["landed", "missed", "partial"]
+      activity_stage:
+        type: string
+        required: true
+        description: "Activity stage when the recast occurred"
+        enum: ["stage-1", "stage-2", "stage-3", "stage-4", "fluency"]
+
   assignments:
     type: list
     required: false
@@ -170,7 +199,9 @@ fields:
         type: list
         required: false
         default: []
-        description: "Top-scoring candidates with individual dimension scores: {id, NEED, GAP, DECAY, TOPIC, VARIETY, TOTAL}"
+        description: "Top-scoring candidates with individual dimension scores: {id, NEED, GAP, DECAY, TOPIC, INTEREST, VARIETY, TOTAL}"
+        # Per-candidate shape includes: id (string), NEED (int), GAP (int),
+        # DECAY (float), TOPIC (int), INTEREST (int 0-3, D-04), VARIETY (int), TOTAL (float)
       selected_primary:
         type: string
         required: false
