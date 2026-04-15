@@ -243,6 +243,10 @@ def check_acquired_consistency(sm: dict, res: ValidationResults) -> None:
         # E-05: threshold matches CLAUDE.md spec (< 10%)
         if err is not None and err > 0.10:
             res.fail(f"Grammar '{cid}': acquired but error_rate_production={err} (> 0.10)")
+        err_drills = e.get("error_rate_drills")
+        # ENFORCE-07: threshold matches CLAUDE.md acquisition rule (< 0.10)
+        if err_drills is not None and err_drills > 0.10:
+            res.fail(f"Grammar '{cid}': acquired but error_rate_drills={err_drills} (> 0.10)")
         perf = e.get("performance_unscaffolded")
         if perf is not None and perf != "competent":
             res.fail(f"Grammar '{cid}': acquired but performance_unscaffolded='{perf}' (expected 'competent')")
