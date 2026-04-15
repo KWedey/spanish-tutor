@@ -10,7 +10,7 @@ except ImportError:
 
 from shared import (ROOT, STATE_DIR as STATE, CURRICULUM_DIR as CURRICULUM,
                      PHASE_DIRS, TIER_DIRS, load_yaml, load_schema,
-                     get_required_fields)
+                     get_required_fields, atomic_write)
 
 
 # ---------------------------------------------------------------------------
@@ -623,9 +623,7 @@ def check_last_session_date(sched: dict, res: ValidationResults,
 
     sched_path = STATE / "schedule.yaml"
     sched["last_session_date"] = most_recent
-    with sched_path.open("w") as f:
-        import yaml as _yaml
-        _yaml.dump(sched, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+    atomic_write(sched_path, yaml.dump(sched, default_flow_style=False, allow_unicode=True, sort_keys=False))
 
     health_path = STATE / "system-health.yaml"
     if health_path.exists():
@@ -639,9 +637,9 @@ def check_last_session_date(sched: dict, res: ValidationResults,
             "reason": "Disagreed with most recent session log filename",
             "detected_by": "validate-state.py:check_last_session_date",
         })
-        with health_path.open("w") as f:
-            import yaml as _yaml
-            _yaml.dump(health, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+        atomic_write(health_path, yaml.dump(health, default_flow_style=False, allow_unicode=True, sort_keys=False))
+    else:
+        res.warn("system-health.yaml missing — auto-fix applied to schedule.yaml but not logged to health file")
 
     res.pass_(
         f"Auto-fixed last_session_date: '{recorded}' → '{most_recent}' "
