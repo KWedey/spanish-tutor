@@ -376,6 +376,17 @@ grammar:
                                     # A concept is not fully consolidated until it has been combined with at least one other active concept.
     prerequisites: []
     notes: ""
+    learner_interest:             # D-01/D-03: tutor-inferred interest (stale after 28 days)
+      score: 0                    # 0-3. Out-of-range = validator FAIL.
+      last_inferred: null         # YYYY-MM-DD. > 28 days = stale, scored as 0.
+      signal_source: null         # parking-lot / debrief / spontaneous-q / engagement / stale
+    recast_uptake_stats:          # D-07: aggregate from session-log recasts[]. Grammar only.
+      recasts_given: 0            # Total recasts issued for this concept
+      landed: 0                   # Learner incorporated corrected form
+      missed: 0                   # Learner did not incorporate
+      partial: 0                  # Learner partially incorporated
+      last_updated: null          # YYYY-MM-DD of last aggregation
+    regression_session_count: 0   # D-09/ENGINE-05: consecutive sessions in regression. Grammar only.
 
   # ... (one entry per grammar concept in curriculum/grammar/)
 
@@ -409,6 +420,12 @@ grammar:
 - **Moderate confidence (8-30 days):** Error rates are informative but should be confirmed with a fresh observation before triggering status changes (advancement or regression).
 - **Low confidence (31-60 days):** Consider rates stale. Collect fresh data before any advancement decision. Flag during weekly review.
 - **Expired (60+ days):** Rates are unreliable. Treat the concept as needing a fresh assessment. (This aligns with the staleness rule for `last_practiced` above.)
+
+**Learner interest tracking (D-01/D-03):** `learner_interest` is a per-concept field on grammar, vocabulary, and cultural_awareness entries. The tutor infers a 0-3 score post-session from four signals: parking-lot mentions, real-world debrief content, spontaneous learner questions, and engagement notes. Stale after 28 days (`last_inferred` > 28 days ago = scored as 0). `validate-state.py` FAILs on `score > 3`; WARNs on stale entries. Missing field = backward-compatible default 0 (no FAIL).
+
+**Recast uptake statistics (D-07):** `recast_uptake_stats` is a per-concept field on grammar entries only. Aggregated from session-log `recasts[]` entries by `post-session.sh` Step 5b. Invariant: `landed + missed + partial <= recasts_given`. `validate-state.py` FAILs on invariant violation. Missing field = backward-compatible all-zeros (no FAIL).
+
+**Regression session count (D-09/ENGINE-05):** `regression_session_count` is a per-concept integer on grammar entries only. Tracks consecutive sessions where a concept's status is `regressed` or `practicing` after previously being `acquired` or `automatic`. Incremented by `post-session.sh`; read by `decision-engine.md` Step 0c regression escalation ladder to determine escalation stage (normal/flagged/approach_changed/sprint/surfaced). Reset to 0 when the concept re-acquires `acquired` status. Missing field = backward-compatible default 0 (no FAIL).
 
 vocabulary:
   tier1-greetings-introductions:
@@ -770,6 +787,17 @@ interleaved_concepts: []
   #   interleave_context: ""                # e.g., "embedded ser/estar in preterite drills"
   #   errors_observed: 0
 
+# Recast uptake log — per-event record of recasts and learner response (D-05)
+# Required when session contains Stage 3/4, fluency, or conversation practice.
+# Empty list (recasts: []) is a positive assertion that no recasts occurred.
+recasts: []
+  # Entry structure when populated:
+  # - concept_id: ""              # grammar concept key (skill-map)
+  #   error_form: ""              # what the learner said
+  #   corrected_form: ""          # the recast
+  #   uptake: landed              # landed / missed / partial
+  #   activity_stage: stage-3     # stage-1 / stage-2 / stage-3 / stage-4 / fluency
+
 # Assignments for before next session
 assignments:
   - type: ""                    # pronunciation, listening, reading, vocabulary, speaking, writing, fluency
@@ -841,11 +869,15 @@ validation_checks:
 decision_engine_trace:
   candidates_scored: 0
   top_candidates:
+    # Per-candidate shape: {id, NEED, GAP, DECAY, TOPIC, INTEREST, VARIETY, TOTAL}
+    # INTEREST (int, 0-3): D-04 learner_interest dimension. Recorded for every
+    # top candidate always (not conditional). Full 6-dimension trace.
     - id: ""                    # concept ID
       NEED: 0
       GAP: 0
       DECAY: 0
       TOPIC: 0
+      INTEREST: 0              # D-04: 0-3 learner_interest dimension
       VARIETY: 0
       TOTAL: 0
   selected_primary: ""
