@@ -237,6 +237,14 @@ def check_log(date: str, strict: bool) -> int:
         elif is_empty(value):
             empty_fields.append(path)
 
+    # ENGINE-03/D-06: Conditional recasts enforcement (with backward-compat date guard)
+    # Must run before the early-return so that a session with all expected
+    # fields populated but missing a conditionally-required 'recasts' field
+    # is correctly caught as a failure.
+    session_date = str(data.get("date", ""))
+    if session_date >= PHASE_4_CUTOFF and check_recasts_required(data) and "recasts" not in data:
+        missing.append("recasts")
+
     # Report
     print(dim(f"Checking {log_path.relative_to(ROOT)} ({session_type})"))
     print(dim(f"  Expected fields: {len(expected)}"))
@@ -248,7 +256,10 @@ def check_log(date: str, strict: bool) -> int:
     if missing:
         print(red(f"FAIL: {len(missing)} expected field(s) missing:"))
         for path in missing:
-            print(red(f"  - {path}"))
+            if path == "recasts":
+                print(red(f"  - {path} (required for Stage 3/4 / fluency / conversation -- D-06)"))
+            else:
+                print(red(f"  - {path}"))
 
     if empty_fields:
         severity = red("FAIL") if strict else yellow("WARN")
@@ -256,13 +267,6 @@ def check_log(date: str, strict: bool) -> int:
         for path in empty_fields:
             label = red(f"  - {path}") if strict else yellow(f"  - {path}")
             print(label)
-
-    # ENGINE-03/D-06: Conditional recasts enforcement (with backward-compat date guard)
-    session_date = str(data.get("date", ""))
-    if session_date >= PHASE_4_CUTOFF and check_recasts_required(data) and "recasts" not in data:
-        missing.append("recasts")
-        print(red("FAIL: 'recasts' field required for session containing Stage 3/4 / "
-                   "fluency / conversation -- see decision D-06"))
 
     if missing or (strict and empty_fields):
         return 1
