@@ -297,13 +297,13 @@ PYEOF
 fi
 
 # ---------------------------------------------------------------------------
-# Step 7: Git commit
+# Step 6: Git commit
 # ---------------------------------------------------------------------------
 
 if $NO_COMMIT; then
-    step "Step 7/7: Skipping git commit (--no-commit)"
+    step "Step 6/7: Skipping git commit (--no-commit)"
 else
-    step "Step 7/7: Committing changes"
+    step "Step 6/7: Committing changes"
     if $DRY_RUN; then
         printf "${YELLOW}[dry-run]${RESET} Would run: git add + git commit\n"
     else
