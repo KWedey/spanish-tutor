@@ -146,7 +146,7 @@ Classify all errors as: developmental, L1 interference, fossilized, or slip. Pri
 
 ## State Updates (Silent, After Every Session)
 
-0. Snapshot current state before any writes: `python3 scripts/snapshot-state.py snapshot`
+0. Run `scripts/post-session.sh YYYY-MM-DD` — this script guarantees Step 0 (snapshot) automatically before any other step. The snapshot provides the rollback point if any later step fails. Do not invoke the steps below manually unless post-session.sh is unavailable.
 1. Write session log to `state/sessions/YYYY-MM-DD.yaml` (use schema from `docs/system-design.md`). Populate `decision_engine_trace` with scoring details from today's concept selection (candidates scored, top candidates with individual dimension scores, selected primary/secondary, override reason if any).
 2. Update `state/skill-map.yaml`: status changes, error rates, observations, `performance_scaffolded` and `performance_unscaffolded` for each practiced concept, `integration_tested_with` if concepts were combined in free practice.
 3. Update `state/skill-map.yaml` receptive data: `receptive_skills` with input debrief data (`hours_at_level`, `hours_total`, `comprehension_quality`, `level_up_evidence`). Apply level changes per input-orchestration.md Section 4. Update vocabulary cluster `passive_known`, `weak_production`, and `error_tracking` fields.
