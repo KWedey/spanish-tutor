@@ -1,4 +1,5 @@
 """Tests for scripts/setup.py — specifically has_existing_state()."""
+import ast
 import importlib.util
 import sys
 from pathlib import Path
@@ -359,4 +360,53 @@ class TestSetupBatExitCode:
         # 8. File starts with @echo off (no BOM, no leading whitespace).
         assert stripped_lines[0] == "@echo off", (
             f"setup.bat first line must be '@echo off', got: {stripped_lines[0]!r}"
+        )
+
+
+class TestConfigureGitHooks:
+    """Regression lock for Phase 2.1: configure_git_hooks must exist,
+    be called from main(), and configure core.hooksPath=.githooks.
+
+    Commit da6cf51 silently deleted this function and its call site
+    during a worktree realignment. These assertions prevent a future
+    worktree collapse from doing the same and inerting the LEAK hook.
+    """
+
+    SETUP_PY = Path(__file__).resolve().parent.parent / "scripts" / "setup.py"
+
+    def test_configure_git_hooks_function_exists(self):
+        source = self.SETUP_PY.read_text(encoding="utf-8")
+        tree = ast.parse(source)
+        names = {n.name for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
+        assert "configure_git_hooks" in names, (
+            "configure_git_hooks() missing from scripts/setup.py — "
+            "Phase 2.1 regression: commit da6cf51 deleted this before."
+        )
+
+    def test_configure_git_hooks_called_from_main(self):
+        source = self.SETUP_PY.read_text(encoding="utf-8")
+        tree = ast.parse(source)
+        main_fn = next(
+            (n for n in ast.walk(tree)
+             if isinstance(n, ast.FunctionDef) and n.name == "main"),
+            None,
+        )
+        assert main_fn is not None, "main() missing from scripts/setup.py"
+        called = {
+            node.func.id
+            for node in ast.walk(main_fn)
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+        }
+        assert "configure_git_hooks" in called, (
+            "main() does not call configure_git_hooks() — "
+            "function exists but is dead code. LEAK hook will not activate."
+        )
+
+    def test_configure_git_hooks_sets_githooks_path(self):
+        source = self.SETUP_PY.read_text(encoding="utf-8")
+        assert '"core.hooksPath"' in source, (
+            "configure_git_hooks must invoke 'git config core.hooksPath'"
+        )
+        assert '".githooks"' in source, (
+            "configure_git_hooks must set core.hooksPath to '.githooks' exactly"
         )
