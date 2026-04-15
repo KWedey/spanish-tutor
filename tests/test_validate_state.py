@@ -108,6 +108,51 @@ class TestAcquiredHighErrorRate:
 
 
 # ---------------------------------------------------------------------------
+# 1b. acquired + high error_rate_drills (ENFORCE-07)
+# ---------------------------------------------------------------------------
+
+class TestAcquiredHighErrorRateDrills:
+    def test_drills_0_40_fails(self, skill_map_data):
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["status"] = "acquired"
+        sm["grammar"]["A-01-present-regular"]["error_rate_drills"] = 0.40
+        sm["grammar"]["A-01-present-regular"]["error_rate_production"] = 0.05
+        sm["grammar"]["A-01-present-regular"]["performance_unscaffolded"] = "competent"
+
+        check_acquired_consistency(sm, results)
+
+        fails = _fails()
+        assert len(fails) >= 1
+        assert any("error_rate_drills=0.4" in f for f in fails)
+
+    def test_drills_0_12_fails(self, skill_map_data):
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["status"] = "acquired"
+        sm["grammar"]["A-01-present-regular"]["error_rate_drills"] = 0.12
+        sm["grammar"]["A-01-present-regular"]["error_rate_production"] = 0.05
+        sm["grammar"]["A-01-present-regular"]["performance_unscaffolded"] = "competent"
+
+        check_acquired_consistency(sm, results)
+
+        fails = _fails()
+        assert len(fails) >= 1
+        assert any("0.12" in f for f in fails)
+
+    def test_drills_0_10_boundary_passes(self, skill_map_data):
+        """ENFORCE-07: error_rate_drills == 0.10 should pass (threshold is >, not >=)."""
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["status"] = "acquired"
+        sm["grammar"]["A-01-present-regular"]["error_rate_drills"] = 0.10
+        sm["grammar"]["A-01-present-regular"]["error_rate_production"] = 0.05
+        sm["grammar"]["A-01-present-regular"]["performance_unscaffolded"] = "competent"
+
+        check_acquired_consistency(sm, results)
+
+        fails = _fails()
+        assert len(fails) == 0
+
+
+# ---------------------------------------------------------------------------
 # 2. acquired + unscaffolded != competent
 # ---------------------------------------------------------------------------
 
