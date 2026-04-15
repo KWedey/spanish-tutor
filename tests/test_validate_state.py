@@ -830,3 +830,102 @@ class TestCheckSkillMap:
 
         fails = _fails()
         assert any("A-01-present-regular" in f and "missing" in f for f in fails)
+
+
+# ---------------------------------------------------------------------------
+# 29. ENFORCE-06: last_session_date drift detection + auto-fix
+# ---------------------------------------------------------------------------
+
+check_last_session_date = getattr(validate_mod, "check_last_session_date", None)
+
+_missing_check_last_session_date = pytest.mark.skipif(
+    check_last_session_date is None,
+    reason="check_last_session_date not yet implemented — RED phase"
+)
+
+
+@_missing_check_last_session_date
+class TestLastSessionDateDrift:
+    def test_detects_drift(self, tmp_path, monkeypatch):
+        """ENFORCE-06: stale last_session_date is auto-fixed and logged to system-health."""
+        monkeypatch.setattr(validate_mod, "STATE", tmp_path)
+
+        # Create sessions directory with a session log
+        sdir = tmp_path / "sessions"
+        sdir.mkdir()
+        (sdir / "2026-04-12.yaml").write_text("date: 2026-04-12\n", encoding="utf-8")
+
+        # Create schedule.yaml with stale date
+        sched_data = {"last_session_date": "2026-04-10", "current_phase": "A-foundation"}
+        sched_path = tmp_path / "schedule.yaml"
+        with sched_path.open("w") as f:
+            yaml.dump(sched_data, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+        # Create system-health.yaml
+        health_data = {"schema_version": 1, "auto_fixes": []}
+        health_path = tmp_path / "system-health.yaml"
+        with health_path.open("w") as f:
+            yaml.dump(health_data, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+        check_last_session_date(sched_data, results, dry_run=False)
+
+        # schedule dict should be updated in-memory
+        assert sched_data["last_session_date"] == "2026-04-12"
+
+        # schedule.yaml file should be updated on disk
+        updated_sched = yaml.safe_load(sched_path.read_text(encoding="utf-8"))
+        assert updated_sched["last_session_date"] == "2026-04-12"
+
+        # system-health.yaml should have an auto_fixes entry
+        updated_health = yaml.safe_load(health_path.read_text(encoding="utf-8"))
+        fixes = updated_health.get("auto_fixes", [])
+        assert len(fixes) == 1
+        assert fixes[0]["field"] == "schedule.last_session_date"
+        assert fixes[0]["old_value"] == "2026-04-10"
+        assert fixes[0]["new_value"] == "2026-04-12"
+
+        # Should be a PASS (auto-fixed)
+        passes = _passes()
+        assert any("Auto-fixed" in p for p in passes)
+
+
+@_missing_check_last_session_date
+class TestLastSessionDateDriftDryRun:
+    def test_dry_run_does_not_mutate(self, tmp_path, monkeypatch):
+        """ENFORCE-06: --dry-run flag prevents writes, emits WARN."""
+        monkeypatch.setattr(validate_mod, "STATE", tmp_path)
+
+        # Create sessions directory with a session log
+        sdir = tmp_path / "sessions"
+        sdir.mkdir()
+        (sdir / "2026-04-12.yaml").write_text("date: 2026-04-12\n", encoding="utf-8")
+
+        # Create schedule.yaml with stale date
+        sched_data = {"last_session_date": "2026-04-10", "current_phase": "A-foundation"}
+        sched_path = tmp_path / "schedule.yaml"
+        with sched_path.open("w") as f:
+            yaml.dump(sched_data, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+        # Create system-health.yaml
+        health_data = {"schema_version": 1, "auto_fixes": []}
+        health_path = tmp_path / "system-health.yaml"
+        with health_path.open("w") as f:
+            yaml.dump(health_data, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+        check_last_session_date(sched_data, results, dry_run=True)
+
+        # schedule dict should NOT be updated
+        assert sched_data["last_session_date"] == "2026-04-10"
+
+        # schedule.yaml file should NOT be updated on disk
+        unchanged_sched = yaml.safe_load(sched_path.read_text(encoding="utf-8"))
+        assert unchanged_sched["last_session_date"] == "2026-04-10"
+
+        # system-health.yaml should NOT have any auto_fixes entries
+        unchanged_health = yaml.safe_load(health_path.read_text(encoding="utf-8"))
+        fixes = unchanged_health.get("auto_fixes", [])
+        assert len(fixes) == 0
+
+        # Should be a WARN (dry-run detected drift)
+        warns = _warns()
+        assert any("dry-run" in w for w in warns)
