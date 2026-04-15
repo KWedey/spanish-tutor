@@ -161,6 +161,41 @@ def is_empty(value: object) -> bool:
 
 
 # ---------------------------------------------------------------------------
+# ENGINE Phase 4: Conditional recasts enforcement (D-06)
+# ---------------------------------------------------------------------------
+
+# Backward compatibility: session logs before this date were written without
+# the recasts field. Skip conditional enforcement for pre-Phase-4 logs.
+PHASE_4_CUTOFF = "2026-04-20"
+
+
+def check_recasts_required(data: dict) -> bool:
+    """D-06: recasts field is required when session contained
+    Stage 3/4 activities, fluency type, or conversation practice."""
+    # Short-circuit: fluency sessions always require recasts (Pitfall 6)
+    if data.get("session_type") == "fluency":
+        return True
+    activities = data.get("session_activities") or []
+    for a in activities:
+        if not isinstance(a, dict):
+            continue
+        stage = (a.get("stage") or "").lower()
+        if "stage-3" in stage or "stage-4" in stage:
+            return True
+        atype = (a.get("type") or "").lower()
+        if "conversation" in atype or "role-play" in atype or "storytelling" in atype:
+            return True
+    # Fallback: scan free-text fields for "recast" substring
+    for a in activities:
+        if not isinstance(a, dict):
+            continue
+        for key in ("notes", "observations"):
+            if "recast" in str(a.get(key, "")).lower():
+                return True
+    return False
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -221,6 +256,13 @@ def check_log(date: str, strict: bool) -> int:
         for path in empty_fields:
             label = red(f"  - {path}") if strict else yellow(f"  - {path}")
             print(label)
+
+    # ENGINE-03/D-06: Conditional recasts enforcement (with backward-compat date guard)
+    session_date = str(data.get("date", ""))
+    if session_date >= PHASE_4_CUTOFF and check_recasts_required(data) and "recasts" not in data:
+        missing.append("recasts")
+        print(red("FAIL: 'recasts' field required for session containing Stage 3/4 / "
+                   "fluency / conversation -- see decision D-06"))
 
     if missing or (strict and empty_fields):
         return 1
