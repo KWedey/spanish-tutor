@@ -83,6 +83,64 @@ grammar_entry_template:
     required: false
     default: ""
     description: "Free-text notes"
+  learner_interest:
+    type: map
+    required: false
+    default: null
+    description: "D-01/D-03: tutor-inferred interest score with provenance. Stale after 28 days."
+    children:
+      score:
+        type: int
+        required: false
+        default: 0
+        description: "0-3 interest score. Out-of-range = validator FAIL."
+      last_inferred:
+        type: string
+        required: false
+        default: null
+        description: "YYYY-MM-DD of last inference. Stale decay: > 28 days ago treated as 0."
+      signal_source:
+        type: string
+        required: false
+        default: null
+        description: "Why this score was set"
+        enum: [null, "parking-lot", "debrief", "spontaneous-q", "engagement", "stale"]
+  recast_uptake_stats:
+    type: map
+    required: false
+    default: null
+    description: "D-07: aggregate of recasts[] entries from session logs. Invariant: landed + missed + partial <= recasts_given."
+    children:
+      recasts_given:
+        type: int
+        required: false
+        default: 0
+        description: "Total recasts issued for this concept across sessions"
+      landed:
+        type: int
+        required: false
+        default: 0
+        description: "Recasts where learner incorporated corrected form"
+      missed:
+        type: int
+        required: false
+        default: 0
+        description: "Recasts where learner did not incorporate corrected form"
+      partial:
+        type: int
+        required: false
+        default: 0
+        description: "Recasts where learner partially incorporated corrected form"
+      last_updated:
+        type: string
+        required: false
+        default: null
+        description: "YYYY-MM-DD of last aggregation from session logs"
+  regression_session_count:
+    type: int
+    required: false
+    default: 0
+    description: "D-09/ENGINE-05: consecutive sessions in regression since last acquired/automatic status. Incremented by post-session.sh. Used by Step 0c regression escalation ladder to determine escalation stage."
 
 vocabulary_entry_template:
   status:
@@ -152,6 +210,28 @@ vocabulary_entry_template:
         required: false
         default: null
         description: "Date of last in-session production observation"
+  learner_interest:
+    type: map
+    required: false
+    default: null
+    description: "D-01/D-03: tutor-inferred interest score with provenance. Stale after 28 days."
+    children:
+      score:
+        type: int
+        required: false
+        default: 0
+        description: "0-3 interest score. Out-of-range = validator FAIL."
+      last_inferred:
+        type: string
+        required: false
+        default: null
+        description: "YYYY-MM-DD of last inference. Stale decay: > 28 days ago treated as 0."
+      signal_source:
+        type: string
+        required: false
+        default: null
+        description: "Why this score was set"
+        enum: [null, "parking-lot", "debrief", "spontaneous-q", "engagement", "stale"]
 
 pronunciation_entry_template:
   status:
@@ -305,6 +385,28 @@ cultural_awareness_entry_template:
     required: false
     default: ""
     description: "Free-text notes"
+  learner_interest:
+    type: map
+    required: false
+    default: null
+    description: "D-01/D-03: tutor-inferred interest score with provenance. Stale after 28 days."
+    children:
+      score:
+        type: int
+        required: false
+        default: 0
+        description: "0-3 interest score. Out-of-range = validator FAIL."
+      last_inferred:
+        type: string
+        required: false
+        default: null
+        description: "YYYY-MM-DD of last inference. Stale decay: > 28 days ago treated as 0."
+      signal_source:
+        type: string
+        required: false
+        default: null
+        description: "Why this score was set"
+        enum: [null, "parking-lot", "debrief", "spontaneous-q", "engagement", "stale"]
 
 fluency_metrics:
   speaking_pace:
