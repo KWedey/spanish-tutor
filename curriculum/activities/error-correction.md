@@ -42,12 +42,7 @@ The tutor's role during free production (conversation, role-play, storytelling):
 4. **Do not recast repeatedly.** One recast, then move on. If the learner doesn't notice and
    correct themselves, it goes in the post-activity review.
 
-**Recasting vs explicit correction:**
-- **Recasting:** Tutor restates the correct form conversationally ("Saliste tarde —
-  ¿y después?"). The learner may or may not notice. No disruption to communication.
-- **Explicit correction:** Tutor pauses the flow and directly addresses the error ("Espera —
-  it should be 'saliste,' not 'saliste.' " — or more gently: "Eso se dice 'saliste.' ").
-  Reserve for Phase A-B or when the error is so persistent that recasting hasn't worked.
+**Correction mode selection:** Stage determines the correction MODE. Phase overlays FREQUENCY and the explicit-vs-recast ratio. See the Stage x Phase Correction Matrix below for the full specification.
 
 **Recast salience techniques** — when recasting, maximize the chance the learner notices:
 - **Stress the corrected element:** Emphasize the corrected word with caps or formatting: "*SALISTE* tarde — ¿y después?" The prosodic emphasis draws attention to the correction.
@@ -57,8 +52,45 @@ The tutor's role during free production (conversation, role-play, storytelling):
 
 Use stress and rising intonation as defaults. Use partial recast when the error is buried in a long sentence. Reserve contrastive stress for persistent errors where subtler recasts have failed.
 
-In Phase C-D: recast almost exclusively. In Phase A: explicit correction is acceptable for
-high-priority errors (current focus concept, meaning-blocking errors).
+## Stage x Phase Correction Matrix
+
+Stage sets the correction MODE. Phase overlays FREQUENCY and the explicit-vs-recast ratio.
+
+| Stage | Phase A | Phase B | Phase C | Phase D |
+|-------|---------|---------|---------|---------|
+| Stage 1-2 (controlled practice) | Explicit, immediate, no limit. L1 interference preempted. | Explicit, immediate, no limit. | Explicit when error is on current focus; recast otherwise. | Recast primarily; explicit only for fossilized risks. |
+| Stage 3 (guided production) | Explicit for focus concept; recast for everything else. | Mostly recast; explicit <= 2 per segment. | Recast; explicit <= 1 per segment. | Recast only. |
+| Stage 4 (free conversation) | Recast only (max 3 explicit per segment for meaning-blocking errors). Batch rest. | Recast; max 3 explicit per segment. Batch rest. | Recast; max 3 explicit per 10-min segment. Batch rest. | Recast; meaning-impeding only. |
+| Fluency activities | Meaning-impeding only, immediate. All other errors batched for post-activity review. | Same as Phase A. | Same, but batched review is entirely in Spanish. | Same, tutor intervention minimal. |
+
+**Metalinguistic mode** (third tier, above explicit) is NOT listed per cell — it is an ESCALATION triggered by 2+ failed explicit corrections on the same error in the same or consecutive sessions. See Metalinguistic Feedback Protocol below.
+
+**Source of truth:** This matrix governs all activity-stage correction decisions. CLAUDE.md Error Correction contains a quick-reference table; any conflict is resolved in favor of this matrix.
+
+## Metalinguistic Feedback Protocol
+
+**What it is:** Naming the rule (not just providing the correct form). Example: after the learner says "No creo que es importante," instead of recasting ("No crees que sea importante"), you say: "Después de 'dudar' o 'no creer,' usamos el subjuntivo. Entonces: 'No creo que sea importante.'"
+
+**When to use:**
+- **Trigger:** The same error form has received explicit correction 2+ times in the current session OR across 2 consecutive sessions without uptake.
+- **Phase A-B:** Tutor-initiated when trigger conditions are met.
+- **Phase C-D:** Learner-initiated only. Tutor waits for a question like "¿Por qué es 'sea' y no 'es'?" before offering a metalinguistic explanation. Unsolicited rules break flow at this level.
+
+**How to phrase:**
+1. **One rule statement (≤ 2 sentences).** "Se usa el subjuntivo después de 'dudar' porque expresa incertidumbre."
+2. **One canonical example.** "Por ejemplo: 'Dudo que venga mañana.'"
+3. **One learner-produced example.** "Ahora tú — dame una frase con 'dudar que.'"
+4. Move on. Do not repeat the rule later in the session.
+
+**What NOT to do:**
+- Do NOT chain rules. One concept per session maximum.
+- Do NOT cite linguistic terminology the learner hasn't been taught ("subordinate clause," "mood marker," "aspect").
+- Do NOT use metalinguistic mode mid-utterance. Wait until the activity ends.
+- Do NOT use it during free conversation (Stage 4) in Phase A-B — break to Stage 3 first, then explain.
+- Do NOT lecture. If the explanation takes more than 2 sentences, it is too long.
+- Do NOT metalinguistically correct more than 1 concept per session, even if multiple errors trigger.
+
+**Why a third tier:** Research (Lyster & Saito 2010 meta-analysis; Lobo 2022) shows prompts including metalinguistic feedback produce larger effect sizes than recasts, especially for lower-proficiency learners, when used sparingly. Used often, they become lectures and shut down production. The ≤ 1 per session cap is the guardrail.
 
 ## Post-Activity Review
 
@@ -111,6 +143,8 @@ grammar_concepts:
         classification: L1-interference
         action: "escalated — started dedicated drill cycle"
 ```
+
+**Cross-link:** `curriculum/tutor-guides/decision-engine.md` Step 0c (Regression Escalation Ladder) is the DECISION side of regression handling — which concept to select and how to score it. This Escalation Protocol is the EXECUTION side — what to do with the error during an activity. Both can fire on the same concept simultaneously without conflict.
 
 ## Handling Learner Reactions
 
