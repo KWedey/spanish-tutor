@@ -96,12 +96,42 @@ MICRO_EXPECTED = BASE_EXPECTED + [
     "skill_map_updates",
 ]
 
+FIRST_SESSION_EXPECTED = BASE_EXPECTED + [
+    "assessment",
+    "skill_map_updates",
+]
+
+ONBOARDING_EXPECTED = BASE_EXPECTED + [
+    "session_activities",
+    "skill_map_updates",
+    "assignments",
+    "next_session.recommended_focus",
+]
+
+SPRINT_EXPECTED = BASE_EXPECTED + [
+    "session_activities",
+    "assignments",
+    "skill_map_updates",
+    "next_session.recommended_focus",
+]
+
+FLUENCY_EXPECTED = BASE_EXPECTED + [
+    "session_activities",
+    "skill_map_updates",
+    "assignments",
+    "next_session.recommended_focus",
+]
+
 EXPECTED_BY_TYPE: dict[str, list[str]] = {
     "standard": STANDARD_EXPECTED,
     "weekly-review": WEEKLY_REVIEW_EXPECTED,
     "phase-transition": PHASE_TRANSITION_EXPECTED,
     "return": RETURN_EXPECTED,
     "micro": MICRO_EXPECTED,
+    "first-session": FIRST_SESSION_EXPECTED,
+    "onboarding": ONBOARDING_EXPECTED,
+    "sprint": SPRINT_EXPECTED,
+    "fluency": FLUENCY_EXPECTED,
 }
 
 # Fields that MAY be empty when applicable is uncertain. Agent should still
