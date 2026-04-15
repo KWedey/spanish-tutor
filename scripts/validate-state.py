@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Validate state files against expected schemas and cross-references."""
 import argparse, re, sys
+from datetime import datetime
 from pathlib import Path
 try:
     import yaml
@@ -582,11 +583,78 @@ def check_resource_skill_map_levels(resource_tracker: dict, skill_map: dict,
         res.pass_("resource-tracker/skill-map receptive levels are consistent")
 
 
+# --- 6. Last-session-date drift check (ENFORCE-06) ----------------------------
+
+def check_last_session_date(sched: dict, res: ValidationResults,
+                             dry_run: bool = False) -> None:
+    """Detect and auto-fix last_session_date vs most-recent session log disagreement."""
+    sdir = STATE / "sessions"
+    if not sdir.exists():
+        res.pass_("last_session_date: no sessions directory — skip check")
+        return
+
+    date_re = re.compile(r"^(\d{4}-\d{2}-\d{2})\.yaml$")
+    logs = sorted(
+        (m.group(1) for f in sdir.iterdir()
+         if f.is_file() and not f.name.startswith(".")
+         and (m := date_re.match(f.name))),
+        reverse=True
+    )
+    if not logs:
+        res.pass_("last_session_date: no session logs found — skip check")
+        return
+
+    most_recent = logs[0]
+    recorded = sched.get("last_session_date")
+
+    if recorded is not None and not isinstance(recorded, str):
+        recorded = str(recorded)
+
+    if recorded == most_recent:
+        res.pass_(f"last_session_date matches most recent session log: {most_recent}")
+        return
+
+    if dry_run:
+        res.warn(
+            f"last_session_date='{recorded}' but most recent session log is {most_recent} "
+            f"[dry-run: would auto-fix]"
+        )
+        return
+
+    sched_path = STATE / "schedule.yaml"
+    sched["last_session_date"] = most_recent
+    with sched_path.open("w") as f:
+        import yaml as _yaml
+        _yaml.dump(sched, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+    health_path = STATE / "system-health.yaml"
+    if health_path.exists():
+        health = load_yaml(health_path) or {}
+        fixes = health.setdefault("auto_fixes", [])
+        fixes.append({
+            "date": datetime.now().strftime("%Y-%m-%d"),
+            "field": "schedule.last_session_date",
+            "old_value": recorded,
+            "new_value": most_recent,
+            "reason": "Disagreed with most recent session log filename",
+            "detected_by": "validate-state.py:check_last_session_date",
+        })
+        with health_path.open("w") as f:
+            import yaml as _yaml
+            _yaml.dump(health, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+    res.pass_(
+        f"Auto-fixed last_session_date: '{recorded}' → '{most_recent}' "
+        f"(logged in system-health.yaml)"
+    )
+
+
 # --- Main ---------------------------------------------------------------------
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Validate tutoring system state files")
     ap.add_argument("--verbose", action="store_true", help="Show PASS results in addition to WARN/FAIL")
+    ap.add_argument("--dry-run", action="store_true", help="Preview auto-fixes without writing")
     args = ap.parse_args()
 
     res = results  # use module-level instance
@@ -622,6 +690,7 @@ def main() -> None:
     check_session_filenames(res)
     check_session_logs(res)
     if schedule is not None:
+        check_last_session_date(schedule, res, dry_run=args.dry_run)
         check_schedule_enums(schedule, res)
         check_placement_validation_consistency(schedule, res)
     if schedule is not None and skill_map is not None:
