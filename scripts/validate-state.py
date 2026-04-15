@@ -267,6 +267,83 @@ def check_performance_enums(sm: dict, res: ValidationResults) -> None:
     res.pass_("Performance enum values are valid")
 
 
+# --- 3b. ENGINE Phase 4 checks -----------------------------------------------
+
+def check_learner_interest_range(sm: dict, res: ValidationResults) -> None:
+    """D-02/D-10: learner_interest.score must be 0-3. Missing = OK (default 0).
+    Out of range = FAIL."""
+    violations = []
+    for section in ("grammar", "vocabulary", "cultural_awareness"):
+        for cid, e in (sm.get(section) or {}).items():
+            if not isinstance(e, dict):
+                continue
+            li = e.get("learner_interest")
+            if li is None:
+                continue  # missing = backward-compat default 0
+            score = li.get("score")
+            if score is None:
+                continue
+            if not isinstance(score, int) or score < 0 or score > 3:
+                violations.append((section, cid, score))
+    if violations:
+        for section, cid, score in violations:
+            res.fail(f"{section} '{cid}': learner_interest.score={score} out of range 0-3 (D-02 cap)")
+    else:
+        res.pass_("learner_interest scores in range 0-3")
+
+
+def check_learner_interest_staleness(sm: dict, res: ValidationResults) -> None:
+    """D-03/D-10: WARN (not FAIL) when learner_interest.last_inferred > 28 days."""
+    from datetime import date
+    today = date.today()
+    stale = []
+    for section in ("grammar", "vocabulary", "cultural_awareness"):
+        for cid, e in (sm.get(section) or {}).items():
+            if not isinstance(e, dict):
+                continue
+            li = e.get("learner_interest")
+            if not isinstance(li, dict):
+                continue
+            last = li.get("last_inferred")
+            if not last:
+                continue
+            try:
+                inferred_date = date.fromisoformat(str(last))
+                days_ago = (today - inferred_date).days
+                if days_ago > 28:
+                    stale.append((section, cid, days_ago))
+            except (ValueError, TypeError):
+                continue  # unparseable date — skip, don't FAIL
+    if stale:
+        for section, cid, days in stale:
+            res.warn(f"{section} '{cid}': learner_interest.last_inferred is {days} days old (stale > 28 days)")
+    else:
+        res.pass_("learner_interest staleness: all entries fresh or absent")
+
+
+def check_recast_uptake_stats_consistency(sm: dict, res: ValidationResults) -> None:
+    """D-07: landed + missed + partial must be <= recasts_given."""
+    violations = []
+    for cid, e in (sm.get("grammar") or {}).items():
+        if not isinstance(e, dict):
+            continue
+        stats = e.get("recast_uptake_stats")
+        if not isinstance(stats, dict):
+            continue
+        given = stats.get("recasts_given", 0) or 0
+        landed = stats.get("landed", 0) or 0
+        missed = stats.get("missed", 0) or 0
+        partial = stats.get("partial", 0) or 0
+        if landed + missed + partial > given:
+            violations.append((cid, given, landed, missed, partial))
+    if violations:
+        for cid, g, l, m, p in violations:
+            res.fail(f"Grammar '{cid}': recast_uptake_stats invariant violated "
+                     f"(landed={l} + missed={m} + partial={p} > recasts_given={g})")
+    else:
+        res.pass_("recast_uptake_stats invariants hold")
+
+
 def check_session_filenames(res: ValidationResults) -> None:
     sdir = STATE / "sessions"
     if not sdir.exists():
@@ -685,6 +762,10 @@ def main() -> None:
     if skill_map is not None:
         check_receptive_skills(skill_map, res)
         check_vocab_error_tracking(skill_map, res)
+    if skill_map is not None:
+        check_learner_interest_range(skill_map, res)
+        check_learner_interest_staleness(skill_map, res)
+        check_recast_uptake_stats_consistency(skill_map, res)
     check_session_filenames(res)
     check_session_logs(res)
     if schedule is not None:
