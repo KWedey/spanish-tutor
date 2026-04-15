@@ -44,10 +44,10 @@ class TestStep0Snapshot:
     """ENFORCE-01: post-session.sh must call snapshot-state.py as Step 0."""
 
     def test_step_0_header_present(self):
-        """Step 0/6 header line exists in the script."""
+        """Step 0 header line exists in the script (any total step count)."""
         content = _read_script()
-        assert "Step 0/6: Snapshotting state before writes" in content, (
-            "ENFORCE-01: 'Step 0/6: Snapshotting state before writes' missing"
+        assert "Step 0/" in content and "Snapshotting state before writes" in content, (
+            "ENFORCE-01: 'Step 0/N: Snapshotting state before writes' missing"
         )
 
     def test_step_0_invokes_snapshot_state(self):
@@ -67,14 +67,14 @@ class TestStep0Snapshot:
         )
 
     def test_step_0_comes_before_step_1(self):
-        """Step 0/6 line must appear before Step 1/6 line."""
-        step0_line = _line_number_of("Step 0/6:")
-        step1_line = _line_number_of("Step 1/6:")
-        assert step0_line > 0, "ENFORCE-01: 'Step 0/6:' not found"
-        assert step1_line > 0, "'Step 1/6:' not found"
+        """Step 0 line must appear before Step 1 line."""
+        step0_line = _line_number_of("Step 0/")
+        step1_line = _line_number_of("Step 1/")
+        assert step0_line > 0, "ENFORCE-01: 'Step 0/' not found"
+        assert step1_line > 0, "'Step 1/' not found"
         assert step0_line < step1_line, (
-            f"ENFORCE-01: Step 0/6 (line {step0_line}) must appear before "
-            f"Step 1/6 (line {step1_line})"
+            f"ENFORCE-01: Step 0 (line {step0_line}) must appear before "
+            f"Step 1 (line {step1_line})"
         )
 
 
@@ -112,7 +112,7 @@ class TestStep0SnapshotFail:
                 found_exit = True
                 break
             # Stop scanning if we hit the next step
-            if in_failure_block and "Step 1/6:" in line:
+            if in_failure_block and "Step 1/" in line:
                 break
         assert found_exit, (
             "ENFORCE-01: 'exit 1' not found after 'Snapshot failed' error"
@@ -136,24 +136,24 @@ class TestStep0DryRun:
     def test_dry_run_branch_in_step_0_region(self):
         """The dry-run skip must be in the Step 0 region (before Step 1)."""
         lines = _script_lines()
-        step0_line = _line_number_of("Step 0/6:")
-        step1_line = _line_number_of("Step 1/6:")
-        assert step0_line > 0, "Step 0/6: not found"
-        assert step1_line > 0, "Step 1/6: not found"
+        step0_line = _line_number_of("Step 0/")
+        step1_line = _line_number_of("Step 1/")
+        assert step0_line > 0, "Step 0/ not found"
+        assert step1_line > 0, "Step 1/ not found"
 
         # Check that "Skipping snapshot" appears between Step 0 and Step 1
         skip_line = _line_number_of("Skipping snapshot")
         assert skip_line > 0, "ENFORCE-01: 'Skipping snapshot' not found"
         assert step0_line < skip_line < step1_line, (
             f"ENFORCE-01: 'Skipping snapshot' (line {skip_line}) must be "
-            f"between Step 0/6 (line {step0_line}) and Step 1/6 (line {step1_line})"
+            f"between Step 0 (line {step0_line}) and Step 1 (line {step1_line})"
         )
 
     def test_step_0_not_wrapped_in_run(self):
         """Step 0 must NOT use the run() helper — dry-run must SKIP, not print."""
         lines = _script_lines()
-        step0_line = _line_number_of("Step 0/6:")
-        step1_line = _line_number_of("Step 1/6:")
+        step0_line = _line_number_of("Step 0/")
+        step1_line = _line_number_of("Step 1/")
         assert step0_line > 0 and step1_line > 0
 
         # Extract the Step 0 block
@@ -177,8 +177,8 @@ class TestTranscriptFail:
         assert "transcripts/$DATE.md" in content, (
             "ENFORCE-09: post-session.sh must check for transcripts/$DATE.md"
         )
-        assert "Step 4.5/6" in content, (
-            "ENFORCE-09: post-session.sh must have a 'Step 4.5/6' step for transcript check"
+        assert "Step 4.5/" in content, (
+            "ENFORCE-09: post-session.sh must have a 'Step 4.5/N' step for transcript check"
         )
 
     def test_transcript_fail_gated_on_session_number(self):
