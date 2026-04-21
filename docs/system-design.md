@@ -686,6 +686,29 @@ placement_validation:
       notes: ""
 ```
 
+#### study_time_budget (top-level map, added Phase 5 / LOAD-07 / D-04)
+
+The `study_time_budget` map is a homework-only time budget. Null at initialization; populated during the first session capture (curriculum/tutor-guides/first-session.md §4). Required after session 1 — validate-state.py FAILs if `study_time_budget` is still null.
+
+| Sub-field | Type | Strawman default | Purpose |
+|-----------|------|------------------|---------|
+| `daily_minimum` | int (minutes) | 15 | SLA floor for progression; below this, vocab decay exceeds acquisition |
+| `daily_target` | int (minutes) | 30 | Default daily assignment budget on a normal day; adapted by the D-11 tiered rule |
+| `daily_maximum` | int (minutes) | 60 | Hard ceiling; check-session-log.py FAILs if homework sum > daily_maximum + today_stretch |
+| `weekly_goal` | int (minutes) | 180 | Weekly total target; informs weekly review |
+| `today_stretch` | int (minutes) | 0 | Ephemeral per-session extension above daily_maximum; reset to 0 by post-session.sh Step 5c |
+
+Strawman defaults summary: 15/30/60/180/0 (daily_minimum/daily_target/daily_maximum/weekly_goal/today_stretch).
+
+Invariant enforced by `scripts/validate-state.py check_study_time_budget_consistency`: `daily_minimum <= daily_target <= daily_maximum` and `today_stretch >= 0`.
+
+Adaptive companions (top-level siblings, both default 0):
+
+- `consecutive_too_much_count` — Count of consecutive `too-much` homework_load_rating ratings. Drives D-11 tier reduction.
+- `consecutive_just_right_count` — For restoration logic; 3+ consecutive `just-right` after a reduction restores daily_target by +10%.
+
+Renamed from REQUIREMENTS.md LOAD-07's literal `available_daily_study_time` per D-04 to capture the full map semantic (minimum/target/maximum/stretch/weekly). See CLAUDE.md §Guardrails for the enforced homework guardrail that cites this budget.
+
 ### 4b. Resource Tracker (`state/resource-tracker.yaml`)
 
 Tracks input resource engagement and comprehension trends. Entries created on first assignment — not pre-populated from media-bank.

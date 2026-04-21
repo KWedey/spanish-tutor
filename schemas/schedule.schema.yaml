@@ -274,3 +274,47 @@ fields:
     required: false
     default: []
     description: "Log of schedule adjustments"
+
+  study_time_budget:
+    type: map
+    required: false
+    default: null
+    description: "D-04/LOAD-07: Homework-only time budget. Null at init; populated at first-session. Required after session 1. Renamed from REQUIREMENTS.md LOAD-07 'available_daily_study_time' per D-04."
+    children:
+      daily_minimum:
+        type: int
+        required: false
+        default: null
+        description: "D-05: Minimum daily homework minutes — SLA floor for progression. Strawman default 15."
+      daily_target:
+        type: int
+        required: false
+        default: null
+        description: "D-05: Default daily assignment budget on a normal day. Adaptive via D-11 tiered rule. Strawman default 30."
+      daily_maximum:
+        type: int
+        required: false
+        default: null
+        description: "D-05: Hard ceiling; check-session-log.py FAILs if homework sum > daily_maximum + today_stretch. Strawman default 60."
+      weekly_goal:
+        type: int
+        required: false
+        default: null
+        description: "D-05: Weekly total target; informs weekly review. Strawman default 180."
+      today_stretch:
+        type: int
+        required: false
+        default: 0
+        description: "D-04: Ephemeral per-session extension above daily_maximum. Reset to 0 by post-session.sh Step 5c. Default 0."
+
+  consecutive_too_much_count:
+    type: int
+    required: false
+    default: 0
+    description: "D-11: Count of consecutive 'too-much' homework_load_rating ratings. Incremented at post-session; reset after daily_target reduction or on non-'too-much' rating."
+
+  consecutive_just_right_count:
+    type: int
+    required: false
+    default: 0
+    description: "D-11: For restoration logic. 3+ consecutive 'just-right' after reduction → +10% daily_target."
