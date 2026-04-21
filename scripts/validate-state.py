@@ -456,6 +456,57 @@ def check_study_time_budget_consistency(sched: dict, has_sessions: bool,
     res.pass_("study_time_budget internal consistency OK")
 
 
+def check_daily_target_tier_drift(sched: dict, session_logs: list,
+                                    res: ValidationResults) -> None:
+    """LOAD-04 / D-11: detect when 2+ consecutive 'too-much' homework_load_rating
+    ratings accumulate in schedule.consecutive_too_much_count but the tutor has
+    not yet reduced schedule.study_time_budget.daily_target (i.e. counter pinned
+    at >=2 is the "pending reduction" state).
+
+    Semantic (locked by tests/test_validate_state.py::TestDailyTargetTierDrift):
+
+    - If the most recent two session logs both have homework_load_rating='too-much'
+      AND schedule['consecutive_too_much_count'] >= 2 → FAIL (the counter reached
+      the D-11 threshold; tutor must reduce daily_target by 20% rounded to nearest
+      5 min AND reset consecutive_too_much_count to 0 AND append an entry to
+      state/system-health.yaml > load_adjustments).
+    - If counter == 0 after 2 too-much in logs → PASS (reduction already applied,
+      counter reset per the D-11 ladder — the audit trail is in
+      state/system-health.yaml > load_adjustments).
+    - 0 or 1 'too-much' in recent logs → PASS regardless of counter (below
+      threshold; not enough to trigger reduction).
+
+    Does nothing (PASS) if session_logs is empty or schedule has no
+    study_time_budget.
+    """
+    stb = (sched or {}).get("study_time_budget")
+    if not isinstance(stb, dict):
+        res.pass_("daily_target tier drift: no study_time_budget configured")
+        return
+    # Scan the most recent 2 logs for 'too-much'.
+    recent = [l for l in (session_logs or []) if isinstance(l, dict)][-2:]
+    too_much_count = sum(
+        1 for l in recent if l.get("homework_load_rating") == "too-much"
+    )
+    counter = int(sched.get("consecutive_too_much_count") or 0)
+    if too_much_count >= 2 and counter >= 2:
+        res.fail(
+            f"daily_target tier drift: observed {too_much_count} consecutive "
+            f"'too-much' ratings in last 2 session logs AND "
+            f"consecutive_too_much_count={counter} (>=2) — D-11 requires reducing "
+            f"daily_target by 20% (round to nearest 5 min) once the counter "
+            f"reaches 2 consecutive 'too-much' ratings and then resetting "
+            f"consecutive_too_much_count to 0 with an entry appended to "
+            f"state/system-health.yaml > load_adjustments. The pending reduction "
+            f"has not been applied."
+        )
+        return
+    res.pass_(
+        f"daily_target tier drift check: {too_much_count} recent 'too-much', "
+        f"consecutive_too_much_count={counter} (consistent with D-11 ladder)"
+    )
+
+
 def check_integration_tested_with(sm: dict, res: ValidationResults) -> None:
     grammar = sm.get("grammar", {})
     grammar_ids = set(grammar.keys())
@@ -838,6 +889,25 @@ def main() -> None:
         check_schedule_enums(schedule, res)
         # LOAD-07 / D-04 / D-06: study_time_budget consistency
         check_study_time_budget_consistency(schedule, has_sessions, res)
+        # LOAD-04 / D-11: daily_target tier drift detector — loads last 2 session
+        # logs by filename (YYYY-MM-DD sorts chronologically) and checks whether
+        # consecutive_too_much_count has been advanced to match observed
+        # 'too-much' homework_load_rating ratings.
+        session_logs_recent: list = []
+        sessions_dir = STATE / "sessions"
+        if sessions_dir.exists():
+            yaml_files = sorted(
+                p for p in sessions_dir.glob("*.yaml") if p.is_file()
+            )
+            for p in yaml_files[-2:]:
+                try:
+                    with p.open() as f:
+                        d = yaml.safe_load(f) or {}
+                    if isinstance(d, dict):
+                        session_logs_recent.append(d)
+                except (OSError, yaml.YAMLError):
+                    continue
+        check_daily_target_tier_drift(schedule, session_logs_recent, res)
         check_placement_validation_consistency(schedule, res)
     if schedule is not None and skill_map is not None:
         check_carryover_concepts(schedule, skill_map, res)
