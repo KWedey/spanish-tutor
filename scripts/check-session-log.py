@@ -196,6 +196,30 @@ def check_recasts_required(data: dict) -> bool:
 
 
 # ---------------------------------------------------------------------------
+# LOAD Phase 5: Conditional homework_load_rating enforcement (D-10 / Pitfall 5)
+# ---------------------------------------------------------------------------
+
+def check_homework_load_rating_required(data: dict) -> bool:
+    """D-10/Pitfall-5: homework_load_rating is required when there was a PRIOR
+    session with homework. Exempts first-session (no prior homework) and
+    onboarding session_number=1 (still the first real session).
+
+    Also exempts special session types (weekly-review, phase-transition, return,
+    micro) — these have their own purpose and are not budget-gated daily sessions.
+    """
+    stype = (data.get("session_type") or "").lower()
+    if stype in ("first-session", "weekly-review", "phase-transition", "return", "micro"):
+        return False
+    try:
+        snum = int(data.get("session_number") or 0)
+    except (TypeError, ValueError):
+        return False
+    if stype == "onboarding" and snum <= 1:
+        return False
+    return snum >= 2
+
+
+# ---------------------------------------------------------------------------
 # LOAD Phase 5: Homework budget enforcement (D-07 / Pitfall 1)
 # ---------------------------------------------------------------------------
 
@@ -361,6 +385,24 @@ def check_log(date: str, strict: bool) -> int:
         if level == "WARN":
             print(yellow(f"WARN: {msg}"))
             _append_load_adjustment_warn(session_date, total, schedule, msg)
+
+    # LOAD-04/D-10/Pitfall-5: Conditional homework_load_rating enforcement.
+    # Retrospective capture: the tutor records the LEARNER's rating of the
+    # PRIOR session's homework load in today's session log during the Review
+    # & Warm-up. Required on post-cutoff sessions that had a prior session
+    # with homework (see check_homework_load_rating_required for the exempt
+    # list). Out-of-range enum values are caught by the schema-driven enum
+    # loop in validate-state.py check_session_logs — no duplicate check here.
+    if session_date >= PHASE_5_CUTOFF and check_homework_load_rating_required(data):
+        if "homework_load_rating" not in data:
+            print(red("FAIL: homework_load_rating is required for post-LOAD "
+                       "sessions that had prior homework (D-10). "
+                       "Ask the learner: 'How did the homework load feel — "
+                       "too much, just right, or too light?'"))
+            return 1
+        # The key is present. Its value may be null/None (learner declined)
+        # which is a valid enum option per D-10; out-of-range string values
+        # are caught by the schema-driven enum loop in validate-state.py.
 
     expected = EXPECTED_BY_TYPE.get(session_type)
     if expected is None:

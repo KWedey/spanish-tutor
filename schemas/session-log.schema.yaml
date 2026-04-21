@@ -225,6 +225,13 @@ fields:
     description: "Learner self-report at checkout"
     enum: [null, "too-easy", "just-right", "too-hard"]
 
+  homework_load_rating:
+    type: string
+    required: false
+    default: null
+    description: "D-10/LOAD-04: Learner self-report on PRIOR session's homework load. Captured in Review & Warm-up (CLAUDE.md L96). Separate from session_difficulty_rating. Drives D-11 tiered daily_target adjustment via check_daily_target_tier_drift in validate-state.py."
+    enum: [null, "too-much", "just-right", "too-light"]
+
   next_session:
     type: map
     required: false

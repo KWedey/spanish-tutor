@@ -921,6 +921,21 @@ next_session:
 
 **Session difficulty rating:** `session_difficulty_rating` is captured during checkout ("How did today feel — too easy, about right, or too hard?"). It feeds into `system-health.yaml` counters (`sessions_rated_too_easy_30d`, `sessions_rated_too_hard_30d`) and influences next-session calibration: two consecutive `too-easy` ratings → increase challenge; two consecutive `too-hard` ratings → reduce load.
 
+#### homework_load_rating (top-level enum, added Phase 5 / LOAD-04 / D-10)
+
+Learner self-report on the PRIOR session's homework load. Captured in Review & Warm-up (CLAUDE.md L96) at the start of the NEXT session — retrospective, not prospective. Shape mirrors `session_difficulty_rating` verbatim.
+
+| Value | Meaning | Next-session adjustment |
+|-------|---------|-------------------------|
+| `null` | Not captured (decline, first-session, or session_number==1) | none |
+| `too-much` | Homework felt excessive | Next session: sum ≤ daily_target. Two consecutive → reduce `daily_target` by 20% (round to nearest 5 min), log to `state/system-health.yaml > load_adjustments` |
+| `just-right` | Load felt appropriate | none; 3+ consecutive after a reduction → restore `daily_target` by +10% |
+| `too-light` | Homework felt under-engaging | Next session: sum ≥ daily_target. Two consecutive → flag at weekly review (no auto-increase; increases require affirmative learner input) |
+
+Conditional enforcement (Pitfall 5): required on post-`PHASE_5_CUTOFF` sessions of type `standard`, `onboarding` (session_number ≥ 2), `sprint`, or `fluency`. Exempt: `first-session`, `onboarding` session 1, `weekly-review`, `phase-transition`, `return`, `micro`.
+
+Invariant enforcement: `scripts/validate-state.py check_daily_target_tier_drift` cross-references the last N session logs against `schedule.consecutive_too_much_count` and FAILs if the counter disagrees with observed ratings.
+
 **Session recovery:** If `session_status` is `partial`, the next session's agent should:
 1. Note that the previous session was incomplete
 2. Check what was and wasn't covered by reading `session_activities`
