@@ -235,6 +235,23 @@ def check_vocab_passive_active(sm: dict, res: ValidationResults) -> None:
 # --- 3. Consistency checks ----------------------------------------------------
 
 def check_acquired_consistency(sm: dict, res: ValidationResults) -> None:
+    """LOAD-01 / D-02: Core-only by design.
+
+    Only iterates `sm["grammar"]`. Secondary categories (pronunciation, writing,
+    cultural_awareness) are intentionally NOT iterated here because their schema
+    templates have no error_rate_drills / error_rate_production fields — applying
+    a numeric acquired+high-error check to them would FAIL on null data.
+
+    Secondary acquisition is governed by tutor judgment (CLAUDE.md L191 SECONDARY
+    bullet) and, for cultural, by the `assessed_through` field on the entry.
+    A future refactor that broadens this loop to all skill-map sections will
+    break tests/test_validate_state.py::TestAcquiredConsistencyCoreOnly and must
+    first update the secondary schemas to carry the required numeric fields.
+
+    Vocabulary is checked separately by check_vocab_error_tracking (L507+),
+    which validates the 0.0 <= error_rate_production <= 1.0 range. The vocabulary
+    variant of the acquired+high-error cross-check is left to check_vocab_error_tracking.
+    """
     grammar = sm.get("grammar", {})
     acquired = []
     for cid, e in grammar.items():

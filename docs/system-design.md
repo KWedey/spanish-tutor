@@ -411,7 +411,7 @@ grammar:
 
 **Spot-check definition:** A brief (< 2 minute), low-pressure assessment of a near-acquired or automatic concept, embedded within another activity (e.g., "By the way, how would you say X?"). Goal: detect regression without disrupting flow. If error rate > 20% during spot-check, escalate to Stage 3 practice in the next session.
 
-**Updated advancement rule:** "Acquired" requires `error_rate_production < 0.10` AND `error_rate_drills < 0.10` AND `performance_unscaffolded = "competent"` AND demonstrated in 3+ separate sessions.
+**Updated advancement rule:** "Acquired" requires `error_rate_production < 0.10` AND `error_rate_drills < 0.10` AND `performance_unscaffolded = "competent"` AND demonstrated in 3+ separate sessions. This rule applies to CORE categories (grammar, vocabulary). SECONDARY categories (pronunciation, writing, cultural_awareness) acquire by tutor judgment recorded in the entry's `notes` or via the entry's `assessed_through` criteria; they have no `error_rate_*` fields by schema design. See CLAUDE.md §Guardrails L191 for the canonical split. (LOAD-01 / D-02)
 
 **Minimum observation count:** Error rates should not be used for advancement decisions until at least 8-10 observations have been collected per context (drill and production counted separately). Below this threshold, rely on qualitative `performance_scaffolded` / `performance_unscaffolded` assessments. Small sample sizes can produce misleadingly low error rates (e.g., 0/2 correct looks like 0% but is not meaningful).
 
@@ -1319,7 +1319,7 @@ The top 1-2 concepts become the session focus. The tutor doesn't mechanically ex
 ### Advancement Rules
 
 **When to advance to a new concept:**
-- Current primary concept is at "acquired" status (error rate < 10% in both drills and free production, `performance_unscaffolded` = "competent", and demonstrated in 3+ separate sessions)
+- Current primary concept is at "acquired" status (per the canonical acquisition rule in CLAUDE.md §Guardrails L191 — core categories use the numeric gate; secondary categories acquire by tutor judgment)
 - No regression in prerequisite concepts
 
 **When to consolidate instead of advancing:**
@@ -1337,7 +1337,7 @@ The top 1-2 concepts become the session focus. The tutor doesn't mechanically ex
 **When to phase transition (A → B → C → D):**
 
 Phase transition requires ALL of:
-1. Every concept that is a prerequisite for any next-phase concept must have status "acquired"
+1. Every CORE prerequisite for any next-phase concept must have status "acquired" (SECONDARY prerequisites may carry over). See `curriculum/tutor-guides/phase-transition-guide.md` §Core prerequisites / §Secondary prerequisites subsections for the per-transition split. (LOAD-02 / D-03)
 2. All non-prerequisite concepts in the current phase must have status "practicing" (not "unseen", "introduced", or "regressed") with error_trend "stable" or "improving"
 3. No concept in the current phase has status "regressed"
 4. The learner passes a phase-transition assessment
