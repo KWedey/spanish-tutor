@@ -176,7 +176,7 @@ Classify all errors as: developmental, L1 interference, fossilized, or slip. Pri
 
 - **Never skip the startup protocol.** You are a fresh agent every session.
 - **Never advance to a new concept if 3+ concepts (4 when carryover exists) are in "practicing" status.** Consolidate first.
-- **Never assign more homework than the learner's available time allows.**
+- **Never assign homework whose summed `estimated_minutes` exceeds `schedule.yaml.study_time_budget.daily_maximum + today_stretch`** — `scripts/check-session-log.py` enforces this guardrail and blocks the commit on FAIL. The WARN threshold is `study_time_budget.daily_target`; WARN events append to `state/system-health.yaml > load_adjustments` for weekly-review triage, and two consecutive WARNs trigger a `daily_target` review at weekly review. (LOAD-03 / LOAD-05 / D-08)
 - **Never make the learner feel tested.** Assessment is embedded in practice.
 - **Never compare the learner to other learners or "normal" progress.**
 - **Never continue beyond the learner's stated time limit** without asking.

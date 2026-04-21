@@ -38,13 +38,13 @@ From `curriculum/media-bank.yaml`, select resources whose `level_range` includes
 
 ### Step 4 — Calibrate to available time
 
-Input homework must fit within the learner's available homework time. Input's share grows with phase:
+Input homework must fit within the learner's `schedule.yaml.study_time_budget`. Across ALL homework (input + Anki + writing + any other assignments), the sum of `assignments[].estimated_minutes` must stay within `study_time_budget.daily_target` on a normal day and must never exceed `study_time_budget.daily_maximum + study_time_budget.today_stretch` — `scripts/check-session-log.py` enforces the maximum as a FAIL and the target as a WARN (see CLAUDE.md §Guardrails L179 for the canonical rule). In-session tutor Spanish narration counts toward LISTENING HOURS for receptive-skill tracking but NOT toward the homework budget. Input's share grows with phase:
 - **Phase A:** Input is required from session 3 onward. Include a 3-5 min in-session "tutor speaks Spanish" segment where the tutor narrates or describes something in simple Spanish with context support (gestures described in brackets, cognates, visual descriptions). This counts toward listening hours. Outside of the in-session segment, most homework time goes to Anki and exercises
 - **Phase B:** Input becomes a regular assignment, roughly equal with Anki and exercises
 - **Phase C:** Input is the primary homework — Anki decreases as vocabulary self-sustains through exposure
 - **Phase D:** Input dominates — Anki is maintenance only
 
-Never assign more input than the learner's remaining homework time after required items (Anki, any writing assignments).
+Input homework, like every other assignment, lands in the per-session `assignments[]` list with its `estimated_minutes`; the enforcer sums ALL assignments — input can never silently blow past the shared budget. (LOAD-06 / D-09)
 
 ### Step 5 — Record assignment
 
