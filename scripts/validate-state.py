@@ -408,6 +408,54 @@ def check_schedule_enums(sched: dict, res: ValidationResults) -> None:
     res.pass_("Schedule enum values are valid")
 
 
+def check_study_time_budget_consistency(sched: dict, has_sessions: bool,
+                                         res: ValidationResults) -> None:
+    """LOAD-07 / D-04 / D-06: study_time_budget internal consistency.
+
+    Invariants:
+    - null pre-first-session → PASS (valid at init, D-06)
+    - null AND has_sessions → FAIL (must be captured at first-session per D-06)
+    - must be a dict if not null
+    - after first-session: daily_minimum, daily_target, daily_maximum, weekly_goal
+      must all be populated (each missing sub-field → one FAIL)
+    - daily_minimum <= daily_target <= daily_maximum → FAIL if violated
+    - today_stretch >= 0 → FAIL if negative
+    """
+    stb = sched.get("study_time_budget")
+    if stb is None:
+        if has_sessions:
+            res.fail("schedule.study_time_budget is null but sessions exist "
+                     "(required after first-session per D-06)")
+        else:
+            res.pass_("study_time_budget: null pre-first-session (expected)")
+        return
+    if not isinstance(stb, dict):
+        res.fail(f"schedule.study_time_budget must be a map, got {type(stb).__name__}")
+        return
+    d_min = stb.get("daily_minimum")
+    d_tgt = stb.get("daily_target")
+    d_max = stb.get("daily_maximum")
+    stretch = stb.get("today_stretch", 0)
+    # Required sub-fields once the learner has run any session (D-06).
+    missing = [k for k in ("daily_minimum", "daily_target", "daily_maximum", "weekly_goal")
+               if stb.get(k) is None]
+    if missing and has_sessions:
+        for k in missing:
+            res.fail(f"study_time_budget.{k} is null — must be populated at first-session (D-06)")
+        return
+    # Invariant: min <= target <= max
+    if None not in (d_min, d_tgt, d_max):
+        if not (d_min <= d_tgt <= d_max):
+            res.fail(f"study_time_budget invariant violated: "
+                     f"daily_minimum({d_min}) <= daily_target({d_tgt}) <= daily_maximum({d_max})")
+            return
+    # today_stretch must be non-negative
+    if stretch is not None and stretch < 0:
+        res.fail(f"study_time_budget.today_stretch={stretch} is negative")
+        return
+    res.pass_("study_time_budget internal consistency OK")
+
+
 def check_integration_tested_with(sm: dict, res: ValidationResults) -> None:
     grammar = sm.get("grammar", {})
     grammar_ids = set(grammar.keys())
@@ -788,6 +836,8 @@ def main() -> None:
     if schedule is not None:
         check_last_session_date(schedule, res, dry_run=args.dry_run)
         check_schedule_enums(schedule, res)
+        # LOAD-07 / D-04 / D-06: study_time_budget consistency
+        check_study_time_budget_consistency(schedule, has_sessions, res)
         check_placement_validation_consistency(schedule, res)
     if schedule is not None and skill_map is not None:
         check_carryover_concepts(schedule, skill_map, res)
