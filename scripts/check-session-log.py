@@ -196,6 +196,125 @@ def check_recasts_required(data: dict) -> bool:
 
 
 # ---------------------------------------------------------------------------
+# LOAD Phase 5: Homework budget enforcement (D-07 / Pitfall 1)
+# ---------------------------------------------------------------------------
+
+# Backward compatibility: session logs before this date were written without
+# the study_time_budget in schedule.yaml. Grandfather pre-LOAD logs.
+PHASE_5_CUTOFF = "2026-04-21"
+
+
+def _load_schedule() -> dict | None:
+    """Load state/schedule.yaml, returning None on missing-file or YAML error."""
+    schedule_path = STATE_DIR / "schedule.yaml"
+    if not schedule_path.exists():
+        return None
+    try:
+        with schedule_path.open() as f:
+            return yaml.safe_load(f) or {}
+    except yaml.YAMLError:
+        return None
+
+
+def compute_assignment_budget_total(data: dict) -> int:
+    """Sum the estimated_minutes field across the per-log homework list.
+
+    Pitfall 1 note: the authoritative per-item field name is estimated_minutes.
+    The neighbor field on next_session (a separate top-level key, NOT the
+    per-log list) is named estimated_duration; that path is unrelated to this
+    sum. Reference: docs/session-log-example.yaml L109/L119/L129 and
+    docs/system-design.md L807.
+    """
+    total = 0
+    for a in data.get("assignments") or []:
+        if isinstance(a, dict):
+            total += int(a.get("estimated_minutes") or 0)
+    return total
+
+
+def check_assignment_budget(data: dict, schedule: dict | None) -> tuple[str, str, int]:
+    """D-07: Returns (level, message, total_minutes). level in {OK, WARN, FAIL}.
+
+    Reads study_time_budget.{daily_target, daily_maximum, today_stretch} from schedule.
+
+    Ordering:
+    - Pre-PHASE_5_CUTOFF -> OK (grandfathered, Pitfall 4)
+    - total == 0 -> OK (no assignments)
+    - schedule unreadable -> FAIL
+    - study_time_budget missing or not a dict -> FAIL (required after session 1, D-06)
+    - total > daily_maximum + today_stretch -> FAIL
+    - total > daily_target -> WARN
+    - else -> OK
+    """
+    session_date = str(data.get("date", ""))
+    if session_date < PHASE_5_CUTOFF:
+        return ("OK", "pre-LOAD session — grandfathered", 0)
+
+    total = compute_assignment_budget_total(data)
+    if total == 0:
+        return ("OK", "no homework assignments — budget not applicable", 0)
+
+    if not isinstance(schedule, dict):
+        return ("FAIL", "schedule.yaml unreadable — cannot enforce study_time_budget", total)
+    budget = schedule.get("study_time_budget")
+    if not isinstance(budget, dict):
+        return ("FAIL",
+                "study_time_budget missing from schedule.yaml "
+                "(required after first-session per D-06)",
+                total)
+
+    d_max = int(budget.get("daily_maximum") or 0)
+    stretch = int(budget.get("today_stretch") or 0)
+    d_tgt = int(budget.get("daily_target") or 0)
+
+    ceiling = d_max + stretch
+    if total > ceiling:
+        return ("FAIL",
+                f"homework sum {total}min > daily_maximum({d_max}) + today_stretch({stretch})",
+                total)
+    if total > d_tgt:
+        return ("WARN",
+                f"homework sum {total}min > daily_target({d_tgt}) (<= max+stretch OK)",
+                total)
+    return ("OK", f"homework sum {total}min within daily_target", total)
+
+
+def _append_load_adjustment_warn(session_date: str, total: int,
+                                 schedule: dict | None, message: str) -> None:
+    """D-07/A7: Append a WARN-tier entry to state/system-health.yaml > load_adjustments.
+
+    Separate from auto_fixes because the intent differs (learner-load signal vs
+    validator-driven data repair). Shape mirrors auto_fixes (Phase 3 D-03 pattern).
+    """
+    health_path = STATE_DIR / "system-health.yaml"
+    if not health_path.exists():
+        # Don't fabricate system-health.yaml; if it's absent the WARN is still printed.
+        return
+    try:
+        with health_path.open() as f:
+            health = yaml.safe_load(f) or {}
+    except yaml.YAMLError:
+        return
+    budget = (schedule or {}).get("study_time_budget") or {}
+    entry = {
+        "date": session_date,
+        "level": "WARN",
+        "homework_sum": total,
+        "daily_target": int(budget.get("daily_target") or 0),
+        "daily_maximum": int(budget.get("daily_maximum") or 0),
+        "today_stretch": int(budget.get("today_stretch") or 0),
+        "message": message,
+        "detected_by": "check-session-log.py:check_assignment_budget",
+    }
+    health.setdefault("load_adjustments", []).append(entry)
+    try:
+        with health_path.open("w") as f:
+            yaml.safe_dump(health, f, sort_keys=False, allow_unicode=True)
+    except OSError:
+        return
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -223,6 +342,26 @@ def check_log(date: str, strict: bool) -> int:
         print(red("FAIL: session_type field is missing or empty"))
         return 1
 
+    # Derive session_date once — used by both LOAD-03 budget enforcement and
+    # ENGINE-03/D-06 conditional recasts enforcement below.
+    session_date = str(data.get("date", ""))
+
+    # LOAD-03/D-07: Homework-budget enforcement (Phase 5). Runs BEFORE the
+    # EXPECTED_BY_TYPE scan and the early-return so that a session whose
+    # protocol fields are all populated but whose homework sum exceeds
+    # study_time_budget.daily_maximum + today_stretch is still correctly
+    # blocked. Mirrors the WR-01 precedent (commit e273529) that moved the
+    # recasts check before the early-return.
+    if session_date >= PHASE_5_CUTOFF:
+        schedule = _load_schedule()
+        level, msg, total = check_assignment_budget(data, schedule)
+        if level == "FAIL":
+            print(red(f"FAIL: {msg}"))
+            return 1
+        if level == "WARN":
+            print(yellow(f"WARN: {msg}"))
+            _append_load_adjustment_warn(session_date, total, schedule, msg)
+
     expected = EXPECTED_BY_TYPE.get(session_type)
     if expected is None:
         print(yellow(f"WARN: unknown session_type '{session_type}' — skipping expected-field check"))
@@ -241,7 +380,6 @@ def check_log(date: str, strict: bool) -> int:
     # Must run before the early-return so that a session with all expected
     # fields populated but missing a conditionally-required 'recasts' field
     # is correctly caught as a failure.
-    session_date = str(data.get("date", ""))
     if session_date >= PHASE_4_CUTOFF and check_recasts_required(data) and "recasts" not in data:
         missing.append("recasts")
 
