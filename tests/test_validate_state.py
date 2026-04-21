@@ -55,6 +55,15 @@ _missing_engine_fns = pytest.mark.skipif(
     reason="ENGINE Phase 4 validate-state functions not yet implemented — RED phase"
 )
 
+# LOAD Phase 5 function references (will be None until implemented by 05-02/05-04 — RED state)
+check_study_time_budget_consistency = getattr(validate_mod, "check_study_time_budget_consistency", None)
+check_daily_target_tier_drift = getattr(validate_mod, "check_daily_target_tier_drift", None)
+
+_missing_load_fns = pytest.mark.skipif(
+    check_study_time_budget_consistency is None or check_daily_target_tier_drift is None,
+    reason="LOAD Phase 5 validators not yet implemented — RED phase",
+)
+
 
 @pytest.fixture(autouse=True)
 def clear_results():
@@ -1069,3 +1078,223 @@ class TestLearnerInterestStaleness:
         check_learner_interest_staleness(sm, res)
         assert not any(level == "WARN" for level, _ in res._items), \
             "D-03: fresh interest should not WARN"
+
+
+# =============================================================================
+# Phase 5 LOAD: Wave 0 RED-scaffolding tests
+# =============================================================================
+
+
+class TestStudyTimeBudgetConsistency:
+    """LOAD-03 / D-04 / D-06: validate-state.py check_study_time_budget_consistency.
+
+    Invariants:
+    - null pre-session-1 → PASS
+    - null with sessions → FAIL (D-06)
+    - min > target → FAIL
+    - today_stretch < 0 → FAIL
+    - all populated + invariant holds → PASS
+    - missing subfield after sessions → FAIL
+    """
+
+    @_missing_load_fns
+    def test_null_pre_session_1_passes(self):
+        sched = {"study_time_budget": None}
+        check_study_time_budget_consistency(sched, has_sessions=False, res=results)
+        assert _fails() == []
+        assert any("pre-first-session" in m for m in _passes())
+
+    @_missing_load_fns
+    def test_null_after_sessions_fails(self):
+        sched = {"study_time_budget": None}
+        check_study_time_budget_consistency(sched, has_sessions=True, res=results)
+        fails = _fails()
+        assert any("null but sessions exist" in m or "required after first-session" in m for m in fails), (
+            f"D-06: expected FAIL with 'required after first-session'; got {fails!r}"
+        )
+
+    @_missing_load_fns
+    def test_invariant_violation_min_gt_target(self):
+        sched = {"study_time_budget": {
+            "daily_minimum": 45, "daily_target": 30, "daily_maximum": 60,
+            "weekly_goal": 180, "today_stretch": 0,
+        }}
+        check_study_time_budget_consistency(sched, has_sessions=True, res=results)
+        fails = _fails()
+        assert any("invariant" in m.lower() for m in fails), (
+            f"D-04: expected invariant FAIL; got {fails!r}"
+        )
+
+    @_missing_load_fns
+    def test_invariant_violation_target_gt_max(self):
+        sched = {"study_time_budget": {
+            "daily_minimum": 15, "daily_target": 90, "daily_maximum": 60,
+            "weekly_goal": 180, "today_stretch": 0,
+        }}
+        check_study_time_budget_consistency(sched, has_sessions=True, res=results)
+        assert any("invariant" in m.lower() for m in _fails())
+
+    @_missing_load_fns
+    def test_negative_today_stretch_fails(self):
+        sched = {"study_time_budget": {
+            "daily_minimum": 15, "daily_target": 30, "daily_maximum": 60,
+            "weekly_goal": 180, "today_stretch": -5,
+        }}
+        check_study_time_budget_consistency(sched, has_sessions=True, res=results)
+        assert any("today_stretch" in m and "negative" in m.lower() for m in _fails())
+
+    @_missing_load_fns
+    def test_all_populated_passes(self):
+        sched = {"study_time_budget": {
+            "daily_minimum": 15, "daily_target": 30, "daily_maximum": 60,
+            "weekly_goal": 180, "today_stretch": 0,
+        }}
+        check_study_time_budget_consistency(sched, has_sessions=True, res=results)
+        assert _fails() == [], f"Expected no FAILs; got {_fails()!r}"
+        assert any("consistency OK" in m for m in _passes())
+
+    @_missing_load_fns
+    def test_missing_subfield_after_session_fails(self):
+        sched = {"study_time_budget": {
+            "daily_minimum": 15, "daily_target": 30,  # missing daily_maximum, weekly_goal
+            "today_stretch": 0,
+        }}
+        check_study_time_budget_consistency(sched, has_sessions=True, res=results)
+        fails = _fails()
+        assert any("daily_maximum" in m and "null" in m.lower() for m in fails), (
+            f"D-06: expected missing-subfield FAIL naming daily_maximum; got {fails!r}"
+        )
+
+
+class TestDailyTargetTierDrift:
+    """LOAD-04 / D-11: drift detector catches the case where the learner rated
+    "too-much" twice consecutively but schedule.study_time_budget.daily_target
+    was never reduced (tutor forgot the tier adjustment)."""
+
+    @_missing_load_fns
+    def test_drift_detected_when_counter_ignored(self):
+        sched = {
+            "study_time_budget": {"daily_target": 30, "daily_maximum": 60, "daily_minimum": 15, "weekly_goal": 180, "today_stretch": 0},
+            "consecutive_too_much_count": 2,
+        }
+        session_logs = [
+            {"date": "2026-04-22", "homework_load_rating": "too-much"},
+            {"date": "2026-04-23", "homework_load_rating": "too-much"},
+        ]
+        check_daily_target_tier_drift(sched, session_logs, results)
+        fails = _fails()
+        assert any("daily_target" in m and ("drift" in m.lower() or "reduce" in m.lower() or "consecutive_too_much" in m) for m in fails), (
+            f"D-11: expected drift FAIL (2 too-much + daily_target unchanged); got {fails!r}"
+        )
+
+    @_missing_load_fns
+    def test_reduced_correctly_passes(self):
+        # daily_target was 30, reduced 20% → 24, rounded to nearest 5 → 25
+        sched = {
+            "study_time_budget": {"daily_target": 25, "daily_maximum": 60, "daily_minimum": 15, "weekly_goal": 180, "today_stretch": 0},
+            "consecutive_too_much_count": 0,  # reset after reduction per D-11
+        }
+        session_logs = [
+            {"date": "2026-04-22", "homework_load_rating": "too-much"},
+            {"date": "2026-04-23", "homework_load_rating": "too-much"},
+        ]
+        check_daily_target_tier_drift(sched, session_logs, results)
+        # should NOT fail — reduction already applied, counter reset
+        assert not any("drift" in m.lower() for m in _fails())
+
+    @_missing_load_fns
+    def test_single_too_much_no_reduction_passes(self):
+        sched = {
+            "study_time_budget": {"daily_target": 30, "daily_maximum": 60, "daily_minimum": 15, "weekly_goal": 180, "today_stretch": 0},
+            "consecutive_too_much_count": 1,
+        }
+        session_logs = [
+            {"date": "2026-04-23", "homework_load_rating": "too-much"},
+        ]
+        check_daily_target_tier_drift(sched, session_logs, results)
+        # 1 too-much does not trigger reduction per D-11
+        assert not any("drift" in m.lower() for m in _fails())
+
+
+class TestAcquiredConsistencyCoreOnly:
+    """LOAD-01 / D-02: check_acquired_consistency must scope to grammar only.
+    Cultural/pronunciation/writing concepts with status: acquired must NOT trigger a FAIL
+    from this check (they have no error_rate_drills field by design).
+
+    This test RUNS NOW — it locks the currently-correct behavior (L237-256 iterates grammar only)
+    so a future refactor can't silently broaden scope."""
+
+    def test_cultural_acquired_does_not_fail(self):
+        # Cultural concept has no error_rate_drills. Injecting it at status=acquired
+        # must not produce a FAIL from check_acquired_consistency.
+        sm = {
+            "grammar": {},
+            "cultural_awareness": {
+                "politeness-formulas": {
+                    "status": "acquired",
+                    # NO error_rate_drills field by design
+                }
+            },
+        }
+        check_acquired_consistency(sm, results)
+        fails = _fails()
+        assert not any("politeness-formulas" in m or "cultural" in m for m in fails), (
+            f"LOAD-01/D-02: cultural acquired entry must NOT trigger FAIL from check_acquired_consistency; got {fails!r}"
+        )
+
+    def test_pronunciation_acquired_does_not_fail(self):
+        sm = {
+            "grammar": {},
+            "pronunciation": {
+                "rr-trill": {"status": "acquired"},
+            },
+        }
+        check_acquired_consistency(sm, results)
+        assert not any("rr-trill" in m or "pronunciation" in m for m in _fails())
+
+    def test_writing_acquired_does_not_fail(self):
+        sm = {
+            "grammar": {},
+            "writing": {
+                "paragraph-cohesion": {"status": "acquired"},
+            },
+        }
+        check_acquired_consistency(sm, results)
+        assert not any("paragraph-cohesion" in m or "writing" in m for m in _fails())
+
+    def test_grammar_acquired_with_high_error_still_fails(self):
+        """Regression: ensure the check still flags core concepts with bad data."""
+        sm = {"grammar": {"A-01-present-regular": {
+            "status": "acquired",
+            "error_rate_drills": 0.35,
+            "error_rate_production": 0.05,
+            "performance_unscaffolded": "competent",
+        }}}
+        check_acquired_consistency(sm, results)
+        fails = _fails()
+        assert any("A-01" in m and ("error_rate_drills" in m or "0.35" in m) for m in fails), (
+            f"LOAD-01: grammar regression — acquired+high-error must still FAIL; got {fails!r}"
+        )
+
+
+class TestSessionLogEnumsHomeworkLoad:
+    """LOAD-04: The existing schema-driven enum loop in check_session_logs
+    automatically validates every enum field in session-log.schema.yaml. Once
+    homework_load_rating is added (plan 05-04), invalid values must FAIL via this loop."""
+
+    def test_valid_values_accepted(self):
+        """Placeholder — exercises the enum loop via minimal session-log fixture with valid value."""
+        import yaml
+        from pathlib import Path
+        schema_path = Path(__file__).resolve().parent.parent / "schemas" / "session-log.schema.yaml"
+        schema_doc = yaml.safe_load(schema_path.read_text()) or {}
+        # Schedule/session-log schemas wrap field specs under `fields:` — tolerate either layout.
+        fields = schema_doc.get("fields") or schema_doc
+        if "homework_load_rating" not in fields:
+            pytest.skip("homework_load_rating not yet in schema — RED phase")
+        spec = fields["homework_load_rating"] or {}
+        enum = spec.get("enum") or []
+        assert "too-much" in enum, "LOAD-04: 'too-much' must be in homework_load_rating enum"
+        assert "just-right" in enum, "LOAD-04: 'just-right' must be in homework_load_rating enum"
+        assert "too-light" in enum, "LOAD-04: 'too-light' must be in homework_load_rating enum"
+        assert None in enum, "LOAD-04: null must be in homework_load_rating enum"

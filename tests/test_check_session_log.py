@@ -36,6 +36,21 @@ _missing_recasts_fn = pytest.mark.skipif(
     reason="check_recasts_required not yet implemented — RED phase"
 )
 
+# LOAD Phase 5 function/constant references (None until 05-03/05-04 ship — RED state)
+check_assignment_budget = getattr(check_mod, "check_assignment_budget", None)
+compute_assignment_budget_total = getattr(check_mod, "compute_assignment_budget_total", None)
+check_homework_load_rating_required = getattr(check_mod, "check_homework_load_rating_required", None)
+PHASE_5_CUTOFF = getattr(check_mod, "PHASE_5_CUTOFF", None)
+
+_missing_budget_fns = pytest.mark.skipif(
+    check_assignment_budget is None or compute_assignment_budget_total is None or PHASE_5_CUTOFF is None,
+    reason="LOAD Phase 5 budget enforcement not yet implemented — RED phase",
+)
+_missing_load_rating_fn = pytest.mark.skipif(
+    check_homework_load_rating_required is None,
+    reason="LOAD Phase 5 homework_load_rating conditional not yet implemented — RED phase",
+)
+
 # Grab the individual constants (will exist after implementation)
 # We test via EXPECTED_BY_TYPE dict lookup instead, which is more robust.
 
@@ -475,3 +490,159 @@ class TestRecasts:
         })
         assert check_recasts_required(log) is True, \
             "D-06: 'recast' substring in notes should trigger required"
+
+
+# =============================================================================
+# Phase 5 LOAD: Wave 0 RED-scaffolding tests
+# =============================================================================
+
+
+class TestBudgetEnforcement:
+    """LOAD-03 / D-07: check_assignment_budget returns (level, msg, total).
+    Levels: OK, WARN, FAIL. See RESEARCH.md Ex-3 for reference implementation."""
+
+    @_missing_budget_fns
+    def test_pass_within_target(self):
+        data = {"date": "2026-04-22", "assignments": [
+            {"task": "Anki", "estimated_minutes": 15},
+            {"task": "listening", "estimated_minutes": 10},
+        ]}
+        schedule = {"study_time_budget": {
+            "daily_minimum": 15, "daily_target": 30, "daily_maximum": 60,
+            "weekly_goal": 180, "today_stretch": 0,
+        }}
+        level, msg, total = check_assignment_budget(data, schedule)
+        assert level == "OK", f"D-07: sum=25 <= daily_target(30) must be OK; got {level!r} ({msg})"
+        assert total == 25
+
+    @_missing_budget_fns
+    def test_warn_over_target(self):
+        data = {"date": "2026-04-22", "assignments": [
+            {"task": "Anki", "estimated_minutes": 20},
+            {"task": "writing", "estimated_minutes": 20},
+        ]}
+        schedule = {"study_time_budget": {
+            "daily_minimum": 15, "daily_target": 30, "daily_maximum": 60,
+            "weekly_goal": 180, "today_stretch": 0,
+        }}
+        level, msg, total = check_assignment_budget(data, schedule)
+        assert level == "WARN", f"D-07: sum=40 > daily_target(30) but <= max(60) must be WARN; got {level!r}"
+        assert total == 40
+        assert "daily_target" in msg
+
+    @_missing_budget_fns
+    def test_fail_over_maximum(self):
+        data = {"date": "2026-04-22", "assignments": [
+            {"task": "Anki", "estimated_minutes": 30},
+            {"task": "writing", "estimated_minutes": 25},
+            {"task": "listening", "estimated_minutes": 25},
+        ]}
+        schedule = {"study_time_budget": {
+            "daily_minimum": 15, "daily_target": 30, "daily_maximum": 60,
+            "weekly_goal": 180, "today_stretch": 0,
+        }}
+        level, msg, total = check_assignment_budget(data, schedule)
+        assert level == "FAIL", f"D-07: sum=80 > max(60)+stretch(0) must be FAIL; got {level!r}"
+        assert total == 80
+        assert "daily_maximum" in msg
+
+    @_missing_budget_fns
+    def test_stretch_extends_ceiling(self):
+        data = {"date": "2026-04-22", "assignments": [
+            {"task": "Anki", "estimated_minutes": 40},
+            {"task": "writing", "estimated_minutes": 30},
+        ]}
+        schedule = {"study_time_budget": {
+            "daily_minimum": 15, "daily_target": 30, "daily_maximum": 60,
+            "weekly_goal": 180, "today_stretch": 15,  # extends ceiling to 75
+        }}
+        level, msg, total = check_assignment_budget(data, schedule)
+        # 70 > target(30), 70 <= max(60)+stretch(15)=75 → WARN
+        assert level == "WARN", f"D-04: today_stretch must extend the ceiling; got {level!r}"
+
+    @_missing_budget_fns
+    def test_pre_cutoff_grandfathered(self):
+        data = {"date": "2020-01-01", "assignments": [
+            {"task": "Anki", "estimated_minutes": 500},  # way over any budget
+        ]}
+        schedule = {"study_time_budget": {
+            "daily_minimum": 15, "daily_target": 30, "daily_maximum": 60,
+            "weekly_goal": 180, "today_stretch": 0,
+        }}
+        level, msg, total = check_assignment_budget(data, schedule)
+        assert level == "OK", f"Pitfall-4: pre-PHASE_5_CUTOFF logs must grandfather; got {level!r}"
+
+    @_missing_budget_fns
+    def test_no_assignments_skip(self):
+        data = {"date": "2026-04-22", "assignments": []}
+        schedule = {"study_time_budget": {"daily_maximum": 60, "daily_target": 30, "daily_minimum": 15, "weekly_goal": 180, "today_stretch": 0}}
+        level, msg, total = check_assignment_budget(data, schedule)
+        assert level == "OK"
+        assert total == 0
+
+    @_missing_budget_fns
+    def test_missing_schedule_fails(self):
+        data = {"date": "2026-04-22", "assignments": [{"task": "Anki", "estimated_minutes": 15}]}
+        level, msg, total = check_assignment_budget(data, schedule=None)
+        assert level == "FAIL"
+        assert "schedule" in msg.lower() or "study_time_budget" in msg
+
+    @_missing_budget_fns
+    def test_estimated_minutes_is_summed_not_duration(self):
+        """Pitfall 1 guard: if the implementation reads `estimated_duration`, the sum will be 0 and FAIL won't fire."""
+        data = {"date": "2026-04-22", "assignments": [
+            {"task": "bad-label", "estimated_duration": 500},  # wrong field name
+            {"task": "right-label", "estimated_minutes": 15},
+        ]}
+        level, msg, total = check_assignment_budget(data, schedule={
+            "study_time_budget": {"daily_minimum": 15, "daily_target": 30, "daily_maximum": 60, "weekly_goal": 180, "today_stretch": 0}
+        })
+        # Correct impl ignores estimated_duration and sums 15 only → OK
+        assert total == 15, (
+            f"Pitfall-1: implementation must read estimated_minutes ONLY, ignoring estimated_duration. Total={total} (expected 15)"
+        )
+        assert level == "OK"
+
+
+class TestHomeworkLoadRatingEnforcement:
+    """LOAD-04 / D-10 / Pitfall 5: homework_load_rating conditional coverage.
+    - First-session (type): exempt (no prior homework)
+    - Onboarding session_number=1: exempt
+    - Post-cutoff standard/onboarding-2+/sprint/fluency: required
+    """
+
+    @_missing_load_rating_fn
+    def test_standard_session_2_plus_requires_rating(self):
+        data = {"session_type": "standard", "session_number": 2}
+        assert check_homework_load_rating_required(data) is True, (
+            "D-10: standard session_number>=2 must require homework_load_rating"
+        )
+
+    @_missing_load_rating_fn
+    def test_first_session_exempt(self):
+        data = {"session_type": "first-session", "session_number": 1}
+        assert check_homework_load_rating_required(data) is False, (
+            "Pitfall-5: first-session has no prior homework — exempt"
+        )
+
+    @_missing_load_rating_fn
+    def test_onboarding_session_1_exempt(self):
+        data = {"session_type": "onboarding", "session_number": 1}
+        assert check_homework_load_rating_required(data) is False, (
+            "Pitfall-5: onboarding session_number=1 exempt"
+        )
+
+    @_missing_load_rating_fn
+    def test_onboarding_session_2_required(self):
+        data = {"session_type": "onboarding", "session_number": 2}
+        assert check_homework_load_rating_required(data) is True
+
+    @_missing_load_rating_fn
+    def test_fluency_required(self):
+        data = {"session_type": "fluency", "session_number": 5}
+        assert check_homework_load_rating_required(data) is True
+
+    @_missing_load_rating_fn
+    def test_sprint_required(self):
+        data = {"session_type": "sprint", "session_number": 3}
+        assert check_homework_load_rating_required(data) is True
