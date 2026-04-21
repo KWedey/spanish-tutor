@@ -1,0 +1,21 @@
+# Fully populated study_time_budget — plan 05-02 consistency check must PASS
+current_phase: A
+phase_balance: consolidation
+fluency_days_per_week: 0
+last_fluency_day: null
+last_session_date: "2026-04-21"
+weekly_review_day: sunday
+current_onboarding_session: null
+sprint:
+  active: false
+placement_validation:
+  active: false
+adjustment_log: []
+study_time_budget:
+  daily_minimum: 15
+  daily_target: 30
+  daily_maximum: 60
+  weekly_goal: 180
+  today_stretch: 0
+consecutive_too_much_count: 0
+consecutive_just_right_count: 0
