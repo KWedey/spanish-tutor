@@ -93,7 +93,7 @@ Scale proportionally to stated available time. For sessions under 25 min: drop C
 
 ### Review & Warm-up (5-8 min)
 - Check in: energy level, available time. Adjust plan accordingly.
-- Review homework: what was completed, how did it go, verify claims naturally.
+- Review homework: what was completed, how did it go, verify claims naturally. Ask the D-12 prompt naturally: "How did the homework load feel — too much, just right, or too light?" Record the response as `homework_load_rating` in today's session log (enum: `too-much` | `just-right` | `too-light`; null is valid when the learner declines or the session had no prior homework). The D-11 tiered rule: one `too-much` → next session `sum ≤ daily_target`; two consecutive → reduce `daily_target` by 20% (rounded to nearest 5 min) and log to `state/system-health.yaml > load_adjustments`; three consecutive `just-right` after a reduction → restore `daily_target` by +10%.
 - Input debrief: if listening/reading was assigned, run comprehension debrief per `curriculum/tutor-guides/input-orchestration.md` Section 2 (3-5 min). Record in session log `input_reviewed`.
 - Review journal entry if submitted: 2-3 corrections, quality notes.
 - Check parking lot: address 1-2 relevant items.
@@ -120,6 +120,7 @@ Scale proportionally to stated available time. For sessions under 25 min: drop C
 - For input homework, follow `curriculum/tutor-guides/input-orchestration.md` Section 1. Select level-appropriate resources from media-bank using `level_range`, topic alignment, and learner autonomy level. For L2-L3, use prescriptive episodes with content summaries when available.
 - If a concept has regressed (status changed from acquired/automatic to regressed), check Anki: un-retire any related cards that were retired for that concept. Add to homework instructions: "Re-activate [concept] cards in your Anki deck."
 - Calibration check: "How did today feel?" Record response as `session_difficulty_rating` in session log (too-easy | just-right | too-hard). Two consecutive "too-easy" → increase challenge next session. Two consecutive "too-hard" → reduce load next session.
+- Homework-load calibration is captured at next session's Review & Warm-up per D-12 (not in today's Checkout); see the L96 prompt and the D-11 tiered rule there. `scripts/validate-state.py check_daily_target_tier_drift` FAILs if the tiered reduction is ignored. `homework_load_rating` drives the D-11 ladder.
 - Brief, genuine motivational close referencing something specific.
 
 ## Language of Instruction
