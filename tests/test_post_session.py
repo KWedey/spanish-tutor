@@ -224,3 +224,90 @@ class TestTranscriptWarn:
             "ENFORCE-09: post-session.sh must warn (not error) about missing "
             "transcript for session 1"
         )
+
+
+# ---------------------------------------------------------------------------
+# Phase 5 LOAD: Step 5c today_stretch reset (D-04 / Pitfall 3)
+# ---------------------------------------------------------------------------
+
+
+class TestTodayStretchReset:
+    """LOAD / D-04 / Pitfall 3: post-session.sh Step 5c resets study_time_budget.today_stretch to 0.
+
+    Uses the Phase 4 quoted-heredoc + sys.argv pattern (CR-01 commits c4139b2, e273529).
+    Step 5c must land between Step 5b (recast aggregation) and Step 6 (git commit).
+    """
+
+    def test_reset_step_header_present(self):
+        assert _line_number_of("Step 5c/") > 0, (
+            "LOAD/D-04: post-session.sh must contain a 'Step 5c/' header for today_stretch reset"
+        )
+
+    def test_today_stretch_token_present(self):
+        script = _read_script()
+        assert "today_stretch" in script, (
+            "LOAD/D-04: post-session.sh must reference today_stretch somewhere in Step 5c"
+        )
+
+    def test_step_5c_after_step_5b(self):
+        line_5b = _line_number_of("Step 5b/")
+        line_5c = _line_number_of("Step 5c/")
+        assert line_5b > 0 and line_5c > 0, "Both Step 5b and Step 5c headers must exist"
+        assert line_5b < line_5c, (
+            f"Step 5b at line {line_5b} must come before Step 5c at line {line_5c}"
+        )
+
+    def test_step_5c_before_step_6(self):
+        line_5c = _line_number_of("Step 5c/")
+        line_6 = _line_number_of("Step 6/")
+        assert line_5c > 0 and line_6 > 0
+        assert line_5c < line_6, (
+            f"Step 5c (line {line_5c}) must come before Step 6 (line {line_6})"
+        )
+
+    def test_uses_quoted_heredoc(self):
+        """CR-01: quoted heredoc <<'PYEOF' prevents shell expansion into Python."""
+        script = _read_script()
+        # There must be at least TWO quoted heredocs — one for 5b (existing), one for 5c (new)
+        count = script.count("<<'PYEOF'")
+        assert count >= 2, (
+            f"CR-01: Step 5c must use quoted heredoc <<'PYEOF' (found {count} total; expected >=2 — one each for 5b and 5c)"
+        )
+
+    def test_uses_sys_argv(self):
+        """CR-01: dynamic data flows via sys.argv, not shell interpolation."""
+        lines = _script_lines()
+        step_5c_line = _line_number_of("Step 5c/")
+        assert step_5c_line > 0
+        block = "\n".join(lines[step_5c_line - 1 : step_5c_line + 40])
+        assert "sys.argv" in block, (
+            "CR-01: Step 5c Python block must reference sys.argv (not rely on shell interpolation into heredoc)"
+        )
+
+    def test_honors_dry_run(self):
+        lines = _script_lines()
+        step_5c_line = _line_number_of("Step 5c/")
+        assert step_5c_line > 0
+        block = "\n".join(lines[step_5c_line - 1 : step_5c_line + 30])
+        assert "DRY_RUN" in block or "[dry-run]" in block, (
+            "Step 5c must honor --dry-run (DRY_RUN branch present)"
+        )
+
+    def test_exit_on_failure(self):
+        """Step 5c must propagate failure via `if ! python3 ... then error ...; exit 1; fi` pattern."""
+        lines = _script_lines()
+        step_5c_line = _line_number_of("Step 5c/")
+        assert step_5c_line > 0
+        block = "\n".join(lines[step_5c_line - 1 : step_5c_line + 60])
+        assert "exit 1" in block, (
+            "Step 5c Python invocation must fail-fast with exit 1 on error (set -e compliance)"
+        )
+
+    def test_step_count_renumbered_to_8(self):
+        """After adding Step 5c, all Step N/7 labels must become Step N/8."""
+        script = _read_script()
+        # Filter out comment-only lines; look for real "/7:" references in step headers/printfs
+        real_lines = [l for l in script.splitlines() if not l.lstrip().startswith("#") and "/7:" in l]
+        assert not real_lines, (
+            f"Step count not renumbered: {len(real_lines)} line(s) still reference /7: {real_lines[:3]}"
+        )

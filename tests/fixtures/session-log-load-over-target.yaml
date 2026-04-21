@@ -1,0 +1,28 @@
+# sum = 40 → > daily_target(30), ≤ daily_maximum(60)+today_stretch(0) → WARN
+date: "2026-04-22"
+session_number: 5
+duration_minutes: 30
+session_type: standard
+session_status: complete
+learner_energy: medium
+session_activities:
+  - stage: stage-2
+    type: controlled-practice
+learner_observations:
+  mood: calm
+  engagement: focused
+assignment_review: []
+skill_map_updates: []
+assignments:
+  - task: "Anki review"
+    estimated_minutes: 20
+  - task: "Writing — journal prompt"
+    estimated_minutes: 20
+decision_engine_trace:
+  selected_primary: "A-01-present-regular"
+  candidates_scored: []
+session_difficulty_rating: just-right
+homework_load_rating: just-right
+next_session:
+  recommended_focus: "..."
+  session_type: standard

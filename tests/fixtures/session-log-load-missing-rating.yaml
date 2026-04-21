@@ -1,0 +1,24 @@
+# Post-cutoff standard session_number=2, no homework_load_rating → FAIL (per Pitfall 5 conditional)
+date: "2026-04-22"
+session_number: 2
+duration_minutes: 30
+session_type: standard
+session_status: complete
+learner_energy: medium
+session_activities: []
+learner_observations:
+  mood: calm
+  engagement: focused
+assignment_review: []
+skill_map_updates: []
+assignments:
+  - task: "Anki review"
+    estimated_minutes: 15
+decision_engine_trace:
+  selected_primary: "A-01"
+  candidates_scored: []
+session_difficulty_rating: just-right
+# homework_load_rating intentionally MISSING — test asserts FAIL
+next_session:
+  recommended_focus: "..."
+  session_type: standard
