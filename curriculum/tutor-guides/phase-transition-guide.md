@@ -27,6 +27,21 @@ Loaded when: All prerequisites for the next phase show "acquired" for 2+ consecu
 
 **Borderline:** Extend 1-2 weeks, focus on weakest prerequisite.
 
+**Core prerequisites (must be acquired — gate advancement):**
+- A-01 (present regular)
+- A-02 (ser vs estar)
+- A-04 (articles/prepositions)
+
+**Secondary prerequisites (may carry over — do NOT gate advancement):**
+- A-03 (gender agreement) — see Critical dependency note below
+- A-05 (basic questions)
+- A-06 (gustar-type verbs)
+- A-07 (present irregular)
+- A-08 (numbers/quantifiers)
+- A-09 (accent/stress)
+
+*Note: A-00 (communication repair phrases) is not listed here. A-00 is a first-session exit requirement governed by the CLAUDE.md Guardrail "Communication repair phrases are the highest-priority concept through session 5" — it is not a phase A→B transition gate.*
+
 **Critical dependency note:** While A-03 (Gender Agreement) is not a hard prerequisite for Phase B entry, it IS a prerequisite for B-06 (Direct Object Pronouns) and B-10 (Comparatives/Superlatives). If A-03 is carried over, it must reach "acquired" status before B-06 is introduced. The decision engine enforces this via prerequisite filtering, but the tutor should prioritize A-03 consolidation in early Phase B sessions.
 
 ## B → C Assessment (25-30 min)
@@ -48,6 +63,21 @@ Loaded when: All prerequisites for the next phase show "acquired" for 2+ consecu
 
 **Borderline:** Extend 2-3 weeks. If only one prerequisite weak, focused sprint.
 
+**Core prerequisites (must be acquired — gate advancement):**
+- B-01 (preterite regular)
+- B-04 (preterite vs imperfect)
+
+**Secondary prerequisites (may carry over — do NOT gate advancement):**
+- B-02 (preterite irregular)
+- B-03 (imperfect)
+- B-05 (reflexives)
+- B-06 (direct object pronouns)
+- B-07 (indirect object pronouns)
+- B-08 (estar + gerund)
+- B-09 (imperatives)
+- B-10 (comparatives/superlatives)
+- B-11 (future ir+a)
+
 ## C → D Assessment (30-38 min)
 
 **Production (15 min):** "What would change about your city if you were mayor? I disagree with your first point — convince me."
@@ -67,6 +97,19 @@ Loaded when: All prerequisites for the next phase show "acquired" for 2+ consecu
 - Writing sample demonstrates structured argumentation with appropriate connectors and at least one correct subjunctive usage
 
 **Borderline:** Extend 2-4 weeks. Subjunctive is the usual blocker — if that's the gap, dedicated subjunctive sprint.
+
+**Core prerequisites (must be acquired — gate advancement):**
+- C-01 (present subjunctive)
+- C-04 (conditional)
+- C-06 (compound tenses)
+
+**Secondary prerequisites (may carry over — do NOT gate advancement):**
+- C-02 (subjunctive triggers)
+- C-03 (formal future)
+- C-05 (por vs para)
+- C-07 (relative clauses)
+- C-08 (indirect speech)
+- C-09 (diminutives/augmentatives)
 
 ## Recording Results
 
