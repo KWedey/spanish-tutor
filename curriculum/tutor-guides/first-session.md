@@ -181,7 +181,13 @@ Vocabulary is domain-specific — grammar-to-vocabulary inference is weak. Use t
 - **Always:** Note placement level and evidence in both the session log (`assessment` block) and `learner-profile.yaml` (`initial_placement` block).
 
 ### 4. Schedule & Preferences (3 min)
-- How much time per day can they realistically commit? (including homework)
+- Capture the learner's `study_time_budget` (all five sub-fields written into `state/schedule.yaml`). Ask conversationally — do NOT turn this into a form:
+  - `daily_minimum` — "On your worst day, what's the smallest amount of time you'll do?" (strawman default: 15 min)
+  - `daily_target` — "On a normal day, how much time do you plan to spend on Spanish outside our session?" (strawman default: 30 min)
+  - `daily_maximum` — "What's the most you'd ever want in a day — the ceiling past which it feels like too much?" (strawman default: 60 min)
+  - `weekly_goal` — "And over a week, what total feels right?" (strawman default: 180 min — builds in one rest day)
+  - `today_stretch` — initialize to 0; this is an ephemeral "I have extra today" opt-in that the learner sets only on specific days
+  - If the learner is unsure, offer the strawman defaults 15 / 30 / 60 / 180 / 0 as a starting point and let them adjust. Invariant: `daily_minimum <= daily_target <= daily_maximum` (the tutor confirms this holds before writing).
 - Morning, afternoon, or evening preference?
 - Which day works for a weekly review session?
 
@@ -224,6 +230,8 @@ After the session, create and populate:
 - `state/learner-profile.yaml` — all identity, goals, schedule fields, calibration, and initial_placement
 - `state/skill-map.yaml` — mark concepts per placement rules above
 - `state/schedule.yaml` — set initial phase, onboarding_complete
+  - Populate `study_time_budget` map with the five sub-fields captured in §4 (daily_minimum, daily_target, daily_maximum, weekly_goal, today_stretch).
+  - Populate `consecutive_too_much_count: 0` and `consecutive_just_right_count: 0` (fresh counters).
 - `state/system-health.yaml` — initialize all counters
 - `state/resource-tracker.yaml` — add Anki as first resource
 

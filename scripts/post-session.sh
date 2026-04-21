@@ -61,6 +61,7 @@ while [[ $# -gt 0 ]]; do
             echo "  4. Verify session log exists and is well-formed"
             echo "  5. Check session log protocol compliance"
             echo "  5b. Aggregate recast_uptake_stats into skill-map"
+            echo "  5c. Reset study_time_budget.today_stretch to 0"
             echo "  6. Git commit all changes"
             echo ""
             echo "Options:"
@@ -112,7 +113,7 @@ run() {
 # Step 0: Snapshot state (must run before any writes; provides rollback point)
 # ---------------------------------------------------------------------------
 
-step "Step 0/7: Snapshotting state before writes"
+step "Step 0/8: Snapshotting state before writes"
 if $DRY_RUN; then
     printf "${YELLOW}[dry-run]${RESET} Skipping snapshot (dry-run writes nothing)\n"
 else
@@ -128,7 +129,7 @@ fi
 # Step 1: Generate/update vault content
 # ---------------------------------------------------------------------------
 
-step "Step 1/7: Generating vault content for $DATE"
+step "Step 1/8: Generating vault content for $DATE"
 run python3 "$ROOT/scripts/generate-vault.py" --session --date "$DATE"
 if ! $DRY_RUN; then info "Vault generation complete"; fi
 
@@ -136,7 +137,7 @@ if ! $DRY_RUN; then info "Vault generation complete"; fi
 # Step 2: Archive old session logs
 # ---------------------------------------------------------------------------
 
-step "Step 2/7: Archiving session logs older than 60 days"
+step "Step 2/8: Archiving session logs older than 60 days"
 run python3 "$ROOT/scripts/archive-sessions.py"
 if ! $DRY_RUN; then info "Session archival complete"; fi
 
@@ -144,7 +145,7 @@ if ! $DRY_RUN; then info "Session archival complete"; fi
 # Step 3: Validate state files
 # ---------------------------------------------------------------------------
 
-step "Step 3/7: Validating state files"
+step "Step 3/8: Validating state files"
 run python3 "$ROOT/scripts/validate-state.py"
 if ! $DRY_RUN; then info "State validation passed"; fi
 
@@ -154,7 +155,7 @@ if ! $DRY_RUN; then info "State validation passed"; fi
 
 SESSION_LOG="$ROOT/state/sessions/$DATE.yaml"
 
-step "Step 4/7: Verifying session log at state/sessions/$DATE.yaml"
+step "Step 4/8: Verifying session log at state/sessions/$DATE.yaml"
 if $DRY_RUN; then
     printf "${YELLOW}[dry-run]${RESET} Would verify: %s\n" "$SESSION_LOG"
 else
@@ -188,7 +189,7 @@ fi
 # Step 4.5: Transcript presence check (FAIL for session_number > 1)
 # ---------------------------------------------------------------------------
 
-step "Step 4.5/7: Checking transcript file for $DATE"
+step "Step 4.5/8: Checking transcript file for $DATE"
 if $DRY_RUN; then
     printf "${YELLOW}[dry-run]${RESET} Would check: transcripts/%s.md\n" "$DATE"
 else
@@ -224,7 +225,7 @@ fi
 # protocol. Missing expected fields → FAIL. Empty expected fields → WARN
 # (use --strict on check-session-log.py directly to treat empties as fails).
 
-step "Step 5/7: Checking session log protocol compliance"
+step "Step 5/8: Checking session log protocol compliance"
 if $DRY_RUN; then
     printf "${YELLOW}[dry-run]${RESET} Would run: scripts/check-session-log.py %s\n" "$DATE"
 else
@@ -245,7 +246,7 @@ fi
 # concept's recast_uptake_stats counters in skill-map.yaml. Additive write
 # on top of the Step 0 snapshot — if this fails, snapshot provides rollback.
 
-step "Step 5b/7: Aggregating recast_uptake_stats into skill-map"
+step "Step 5b/8: Aggregating recast_uptake_stats into skill-map"
 if $DRY_RUN; then
     printf "${YELLOW}[dry-run]${RESET} Would aggregate recasts from %s\n" "$SESSION_LOG"
 else
@@ -297,13 +298,51 @@ PYEOF
 fi
 
 # ---------------------------------------------------------------------------
+# Step 5c: Reset today_stretch to 0 (D-04 ephemeral semantic)
+# ---------------------------------------------------------------------------
+#
+# today_stretch is a per-session extension above daily_maximum. Clearing it
+# at end-of-session ensures a one-day "extra today" doesn't silently persist.
+# Pattern: quoted heredoc + sys.argv per CR-01 (commits c4139b2, e273529).
+
+step "Step 5c/8: Resetting study_time_budget.today_stretch to 0"
+if $DRY_RUN; then
+    printf "${YELLOW}[dry-run]${RESET} Would reset today_stretch in schedule.yaml\n"
+else
+    if ! python3 - "$ROOT/state/schedule.yaml" <<'PYEOF'
+import yaml, sys
+from pathlib import Path
+SCHED = Path(sys.argv[1])
+if not SCHED.exists():
+    print("No schedule.yaml found - skipping today_stretch reset")
+    sys.exit(0)
+with SCHED.open() as f:
+    sched = yaml.safe_load(f) or {}
+stb = sched.get("study_time_budget")
+if not isinstance(stb, dict):
+    print("No study_time_budget configured - skipping today_stretch reset")
+    sys.exit(0)
+prev = stb.get("today_stretch", 0) or 0
+stb["today_stretch"] = 0
+with SCHED.open("w") as f:
+    yaml.safe_dump(sched, f, sort_keys=False, allow_unicode=True)
+print(f"today_stretch reset: {prev} -> 0")
+PYEOF
+    then
+        error "today_stretch reset failed"
+        exit 1
+    fi
+    info "today_stretch reset to 0"
+fi
+
+# ---------------------------------------------------------------------------
 # Step 6: Git commit
 # ---------------------------------------------------------------------------
 
 if $NO_COMMIT; then
-    step "Step 6/7: Skipping git commit (--no-commit)"
+    step "Step 6/8: Skipping git commit (--no-commit)"
 else
-    step "Step 6/7: Committing changes"
+    step "Step 6/8: Committing changes"
     if $DRY_RUN; then
         printf "${YELLOW}[dry-run]${RESET} Would run: git add + git commit\n"
     else
