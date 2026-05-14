@@ -459,6 +459,7 @@ prescriptive_episodes:
       cefr: A2
       dialect: neutral_latam
       chapter_range: "Chapter 1 (~25 pages, split into 3 sittings if needed)"
+      topic_alignment: [telling-stories, describing-people-and-things, my-daily-routine]
       content_summary: >
         Beginner graded reader using ~1,000 most-common Spanish words. Each chapter
         is a self-contained short story written for learners (controlled vocabulary,
@@ -473,6 +474,7 @@ prescriptive_episodes:
       cefr: B1
       dialect: neutral_latam
       chapter_range: "Chapter 1 (~30 pages, 1-2 sittings)"
+      topic_alignment: [current-events-and-society, opinions-and-debate, philosophy-and-big-ideas]
       content_summary: >
         Intermediate graded reader continuing the Olly Richards series. Vocabulary
         expanded to ~2,000 most-common words; tenses include preterite, imperfect,
@@ -487,6 +489,7 @@ prescriptive_episodes:
       cefr: B1
       dialect: neutral
       chapter_range: "Chapters 1-3 (~15 pages)"
+      topic_alignment: [philosophy-and-big-ideas, describing-people-and-things, childhood-and-family]
       content_summary: >
         Classic French novella translated into accessible Spanish. Short chapters
         (3-6 pages each) with simple syntax, present and imperfect dominant. Often
@@ -502,6 +505,7 @@ prescriptive_episodes:
       cefr: B1
       dialect: mexican
       chapter_range: "First story (~12 pages)"
+      topic_alignment: [childhood-and-family, work-and-career, a-memorable-trip]
       content_summary: >
         Autobiographical short-story collection by a Mexican-American author about
         his family's migrant farm-working life in California in the 1950s-60s.
@@ -517,6 +521,7 @@ prescriptive_episodes:
       cefr: B2
       dialect: rioplatense
       chapter_range: "Single story (~10 pages)"
+      topic_alignment: [emotions-and-relationships, describing-people-and-things, telling-stories]
       content_summary: >
         Uruguayan short-story master. 'La noche de los feos' is a 10-page first-
         person narrative — two physically scarred strangers meet at a cinema and
@@ -533,6 +538,7 @@ prescriptive_episodes:
       cefr: B2
       dialect: chilean
       chapter_range: "Single story (~15 pages)"
+      topic_alignment: [telling-stories, opinions-and-debate, work-and-career]
       content_summary: >
         Chilean author writing in a magical-realist register. 'Dos palabras' opens
         the collection — Belisa Crepusculario sells words at country fairs and is
@@ -548,6 +554,7 @@ prescriptive_episodes:
       cefr: B2
       dialect: peninsular
       chapter_range: "Chapter 1 (~25 pages)"
+      topic_alignment: [childhood-and-family, my-home-and-neighborhood, emotions-and-relationships]
       content_summary: >
         Spanish post-war novel (1944). Chapter 1 introduces Andrea arriving in
         Barcelona to live with her grandmother's eccentric family. Vivid sensory
