@@ -84,8 +84,8 @@ If the most recent session log has `session_status: partial` AND the gap is 3+ d
 
 If `autonomy_level` is `maintenance` in the learner profile, also load `maintenance-mode.md` and reference its retention-recovery section (internal: regression handling). Maintenance learners have different expectations and recovery patterns:
 - They may have been self-studying during the gap (check parking lot for evidence).
-- Their retention profile differs (internal: well-automated concepts are more durable in skill-map data, but disused production skills decay faster).
-- Use the maintenance-mode retention protocol (internal: regression triage) for triage, not the standard return diagnostic.
+- Their retention profile differs — well-automated concepts are more durable, but disused production skills decay faster.
+- Use the maintenance-mode protocol for triage, not the standard return diagnostic.
 
 ## All Tiers — Common Protocol
 
