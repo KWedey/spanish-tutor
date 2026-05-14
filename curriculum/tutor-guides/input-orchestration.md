@@ -24,8 +24,22 @@ Read `receptive_skills.listening.current_level` and `receptive_skills.reading.cu
 ### Step 2 — Filter resources
 
 From `curriculum/media-bank.yaml`, select resources whose `level_range` includes the learner's current level or one level above (i+1). Apply:
+
 - **Dialect preference:** Prefer resources matching `target_dialect` from learner-profile. Accept neutral-dialect resources.
+
+- **Dialect re-filter (advisory at assignment time):** When the assigned resource's `dialect:` tag is `mixed`, `mixed_latin_american`, `mixed_with_spain`, or `neutral`, the resource may still contain dialect-specific forms that conflict with `target_dialect`. Issue an explicit advisory to the learner at assignment time using the matrix below — this re-filter runs AFTER the preference filter above, so it only fires when no better dialect match was available.
+
+  | Learner `target_dialect` | Resource `dialect:` | Advisory the tutor gives at assignment |
+  |--------------------------|---------------------|-----------------------------------------|
+  | `es-AR` or `es-UY` (voseo expected) | `mixed`, `mixed_latin_american`, or `neutral` | "Heads up — this resource may use **tú** in places where you'd use **vos**. Note any **tú** forms you hear; we'll cover the voseo conversion." |
+  | `es-AR` or `es-UY` | `peninsular` or `mixed_with_spain` | "Heads up — this resource uses **vosotros** (Spain's plural-you) and **tú**. Listen for what they say; you would use **vos** and **ustedes**." |
+  | Any non-`es-ES` (Mexico, Colombia, Chile, etc.) | `peninsular` or `mixed_with_spain` | "Heads up — this resource uses **vosotros** (Spain's plural-you). You'll use **ustedes** instead. Notice **vosotros** when it appears." |
+  | `es-ES` | `mixed_latin_american` or any es-LATAM-tagged | "Heads up — this resource uses **ustedes** for plural-you (not **vosotros**). The forms you'll hear are the Latin-American ones." |
+
+  When the advisory fires, log it in the session log alongside the assignment: `dialect_advisory: voseo` or `dialect_advisory: vosotros` (or both, comma-separated). This makes per-learner advisory frequency auditable — high frequency suggests the media-bank dialect coverage for that target is thin and should be expanded.
+
 - **Topic alignment:** Score by overlap with the weekly narrow topic (direct match > adjacent > unrelated).
+
 - **Freshness:** Check `resource-tracker.yaml` — prefer resources not assigned in the last 2 sessions. Avoid resources with `learner_engagement: reluctant`.
 
 ### Step 3 — Apply autonomy level
