@@ -339,6 +339,95 @@ def _append_load_adjustment_warn(session_date: str, total: int,
 
 
 # ---------------------------------------------------------------------------
+# CURR-FOLLOWUP-02: Dialect advisory enforcement
+# ---------------------------------------------------------------------------
+# Transcribed from input-orchestration.md Section 1 Step 2.
+# If that matrix is edited, this function must be updated to match.
+
+# Dialect sets used in the trigger matrix
+_VOSEO_DIALECTS = {"es-AR", "es-UY"}
+_PENINSULAR_RESOURCE_DIALECTS = {"peninsular", "mixed_with_spain"}
+_LATAM_RESOURCE_DIALECTS = {"mixed_latin_american"}
+_MIXED_NEUTRAL_RESOURCE_DIALECTS = {"mixed", "mixed_latin_american", "neutral"}
+
+
+def _lookup_resource_dialect(resource: str, media_bank: dict) -> str | None:
+    """Return the dialect tag for a named resource from media_bank, or None if not found.
+
+    Searches prescriptive_episodes.listening and prescriptive_episodes.reading.
+    Returns None when there is no match (free-form / untracked resource).
+    """
+    if not resource:
+        return None
+    episodes = (media_bank or {}).get("prescriptive_episodes") or {}
+    for section in ("listening", "reading"):
+        for entry in (episodes.get(section) or []):
+            if isinstance(entry, dict) and entry.get("title") == resource:
+                return entry.get("dialect") or None
+    return None
+
+
+def check_dialect_advisory_required(
+    assignment: dict,
+    learner_profile: dict,
+    media_bank: dict,
+) -> bool:
+    """CURR-FOLLOWUP-02: Return True when the assignment triggers a dialect advisory.
+
+    Trigger matrix (transcribed from input-orchestration.md Section 1 Step 2):
+      - target_dialect in {es-AR, es-UY} + resource dialect in {mixed, mixed_latin_american, neutral}
+        → voseo advisory required
+      - target_dialect in {es-AR, es-UY} + resource dialect in {peninsular, mixed_with_spain}
+        → voseo+vosotros advisory required
+      - target_dialect not in {es-ES} + resource dialect in {peninsular, mixed_with_spain}
+        → vosotros advisory required
+      - target_dialect == es-ES + resource dialect in {mixed_latin_american} (or LATAM-tagged)
+        → vosotros advisory required
+
+    Returns False when:
+      - assignment has no `resource` field
+      - resource doesn't match any media-bank entry (free-form/untracked)
+      - learner_profile is missing or has no target_dialect
+    """
+    if not isinstance(assignment, dict):
+        return False
+
+    resource = (assignment.get("resource") or "").strip()
+    if not resource:
+        return False
+
+    target_dialect = ((learner_profile or {}).get("target_dialect") or "").strip()
+    if not target_dialect:
+        return False
+
+    resource_dialect = _lookup_resource_dialect(resource, media_bank)
+    if resource_dialect is None:
+        return False
+
+    # Matrix row 1 & 2: voseo dialects
+    if target_dialect in _VOSEO_DIALECTS:
+        if resource_dialect in _MIXED_NEUTRAL_RESOURCE_DIALECTS:
+            return True  # voseo advisory
+        if resource_dialect in _PENINSULAR_RESOURCE_DIALECTS:
+            return True  # voseo+vosotros advisory
+        return False
+
+    # Matrix row 3: any non-es-ES + peninsular/mixed_with_spain
+    if target_dialect != "es-ES":
+        if resource_dialect in _PENINSULAR_RESOURCE_DIALECTS:
+            return True  # vosotros advisory
+        return False
+
+    # Matrix row 4: es-ES learner + LATAM resource
+    if target_dialect == "es-ES":
+        if resource_dialect in _LATAM_RESOURCE_DIALECTS:
+            return True  # vosotros advisory (ustedes vs vosotros)
+        return False
+
+    return False
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 

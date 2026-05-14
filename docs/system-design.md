@@ -942,6 +942,33 @@ Invariant enforcement: `scripts/validate-state.py check_daily_target_tier_drift`
 3. Resume from where the previous session left off rather than starting fresh
 4. Do not count a partial session toward advancement criteria (e.g., "practiced in 3 sessions")
 
+### dialect_advisory (per-assignment)
+
+**Field location:** `assignments[].dialect_advisory` in the session log.
+
+**When required:** When an assignment references a media-bank resource whose `dialect:` tag triggers the dialect mismatch matrix from `input-orchestration.md` Section 1 Step 2. The check fires only when the resource title matches a `prescriptive_episodes` entry in `curriculum/media-bank.yaml` that carries a `dialect:` tag. Free-form assignments (Anki, journal, untracked resources) are silently skipped.
+
+**Enum values:**
+
+| Value | Meaning |
+|-------|---------|
+| `voseo` | Resource may use **tú** where the learner uses **vos** (es-AR/es-UY + mixed/neutral resource) |
+| `vosotros` | Resource uses Spain's **vosotros**; learner uses **ustedes** (non-es-ES + peninsular resource, or es-ES + LATAM resource) |
+| `voseo+vosotros` | Both apply — resource uses **vosotros** and **tú** where learner uses **ustedes** and **vos** (es-AR/es-UY + peninsular resource) |
+
+**Trigger matrix (transcribed from `input-orchestration.md` Section 1 Step 2):**
+
+| Learner `target_dialect` | Resource `dialect:` | Required `dialect_advisory` |
+|--------------------------|---------------------|-----------------------------|
+| `es-AR` or `es-UY` | `mixed`, `mixed_latin_american`, or `neutral` | `voseo` |
+| `es-AR` or `es-UY` | `peninsular` or `mixed_with_spain` | `voseo+vosotros` |
+| Any non-`es-ES` | `peninsular` or `mixed_with_spain` | `vosotros` |
+| `es-ES` | `mixed_latin_american` or LATAM-tagged | `vosotros` |
+
+**Validator rule:** `check_dialect_advisory_required(assignment, learner_profile, media_bank)` in `scripts/check-session-log.py`. Returns `True` when an advisory is required; the caller is responsible for checking that `assignment.dialect_advisory` is non-empty and matches the expected value. If `target_dialect` is unset or the resource is untracked, the function returns `False` (no-op during bootstrap).
+
+**Schema:** Defined as `item_schema.dialect_advisory` under `assignments:` in `schemas/session-log.schema.yaml`.
+
 ### 6. Weekly Summaries (`state/summaries/YYYY-WNN.yaml`)
 
 Generated during weekly review sessions. Compresses 5-7 daily logs into trends. Kept for 6 months.

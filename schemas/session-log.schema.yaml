@@ -112,6 +112,37 @@ fields:
     required: false
     default: []
     description: "Homework assignments for before next session"
+    # Per-assignment recognized fields (item_schema — validated in check-session-log.py,
+    # not by the schema loader; loader extension deferred to v1.2):
+    #   type            (string, required) — anki, writing, listening, reading, drill, journal, etc.
+    #   estimated_minutes (int, required)  — minutes the learner should expect to spend
+    #   resource        (string, optional) — resource title from curriculum/media-bank.yaml
+    #   dialect_advisory — see below
+    item_schema:
+      type:
+        type: string
+        required: true
+        default: ""
+        description: "Assignment type — anki, writing, listening, reading, drill, journal, etc."
+      estimated_minutes:
+        type: int
+        required: true
+        default: 0
+        description: "Minutes the learner should expect to spend"
+      resource:
+        type: string
+        required: false
+        default: ""
+        description: "Resource title from curriculum/media-bank.yaml or resources/resource-catalog.yaml"
+      dialect_advisory:
+        type: string
+        required: false
+        default: ""
+        description: |
+          Required when the assignment matches the dialect-mismatch trigger matrix in
+          input-orchestration.md Section 1 Step 2 (mixed/neutral resource + voseo/vosotros
+          target_dialect, or peninsular resource + non-es-ES target_dialect).
+        enum: ["voseo", "vosotros", "voseo+vosotros"]
 
   journal_review:
     type: map
