@@ -542,12 +542,16 @@ def _pred_maintenance(state: Path) -> bool:
 
 
 def _pred_weekly_review(state: Path, today: date) -> bool:
+    # Mirror the production fix in scripts/route_session.py: avoid strftime("%A")
+    # which is locale-aware. Use a fixed English weekday table indexed by
+    # today.weekday() so test predicates match router behavior under any locale.
+    from scripts.route_session import _WEEKDAY_NAMES_EN
     profile_path = state / "learner-profile.yaml"
     if not profile_path.exists():
         return False
     profile = _yaml.safe_load(profile_path.read_text()) or {}
     raw = profile.get("weekly_review_day", "") or ""
-    return today.strftime("%A") == raw.strip().capitalize()
+    return _WEEKDAY_NAMES_EN[today.weekday()] == raw.strip().capitalize()
 
 
 def _pred_sprint(state: Path) -> bool:
@@ -744,7 +748,54 @@ PAIRWISE_EXPECTED = [
      "Not co-satisfiable: first-session requires zero logs; placement-validation requires sprint active with a session"),
     ("first-session", "fluency", None,
      "Not co-satisfiable: first-session requires zero logs; fluency requires a recent session"),
+    ("first-session", "standard", None,
+     "Not co-satisfiable: first-session requires zero session logs; the standard builder writes one (and the router only returns 'standard' when row 1 has not fired)."),
+
+    # ── Placement-validation interactions with higher-priority rows ──────
+    # placement-validation only fires under sprint.active=True; rows 2-5 all
+    # precede the sprint row in CLAUDE.md Step 3, so they win when co-satisfied.
+    ("onboarding", "placement-validation", "onboarding",
+     "Row order: onboarding (Row 2) precedes sprint/placement-validation (Row 6 override)"),
+    ("return", "placement-validation", "return",
+     "Row order: return (Row 3) precedes sprint/placement-validation (Row 6 override)"),
+    ("maintenance", "placement-validation", "maintenance",
+     "Row order: maintenance (Row 4) precedes sprint/placement-validation (Row 6 override)"),
+    ("weekly-review", "placement-validation", "weekly-review",
+     "Row order: weekly-review (Row 5) precedes sprint/placement-validation (Row 6 override)"),
+    ("placement-validation", "fluency", "placement-validation",
+     "ROUTE-03 + Row order: placement-validation overrides sprint (Row 6), which precedes fluency (Row 7)"),
+
+    # ── Standard (Row 8 'otherwise') interactions ────────────────────────
+    # `standard` is the catch-all that fires only when no Row 1-7 condition
+    # matches. The _pred_standard re-validator always returns True (standard
+    # is structurally satisfiable for any state), so these pairs verify that
+    # whenever a Row 1-7 condition also fires, the router never falls through
+    # to 'standard'. Each documented winner is the higher-priority row.
+    ("onboarding", "standard", "onboarding",
+     "Row order: onboarding (Row 2) fires before the otherwise/standard fallback (Row 8)"),
+    ("return", "standard", "return",
+     "Row order: return (Row 3) fires before the otherwise/standard fallback (Row 8)"),
+    ("maintenance", "standard", "maintenance",
+     "Row order: maintenance (Row 4) fires before the otherwise/standard fallback (Row 8)"),
+    ("weekly-review", "standard", "weekly-review",
+     "Row order: weekly-review (Row 5) fires before the otherwise/standard fallback (Row 8)"),
+    ("sprint", "standard", "sprint",
+     "Row order: sprint (Row 6) fires before the otherwise/standard fallback (Row 8)"),
+    ("placement-validation", "standard", "placement-validation",
+     "Row order: placement-validation override (Row 6) fires before the otherwise/standard fallback (Row 8)"),
+    # NOTE: fluency × standard is already covered in the "Fluency (Row 7)" block above.
 ]
+
+
+# Backstop: with 9 row-equivalence classes, C(9,2) = 36 unordered pairs.
+# A future Step 3 row addition must extend both _BUILDERS/_PREDICATES and this
+# table. A silent gap = an unmeasured ambiguity surface — fail loudly at import.
+assert len(PAIRWISE_EXPECTED) == 36, (
+    f"PAIRWISE_EXPECTED has {len(PAIRWISE_EXPECTED)} entries — expected 36 "
+    "(C(9,2) for the 9 Step 3 row-equivalence classes). Either a row was added "
+    "without adding its pairs, or a pair was removed. Restore coverage in the "
+    "ROUTE-FOLLOWUP-02 table above."
+)
 
 
 class TestStep3PairwisePriority:
