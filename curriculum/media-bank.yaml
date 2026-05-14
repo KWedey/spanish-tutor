@@ -446,3 +446,114 @@ prescriptive_episodes:
         Vocabulary explanations embedded in conversation (Andrea explains Colombian
         expressions to her husband). Moderate pace, natural back-and-forth.
         Good model for conversational rhythm and back-channeling.
+
+  # Reading entries — graded readers (R2) through transition titles (R3) to
+  # authentic short fiction (R4). Summaries written from publicly-available
+  # book descriptions, blurbs, and reviewer notes — NOT from claiming to have
+  # read the book (the tutor cannot generate summaries; see comment above the
+  # prescriptive_episodes block).
+  reading:
+    - source: Olly Richards
+      title: "Spanish Short Stories for Beginners (Vol 1) — Chapter 1: El Loco"
+      level: R2
+      cefr: A2
+      dialect: neutral_latam
+      chapter_range: "Chapter 1 (~25 pages, split into 3 sittings if needed)"
+      content_summary: >
+        Beginner graded reader using ~1,000 most-common Spanish words. Each chapter
+        is a self-contained short story written for learners (controlled vocabulary,
+        repetition of new words, glossary at chapter end). Chapter 1 introduces a
+        mystery in present and preterite tenses. Each chapter has a multiple-choice
+        comprehension quiz appended — useful as debrief probes. Author writes for
+        the learner, not native-speaker entertainment — pacing is intentionally slow.
+
+    - source: Olly Richards
+      title: "Spanish Short Stories for Intermediate Learners — Chapter 1: La Sociedad"
+      level: R3
+      cefr: B1
+      dialect: neutral_latam
+      chapter_range: "Chapter 1 (~30 pages, 1-2 sittings)"
+      content_summary: >
+        Intermediate graded reader continuing the Olly Richards series. Vocabulary
+        expanded to ~2,000 most-common words; tenses include preterite, imperfect,
+        present subjunctive (introduced gradually). Chapter 1 is a near-future
+        fiction setting introducing societal themes — appropriate for B1 learners
+        building from short narratives toward longer-form reading. End-of-chapter
+        glossary and comprehension questions remain.
+
+    - source: Antoine de Saint-Exupéry (trans. Spanish)
+      title: "El Principito — Chapters 1-3"
+      level: R3
+      cefr: B1
+      dialect: neutral
+      chapter_range: "Chapters 1-3 (~15 pages)"
+      content_summary: >
+        Classic French novella translated into accessible Spanish. Short chapters
+        (3-6 pages each) with simple syntax, present and imperfect dominant. Often
+        used as the first authentic-literature read because the language is
+        deliberately simple (the original is a children's book). Chapters 1-3
+        establish the narrator, the encounter in the desert, and the prince's
+        introduction. Recurring vocabulary: dibujo, planeta, serpiente, sombrero.
+        Cultural/philosophical themes accessible without dialect-specific knowledge.
+
+    - source: Francisco Jiménez
+      title: "Cajas de Cartón — story 'Cajas de cartón'"
+      level: R3
+      cefr: B1
+      dialect: mexican
+      chapter_range: "First story (~12 pages)"
+      content_summary: >
+        Autobiographical short-story collection by a Mexican-American author about
+        his family's migrant farm-working life in California in the 1950s-60s.
+        Title story tracks the family packing their cardboard boxes for the next
+        move. First-person past narration, accessible vocabulary, emotionally
+        weighted but linguistically straightforward. Strong Mexican Spanish flavor —
+        useful for learners targeting es-MX. Each story is 10-15 pages, designed
+        for classroom use (comprehension questions included in many editions).
+
+    - source: Mario Benedetti
+      title: "La muerte y otras sorpresas — story 'La noche de los feos'"
+      level: R4
+      cefr: B2
+      dialect: rioplatense
+      chapter_range: "Single story (~10 pages)"
+      content_summary: >
+        Uruguayan short-story master. 'La noche de los feos' is a 10-page first-
+        person narrative — two physically scarred strangers meet at a cinema and
+        share an evening. Sparse, intimate prose; subjunctive and conditional
+        appear naturally. **Voseo present** — useful target for es-AR / es-UY
+        learners specifically; advisory needed for other Latin-American targets
+        (see input-orchestration.md Section 1 Step 2 dialect re-filter). Strong
+        literary register — first authentic-fiction step for learners moving past
+        graded readers.
+
+    - source: Isabel Allende
+      title: "Cuentos de Eva Luna — story 'Dos palabras'"
+      level: R4
+      cefr: B2
+      dialect: chilean
+      chapter_range: "Single story (~15 pages)"
+      content_summary: >
+        Chilean author writing in a magical-realist register. 'Dos palabras' opens
+        the collection — Belisa Crepusculario sells words at country fairs and is
+        recruited by a colonel to write him a speech. Rich descriptive vocabulary,
+        preterite/imperfect contrast on display, occasional subjunctive. Less
+        regionally marked than Benedetti — accessible to most Latin-American
+        target_dialect learners. Stories are 12-20 pages each, designed for
+        sequential reading but each stands alone.
+
+    - source: Carmen Laforet
+      title: "Nada — Chapter 1"
+      level: R4
+      cefr: B2
+      dialect: peninsular
+      chapter_range: "Chapter 1 (~25 pages)"
+      content_summary: >
+        Spanish post-war novel (1944). Chapter 1 introduces Andrea arriving in
+        Barcelona to live with her grandmother's eccentric family. Vivid sensory
+        prose, peninsular Spanish, **vosotros forms present** — advisory needed
+        for non-peninsular target_dialect learners (see input-orchestration.md
+        Section 1 Step 2 dialect re-filter). First chapter is self-contained
+        enough to function as a standalone reading. Strong literary register —
+        appropriate for B2+ learners ready for authentic 20th-century Spanish
+        prose.
