@@ -75,3 +75,21 @@ class TestMediaBankReadingPrescriptive:
             f"(found: {sorted(dialects)}). A single-dialect reading bank cannot serve "
             "learners with varying target_dialect."
         )
+
+    def test_every_entry_has_topic_alignment(self):
+        """CURR-FOLLOWUP-01: every reading entry must carry a non-empty topic_alignment list,
+        parallel to the listening entries — without it, the Section 1 Step 2 topic-alignment
+        filter cannot score reading resources against the weekly narrow topic."""
+        data = self._load()
+        entries = (data.get("prescriptive_episodes") or {}).get("reading") or []
+        offenders = []
+        for i, entry in enumerate(entries):
+            ta = (entry or {}).get("topic_alignment")
+            if not isinstance(ta, list) or not ta:
+                offenders.append((i, (entry or {}).get("title", "<no title>"), repr(ta)))
+        assert not offenders, (
+            "CURR-FOLLOWUP-01: every reading entry must have a non-empty topic_alignment "
+            "list (matching the listening entries' field). Offenders:\n"
+            + "\n".join(f"  [{i}] '{title}' has topic_alignment={ta!r}" for i, title, ta in offenders)
+            + "\nSee .planning/phases/08-followup-v1.1-improvements/08-01-PLAN.md."
+        )

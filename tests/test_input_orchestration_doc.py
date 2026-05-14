@@ -68,3 +68,55 @@ class TestInputOrchestrationDialectRefilter:
             "(Filter resources) — found dialect terminology elsewhere in the file but "
             "not in Step 2."
         )
+
+
+# =============================================================================
+# Phase 8 FOLLOWUP: CURR-FOLLOWUP-04 — reading debrief Section 2c
+# =============================================================================
+
+
+class TestReadingDebriefSection2c:
+    """CURR-FOLLOWUP-04: input-orchestration.md Section 2 (Comprehension Debrief) must
+    include a Section 2c that documents the reading-debrief flow using content_summary
+    and chapter_range, parallel to the listening flow already in Section 2."""
+
+    def _read(self):
+        return INPUT_ORCHESTRATION.read_text(encoding="utf-8")
+
+    def test_reading_debrief_subsection_present(self):
+        """A heading or sub-heading containing 'reading' and 'debrief' (case-insensitive)
+        must exist between Section 2 and Section 3 of input-orchestration.md."""
+        import re
+        content = self._read()
+        # Find Section 2 and Section 3 boundaries
+        sec2_match = re.search(r"^##\s+Section\s+2\b", content, re.MULTILINE | re.IGNORECASE)
+        sec3_match = re.search(r"^##\s+Section\s+3\b", content, re.MULTILINE | re.IGNORECASE)
+        assert sec2_match, "CURR-FOLLOWUP-04: Section 2 heading not found in input-orchestration.md"
+        assert sec3_match, "CURR-FOLLOWUP-04: Section 3 heading not found in input-orchestration.md"
+        section2_block = content[sec2_match.start():sec3_match.start()]
+        # Look for a heading containing both 'reading' and 'debrief' (case-insensitive)
+        heading_pattern = re.compile(r"^#{2,4}.*reading.*debrief", re.MULTILINE | re.IGNORECASE)
+        alt_pattern = re.compile(r"^#{2,4}.*debrief.*reading", re.MULTILINE | re.IGNORECASE)
+        assert heading_pattern.search(section2_block) or alt_pattern.search(section2_block), (
+            "CURR-FOLLOWUP-04: input-orchestration.md Section 2 must contain a heading "
+            "with 'reading' and 'debrief' (Section 2c — Reading Debrief). "
+            "See .planning/phases/08-followup-v1.1-improvements/08-05-PLAN.md."
+        )
+
+    def test_reading_debrief_references_content_summary(self):
+        """The reading-debrief section must explicitly cite content_summary and
+        chapter_range from media-bank.yaml prescriptive_episodes.reading."""
+        import re
+        content = self._read()
+        sec2_match = re.search(r"^##\s+Section\s+2\b", content, re.MULTILINE | re.IGNORECASE)
+        sec3_match = re.search(r"^##\s+Section\s+3\b", content, re.MULTILINE | re.IGNORECASE)
+        assert sec2_match and sec3_match, "CURR-FOLLOWUP-04: Section 2/3 boundaries not found"
+        section2_block = content[sec2_match.start():sec3_match.start()]
+        assert "content_summary" in section2_block, (
+            "CURR-FOLLOWUP-04: the reading-debrief section must cite `content_summary` "
+            "(the field on prescriptive_episodes.reading entries that drives comprehension probes)."
+        )
+        assert "chapter_range" in section2_block, (
+            "CURR-FOLLOWUP-04: the reading-debrief section must cite `chapter_range` "
+            "(the field that scopes the debrief to the assigned chapters)."
+        )

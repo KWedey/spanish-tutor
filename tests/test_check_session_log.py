@@ -646,3 +646,124 @@ class TestHomeworkLoadRatingEnforcement:
     def test_sprint_required(self):
         data = {"session_type": "sprint", "session_number": 3}
         assert check_homework_load_rating_required(data) is True
+
+
+# =============================================================================
+# Phase 8 FOLLOWUP: CURR-FOLLOWUP-02 — dialect_advisory schema + validator
+# =============================================================================
+
+
+class TestDialectAdvisoryRule:
+    """CURR-FOLLOWUP-02: when a session log records a homework assignment that triggers
+    the dialect mismatch matrix (input-orchestration.md Section 1 Step 2), the assignment
+    must carry a `dialect_advisory` field naming voseo, vosotros, or both."""
+
+    def test_schema_includes_dialect_advisory_enum(self):
+        """The session-log schema must enumerate dialect_advisory with the documented values."""
+        schema_path = Path(__file__).resolve().parent.parent / "schemas" / "session-log.schema.yaml"
+        with open(schema_path) as f:
+            schema = yaml.safe_load(f)
+        # Schema may expose this under fields.assignments.item_schema (or similar nested path).
+        # We accept any nested location, but the enum values must match exactly.
+        expected_enum = {"voseo", "vosotros", "voseo+vosotros"}
+
+        def _find_dialect_advisory(node):
+            if isinstance(node, dict):
+                if "dialect_advisory" in node:
+                    return node["dialect_advisory"]
+                for v in node.values():
+                    found = _find_dialect_advisory(v)
+                    if found is not None:
+                        return found
+            elif isinstance(node, list):
+                for item in node:
+                    found = _find_dialect_advisory(item)
+                    if found is not None:
+                        return found
+            return None
+
+        spec = _find_dialect_advisory(schema)
+        assert spec is not None, (
+            "CURR-FOLLOWUP-02: session-log.schema.yaml must define a `dialect_advisory` field "
+            "(on the homework-assignment item schema). See "
+            ".planning/phases/08-followup-v1.1-improvements/08-02-PLAN.md."
+        )
+        enum_values = set((spec or {}).get("enum") or [])
+        assert enum_values == expected_enum, (
+            f"CURR-FOLLOWUP-02: dialect_advisory enum must be {sorted(expected_enum)}, "
+            f"got {sorted(enum_values)}."
+        )
+
+    def test_missing_advisory_fails_check(self, tmp_path, monkeypatch):
+        """Build a synthetic session log whose homework includes a media assignment matching
+        a dialect-mismatch trigger (e.g. learner target_dialect=es-AR + resource dialect=mixed)
+        but omitting dialect_advisory. Invoking check-session-log.py on it must fail with a
+        message naming `dialect_advisory` and the trigger condition."""
+        check_dialect_advisory = getattr(check_mod, "check_dialect_advisory_required", None)
+        if check_dialect_advisory is None:
+            pytest.fail(
+                "CURR-FOLLOWUP-02: check-session-log.py must expose "
+                "check_dialect_advisory_required(assignment, learner_profile, media_bank). "
+                "See .planning/phases/08-followup-v1.1-improvements/08-02-PLAN.md."
+            )
+
+        learner = {"target_dialect": "es-AR"}
+        media_bank = {
+            "prescriptive_episodes": {
+                "reading": [
+                    {"title": "El amor, las mujeres y la vida", "dialect": "mixed"},
+                ]
+            }
+        }
+        assignment_missing = {
+            "task": "read",
+            "resource": "El amor, las mujeres y la vida",
+            "estimated_minutes": 15,
+            # dialect_advisory deliberately missing
+        }
+        result = check_dialect_advisory(assignment_missing, learner, media_bank)
+        assert result is True, (
+            "CURR-FOLLOWUP-02: es-AR learner + mixed-dialect resource must trigger "
+            "dialect_advisory required (got False)."
+        )
+
+        assignment_present = dict(assignment_missing, dialect_advisory="voseo")
+        result_ok = check_dialect_advisory(assignment_present, learner, media_bank)
+        # The function returns True (advisory is required) — separate validator step
+        # confirms the field is present. We just verify the trigger fires.
+        assert result_ok is True
+
+    def test_unmatched_resource_skips_check(self, tmp_path):
+        """Free-form journal/Anki assignments (no resource string, or a resource that doesn't
+        match anything in media-bank) must NOT trigger the rule. The check fires only when
+        there's a media-bank resource with a `dialect:` tag. This codifies the silent-pass
+        behavior as contract, not an accident — protects against a future change that adds
+        a fall-through validator default."""
+        check_dialect_advisory = getattr(check_mod, "check_dialect_advisory_required", None)
+        if check_dialect_advisory is None:
+            pytest.fail(
+                "CURR-FOLLOWUP-02: check-session-log.py must expose "
+                "check_dialect_advisory_required(assignment, learner_profile, media_bank)."
+            )
+
+        learner = {"target_dialect": "es-AR"}
+        media_bank = {
+            "prescriptive_episodes": {
+                "reading": [
+                    {"title": "El amor, las mujeres y la vida", "dialect": "mixed"},
+                ]
+            }
+        }
+        # Anki assignment — no resource field
+        anki = {"task": "Anki review", "estimated_minutes": 10}
+        assert check_dialect_advisory(anki, learner, media_bank) is False, (
+            "CURR-FOLLOWUP-02: Anki/journal assignments (no resource) must silently skip "
+            "the dialect-advisory check, not fall through to a default-required."
+        )
+
+        # Resource that doesn't match anything in media-bank
+        unmatched = {"task": "read", "resource": "Some random article", "estimated_minutes": 15}
+        assert check_dialect_advisory(unmatched, learner, media_bank) is False, (
+            "CURR-FOLLOWUP-02: assignments whose resource doesn't match any media-bank "
+            "entry must silently skip — no false positives."
+        )
