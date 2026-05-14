@@ -69,7 +69,7 @@ In the session log `assignments` section, include:
 - `input_minutes:` estimated duration
 - `narrow_topic_aligned:` true if aligned with weekly topic
 
-## 2. Comprehension Debrief (During Review & Warm-up)
+## Section 2. Comprehension Debrief (During Review & Warm-up)
 
 3-5 minutes. Conversational — not a quiz. Conducted increasingly in Spanish as phase advances.
 
@@ -121,7 +121,40 @@ input_reviewed:
     level_at_time: L2
 ```
 
-## 3. Skipped Input Homework
+### Reading Debrief — Variations
+
+The flow above (a-e) applies to reading the same way it applies to listening, with five reading-specific deltas. Use this sub-section when the input under debrief was assigned from `prescriptive_episodes.reading` in `curriculum/media-bank.yaml`.
+
+**a) What did you read?**
+Ask which chapters / pages they covered. Log: resource title, `chapter_range` covered (vs assigned), and number of re-reads of any passages.
+
+**b) Topic probe (chapter-anchored)**
+"¿De qué trataba el capítulo?" / "What was this chapter about?"
+
+Probe at chapter granularity, not whole-book. Reading is consumed in chunks — a learner who summarizes Chapter 3 of *El Principito* well but stalls on Chapter 4 needs a chapter-level signal, not "the book in general."
+
+**c) Detail probe (from content_summary)**
+The reading entries in `media-bank.yaml > prescriptive_episodes.reading` each carry a `content_summary` written for this debrief. Load it before the probe and ask 1-2 specific questions that the summary anticipates (e.g., for Cajas de Cartón Story 1: "What does the family pack their belongings in? Why?").
+
+For entries that lack a content summary (rare — every entry in 07-01 has one), fall back to depth-of-elaboration as the comprehension proxy, same as listening.
+
+**d) Vocabulary extraction (passive recognition first)**
+Reading is the modality where passive vocabulary grows fastest. Ask: "¿Hubo palabras que te confundieron pero entendiste por el contexto?" / "Were there words that tripped you up but you figured out from context?"
+
+These are the passive-vocab acquisitions. Record them; they belong in `passive_known` on the relevant cluster, not `active_known` (production-readiness is a separate signal).
+
+If the entry is dialect-marked (e.g., Benedetti's voseo, Laforet's vosotros), explicitly ask which dialect-specific forms they noticed — this closes the loop with the assignment-time dialect advisory (Section 1 Step 2 re-filter) and feeds the L1-interference preempts (`curriculum/l1-interference.yaml` — see entries `voseo-tu-conversion`, `vosotros-ustedes-recognition`).
+
+**e) Difficulty self-report (pace, not just gist)**
+"¿El ritmo te pareció bien? ¿Tuviste que releer mucho?" / "How was the pace? Did you have to re-read often?"
+
+Reading allows arbitrary slow-down, so the pure "could you understand it" signal is less informative than for listening. The right signal is whether the learner could maintain reading flow without dropping into translation. If they re-read every paragraph, the level is too high regardless of whether they eventually understood.
+
+### Recording (reading)
+
+The session-log shape is the same as listening, with `type: reading` and `chapter_range_covered` in place of `passes`. Use the same field names that already exist under `session-log.schema.yaml > input_reviewed`. The reading-specific fields below (`chapter_range_covered`, `passive_vocabulary_inferred`, `dialect_friction_noted`) are recorded as free-form prose inside the existing `notes:` field today — see the schema for the enforced field set.
+
+## Section 3. Skipped Input Homework
 
 - **Single skip:** No intervention. Life happens. Assign normally next session.
 - **2 consecutive skips:** Reduce input assignment load — the time budget may be wrong. Do a brief in-session listening moment (2-3 min): describe a short scenario or play a brief segment, then discuss.
