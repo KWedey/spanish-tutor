@@ -247,3 +247,61 @@ interference_patterns:
     preempt_at: A-05-basic-questions
     severity: low
     persistence: "Usually self-corrects with exposure to natural question patterns"
+
+  - id: voseo-tu-conversion
+    english_cause: >
+      Most non-Rioplatense Spanish curricula teach the learner `tú` and `tú` verb
+      forms (`comes`, `eres`, `vienes`). A learner targeting `es-AR` or `es-UY`
+      hits authentic literature using `vos` (`comés`, `sos`, `venís`) and
+      mis-conjugates by substituting `tú` forms.
+    common_errors:
+      - wrong: "Tú vienes mañana?"
+        right: "¿Vos venís mañana?"
+        explanation: "Voseo uses second-person singular morphology distinct from tú — drop the diphthong, shift stress."
+      - wrong: "¿Cómo estás tú?"
+        right: "¿Cómo estás vos?"
+        explanation: "Pronoun and verb both shift; stress remains on the final syllable in present indicative."
+      - wrong: "¿Comes algo?"
+        right: "¿Comés algo?"
+        explanation: "Present-indicative voseo drops the diphthong: -es → -és, -is → -ís."
+    preempt_at: "media-bank:Mario Benedetti — La noche de los feos"
+    severity: medium
+    persistence: "Recoverable — voseo morphology is regular once seen; the friction is recognition, not production fossilization."
+    pre_instruction_recast: false
+    notes: >
+      Cross-reference: `curriculum/tutor-guides/input-orchestration.md` Section 1
+      Step 2 dialect re-filter advisory. When the tutor assigns the Benedetti
+      entry to an es-AR or es-UY learner who has not yet seen voseo, the tutor
+      should issue the preempt one-liner at assignment time:
+      "Heads up — Benedetti is Uruguayan and uses `vos` / `comés` instead of
+      `tú` / `comes`. Read it through once for gist; we'll cover voseo on the
+      debrief."
+
+  - id: vosotros-ustedes-recognition
+    english_cause: >
+      Latin-American Spanish curricula teach `ustedes` as the plural-you for all
+      formality registers; vosotros never appears in production. A learner
+      targeting any non-`es-ES` dialect hits authentic peninsular literature
+      using `vosotros` (`venís`, `coméis`, `sois`) and stalls on comprehension
+      — the form is unfamiliar morphology even though the meaning is "plural
+      you (informal)".
+    common_errors:
+      - wrong: "(comprehension breakdown on) 'Vosotros sois mis amigos.'"
+        right: "Vosotros sois mis amigos. (= Spanish-Spain way of saying 'You all are my friends'; LATAM uses 'Ustedes son mis amigos.')"
+        explanation: "Vosotros is recognition-only for non-es-ES targets — the learner should map vosotros forms to ustedes mentally, not produce vosotros."
+      - wrong: "¿Vosotros tenéis hambre? → 'Do you have hungry?'"
+        right: "¿Vosotros tenéis hambre? → 'Do you all (informal plural) have hunger / Are you all hungry?'"
+        explanation: "Map the morphology to LATAM's ustedes/tienen and the meaning is intact."
+    preempt_at: "media-bank:Carmen Laforet — Nada Chapter 1"
+    severity: low
+    persistence: "Recognition only — non-es-ES learners will not produce vosotros, so there is no fossilization vector. The risk is mid-passage comprehension drop, not error."
+    pre_instruction_recast: false
+    notes: >
+      Cross-reference: `curriculum/tutor-guides/input-orchestration.md` Section 1
+      Step 2 dialect re-filter advisory. When the tutor assigns the Laforet
+      entry (or any peninsular resource) to a non-es-ES learner, the tutor
+      should issue the preempt one-liner at assignment time:
+      "Heads up — Laforet is Spanish-Spain and uses `vosotros` (informal
+      plural you). It's recognition-only for you — read it, you don't need to
+      produce these forms. Tell me which vosotros forms you noticed on the
+      debrief."
