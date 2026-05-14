@@ -119,6 +119,32 @@ FLUENCY_EXPECTED = BASE_EXPECTED + [
     "next_session.recommended_focus",
 ]
 
+# Audit C-3 wire-in. These four session_type values are produced by
+# scripts/route_session.py (canonical session_types beyond the 9 base types
+# the original enum listed). EXPECTED_BY_TYPE must accept them so a session
+# log written with the router's output doesn't trip validate-state. The
+# expected fields here are intentionally conservative — the load-bearing
+# protocol per type lives in curriculum/tutor-guides/{maintenance-mode.md,
+# placement-validation.md, return-session.md, weekly-review-guide.md}; a
+# future commit can tighten these once those guides settle.
+MAINTENANCE_EXPECTED = BASE_EXPECTED + [
+    "skill_map_updates",
+    "next_session.recommended_focus",
+]
+
+PLACEMENT_VALIDATION_EXPECTED = BASE_EXPECTED + [
+    "validation_checks",
+    "skill_map_updates",
+    "next_session.recommended_focus",
+]
+
+# Overlay types: union the base type's expected fields with the overlay marker.
+# `onboarding-with-return-overlay` = onboarding + gap_days observation.
+# `maintenance-with-weekly-review` = maintenance + the weekly review's
+# assignment_review (the tutor reviews homework from the prior week).
+ONBOARDING_WITH_RETURN_OVERLAY_EXPECTED = ONBOARDING_EXPECTED + ["gap_days"]
+MAINTENANCE_WITH_WEEKLY_REVIEW_EXPECTED = MAINTENANCE_EXPECTED + ["assignment_review"]
+
 EXPECTED_BY_TYPE: dict[str, list[str]] = {
     "standard": STANDARD_EXPECTED,
     "weekly-review": WEEKLY_REVIEW_EXPECTED,
@@ -129,6 +155,10 @@ EXPECTED_BY_TYPE: dict[str, list[str]] = {
     "onboarding": ONBOARDING_EXPECTED,
     "sprint": SPRINT_EXPECTED,
     "fluency": FLUENCY_EXPECTED,
+    "maintenance": MAINTENANCE_EXPECTED,
+    "placement-validation": PLACEMENT_VALIDATION_EXPECTED,
+    "onboarding-with-return-overlay": ONBOARDING_WITH_RETURN_OVERLAY_EXPECTED,
+    "maintenance-with-weekly-review": MAINTENANCE_WITH_WEEKLY_REVIEW_EXPECTED,
 }
 
 # Fields that MAY be empty when applicable is uncertain. Agent should still

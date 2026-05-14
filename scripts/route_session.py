@@ -27,6 +27,25 @@ import yaml
 
 SessionType = str
 
+# Every string `route_session()` may return. Audit C-3: this set must remain
+# a subset of `schemas/session-log.schema.yaml > session_type > enum` so the
+# session-log writer can persist whatever the router decided. The integration
+# test `tests/test_route_session.py::test_router_outputs_in_session_log_enum`
+# asserts the subset relation at every test run.
+ROUTABLE_SESSION_TYPES = frozenset({
+    "first-session",
+    "onboarding",
+    "onboarding-with-return-overlay",
+    "return",
+    "maintenance",
+    "maintenance-with-weekly-review",
+    "weekly-review",
+    "sprint",
+    "placement-validation",
+    "fluency",
+    "standard",
+})
+
 
 # ---------------------------------------------------------------------------
 # Helpers

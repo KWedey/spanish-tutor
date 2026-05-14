@@ -20,6 +20,27 @@ class TestRouteSessionHarnessExists:
             "See .planning/phases/08-followup-v1.1-improvements/08-03-PLAN.md."
         )
 
+    def test_router_outputs_in_session_log_enum(self):
+        """Audit C-3 regression guard. Every string `route_session()` may return
+        must be a legal `session_type` value per `schemas/session-log.schema.yaml`.
+        If this fails, either:
+          (a) the router gained a new output without extending the schema enum, OR
+          (b) the schema enum shrank without updating the router's ROUTABLE set.
+        Both directions are equally bad — the session log can't persist the
+        decision the router made and the canary doc's verification step breaks.
+        """
+        import yaml as _yaml
+        from scripts.route_session import ROUTABLE_SESSION_TYPES
+        schema_path = Path(__file__).resolve().parent.parent / "schemas" / "session-log.schema.yaml"
+        schema = _yaml.safe_load(schema_path.read_text(encoding="utf-8"))
+        enum_values = set(schema["fields"]["session_type"]["enum"])
+        unsupported = ROUTABLE_SESSION_TYPES - enum_values
+        assert not unsupported, (
+            f"audit C-3 regression: router can return {sorted(unsupported)} "
+            f"but session-log.schema.yaml > session_type > enum lacks these. "
+            "The session log writer will reject what the router decides."
+        )
+
 
 def _write_state(tmp_path, profile=None, schedule=None, sessions=None):
     """Helper — materialize a minimal state dir under tmp_path/state/ and return it."""

@@ -145,14 +145,31 @@ class TestSessionTypeEnum:
         for val in ["standard", "micro", "weekly-review", "phase-transition", "return"]:
             assert val in enum_values, f"Pre-existing enum value '{val}' was removed"
 
-    def test_schema_has_exactly_nine_values(self):
+    def test_schema_has_all_routable_session_types(self):
+        """Audit C-3: enum must cover the 9 base types (ENFORCE-02..05) AND the
+        4 router-returnable strings introduced when scripts/route_session.py
+        landed (maintenance, placement-validation, onboarding-with-return-overlay,
+        maintenance-with-weekly-review).
+
+        Replaces the prior strict ==9 assertion, which was correct for Phase 3
+        but blocked the audit C-3 fix that legitimately extends the enum. The
+        new bar is "every base type + every router output", checked by
+        membership rather than count — so future additions to either set don't
+        require updating the literal in this test."""
         schema_path = Path(__file__).resolve().parent.parent / "schemas" / "session-log.schema.yaml"
         with open(schema_path) as f:
             schema = yaml.safe_load(f)
-        enum_values = schema["fields"]["session_type"]["enum"]
-        assert len(enum_values) == 9, (
-            f"Expected 9 session_type enum values, got {len(enum_values)}: {enum_values}"
-        )
+        enum_values = set(schema["fields"]["session_type"]["enum"])
+        required = {
+            # 9 base types (ENFORCE-02..05 + pre-existing)
+            "standard", "micro", "weekly-review", "phase-transition", "return",
+            "first-session", "onboarding", "sprint", "fluency",
+            # 4 router-returnable strings (audit C-3)
+            "maintenance", "placement-validation",
+            "onboarding-with-return-overlay", "maintenance-with-weekly-review",
+        }
+        missing = required - enum_values
+        assert not missing, f"session_type enum missing required values: {sorted(missing)}"
 
 
 # ---------------------------------------------------------------------------

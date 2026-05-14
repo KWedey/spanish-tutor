@@ -32,8 +32,16 @@ fields:
     type: string
     required: true
     default: ""
-    description: "Session type"
-    enum: ["standard", "micro", "weekly-review", "phase-transition", "return", "first-session", "onboarding", "sprint", "fluency"]
+    description: |
+      Session type. Includes 9 base types (standard, micro, weekly-review,
+      phase-transition, return, first-session, onboarding, sprint, fluency)
+      plus 2 overlay strings (onboarding-with-return-overlay,
+      maintenance-with-weekly-review) and 2 router-only types (maintenance,
+      placement-validation). The 4 added values mirror scripts/route_session.py
+      return strings so the session log can persist whatever the router
+      decided. Audit C-3: prior enum omitted these, breaking the canary doc's
+      `route_session.py state/` verification step.
+    enum: ["standard", "micro", "weekly-review", "phase-transition", "return", "first-session", "onboarding", "sprint", "fluency", "maintenance", "onboarding-with-return-overlay", "maintenance-with-weekly-review", "placement-validation"]
 
   session_status:
     type: string
