@@ -178,18 +178,59 @@ class TestRouteSessionRows:
         assert route_session(state, today=date(2026, 5, 14)) == "sprint"
 
     def test_fluency_day_phase_b_plus_routes_to_fluency(self, tmp_path):
+        """Production-realistic fixture: canonical phase string + counter field
+        per `schemas/schedule.schema.yaml`. The audit C-1/C-2 fix changed the
+        router to read these (not the bare letter / per-week field that the
+        schema never defined)."""
         state = _write_state(
             tmp_path,
             schedule={
                 "onboarding_complete": True,
                 "last_session_date": "2026-05-13",
-                "current_phase": "B",
-                "fluency_days_per_week": 1,
+                "current_phase": "B-conversational",
+                "fluency_days_this_week": 0,
                 "last_fluency_day": "2026-05-06",
             },
             sessions=[{"date": "2026-05-13"}],
         )
         assert route_session(state, today=date(2026, 5, 14)) == "fluency"
+
+    def test_fluency_day_blocked_when_counter_reaches_target(self, tmp_path):
+        """Production-realistic fixture: Phase B-conversational has a weekly
+        target of 1 fluency day. Once `fluency_days_this_week >= 1`, the row
+        must NOT fire. Regression guard for the audit C-2 bug where the field
+        name was wrong and the count was effectively always 0."""
+        state = _write_state(
+            tmp_path,
+            schedule={
+                "onboarding_complete": True,
+                "last_session_date": "2026-05-13",
+                "current_phase": "B-conversational",
+                "fluency_days_this_week": 1,
+                "last_fluency_day": None,
+            },
+            sessions=[{"date": "2026-05-13"}],
+        )
+        assert route_session(state, today=date(2026, 5, 14)) == "standard"
+
+    def test_fluency_day_blocked_when_phase_a_foundation(self, tmp_path):
+        """Production-realistic fixture: the very first canary learner has
+        `current_phase: A-foundation` (verified against state/schedule.yaml).
+        Fluency-day must not fire in Phase A. Audit C-1 regression guard:
+        the old bare-letter check missed the "A-foundation" string entirely
+        and would have allowed Phase A learners through if the target lookup
+        had matched."""
+        state = _write_state(
+            tmp_path,
+            schedule={
+                "onboarding_complete": True,
+                "last_session_date": "2026-05-13",
+                "current_phase": "A-foundation",
+                "fluency_days_this_week": 0,
+            },
+            sessions=[{"date": "2026-05-13"}],
+        )
+        assert route_session(state, today=date(2026, 5, 14)) == "standard"
 
     def test_otherwise_routes_to_standard(self, tmp_path):
         state = _write_state(
@@ -448,20 +489,24 @@ def _apply_placement_validation_active(state: Path) -> None:
 
 
 def _apply_fluency_day_phase_b(state: Path) -> None:
-    """Row 8 (fluency): Phase B+, fluency_days_per_week > 0, not consecutive.
+    """Row 7 (fluency): Phase B+, weekly fluency target > 0, not consecutive.
 
     CLAUDE.md Step 3 Row 7: 'Phase B+ AND today is a fluency day → fluency'.
     Uses _write_schedule_defaults for onboarding_complete/last_session_date.
-    current_phase=B, fluency_days_per_week, and last_fluency_day are owned
+    current_phase, fluency_days_this_week, and last_fluency_day are owned
     fields written unconditionally.
+
+    Uses the schema-canonical phase string `B-conversational` (NOT the bare
+    letter `B` — the audit C-1 bug was the router checking `{"B","C","D"}`
+    against schema enum `["A-foundation","B-conversational",...]`).
     """
     _write_schedule_defaults(state, {
         "onboarding_complete": True,
         "last_session_date": _RECENT_DATE,
     })
     _write_schedule(state, {
-        "current_phase": "B",
-        "fluency_days_per_week": 2,
+        "current_phase": "B-conversational",
+        "fluency_days_this_week": 0,
         "last_fluency_day": "2026-05-06",
     })
     _write_session(state, _RECENT_DATE)
@@ -577,15 +622,24 @@ def _pred_placement_validation(state: Path) -> bool:
 
 
 def _pred_fluency(state: Path, today: date) -> bool:
+    """Mirror the production predicate at scripts.route_session._is_fluency_day.
+
+    Audit C-1/C-2: the production code now uses canonical phase strings
+    ("B-conversational" etc.) and reads `fluency_days_this_week` directly
+    (not the never-existed `fluency_days_per_week`). Keep this re-validator
+    in sync — drift here was the original source of the pairwise test giving
+    false-green coverage."""
+    from scripts.route_session import _FLUENCY_DAYS_PER_PHASE
     schedule_path = state / "schedule.yaml"
     if not schedule_path.exists():
         return False
     schedule = _yaml.safe_load(schedule_path.read_text()) or {}
-    phase = schedule.get("current_phase", "A") or "A"
-    if phase not in {"B", "C", "D"}:
+    phase = schedule.get("current_phase") or ""
+    target = _FLUENCY_DAYS_PER_PHASE.get(phase, 0)
+    if target <= 0:
         return False
-    fpw = schedule.get("fluency_days_per_week", 0) or 0
-    if fpw <= 0:
+    this_week = int(schedule.get("fluency_days_this_week") or 0)
+    if this_week >= target:
         return False
     last_raw = schedule.get("last_fluency_day")
     if last_raw:
@@ -593,14 +647,9 @@ def _pred_fluency(state: Path, today: date) -> bool:
             lf = date.fromisoformat(str(last_raw))
             if (today - lf).days <= 1:
                 return False
-            today_iso = today.isocalendar()
-            lf_iso = lf.isocalendar()
-            this_week = 1 if lf_iso[:2] == today_iso[:2] else 0
         except ValueError:
-            this_week = 0
-    else:
-        this_week = 0
-    return this_week < fpw
+            return True
+    return True
 
 
 _PREDICATES = {

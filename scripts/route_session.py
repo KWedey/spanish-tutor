@@ -102,46 +102,50 @@ def _is_weekly_review_day(profile: dict, today: date) -> bool:
     return _WEEKDAY_NAMES_EN[today.weekday()] == normalized
 
 
+# Fluency-day target per phase (CLAUDE.md Step 2.9 + fluency-activities.md).
+# Phase A: never (foundation work). B/C/D: 1/2/3 fluency sessions per week.
+# Keyed by the canonical schema-enum strings from schemas/schedule.schema.yaml
+# (NOT the bare letters — that drift caused the audit C-1/C-2 bugs).
+_FLUENCY_DAYS_PER_PHASE = {
+    "B-conversational": 1,
+    "C-intermediate": 2,
+    "D-advanced": 3,
+}
+
+
 def _is_fluency_day(schedule: dict, today: date) -> bool:
     """True if today qualifies as a fluency day per CLAUDE.md Step 2.9.
 
     Conditions (all must hold):
-      - current_phase in {B, C, D}
-      - fluency_days_per_week > 0
-      - fluency sessions this week < fluency_days_per_week target
+      - current_phase is B/C/D (canonical "X-name" form per schedule.schema.yaml)
+      - phase-specific weekly fluency target > 0
+      - fluency_days_this_week count < weekly target
       - today is not consecutive with last_fluency_day
+
+    Reads `fluency_days_this_week` directly from schedule.yaml — the explicit
+    counter the post-session.sh ritual maintains. The audit (C-1/C-2) caught
+    that the previous version read a non-existent `fluency_days_per_week`
+    field AND compared against bare-letter phase strings the schema never
+    writes, leaving the predicate permanently False in production.
     """
-    current_phase = schedule.get("current_phase", "A") or "A"
-    if current_phase not in {"B", "C", "D"}:
+    current_phase = schedule.get("current_phase") or ""
+    target = _FLUENCY_DAYS_PER_PHASE.get(current_phase, 0)
+    if target <= 0:
         return False
 
-    fluency_days_per_week = schedule.get("fluency_days_per_week", 0) or 0
-    if fluency_days_per_week <= 0:
+    fluency_this_week = int(schedule.get("fluency_days_this_week") or 0)
+    if fluency_this_week >= target:
         return False
 
-    # Count fluency sessions this week (Mon–Sun ISO week)
     last_fluency_raw = schedule.get("last_fluency_day")
     if last_fluency_raw:
         try:
             last_fluency = date.fromisoformat(str(last_fluency_raw))
         except ValueError:
-            last_fluency = None
-    else:
-        last_fluency = None
-
-    # Consecutive-day guard
-    if last_fluency and (today - last_fluency).days <= 1:
-        return False
-
-    # Count fluency sessions this calendar week
-    today_iso = today.isocalendar()  # (year, week, weekday)
-    fluency_this_week = 0
-    if last_fluency:
-        lf_iso = last_fluency.isocalendar()
-        if lf_iso[:2] == today_iso[:2]:
-            fluency_this_week = 1  # at most one tracked via last_fluency_day
-
-    return fluency_this_week < fluency_days_per_week
+            return True  # malformed date — don't block the routing
+        if (today - last_fluency).days <= 1:
+            return False
+    return True
 
 
 # ---------------------------------------------------------------------------
