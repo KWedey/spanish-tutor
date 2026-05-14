@@ -77,16 +77,29 @@ def _session_logs_exist(sessions_dir: Path) -> bool:
     return any(sessions_dir.glob("*.yaml"))
 
 
+# Fixed weekday name table — locale-independent, English-canonical.
+# Indexed by `today.weekday()` (Monday=0..Sunday=6). Used in preference to
+# `strftime("%A")` which is locale-aware: on a Spanish-locale system the latter
+# would return "miércoles" and never match the project's English-capitalized
+# weekly_review_day contract.
+_WEEKDAY_NAMES_EN = (
+    "Monday", "Tuesday", "Wednesday", "Thursday",
+    "Friday", "Saturday", "Sunday",
+)
+
+
 def _is_weekly_review_day(profile: dict, today: date) -> bool:
     """True if today's weekday matches weekly_review_day (case-insensitive, stripped).
 
     An empty or missing weekly_review_day means no weekly-review day configured.
+    Comparison is against a fixed English weekday table so the routing is
+    deterministic regardless of system locale.
     """
     raw = profile.get("weekly_review_day", "") or ""
     normalized = raw.strip().capitalize()
     if not normalized:
         return False
-    return today.strftime("%A") == normalized
+    return _WEEKDAY_NAMES_EN[today.weekday()] == normalized
 
 
 def _is_fluency_day(schedule: dict, today: date) -> bool:

@@ -217,6 +217,27 @@ class TestRouteSessionRows:
         )
         assert route_session(state, today=date(2026, 5, 13)) == "weekly-review"
 
+    def test_weekly_review_day_uses_locale_independent_weekday_table(self):
+        """Regression guard for the strftime('%A') locale trap (audit finding 08-03H2).
+
+        The original implementation compared `today.strftime('%A')` to the profile's
+        capitalized-English weekly_review_day. strftime is locale-aware: on a
+        Spanish-locale system it returns 'miércoles' and never matches 'Wednesday',
+        silently breaking weekly-review routing forever.
+
+        The fix uses a fixed _WEEKDAY_NAMES_EN tuple indexed by today.weekday().
+        weekday() returns 0..6 deterministically; the tuple is the canonical
+        English source. This test fails if the table is removed or renamed."""
+        from scripts import route_session as rs
+        assert hasattr(rs, "_WEEKDAY_NAMES_EN"), (
+            "scripts/route_session.py must expose _WEEKDAY_NAMES_EN — a fixed "
+            "English weekday table — to avoid the strftime('%A') locale trap."
+        )
+        assert rs._WEEKDAY_NAMES_EN == (
+            "Monday", "Tuesday", "Wednesday", "Thursday",
+            "Friday", "Saturday", "Sunday",
+        ), "_WEEKDAY_NAMES_EN must list English weekday names Monday..Sunday"
+
 
 # ---------------------------------------------------------------------------
 # ROUTE-FOLLOWUP-02: Pairwise priority property tests (08-06)
