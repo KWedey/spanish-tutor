@@ -110,7 +110,6 @@ assignments:
     priority: required
     narrow_topic_aligned: true
     retrieval_target: ""
-    input_minutes: 0
     notes: "Focus on production — say each word aloud before flipping"
   - type: listening
     resource: Dreaming Spanish
@@ -120,7 +119,6 @@ assignments:
     priority: recommended
     narrow_topic_aligned: false
     retrieval_target: A-03-gender-agreement
-    input_minutes: 7
     notes: "Pay attention to how they describe people (ser) vs how they feel (estar)"
   - type: writing
     resource: journal
@@ -130,7 +128,6 @@ assignments:
     priority: recommended
     narrow_topic_aligned: true
     retrieval_target: A-03-gender-agreement
-    input_minutes: 0
     notes: "Prompt: ¿Cómo es tu restaurante favorito? ¿Cómo está la comida?"
 
 journal_review:

@@ -831,7 +831,6 @@ assignments:
     priority: ""                # required, recommended, bonus
     narrow_topic_aligned: false # true if this assignment is part of the weekly topic block
     retrieval_target: ""        # prior concept to revisit in this assignment (e.g., "include 2 ser/estar sentences")
-    input_minutes: 0            # listening or reading minutes for input tracking
     notes: ""
 
 # Journal entry review (if applicable)
