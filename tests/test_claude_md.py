@@ -128,3 +128,94 @@ class TestHomeworkLoadRatingInReview:
         content = CLAUDE_MD.read_text(encoding="utf-8")
         assert "homework_load_rating" in content, \
             "LOAD-04/D-12: CLAUDE.md Review & Warm-up must reference homework_load_rating capture"
+
+
+# =============================================================================
+# Phase 6 ROUTE: Wave 0 RED-scaffolding tests for CLAUDE.md Step 3 precedence
+# =============================================================================
+
+
+def _extract_step3_table(content: str) -> str:
+    """Return the body of the Step 3 routing table (between table header and the Priority note)."""
+    header_idx = content.find("| Condition | Session Type | Load |")
+    assert header_idx != -1, "Step 3 routing table header not found in CLAUDE.md"
+    end_idx = content.find("**Gap detection:**", header_idx)
+    if end_idx == -1:
+        end_idx = content.find("**Priority note:**", header_idx)
+    assert end_idx != -1, "Step 3 routing table end marker not found in CLAUDE.md"
+    return content[header_idx:end_idx]
+
+
+class TestRoutingPrecedence:
+    """ROUTE-01/02/03: CLAUDE.md Step 3 precedence rules must live at the row, not in footnotes or distant guardrails."""
+
+    def test_onboarding_row_states_gap_precedence_inline(self):
+        """ROUTE-01: Onboarding row must contain an explicit 'Gap precedence' marker so the
+        gap-during-onboarding behavior is co-located with the routing decision, not split
+        between Step 1b and a footnote."""
+        table = _extract_step3_table(CLAUDE_MD.read_text(encoding="utf-8"))
+        # Find the Onboarding row specifically
+        onboarding_idx = table.find("Onboarding")
+        assert onboarding_idx != -1, "ROUTE-01: Onboarding row missing from Step 3 table"
+        # Next row starts at the next '\n|' that introduces 'Gap of 3+ days' or similar
+        next_row_idx = table.find("\n| Gap of", onboarding_idx)
+        if next_row_idx == -1:
+            next_row_idx = table.find("\n| `autonomy_level`", onboarding_idx)
+        assert next_row_idx != -1, "ROUTE-01: could not locate Onboarding row boundary"
+        onboarding_row = table[onboarding_idx:next_row_idx]
+        assert "Gap precedence" in onboarding_row, (
+            "ROUTE-01: Onboarding row must contain an explicit '**Gap precedence:**' callout "
+            "so the gap-during-onboarding behavior is co-located with the routing decision. "
+            "See .planning/phases/06-route-routing-return-session-polish/06-01-PLAN.md."
+        )
+
+    def test_return_row_states_weekly_review_precedence_inline(self):
+        """ROUTE-02: Return row must state weekly-review precedence inline, not 9 lines below in
+        a separate Priority note."""
+        table = _extract_step3_table(CLAUDE_MD.read_text(encoding="utf-8"))
+        return_idx = table.find("Gap of 3+ days")
+        assert return_idx != -1, "ROUTE-02: Return row missing from Step 3 table"
+        next_row_idx = table.find("\n| `autonomy_level`", return_idx)
+        assert next_row_idx != -1, "ROUTE-02: could not locate Return row boundary"
+        return_row = table[return_idx:next_row_idx]
+        # The Return row must mention weekly review and the precedence direction
+        has_weekly_mention = "weekly review" in return_row.lower()
+        has_priority_marker = (
+            "takes priority" in return_row.lower()
+            or "defer weekly review" in return_row.lower()
+            or "overrides weekly" in return_row.lower()
+        )
+        assert has_weekly_mention and has_priority_marker, (
+            "ROUTE-02: Return row must inline the weekly-review precedence — "
+            "must mention 'weekly review' AND a priority phrase ('takes priority' / "
+            "'defer weekly review' / 'overrides weekly'). "
+            "See .planning/phases/06-route-routing-return-session-polish/06-01-PLAN.md."
+        )
+
+    def test_sprint_row_states_placement_validation_override(self):
+        """ROUTE-03: Sprint row must mention placement_validation override so the rule is
+        consistent with the bottom-of-file guardrail. Either the row carries the override
+        (preferred), or both row and guardrail must cross-reference each other so they
+        cannot diverge."""
+        content = CLAUDE_MD.read_text(encoding="utf-8")
+        table = _extract_step3_table(content)
+        sprint_idx = table.find("sprint.active")
+        assert sprint_idx != -1, "ROUTE-03: Sprint row missing from Step 3 table"
+        next_row_idx = table.find("\n|", sprint_idx + 1)
+        assert next_row_idx != -1, "ROUTE-03: could not locate Sprint row boundary"
+        sprint_row = table[sprint_idx:next_row_idx]
+        row_mentions_override = (
+            "placement_validation" in sprint_row
+            or "placement-validation" in sprint_row.lower()
+        )
+        # Allow the consistency to be achieved by a cross-reference in the bottom guardrail
+        bottom_cross_ref = (
+            "see CLAUDE.md Step 3 Sprint row" in content
+            or "see Sprint row" in content
+        )
+        assert row_mentions_override or bottom_cross_ref, (
+            "ROUTE-03: Sprint row must mention the placement_validation override, OR the bottom "
+            "guardrail must explicitly cross-reference the Sprint row. Two rules in two locations "
+            "without cross-reference is the bug being fixed. "
+            "See .planning/phases/06-route-routing-return-session-polish/06-01-PLAN.md."
+        )
