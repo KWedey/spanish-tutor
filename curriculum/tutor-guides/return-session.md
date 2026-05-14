@@ -4,7 +4,13 @@ Loaded when: Gap of 3+ days since last session.
 
 ## Goal
 
-Welcome the learner back, assess what's been retained, and calibrate the session plan to their current state. No guilt. No testing framing.
+Welcome the learner back, see what stayed and what needs a refresh, and calibrate the session plan to their current state. No guilt. No testing framing. Lead with connection before any assessment.
+
+## Framing Conventions
+
+- **Internal-only** (state files, skill-map, system-health): "regression", "regressed", "error_rate_production", "performance_unscaffolded" — technical terms, used in writing to state.
+- **Learner-facing** (skill-map terminology stays internal): "see what stuck", "refresh", "check what stayed with you", "see how things landed". Never use the clinical "regression"/"regressed" vocabulary aloud to the learner.
+- **Tutor's opening** for each tier is provided as guidance — adapt to the learner's tone, but lead with warmth.
 
 ## Real-World Encounter Override
 
@@ -14,40 +20,47 @@ If the learner mentions real-world Spanish use during the break, switch to `real
 
 ### Short Break (3-7 days)
 
-1. Welcome back warmly. Zero guilt.
-2. Quick diagnostic: revisit the 2 most recently active concepts (from `schedule.yaml` `active_grammar.primary` and `active_grammar.secondary`) via casual conversation — not drills.
-3. If performance matches pre-break levels (error_rate_production within 5 percentage points of pre-break) → resume normal schedule.
-4. If regression detected → mark concepts as regressed in skill-map, reduce to 1 active concept + the regressed one.
-5. Homework: reduce by 50% for this session only. Resume normal load next session.
+**Tutor's opening (warm, brief):** "Welcome back. Let's pick up where we left off — no big deal, just a few days." Or similar, matched to learner's energy. Do not apologize, do not lecture, do not bring up the gap more than once.
+
+1. Quick check-in via casual conversation — revisit the 2 most recently active concepts (from `schedule.yaml` `active_grammar.primary` and `active_grammar.secondary`) through natural questions, not drills.
+2. If performance matches pre-break levels (error_rate_production within 5 percentage points of pre-break) → resume normal schedule.
+3. If concepts feel shaky → mark them as regressed in skill-map (internal field), and reduce to 1 active concept plus the shaky one. Tell the learner: "Let's spend a bit more time on X today — it's been a few days and that one's worth a refresh."
+4. Homework: reduce by 50% for this session only. Resume normal load next session.
 
 ### Extended Break (8-21 days)
 
-1. Welcome back, acknowledge the gap without judgment.
-2. Diagnostic: revisit all "practicing" concepts and the most recently "acquired" concepts (up to 4 concepts total).
-3. Expect 1-2 regressions — this is normal, tell the learner so. (A regression = error_rate_production increases by >10 percentage points vs pre-break levels, or performance_unscaffolded drops from "competent" to "struggling".)
-4. Update skill-map with any status changes.
-5. Homework: reduce by 50% for 2 sessions.
-6. No new concepts this session — consolidation only.
-7. Motivation check: "What brought you back?" — the answer informs your approach.
+**Tutor's opening:** "Welcome back — really glad to see you. Two weeks is nothing in the long arc of learning a language. Let's see what's stuck and what needs a refresh." No guilt language, no "where have you been."
+
+1. Brief diagnostic via conversation: revisit all "practicing" concepts and the most recently "acquired" concepts (up to 4 concepts total).
+2. Expect a few things to feel rusty — this is normal, and you can tell the learner so without using clinical language. Say: "A couple things will need a refresh — totally expected after a couple weeks." (Internal: an increase of `error_rate_production` >10 percentage points vs pre-break, or `performance_unscaffolded` dropping from "competent" to "struggling", counts as a regression in skill-map.)
+3. Update skill-map with any status changes (internal: mark as regressed where appropriate).
+4. Homework: reduce by 50% for 2 sessions.
+5. No new concepts this session — consolidation only.
+6. Motivation check: "What brought you back?" — the answer informs your approach.
 
 ### Major Break (22+ days)
 
-1. Welcome back as if it's a fresh start, but with history.
-2. Run abbreviated phase transition assessment for current phase (see `phase-transition-guide.md`).
-3. Regressions likely across multiple concepts — don't alarm the learner.
-4. **Phase regression criteria:** if >50% of current phase prerequisite concepts show regression in the diagnostic, regress to previous phase. Otherwise stay in current phase with consolidation focus.
+**Tutor's opening:** "Welcome back. Three+ weeks is a real gap, and that's fine — language learning isn't a sprint. We'll take it easy today and rebuild together. Tell me how you're feeling about Spanish right now." Open with connection before any assessment.
+
+1. Treat it like a fresh start, but with history. Use the learner's prior session notes to remember what you already know about their voice and goals.
+2. Run an abbreviated phase transition assessment for the current phase (see `phase-transition-guide.md`).
+3. Expect several concepts to need a refresh — frame this as normal and expected. Internal: mark regressions in skill-map.
+4. **Phase regression criteria (internal: skill-map status flips):** if >50% of current phase prerequisite concepts show regression in the diagnostic, regress to previous phase. Otherwise stay in current phase with consolidation focus. Do not tell the learner about the phase change in clinical terms — instead say "we're going to spend a bit of time with [previous-phase concept] today to make sure the foundation's solid."
 5. Homework: minimal for first 3 sessions (SRS review + one light task only).
 6. Rebuild momentum before rebuilding knowledge.
 7. If motivation is fragile → also load `emotional-intelligence.md`.
 8. If gap > 60 days → also check `state/sessions/archive/` for the last pre-gap session.
 
 ### Extended Absence (90+ days)
-1. Treat as a major break PLUS: run a 20-minute diagnostic (conversation only, no new material) to assess broad skill decay.
-2. Update `error_rate_production` for all concepts that were "acquired" but last practiced >90 days ago — expect regression.
-3. If >50% of previously acquired concepts show regression, consider reverting to the previous phase with a consolidation focus.
+
+**Tutor's opening:** "Welcome back. It's been a while, and I'm genuinely glad you came back. We're not starting over — what you learned is still in there, just a bit dusty. Let's take 20 minutes today to see where you are, no pressure." Lead with connection and reassurance, not assessment.
+
+1. Treat as a major break PLUS: run a 20-minute diagnostic (conversation only, no new material) to see what's stuck.
+2. Update `error_rate_production` (internal) for all concepts that were "acquired" but last practiced >90 days ago — expect some to need work.
+3. If >50% of previously acquired concepts show regression (internal: skill-map status flip), consider reverting to the previous phase with a consolidation focus.
 4. Homework for the first week: SRS review only (rebuild vocabulary recognition before production practice).
 5. Do NOT introduce any new concepts for the first 3 sessions — focus exclusively on recovery.
-6. Flag in system-health.yaml: `extended_absence: true`, `absence_days: N`, `concepts_regressed: N`.
+6. Flag in system-health.yaml (internal): `extended_absence: true`, `absence_days: N`, `concepts_regressed: N`.
 
 ## Short Gap with Continued Study — Shortcut
 
@@ -65,14 +78,14 @@ If the most recent session log has `session_status: partial` AND the gap is 3+ d
 1. Run the return diagnostic first (per the appropriate tier above) to assess current retention.
 2. After diagnostic, check what was interrupted in the partial session's `session_activities` and `next_session.recommended_focus`.
 3. If the diagnostic shows the interrupted content was retained, resume it as the primary focus.
-4. If the diagnostic shows regression on the interrupted content, treat it as a regressed concept — reteach with a different approach rather than resuming mid-activity.
+4. If the diagnostic shows the interrupted content needs a refresh, treat it as regressed in skill-map (internal) — reteach with a different approach rather than resuming mid-activity.
 
 ## Maintenance Learner Returns
 
-If `autonomy_level` is `maintenance` in the learner profile, also load `maintenance-mode.md` and reference its regression handling section. Maintenance learners have different expectations and recovery patterns:
+If `autonomy_level` is `maintenance` in the learner profile, also load `maintenance-mode.md` and reference its retention-recovery section (internal: regression handling). Maintenance learners have different expectations and recovery patterns:
 - They may have been self-studying during the gap (check parking lot for evidence).
-- Their regression profile differs — well-automated concepts are more durable, but disused production skills decay faster.
-- Use the maintenance-mode regression protocol for triage, not the standard return diagnostic.
+- Their retention profile differs (internal: well-automated concepts are more durable in skill-map data, but disused production skills decay faster).
+- Use the maintenance-mode retention protocol (internal: regression triage) for triage, not the standard return diagnostic.
 
 ## All Tiers — Common Protocol
 
