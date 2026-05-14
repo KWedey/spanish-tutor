@@ -377,10 +377,38 @@ def _append_load_adjustment_warn(session_date: str, total: int,
 # Transcribed from input-orchestration.md Section 1 Step 2.
 # If that matrix is edited, this function must be updated to match.
 
-# Dialect sets used in the trigger matrix
+# Dialect sets used in the trigger matrix.
+#
+# Audit H-1 fix: the LATAM set previously held only `mixed_latin_american`,
+# missing the 6 other LATAM tags actually used in curriculum/media-bank.yaml
+# (`neutral_latam` alone appears 7 times — it is the Dreaming Spanish house
+# dialect that dominates Phase A listening for es-ES learners). With the
+# undersized set, the row-4 vosotros advisory silently never fired for the
+# most common case in production.
+#
+# Future structural fix (audit CC-3): move this taxonomy to a single
+# curriculum/dialects.yaml that media-bank, l1-interference, and this
+# validator all read from. Until then the explicit lists are the single
+# source of truth and validate-state should flag any new media-bank
+# dialect tag that isn't in EITHER set.
 _VOSEO_DIALECTS = {"es-AR", "es-UY"}
 _PENINSULAR_RESOURCE_DIALECTS = {"peninsular", "mixed_with_spain"}
-_LATAM_RESOURCE_DIALECTS = {"mixed_latin_american"}
+_LATAM_RESOURCE_DIALECTS = {
+    "mixed_latin_american",
+    "neutral_latam",
+    "colombian",
+    "mexican",
+    "rioplatense",
+    "chilean",
+    # Reasonable forward-looking additions for tags media-bank may add in v1.2+
+    "argentinian",
+    "uruguayan",
+    "peruvian",
+    "venezuelan",
+    "bolivian",
+    "ecuadorian",
+    "paraguayan",
+}
 _MIXED_NEUTRAL_RESOURCE_DIALECTS = {"mixed", "mixed_latin_american", "neutral"}
 
 

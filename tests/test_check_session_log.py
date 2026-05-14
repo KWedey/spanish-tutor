@@ -870,6 +870,32 @@ class TestDialectAdvisoryIntegration:
             "satisfy the rule and let check_log return 0."
         )
 
+    def test_es_es_learner_with_neutral_latam_resource_triggers_advisory(self, tmp_path, monkeypatch):
+        """Audit H-1 regression guard.
+
+        The Dreaming Spanish house dialect is `neutral_latam` — the dominant
+        Phase A resource for an es-ES learner. The Wave A LATAM dialect set
+        only held `mixed_latin_american`, so the row-4 vosotros advisory
+        silently never fired for the most common production case.
+
+        This test asserts that adding any of the previously-uncovered LATAM
+        tags to media-bank correctly triggers the advisory for an es-ES
+        learner. Verifies the H-1 set expansion is load-bearing."""
+        check_dialect_advisory = getattr(check_mod, "check_dialect_advisory_required", None)
+        assert check_dialect_advisory is not None
+        learner = {"target_dialect": "es-ES"}
+        for dialect_tag in ("neutral_latam", "colombian", "mexican", "rioplatense", "chilean"):
+            media_bank = {
+                "prescriptive_episodes": {
+                    "listening": [{"title": "Test Episode", "dialect": dialect_tag}]
+                }
+            }
+            assignment = {"task": "listen", "resource": "Test Episode", "estimated_minutes": 15}
+            assert check_dialect_advisory(assignment, learner, media_bank) is True, (
+                f"audit H-1: es-ES learner + dialect={dialect_tag!r} resource must "
+                f"trigger vosotros advisory; got False (LATAM dialect set incomplete)."
+            )
+
     def test_check_log_skips_when_no_target_dialect(self, tmp_path, monkeypatch):
         """Silent-pass contract: an unset target_dialect (e.g., onboarding not
         complete) skips the rule rather than firing a default-required."""
