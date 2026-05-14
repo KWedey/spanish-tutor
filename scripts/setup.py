@@ -27,8 +27,14 @@ def check_pyyaml():
         import yaml  # noqa: F401
         print(green("  PyYAML installed"))
     except ImportError:
-        print(yellow("  PyYAML not found — installing..."))
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "pyyaml", "-q"])
+        print(yellow("  PyYAML not found — installing from requirements.txt..."))
+        # Install from requirements.txt so the pin (pyyaml>=6.0,<7) is the single
+        # source of truth. Bare `pip install pyyaml` was unpinned and would happily
+        # pull in a future incompatible major.
+        requirements = ROOT / "requirements.txt"
+        subprocess.check_call(
+            [sys.executable, "-m", "pip", "install", "-r", str(requirements), "-q"]
+        )
         print(green("  PyYAML installed"))
 
 

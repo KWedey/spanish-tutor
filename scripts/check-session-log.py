@@ -332,8 +332,11 @@ def _append_load_adjustment_warn(session_date: str, total: int,
     }
     health.setdefault("load_adjustments", []).append(entry)
     try:
-        with health_path.open("w") as f:
-            yaml.safe_dump(health, f, sort_keys=False, allow_unicode=True)
+        from shared import atomic_write
+        atomic_write(
+            health_path,
+            yaml.safe_dump(health, sort_keys=False, allow_unicode=True),
+        )
     except OSError:
         return
 
