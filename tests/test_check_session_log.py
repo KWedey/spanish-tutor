@@ -767,3 +767,109 @@ class TestDialectAdvisoryRule:
             "CURR-FOLLOWUP-02: assignments whose resource doesn't match any media-bank "
             "entry must silently skip — no false positives."
         )
+
+
+class TestDialectAdvisoryIntegration:
+    """CURR-FOLLOWUP-02 audit-followup: verify check_log() actually invokes the
+    dialect advisory rule end-to-end.
+
+    The Wave A codex audit caught that the helper function was defined, schema-
+    enumerated, and unit-tested but never called from check_log()/main(). The
+    08-02 feature was dead code in production. This class exists to fail the
+    next time someone unwires the call site."""
+
+    def _setup_state(self, tmp_path, monkeypatch, learner_profile, media_bank):
+        state_dir = tmp_path / "state"
+        state_dir.mkdir(parents=True, exist_ok=True)
+        monkeypatch.setattr(check_mod, "STATE_DIR", state_dir)
+        monkeypatch.setattr(check_mod, "ROOT", tmp_path)
+        with open(state_dir / "learner-profile.yaml", "w") as f:
+            yaml.safe_dump(learner_profile, f)
+        curriculum = tmp_path / "curriculum"
+        curriculum.mkdir(parents=True, exist_ok=True)
+        with open(curriculum / "media-bank.yaml", "w") as f:
+            yaml.safe_dump(media_bank, f)
+        return state_dir
+
+    def _standard_log(self, extra_assignment_fields=None):
+        """Build a complete passing standard session log; caller adds the
+        offending or compliant assignment via extra_assignment_fields."""
+        assignment = {"task": "read", "resource": "Test Book", "estimated_minutes": 15}
+        if extra_assignment_fields:
+            assignment.update(extra_assignment_fields)
+        return _make_session_log("standard", {
+            "assignment_review": {"reviewed": "yes"},
+            "skill_map_updates": [{"concept": "test"}],
+            "assignments": [assignment],
+            "decision_engine_trace": {
+                "selected_primary": "X", "candidates_scored": ["X", "Y"]
+            },
+            "session_difficulty_rating": "just-right",
+            "next_session": {"recommended_focus": "X", "session_type": "standard"},
+        })
+
+    def test_check_log_fails_when_advisory_missing(self, tmp_path, monkeypatch):
+        """End-to-end: es-AR learner + mixed-dialect resource + assignment with
+        no dialect_advisory → check_log returns 1.
+
+        This is the test whose absence let the dead-code bug ship. If it fails,
+        the audit-followup wire-in was undone."""
+        state_dir = self._setup_state(
+            tmp_path, monkeypatch,
+            learner_profile={"target_dialect": "es-AR"},
+            media_bank={
+                "prescriptive_episodes": {
+                    "reading": [{"title": "Test Book", "dialect": "mixed"}]
+                }
+            },
+        )
+        log_data = self._standard_log()  # no dialect_advisory
+        _write_session_log(state_dir, "2026-04-15", log_data)
+
+        result = check_log("2026-04-15", strict=False)
+        assert result == 1, (
+            "audit-followup: missing dialect_advisory on a triggered assignment "
+            "must cause check_log to return 1. If this fails, the dialect-advisory "
+            "rule is no longer wired into check_log() and 08-02 is dead code again."
+        )
+
+    def test_check_log_passes_when_advisory_present(self, tmp_path, monkeypatch):
+        """Same setup, but assignment includes dialect_advisory='voseo' → PASS."""
+        state_dir = self._setup_state(
+            tmp_path, monkeypatch,
+            learner_profile={"target_dialect": "es-AR"},
+            media_bank={
+                "prescriptive_episodes": {
+                    "reading": [{"title": "Test Book", "dialect": "mixed"}]
+                }
+            },
+        )
+        log_data = self._standard_log({"dialect_advisory": "voseo"})
+        _write_session_log(state_dir, "2026-04-15", log_data)
+
+        result = check_log("2026-04-15", strict=False)
+        assert result == 0, (
+            "audit-followup: an assignment with dialect_advisory present must "
+            "satisfy the rule and let check_log return 0."
+        )
+
+    def test_check_log_skips_when_no_target_dialect(self, tmp_path, monkeypatch):
+        """Silent-pass contract: an unset target_dialect (e.g., onboarding not
+        complete) skips the rule rather than firing a default-required."""
+        state_dir = self._setup_state(
+            tmp_path, monkeypatch,
+            learner_profile={},  # no target_dialect
+            media_bank={
+                "prescriptive_episodes": {
+                    "reading": [{"title": "Test Book", "dialect": "mixed"}]
+                }
+            },
+        )
+        log_data = self._standard_log()  # no dialect_advisory
+        _write_session_log(state_dir, "2026-04-15", log_data)
+
+        result = check_log("2026-04-15", strict=False)
+        assert result == 0, (
+            "audit-followup: missing target_dialect must silently skip the rule, "
+            "not fail check_log with a false positive."
+        )

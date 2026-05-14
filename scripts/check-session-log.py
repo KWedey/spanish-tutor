@@ -427,6 +427,60 @@ def check_dialect_advisory_required(
     return False
 
 
+def _load_learner_profile() -> dict | None:
+    """Load state/learner-profile.yaml, returning None on missing-file or YAML error.
+    Mirrors _load_schedule's contract."""
+    profile_path = STATE_DIR / "learner-profile.yaml"
+    if not profile_path.exists():
+        return None
+    try:
+        with profile_path.open() as f:
+            return yaml.safe_load(f) or {}
+    except yaml.YAMLError:
+        return None
+
+
+def _load_media_bank() -> dict | None:
+    """Load curriculum/media-bank.yaml, returning None on missing-file or YAML error.
+    Mirrors _load_schedule's contract."""
+    media_bank_path = ROOT / "curriculum" / "media-bank.yaml"
+    if not media_bank_path.exists():
+        return None
+    try:
+        with media_bank_path.open() as f:
+            return yaml.safe_load(f) or {}
+    except yaml.YAMLError:
+        return None
+
+
+def check_dialect_advisory_violations(data: dict) -> list[tuple[int, str]]:
+    """CURR-FOLLOWUP-02: Iterate session-log assignments and return
+    [(index, resource_title), ...] for those triggering the dialect-mismatch
+    matrix but missing the `dialect_advisory` field.
+
+    Returns [] when learner-profile or media-bank can't be loaded (the rule
+    cannot fire without both, by design — see check_dialect_advisory_required).
+    """
+    assignments = data.get("assignments") or []
+    if not assignments:
+        return []
+    learner_profile = _load_learner_profile()
+    if learner_profile is None:
+        return []
+    media_bank = _load_media_bank()
+    if media_bank is None:
+        return []
+    violations: list[tuple[int, str]] = []
+    for idx, assignment in enumerate(assignments):
+        if not isinstance(assignment, dict):
+            continue
+        if check_dialect_advisory_required(assignment, learner_profile, media_bank):
+            if "dialect_advisory" not in assignment:
+                title = assignment.get("resource", "<no resource>")
+                violations.append((idx, title))
+    return violations
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -513,6 +567,14 @@ def check_log(date: str, strict: bool) -> int:
     # is correctly caught as a failure.
     if session_date >= PHASE_4_CUTOFF and check_recasts_required(data) and "recasts" not in data:
         missing.append("recasts")
+
+    # CURR-FOLLOWUP-02: Dialect advisory enforcement (wired in audit-followup).
+    # Each assignment that triggers the dialect-mismatch matrix
+    # (input-orchestration.md Section 1 Step 2) must carry a `dialect_advisory`
+    # field. The check is silent when learner-profile/media-bank are absent
+    # (e.g., fresh tmp_path test fixtures) so existing tests are unaffected.
+    for idx, title in check_dialect_advisory_violations(data):
+        missing.append(f"assignments[{idx}].dialect_advisory (resource={title!r})")
 
     # Report
     print(dim(f"Checking {log_path.relative_to(ROOT)} ({session_type})"))
