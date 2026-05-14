@@ -39,6 +39,22 @@ Cadence accelerates back to weekly if regression is detected.
 - Light homework only: one listening/reading assignment, Anki review
 - No mandatory assignments — learner self-directs at this stage
 
+## Weekly Review in Maintenance Mode
+
+CLAUDE.md routes maintenance-mode learners to a weekly review whenever today matches `weekly_review_day` in learner-profile.yaml. The review still happens, but it is shaped to the maintenance context — not the standard weekly review.
+
+**Maintenance-specific weekly review focus (30-45 min, replaces the regular maintenance session):**
+
+1. **Retention check (10 min):** Spot-check 5-6 concepts across phases via conversation. Prioritize concepts not practiced in 30+ days. Flag any regressions internally.
+2. **Motivation pulse (5 min):** "How's Spanish been fitting into your life lately? Any moments where it came up?" — listen for evidence of real-world use or interest drift.
+3. **Parking-lot triage (5-10 min):** Address accumulated questions and observations the learner has logged between sessions.
+4. **Goal revisit (every 4th weekly review):** Pull in the Graduation Check (see below) — is the learner still meeting their target level? Have goals shifted?
+5. **Light homework only:** Same as the standard maintenance Checkout — one listening/reading + Anki review.
+
+**Skip from the standard weekly review:** narrow topic selection (no curriculum queue to narrow), skill-map audit beyond the spot-check, resource rotation (learner self-directs at this stage).
+
+**Weekly summary cadence:** Maintenance summaries are written monthly (per "State Updates" below), so the `weekly_review_day` does not trigger a summary write every time — only when the calendar month rolls over since the last summary.
+
 ## Decision Engine Adaptation
 
 In maintenance mode, the decision engine scoring changes:

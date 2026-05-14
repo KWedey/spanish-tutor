@@ -109,3 +109,15 @@ If the learner's `weekly_review_day` falls during onboarding, run a simplified r
 **Skip:** narrow topic selection, decision engine references, skill-map audit, system health review, resource rotation.
 
 Write an abbreviated weekly summary noting it's an onboarding review. First full weekly review happens the first review day after `onboarding_complete = true`.
+
+## Gap During Onboarding
+
+If the learner has a 3+ day gap during onboarding (CLAUDE.md Step 3 routes the session to Onboarding but also loads `return-session.md`), use this resume protocol — do not skip ahead to the next session number.
+
+1. Run the appropriate `return-session.md` tier on concepts covered so far. Use the lightweight conversational diagnostic, not a formal test.
+2. Identify any concepts that feel rusty — internally mark them as regressed in skill-map, but frame to the learner as "let's refresh X before we move on."
+3. **Resume from the same `current_onboarding_session`** in `schedule.yaml` — the session number does not advance until the planned concept is delivered.
+4. If 2+ concepts feel rusty after a long gap (8+ days), insert an unscheduled consolidation session (per "Struggling During Onboarding" Step 2) before resuming the sequence.
+5. Homework load follows the `return-session.md` tier reduction (50% for one or two sessions), not the standard onboarding load.
+
+**Why resume same-step rather than advance:** Onboarding builds A-00 → A-07 in a deliberate order. Skipping a session due to a gap fragments the foundation. The cost of "repeating" today's planned content is far smaller than the cost of building on weak ground.
