@@ -1074,9 +1074,11 @@ class TestLearnerInterestStaleness:
 
     def test_stale_interest_warns(self, skill_map_data):
         """Interest last inferred 35 days ago should WARN."""
+        from datetime import date, timedelta
         sm = skill_map_data
+        stale_date = (date.today() - timedelta(days=35)).isoformat()
         sm["grammar"]["A-01-present-regular"]["learner_interest"] = {
-            "score": 2, "last_inferred": "2026-03-01", "signal_source": "debrief"
+            "score": 2, "last_inferred": stale_date, "signal_source": "debrief"
         }
         res = validate_mod.ValidationResults()
         check_learner_interest_staleness(sm, res)
@@ -1085,9 +1087,11 @@ class TestLearnerInterestStaleness:
 
     def test_fresh_interest_no_warn(self, skill_map_data):
         """Interest inferred 5 days ago should not WARN."""
+        from datetime import date, timedelta
         sm = skill_map_data
+        fresh_date = (date.today() - timedelta(days=5)).isoformat()
         sm["grammar"]["A-01-present-regular"]["learner_interest"] = {
-            "score": 2, "last_inferred": "2026-04-10", "signal_source": "debrief"
+            "score": 2, "last_inferred": fresh_date, "signal_source": "debrief"
         }
         res = validate_mod.ValidationResults()
         check_learner_interest_staleness(sm, res)
