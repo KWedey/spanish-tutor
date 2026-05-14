@@ -120,3 +120,59 @@ class TestReadingDebriefSection2c:
             "CURR-FOLLOWUP-04: the reading-debrief section must cite `chapter_range` "
             "(the field that scopes the debrief to the assigned chapters)."
         )
+
+
+class TestInputOrchestrationSchemaFieldDrift:
+    """Audit H-2 + M-5 regression guards.
+
+    Wave B found two drift sites between input-orchestration.md and the
+    schema/validator. Tests here assert the doc uses the canonical field
+    names so a tutor agent following the prose verbatim writes session-log
+    fields the schema accepts and the validator counts.
+
+    Same anti-pattern (CC-1) as the 08-02 dead-code finding: a contract
+    documented in prose but never asserted in code is silently drift-prone.
+    """
+
+    def _read(self):
+        return INPUT_ORCHESTRATION.read_text(encoding="utf-8")
+
+    def test_uses_estimated_minutes_not_input_minutes(self):
+        """Audit H-2: the per-assignment time field is `estimated_minutes`
+        (schemas/session-log.schema.yaml > assignments.item_schema). Earlier
+        revisions of this doc said `input_minutes:` — a name the budget
+        enforcer at scripts/check-session-log.py never reads. A tutor
+        following the doc verbatim shipped a 0-minute assignment and the
+        homework-budget WARN never fired.
+        """
+        content = self._read()
+        # The bare prose phrase "input_minutes" must NOT appear as a field-name
+        # token. Allow it inside a "previously named X, now Y" deprecation note
+        # if one is ever added — match the colon-suffixed YAML-key form only.
+        assert "input_minutes:" not in content, (
+            "audit H-2: input-orchestration.md must not document `input_minutes:` "
+            "as the per-assignment time field; the canonical name is "
+            "`estimated_minutes:` (per schemas/session-log.schema.yaml)."
+        )
+        assert "estimated_minutes:" in content, (
+            "audit H-2: input-orchestration.md must document `estimated_minutes:` "
+            "explicitly so the tutor uses the schema-recognized field name."
+        )
+
+    def test_dialect_advisory_uses_canonical_voseo_plus_vosotros(self):
+        """Audit M-5: the schema enum for dialect_advisory is
+        ['voseo', 'vosotros', 'voseo+vosotros'] — note the literal `+`.
+        Earlier prose suggested 'comma-separated' which a tutor would
+        write as `voseo,vosotros`, breaking the enum.
+        """
+        content = self._read()
+        # Reject the comma-separated form as a documented value
+        assert "voseo,vosotros" not in content, (
+            "audit M-5: input-orchestration.md must not suggest `voseo,vosotros` "
+            "as a value for dialect_advisory; the schema enum requires the "
+            "`voseo+vosotros` form (literal `+`)."
+        )
+        assert "voseo+vosotros" in content, (
+            "audit M-5: input-orchestration.md must document the `voseo+vosotros` "
+            "literal so the prose matches the session-log schema enum."
+        )

@@ -36,7 +36,7 @@ From `curriculum/media-bank.yaml`, select resources whose `level_range` includes
   | Any non-`es-ES` (Mexico, Colombia, Chile, etc.) | `peninsular` or `mixed_with_spain` | "Heads up — this resource uses **vosotros** (Spain's plural-you). You'll use **ustedes** instead. Notice **vosotros** when it appears." |
   | `es-ES` | `mixed_latin_american` or any es-LATAM-tagged | "Heads up — this resource uses **ustedes** for plural-you (not **vosotros**). The forms you'll hear are the Latin-American ones." |
 
-  When the advisory fires, log it in the session log alongside the assignment: `dialect_advisory: voseo` or `dialect_advisory: vosotros` (or both, comma-separated). This makes per-learner advisory frequency auditable — high frequency suggests the media-bank dialect coverage for that target is thin and should be expanded.
+  When the advisory fires, log it in the session log alongside the assignment: `dialect_advisory: voseo`, `dialect_advisory: vosotros`, or `dialect_advisory: voseo+vosotros` (the literal `+` is the enum value when both apply — see `schemas/session-log.schema.yaml`). This makes per-learner advisory frequency auditable — high frequency suggests the media-bank dialect coverage for that target is thin and should be expanded.
 
 - **Topic alignment:** Score by overlap with the weekly narrow topic (direct match > adjacent > unrelated).
 
@@ -66,7 +66,7 @@ In the session log `assignments` section, include:
 - `type: listening` or `type: reading`
 - `resource:` specific resource name
 - `task:` specific instructions (what to listen for, how many passes)
-- `input_minutes:` estimated duration
+- `estimated_minutes:` estimated duration (this is the schema field name; the homework-budget enforcer at `scripts/check-session-log.py` sums this field across all assignments — using any other name like `input_minutes` causes the input portion to be silently counted as 0)
 - `narrow_topic_aligned:` true if aligned with weekly topic
 
 ## Section 2. Comprehension Debrief (During Review & Warm-up)
