@@ -128,10 +128,14 @@ class TestRouteSessionRows:
         assert route_session(state, today=date(2026, 5, 13)) == "return"
 
     def test_maintenance_autonomy_routes_to_maintenance(self, tmp_path):
+        # M13: autonomy_level lives in schedule.yaml (per schema), not profile.
         state = _write_state(
             tmp_path,
-            profile={"autonomy_level": "maintenance"},
-            schedule={"onboarding_complete": True, "last_session_date": "2026-05-13"},
+            schedule={
+                "onboarding_complete": True,
+                "autonomy_level": "maintenance",
+                "last_session_date": "2026-05-13",
+            },
             sessions=[{"date": "2026-05-13"}],
         )
         assert route_session(state, today=date(2026, 5, 14)) == "maintenance"
@@ -141,11 +145,26 @@ class TestRouteSessionRows:
         still receives a weekly review, with maintenance-specific focus."""
         state = _write_state(
             tmp_path,
-            profile={"autonomy_level": "maintenance", "weekly_review_day": "Wednesday"},
-            schedule={"onboarding_complete": True, "last_session_date": "2026-05-13"},
+            profile={"weekly_review_day": "Wednesday"},
+            schedule={
+                "onboarding_complete": True,
+                "autonomy_level": "maintenance",
+                "last_session_date": "2026-05-13",
+            },
             sessions=[{"date": "2026-05-13"}],
         )
         assert route_session(state, today=date(2026, 5, 13)) == "maintenance-with-weekly-review"
+
+    def test_maintenance_in_profile_does_not_route_maintenance(self, tmp_path):
+        """M13 regression: autonomy_level in the WRONG file (profile) must NOT
+        trigger maintenance routing — guards against the source-file bug returning."""
+        state = _write_state(
+            tmp_path,
+            profile={"autonomy_level": "maintenance"},
+            schedule={"onboarding_complete": True, "last_session_date": "2026-05-13"},
+            sessions=[{"date": "2026-05-13"}],
+        )
+        assert route_session(state, today=date(2026, 5, 14)) != "maintenance"
 
     def test_weekly_review_day_routes_to_weekly_review(self, tmp_path):
         state = _write_state(
@@ -444,9 +463,10 @@ def _apply_maintenance_autonomy(state: Path) -> None:
     Uses _write_schedule_defaults for onboarding_complete/last_session_date so
     that composing with return builder (_apply_3_day_gap) preserves the gap date.
     """
-    _write_profile(state, {"autonomy_level": "maintenance"})
+    # M13: autonomy_level lives in schedule.yaml (per schema), not profile.
     _write_schedule_defaults(state, {
         "onboarding_complete": True,
+        "autonomy_level": "maintenance",
         "last_session_date": _RECENT_DATE,
     })
     _write_session(state, _RECENT_DATE)
@@ -600,11 +620,12 @@ def _pred_return(state: Path, today: date) -> bool:
 
 
 def _pred_maintenance(state: Path) -> bool:
-    profile_path = state / "learner-profile.yaml"
-    if not profile_path.exists():
+    # M13: autonomy_level lives in schedule.yaml (per schema), not profile.
+    schedule_path = state / "schedule.yaml"
+    if not schedule_path.exists():
         return False
-    profile = _yaml.safe_load(profile_path.read_text()) or {}
-    return profile.get("autonomy_level") == "maintenance"
+    schedule = _yaml.safe_load(schedule_path.read_text()) or {}
+    return schedule.get("autonomy_level") == "maintenance"
 
 
 def _pred_weekly_review(state: Path, today: date) -> bool:

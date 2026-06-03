@@ -178,11 +178,11 @@ def route_session(
     """Decide today's session type from on-disk state.
 
     Reads:
-      - {state_dir}/learner-profile.yaml  — weekly_review_day, autonomy_level
+      - {state_dir}/learner-profile.yaml  — weekly_review_day
       - {state_dir}/schedule.yaml         — last_session_date, onboarding_complete,
-        current_onboarding_session, sprint.active, placement_validation.active,
-        placement_validation.sessions_completed, fluency_days_per_week,
-        last_fluency_day, current_phase
+        current_onboarding_session, autonomy_level, sprint.active,
+        placement_validation.active, placement_validation.sessions_completed,
+        fluency_days_this_week, last_fluency_day, current_phase
       - {state_dir}/sessions/*.yaml       — existence + most-recent filename
 
     Returns the session_type CLAUDE.md Step 3 routing table would select.
@@ -226,8 +226,11 @@ def route_session(
     # ------------------------------------------------------------------
     # Row 4: autonomy_level == "maintenance" → maintenance
     #   ROUTE-07 overlay: today is weekly_review_day → maintenance-with-weekly-review
+    #   NOTE: autonomy_level lives in schedule.yaml (per schedule.schema.yaml),
+    #   NOT learner-profile.yaml — reading it from profile silently misrouted
+    #   maintenance learners to standard (audit M13).
     # ------------------------------------------------------------------
-    if profile.get("autonomy_level") == "maintenance":
+    if schedule.get("autonomy_level") == "maintenance":
         if _is_weekly_review_day(profile, today):
             return "maintenance-with-weekly-review"
         return "maintenance"

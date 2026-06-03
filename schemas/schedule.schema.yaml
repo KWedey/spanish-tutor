@@ -205,7 +205,32 @@ fields:
     type: list
     required: false
     default: []
-    description: "Concepts from prior phase still in active practice"
+    description: "Concepts from prior phase still in active practice. Read by decision-engine.md Step 0b for the carryover/regression escalation ladder; sessions_in_carryover and escalation_stage are written by CLAUDE.md State Updates step 4."
+    item_shape:
+      concept_id:
+        type: string
+        required: true
+        description: "skill-map key of the carried-over concept"
+      is_prerequisite:
+        type: bool
+        required: false
+        default: false
+        description: "True if this concept is a prerequisite for current-phase work (raises escalation urgency)"
+      sessions_in_carryover:
+        type: int
+        required: false
+        default: 0
+        description: "Count of sessions this concept has been in carryover; checked against the escalation ladder in decision-engine.md Step 0b"
+      escalation_stage:
+        type: int
+        required: false
+        default: 0
+        description: "Current rung on the carryover escalation ladder (0 = none)"
+      current_approach:
+        type: string
+        required: false
+        default: ""
+        description: "The approach currently being used for this concept (change approach on escalation, do not just intensify)"
 
   anki_new_cards_per_session:
     type: int

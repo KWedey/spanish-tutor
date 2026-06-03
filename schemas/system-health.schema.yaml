@@ -112,6 +112,45 @@ fields:
     default: []
     description: "Issues found during last validation run"
 
+  load_adjustments:
+    type: list
+    required: false
+    default: []
+    description: "Homework-load adjustment audit trail (LOAD-03/D-07/D-11). Appended by check-session-log.py on WARN-tier budget events and by the tutor on D-11 daily_target reductions; surfaced at weekly review for triage."
+    item_shape:
+      date:
+        type: string
+        required: false
+        description: "YYYY-MM-DD of the event"
+      level:
+        type: string
+        required: false
+        description: "WARN (over daily_target) or the adjustment type (e.g. daily_target-reduction)"
+      homework_sum:
+        type: int
+        required: false
+        description: "Summed estimated_minutes of the session's assignments"
+      daily_target:
+        type: int
+        required: false
+        description: "daily_target at the time of the event"
+      daily_maximum:
+        type: int
+        required: false
+        description: "daily_maximum at the time of the event"
+      today_stretch:
+        type: int
+        required: false
+        description: "today_stretch at the time of the event"
+      message:
+        type: string
+        required: false
+        description: "Human-readable explanation"
+      detected_by:
+        type: string
+        required: false
+        description: "Source that wrote the entry (script:function or 'tutor')"
+
   placement_validation_metrics:
     type: map
     required: false
