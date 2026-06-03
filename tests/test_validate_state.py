@@ -1315,7 +1315,17 @@ class TestMediaBankDialectCoverage:
             },
         }
         check_media_bank_dialect_coverage(media_bank, self._DIALECTS, results)
-        assert not any("dialect" in m and "not recognized" in m for m in _fails())
+        assert not any("not recognized" in m for m in _fails())
+
+    def test_missing_taxonomy_fails_loud(self):
+        """A missing/empty curriculum/dialects.yaml must FAIL here, mirroring
+        check-session-log.py's fail-loud import — not silently skip the check
+        (reviewer LOW: the guard must not evaporate when its SoT disappears)."""
+        media_bank = {"prescriptive_episodes": {"listening": [{"title": "X", "dialect": "mixed"}]}}
+        check_media_bank_dialect_coverage(media_bank, None, results)
+        assert any("dialects.yaml" in m for m in _fails()), (
+            f"CC-3: missing dialect taxonomy must FAIL, not skip; got {_fails()!r}"
+        )
 
     def test_empty_media_bank_passes(self):
         check_media_bank_dialect_coverage({}, self._DIALECTS, results)

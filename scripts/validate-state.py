@@ -192,6 +192,15 @@ def check_media_bank_dialect_coverage(media_bank: dict, dialects: dict,
     dialect-advisory matrix in check-session-log.py silently cannot classify
     that resource — the matrix would never fire for it. The taxonomy is the
     single source of truth shared by both scripts."""
+    if not dialects:
+        # Fail loud, mirroring check-session-log.py's import-time RuntimeError:
+        # a missing/empty source-of-truth file must not let this guard evaporate.
+        res.fail(
+            "curriculum/dialects.yaml is missing or empty — required by the "
+            "media-bank dialect coverage check (CC-3). check-session-log.py "
+            "fails loudly on the same condition; validate-state must too."
+        )
+        return
     recognized = (
         set(dialects.get("peninsular_resource_dialects") or [])
         | set(dialects.get("latam_resource_dialects") or [])
@@ -1054,9 +1063,11 @@ def main() -> None:
         check_vocab_passive_active(skill_map, res)
 
     # CC-3 (C9): media-bank dialect tags must be covered by curriculum/dialects.yaml.
+    # Pass dialects through even when None — the check fails loud on a missing
+    # taxonomy rather than silently skipping (matches check-session-log.py).
     media_bank = load_yaml(CURRICULUM / "media-bank.yaml")
     dialects = load_yaml(CURRICULUM / "dialects.yaml")
-    if media_bank is not None and dialects is not None:
+    if media_bank is not None:
         check_media_bank_dialect_coverage(media_bank, dialects, res)
     if schedule is not None and skill_map is not None:
         check_schedule_refs(schedule, skill_map, res)
