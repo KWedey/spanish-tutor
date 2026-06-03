@@ -102,7 +102,11 @@ def load_yaml_strict(path: Path) -> dict:
         with open(path, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f)
     except yaml.YAMLError as e:
-        raise yaml.YAMLError(f"Corrupt YAML in {path}: {e}") from e
+        # Annotate with the path while preserving the concrete subclass
+        # (ScannerError/ParserError/...) so a caller that catches a specific
+        # YAMLError subtype still matches.
+        e.args = (f"Corrupt YAML in {path}: {e}",) + e.args[1:]
+        raise
     return data if data is not None else {}
 
 

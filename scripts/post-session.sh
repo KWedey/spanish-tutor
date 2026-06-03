@@ -456,6 +456,9 @@ fi
 # A2: from here on, a non-zero exit is a VCS-layer error, not a pedagogy-state
 # error. Mark the commit phase so the rollback trap leaves validated state on
 # disk (steps 5b–5e already succeeded above).
+# INVARIANT: do NOT add any state-mutating step below this line — once
+# COMMIT_PHASE is set, the trap no longer rolls back, so a failure here would
+# leave a partial mutation in place. New pedagogy steps go ABOVE Step 6.
 COMMIT_PHASE=true
 
 if $NO_COMMIT; then
