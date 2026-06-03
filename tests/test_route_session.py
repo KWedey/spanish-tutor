@@ -923,3 +923,45 @@ class TestStep3PairwisePriority:
             f"Pair ({a!r}, {b!r}): expected {winner!r} (reason: {reason}); "
             f"got {actual!r}. See CLAUDE.md Step 3 routing table."
         )
+
+
+class TestRouterRobustness:
+    """QR-R1/QR-M1/QR-L3: the router must not crash on corrupted scalar state
+    (it runs at every session startup, before validate-state can warn)."""
+
+    def test_corrupted_sprint_scalar_does_not_crash(self, tmp_path):
+        # sprint as a string instead of a map (QR-R1) -> graceful, no AttributeError
+        state = _write_state(
+            tmp_path,
+            schedule={
+                "onboarding_complete": True,
+                "sprint": "yes",
+                "last_session_date": "2026-05-13",
+            },
+            sessions=[{"date": "2026-05-13"}],
+        )
+        assert route_session(state, today=date(2026, 5, 14)) == "standard"
+
+    def test_null_sessions_completed_does_not_crash(self, tmp_path):
+        # placement_validation.sessions_completed: null (QR-R1) -> no None < 3 TypeError
+        state = _write_state(
+            tmp_path,
+            schedule={
+                "onboarding_complete": True,
+                "sprint": {"active": True},
+                "placement_validation": {"active": True, "sessions_completed": None},
+                "last_session_date": "2026-05-13",
+            },
+            sessions=[{"date": "2026-05-13"}],
+        )
+        # null coerces to 0 < 3 -> placement-validation wins (override)
+        assert route_session(state, today=date(2026, 5, 14)) == "placement-validation"
+
+    def test_future_last_session_date_clamps_gap(self, tmp_path):
+        # clock-skew / typo future date (QR-M1) -> negative gap clamped to 0, no return
+        state = _write_state(
+            tmp_path,
+            schedule={"onboarding_complete": True, "last_session_date": "2026-09-01"},
+            sessions=[{"date": "2026-05-13"}],
+        )
+        assert route_session(state, today=date(2026, 5, 14)) == "standard"

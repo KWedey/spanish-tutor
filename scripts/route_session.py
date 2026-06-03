@@ -59,8 +59,31 @@ def _load_yaml(path: Path) -> dict:
         with open(path) as f:
             data = yaml.safe_load(f) or {}
         return data if isinstance(data, dict) else {}
-    except Exception:
+    except (OSError, yaml.YAMLError):
+        # Narrow: a genuinely unreadable/corrupt file degrades to {} (routing
+        # falls back to standard), but we do NOT swallow programming errors.
         return {}
+
+
+def _safe_dict(value) -> dict:
+    """Return value if it is a dict, else {}.
+
+    Guards against corrupted scalar state (e.g. `sprint: "yes"` instead of a
+    map): `x or {}` does NOT replace a truthy non-dict, so `"yes".get(...)`
+    would raise AttributeError at session startup (audit QR-R1).
+    """
+    return value if isinstance(value, dict) else {}
+
+
+def _as_int(value, default: int = 0) -> int:
+    """Coerce a possibly-null/str value to int; fall back to default.
+
+    Guards `pv.get("sessions_completed") < 3` against None/str (QR-R1).
+    """
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
 
 
 def _gap_days(last_session_date: str | None, today: date, sessions_dir: Path) -> int:
@@ -74,7 +97,7 @@ def _gap_days(last_session_date: str | None, today: date, sessions_dir: Path) ->
     if last_session_date:
         try:
             last = date.fromisoformat(str(last_session_date))
-            return (today - last).days
+            return max(0, (today - last).days)
         except ValueError:
             pass
 
@@ -84,7 +107,7 @@ def _gap_days(last_session_date: str | None, today: date, sessions_dir: Path) ->
         stem = session_files[0].stem  # "2026-05-13"
         try:
             last = date.fromisoformat(stem)
-            return (today - last).days
+            return max(0, (today - last).days)
         except ValueError:
             pass
 
@@ -152,7 +175,7 @@ def _is_fluency_day(schedule: dict, today: date) -> bool:
     if target <= 0:
         return False
 
-    fluency_this_week = int(schedule.get("fluency_days_this_week") or 0)
+    fluency_this_week = _as_int(schedule.get("fluency_days_this_week"), 0)
     if fluency_this_week >= target:
         return False
 
@@ -246,10 +269,10 @@ def route_session(
     #   ROUTE-03 override: placement_validation.active + sessions_completed < 3
     #   → placement-validation (override sprint)
     # ------------------------------------------------------------------
-    sprint = schedule.get("sprint") or {}
+    sprint = _safe_dict(schedule.get("sprint"))
     if sprint.get("active", False):
-        pv = schedule.get("placement_validation") or {}
-        if pv.get("active", False) and pv.get("sessions_completed", 0) < 3:
+        pv = _safe_dict(schedule.get("placement_validation"))
+        if pv.get("active", False) and _as_int(pv.get("sessions_completed"), 0) < 3:
             return "placement-validation"
         return "sprint"
 
