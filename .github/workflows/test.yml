@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        # 3.14 is not yet available on GitHub Actions hosted runners (as of mid-2026).
+        # 3.12 is the most recent stable version with guaranteed runner support.
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Run tests
+        run: python -m pytest -q
+
+      - name: Validate state schemas
+        run: python3 scripts/validate-state.py
+
+      - name: Check pre-commit hook syntax
+        # Confirms the hook is valid bash; catches syntax regressions introduced
+        # in the same PR that a --no-verify push would otherwise hide.
+        run: bash -n .githooks/pre-commit
