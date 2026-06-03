@@ -228,6 +228,14 @@ End with something achievable that builds momentum. Calibrate to placement level
 
 ### 7. State Initialization
 
+Also write the session log to `state/sessions/YYYY-MM-DD.yaml` with
+`session_type: first-session`. **`docs/first-session-log-example.yaml` is the
+copy-from template** — `check-session-log.py` requires (for first-session)
+`session_number`, `duration_minutes`, `session_status`, `learner_energy`,
+`session_activities`, `learner_observations.mood`/`.engagement`, an `assessment`
+block, and `skill_map_updates`. Populate `study_time_budget` (below) BEFORE
+running `post-session.sh`, or the homework-budget check FAILs the commit.
+
 After the session, create and populate:
 - `state/learner-profile.yaml` — all identity, goals, schedule fields, calibration, and initial_placement
 - `state/skill-map.yaml` — mark concepts per placement rules above

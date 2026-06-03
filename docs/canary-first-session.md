@@ -1,7 +1,7 @@
 # Canary: First Real Tutoring Session
 
 **Purpose:** v1.1 audit-fix shipped 2026-05-13. Phases 1-7 (38 plans, 455 tests passing,
-33/33 validate-state) are infrastructure that has never run end-to-end against a real
+all validate-state checks green) are infrastructure that has never run end-to-end against a real
 tutoring session. The first session is a canary — its job is to exercise every code
 path under realistic conditions and surface the latent failures.
 
@@ -25,7 +25,7 @@ Run these checks **before** invoking the tutor agent (15-20 min).
    ```bash
    python3 scripts/validate-state.py
    ```
-   Must report 33/33 (or whatever the current expected count is — grep the README).
+   Must report all checks passing (record the exact PASS count here as your pre-session baseline).
    Any FAIL is a STOP — fix before starting the canary.
 
 3. **Take a Step 0 snapshot manually.**
@@ -129,18 +129,22 @@ Run these checks **after** the session ends (10-15 min).
 
 2. **Run check-session-log.py manually.**
    ```bash
-   python3 scripts/check-session-log.py state/sessions/$(date -u +%Y-%m-%d).yaml
+   python3 scripts/check-session-log.py $(date -u +%Y-%m-%d)
    ```
-   Must pass. If `dialect_advisory` (added in 08-02) fires falsely or misses,
-   that's a v1.2 fix candidate.
+   The script takes a **date**, not a path — it builds `state/sessions/<date>.yaml`
+   itself. Must pass. If `dialect_advisory` (added in 08-02) fires falsely or
+   misses, that's a v1.2 fix candidate.
 
 3. **Verify vault generation.**
    ```bash
    python3 scripts/generate-vault.py --session --date $(date -u +%Y-%m-%d)
    ls -la vault/Daily/
    ```
-   Expect: today's daily-note exists and has `generated: true` frontmatter
-   (per CLAUDE.md Guardrails).
+   Expect: Home + Roadmap refreshed and existing notes re-stamped (exit 0).
+   Note: `--session` does **not** create today's daily note — per CLAUDE.md
+   State Updates step 12a the tutor writes `vault/Daily/<date>.md` manually
+   (with `generated: true` frontmatter). Confirm that file exists *after* the
+   tutor's manual write, not as output of this script.
 
 4. **Confirm transcript captured.**
    ```bash
@@ -153,7 +157,7 @@ Run these checks **after** the session ends (10-15 min).
    ```bash
    python3 scripts/validate-state.py
    ```
-   Must report 33/33 again. If any check that passed pre-session now FAILs,
+   Must report the same PASS count as the pre-session baseline. If any check that passed pre-session now FAILs,
    that's a state-corruption finding — see Rollback below.
 
 6. **Commit observations.**
@@ -171,19 +175,22 @@ session ends in an unrecoverable error.
 
 1. **Stop.** Do not run more scripts. Do not commit anything.
 
-2. **Identify the last good snapshot.**
+2. **Identify the available snapshots.**
    ```bash
-   ls -la state/.snapshot/
+   python3 scripts/snapshot-state.py list
    ```
-   The pre-session manual snapshot (taken in Pre-session step 3) is the
-   safest target. The post-session.sh-managed snapshot is also valid.
+   `rollback` restores the **most recent** snapshot (the post-session.sh one if
+   it ran, otherwise the pre-session manual snapshot from Pre-session step 3).
+   There is no per-label restore — the tool always targets the latest snapshot.
 
-3. **Restore.**
+3. **Roll back.**
    ```bash
-   python3 scripts/snapshot-state.py restore <snapshot-label>
+   python3 scripts/snapshot-state.py rollback
    ```
-   Confirm restore by running `validate-state.py` immediately after — must
-   report the same PASS count as before the session.
+   This restores skill-map / schedule / profile to the snapshot; any session
+   log written after the snapshot is preserved (for transparency). Confirm by
+   running `validate-state.py` immediately after — it must report the same
+   PASS count it reported pre-session.
 
 4. **Diff and document.**
    ```bash
@@ -212,7 +219,7 @@ All of the following return exit code 0 and produce the expected artifact:
 2. `bash scripts/post-session.sh $(date -u +%Y-%m-%d)` returns 0.
 3. `python3 scripts/check-session-log.py state/sessions/$(date -u +%Y-%m-%d).yaml` returns 0.
 4. `python3 scripts/generate-vault.py --session --date $(date -u +%Y-%m-%d)` returns 0.
-5. `python3 scripts/validate-state.py` returns 0 (33/33) AFTER the session.
+5. `python3 scripts/validate-state.py` returns 0 (same PASS count as the pre-session baseline) AFTER the session.
 6. `transcripts/$(date -u +%Y-%m-%d).md` exists and is non-empty.
 7. `docs/canary-observations/$(date -u +%Y-%m-%d).md` exists (the protocol REQUIRES Kyle to capture observations, even if "all clean — nothing surfaced").
 

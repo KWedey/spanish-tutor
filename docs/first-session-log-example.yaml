@@ -1,0 +1,82 @@
+# Example FIRST-SESSION log — the template the tutor copies for session 1.
+#
+# check-session-log.py requires, for session_type: first-session (FIRST_SESSION_EXPECTED):
+#   date, session_number, duration_minutes, session_type, session_status,
+#   learner_energy, session_activities, learner_observations.mood,
+#   learner_observations.engagement, assessment, skill_map_updates
+#
+# This example is a TRUE BEGINNER (no placement assessment needed). For a
+# non-beginner, populate the assessment.placement_* fields from the placement
+# protocol in curriculum/tutor-guides/first-session.md (§Placement Protocol).
+# Note: session 1 has no prior homework, so assignment_review is omitted and the
+# study_time_budget guardrail is grandfathered (D-06).
+
+date: "2026-06-03"
+session_number: 1
+duration_minutes: 40
+session_type: first-session
+session_status: complete
+learner_energy: high
+
+# The assessment block is REQUIRED for first-session. For a true beginner it
+# records that no graded placement was run and why. For a non-beginner it holds
+# the placement result + evidence (mirror learner-profile.yaml initial_placement).
+assessment:
+  placement_run: false
+  placement_level: A-foundation
+  placement_confidence: null          # null for true beginners (onboarding calibrates)
+  self_report: beginner
+  self_report_vs_actual: matches
+  grammar_production: "Complete beginner — no production attempted; entered onboarding from session 1."
+  vocabulary_observation: minimal
+  reading_comprehension: not_assessed
+  evidence: "Learner reports zero prior Spanish; skipped graded prompts per first-session.md §3."
+
+session_activities:
+  - type: discovery
+    target_concepts: []
+    duration_minutes: 18
+    performance: n/a
+    notes: "Goals, schedule, dialect (es-MX), learning-style + correction preferences captured."
+  - type: grammar-exposure
+    target_concepts: [A-00-communication-repair]
+    duration_minutes: 15
+    performance: good
+    notes: "Delivered onboarding session 1 (session-01-discovery.md): 6 repair phrases + 5 greetings as memorized chunks; vowel pronunciation check-in."
+  - type: tool-setup
+    target_concepts: []
+    duration_minutes: 7
+    performance: good
+    notes: "Anki installed, Spanish deck created, first 10 cards (6 repair phrases + 4 greetings)."
+
+learner_observations:
+  mood: enthusiastic
+  engagement: high
+  notes: "Picked up repair phrases quickly; slight aspiration on p/t/k to watch."
+
+# skill_map_updates: the concepts touched in session 1 (true beginner starts A-00).
+skill_map_updates:
+  - concept: A-00-communication-repair
+    field: status
+    from: unseen
+    to: practicing
+    note: "Introduced as memorized chunks; highest-priority concept through session 5."
+
+# Homework for the next session (optional for first-session; no SRS-load gate yet).
+assignments:
+  - task: "Memorize the 6 repair phrases — say them aloud"
+    type: speaking
+    resource: none
+    estimated_minutes: 5
+  - task: "First Anki session — review all 10 cards"
+    type: srs
+    resource: Anki
+    estimated_minutes: 5
+  - task: "Watch one Superbeginner Dreaming Spanish video (listening baseline)"
+    type: listening
+    resource: Dreaming Spanish
+    estimated_minutes: 8
+
+next_session:
+  recommended_focus: "Onboarding session 2 (A-01 present tense); confirm repair phrases stuck."
+  session_type: onboarding   # current_onboarding_session advanced to 2 in State Updates step 4
