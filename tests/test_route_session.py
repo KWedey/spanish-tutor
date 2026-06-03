@@ -342,26 +342,64 @@ class TestRouteSessionRows:
         )
         assert route_session(state, today=date(2026, 5, 13)) == "weekly-review"
 
-    def test_weekly_review_day_uses_locale_independent_weekday_table(self):
+    def test_weekly_review_routing_is_locale_independent(self, tmp_path):
         """Regression guard for the strftime('%A') locale trap (audit finding 08-03H2).
 
-        The original implementation compared `today.strftime('%A')` to the profile's
-        capitalized-English weekly_review_day. strftime is locale-aware: on a
-        Spanish-locale system it returns 'miércoles' and never matches 'Wednesday',
-        silently breaking weekly-review routing forever.
+        The original implementation compared `today.strftime('%A')` to the
+        profile's capitalized-English weekly_review_day. strftime is locale-aware:
+        on a Spanish-locale system it returns 'miércoles' and never matches
+        'Wednesday', silently breaking weekly-review routing forever.
 
-        The fix uses a fixed _WEEKDAY_NAMES_EN tuple indexed by today.weekday().
-        weekday() returns 0..6 deterministically; the tuple is the canonical
-        English source. This test fails if the table is removed or renamed."""
-        from scripts import route_session as rs
-        assert hasattr(rs, "_WEEKDAY_NAMES_EN"), (
-            "scripts/route_session.py must expose _WEEKDAY_NAMES_EN — a fixed "
-            "English weekday table — to avoid the strftime('%A') locale trap."
-        )
-        assert rs._WEEKDAY_NAMES_EN == (
-            "Monday", "Tuesday", "Wednesday", "Thursday",
-            "Friday", "Saturday", "Sunday",
-        ), "_WEEKDAY_NAMES_EN must list English weekday names Monday..Sunday"
+        This is the BEHAVIORAL version of the guard: it forces a non-English
+        LC_TIME and asserts routing still picks 'weekly-review' on the configured
+        day. It exercises the public routing path (not a private symbol), so it
+        survives an internal rename of the weekday table — and it goes RED the
+        moment anyone reintroduces a locale-aware strftime('%A') comparison,
+        which a symbol-existence check could never catch.
+
+        2026-05-13 is a Wednesday. Skips only if the host has no non-English
+        LC_TIME locale installed (e.g. a minimal CI image)."""
+        import locale
+
+        # Pick the first non-English time locale the host actually has.
+        candidates = [
+            "es_ES.UTF-8", "es_ES.utf8", "es_ES",
+            "fr_FR.UTF-8", "fr_FR.utf8", "fr_FR",
+            "de_DE.UTF-8", "de_DE",
+        ]
+        original = locale.setlocale(locale.LC_TIME)
+        chosen = None
+        try:
+            for cand in candidates:
+                try:
+                    locale.setlocale(locale.LC_TIME, cand)
+                    chosen = cand
+                    break
+                except locale.Error:
+                    continue
+            if chosen is None:
+                pytest.skip("no non-English LC_TIME locale installed on this host")
+
+            # Sanity: under this locale strftime('%A') for a Wednesday is NOT
+            # the English 'Wednesday' — i.e. the trap is genuinely armed here.
+            wednesday = date(2026, 5, 13)
+            assert wednesday.strftime("%A").lower() != "wednesday", (
+                f"locale {chosen} did not change weekday names; test is not "
+                f"exercising the locale trap"
+            )
+
+            state = _write_state(
+                tmp_path,
+                profile={"weekly_review_day": "Wednesday"},
+                schedule={"onboarding_complete": True, "last_session_date": "2026-05-12"},
+                sessions=[{"date": "2026-05-12"}],
+            )
+            assert route_session(state, today=wednesday) == "weekly-review", (
+                f"weekly-review routing broke under non-English locale {chosen} — "
+                f"a strftime('%A') locale trap has likely been reintroduced"
+            )
+        finally:
+            locale.setlocale(locale.LC_TIME, original)
 
 
 # ---------------------------------------------------------------------------
