@@ -11,7 +11,8 @@ except ImportError:
     print("Error: PyYAML is required. Install with: pip install pyyaml", file=sys.stderr)
     sys.exit(1)
 
-from shared import ROOT, STATE_DIR, load_schema, get_field_default, yaml_value as _yaml_value, green, yellow, red
+from shared import (ROOT, STATE_DIR, load_schema, get_field_default, load_yaml,
+                    yaml_value as _yaml_value, green, yellow, red)
 
 # ---------------------------------------------------------------------------
 # Schema-driven template generation
@@ -161,7 +162,7 @@ def reset_skill_map() -> None:
     data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     for entry in (data.get("grammar") or {}).values():
         if isinstance(entry, dict):
-            entry.update({k: v for k, v in ZERO_GRAMMAR.items()})
+            entry.update(ZERO_GRAMMAR)
     for entry in (data.get("vocabulary") or {}).values():
         if isinstance(entry, dict):
             entry.update({k: (list(v) if isinstance(v, list) else v) for k, v in ZERO_VOCAB.items()})
@@ -208,7 +209,6 @@ def main() -> None:
     args = parser.parse_args()
 
     # --- Step 0: Detect prior learner state (D-09 gate) ---
-    from shared import load_yaml
     profile_path = ROOT / "state" / "learner-profile.yaml"
     profile_data = load_yaml(profile_path) or {}
     name = profile_data.get("name")

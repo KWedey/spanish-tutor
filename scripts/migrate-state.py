@@ -13,16 +13,14 @@ except ImportError:
     sys.exit(1)
 
 import shared
-from shared import ROOT, STATE_DIR, green, yellow, red
+from shared import ROOT, green, yellow, red
 CURRENT_VERSION = 1
 
-# Migrations: version -> list of migration entries.
-# Each entry is either:
-#   - A tuple (file, dot.field.path, default_value) — adds field if missing (legacy format)
-#   - A dict with "file", "transform" keys — callable receives (data) and returns modified data
-# Applied cumulatively from file's current schema_version to CURRENT_VERSION.
+# Migrations: version -> list of (file, dot.field.path, default_value) entries.
+# Each adds the field with its default if missing, applied cumulatively from a
+# file's current schema_version up to CURRENT_VERSION.
 
-MigrationEntry = tuple[str, str, object] | dict
+MigrationEntry = tuple[str, str, object]
 
 MIGRATIONS: dict[int, list[MigrationEntry]] = {
     1: [
@@ -112,8 +110,6 @@ def main() -> None:
 
     def _entry_file(entry: MigrationEntry) -> str:
         """Extract the target filename from a migration entry."""
-        if isinstance(entry, dict):
-            return entry["file"]
         return entry[0]
 
     all_files = sorted({_entry_file(e) for migs in MIGRATIONS.values() for e in migs})
@@ -134,30 +130,18 @@ def main() -> None:
         for version in range(file_version + 1, CURRENT_VERSION + 1):
             if version not in MIGRATIONS: continue
             for entry in MIGRATIONS[version]:
-                if isinstance(entry, dict):
-                    # Callable transform entry: {"file": ..., "transform": callable}
-                    if entry["file"] != rel_path:
-                        continue
-                    label = entry.get("description", "transform")
+                # Additive tuple entry: (file, field_path, default)
+                m_file, field_path, default = entry
+                if m_file != rel_path:
+                    continue
+                exists, _ = get_nested(data, field_path)
+                if not exists:
                     if args.dry_run:
-                        print(green(f"    ~ {label}"))
+                        print(green(f"    + {field_path} = {default}"))
                     else:
-                        data = entry["transform"](data)
-                        print(green(f"    ~ {label}"))
+                        set_nested(data, field_path, default)
+                        print(green(f"    + {field_path}"))
                     file_changes += 1
-                else:
-                    # Additive tuple entry: (file, field_path, default)
-                    m_file, field_path, default = entry
-                    if m_file != rel_path:
-                        continue
-                    exists, _ = get_nested(data, field_path)
-                    if not exists:
-                        if args.dry_run:
-                            print(green(f"    + {field_path} = {default}"))
-                        else:
-                            set_nested(data, field_path, default)
-                            print(green(f"    + {field_path}"))
-                        file_changes += 1
         data["schema_version"] = CURRENT_VERSION
         if not args.dry_run:
             save_state_file(rel_path, data, original_text)

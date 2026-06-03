@@ -156,9 +156,6 @@ EXPECTED_BY_TYPE: dict[str, list[str]] = {
     "maintenance-with-weekly-review": MAINTENANCE_WITH_WEEKLY_REVIEW_EXPECTED,
 }
 
-# Fields that MAY be empty when applicable is uncertain. Agent should still
-# populate them deliberately (even if empty list), but absence of the key at
-# all means the agent skipped the step.
 
 
 # ---------------------------------------------------------------------------

@@ -135,19 +135,8 @@ def get_required_fields(schema: dict) -> list[str]:
 
 
 def get_field_default(spec: dict):
-    """Return the default value for a schema field spec.
-
-    Handles type coercion for null defaults represented as strings.
-    """
-    default = spec.get("default")
-    if default is None:
-        return None
-    field_type = spec.get("type", "string")
-    if field_type == "list" and default is None:
-        return []
-    if field_type == "map" and default is None:
-        return {}
-    return default
+    """Return the schema field's declared default, or None if it has none."""
+    return spec.get("default")
 
 
 def yaml_value(value) -> str:
