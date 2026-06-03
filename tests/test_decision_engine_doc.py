@@ -120,6 +120,11 @@ class TestInterestCap:
             f"interest-inflated arithmetic is internally inconsistent in the doc: "
             f"{need_i} + {gap_i} + {interest_i} != {int_total}"
         )
+        # The example's INTEREST operand must respect the documented cap of 3.
+        assert interest_i <= 3, (
+            f"cap-explanation example uses INTEREST={interest_i}, exceeding the "
+            f"documented maximum contribution of 3"
+        )
 
         assert base_total > int_total, (
             f"cap explanation must show the regression baseline ({base_total}) "
