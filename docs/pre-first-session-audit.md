@@ -206,3 +206,44 @@ The recent **`.omc/audit/` wave (2026-05-14) was the most thorough prior pass �
 **POLISH / by-design:** H3, H5(ordering+ERR-trap), H10, M1/M2/M8–M12/M14, QR-M1, QR-L2–L5, and the LOW/accepted set in the main report.
 
 **Root cause to internalize:** later phases fixed *code*; the *prose* (CLAUDE.md, guides, example log, canary doc, STUDENT-GUIDE) and the *runtime wiring* (counters, increments, migration) didn't always follow. Most of the work is re-aligning the contract and finishing the wiring for code that already exists.
+
+---
+---
+
+# Resolution Log — 2026-06-03 (all gaps closed)
+
+Fixed on branch `audit-fixes-2026-06-03` (14 commits). Final state: **565 tests pass**
+(was 535; +30), **validate-state 34/34** (was 33; +1 guard), router → `first-session`,
+golden CLAUDE.md test green, working tree clean.
+
+| Commit | Findings closed |
+|--------|-----------------|
+| `fix(onboarding)` | C1, C2, C-design — onboarding progression wired (counter increment + glob + numbering model + range validator) |
+| `fix(drift)` | H1, H2, H10, M5, M6, M12, M13 — CLAUDE.md/schema/router realigned with code |
+| `fix(leak)` | QR-S1, QR-S2, QR-S5, QR-L1, QR-L2 — hook/.gitignore broadened, .omc ignored, .planning untracked, deletions allowed |
+| `fix(router)` | QR-R1, QR-M1, QR-L3 — crash-proofing, gap clamp, narrowed except |
+| `fix(post-session)` | H5, QR-S3, M3, M4 — auto-rollback trap, session-log preservation, int coercion, header/atomic writes |
+| `fix(canary)` | H6, H7, H9 + restore→rollback doc bug — first-run protocol corrected, first-session log template added |
+| `fix(vault)` | H4, M14 — append-targets protected from --full, orphan flag fixed |
+| `fix(pedagogy)` | QR-P1, QR-P2 — dead calibration counters wired (recompute-metrics.py + post-session Step 5d) |
+| `fix(content)` | M7, H8 — onboarding accents, 3 L1-interference ids reconciled |
+| `chore(ci)` | QR-R2 — GitHub Actions running pytest + validate-state |
+| `fix(migrate)` | QR-M2, QR-M3, QR-M4 — version-stamp persist, atomic write, wired into SETUP |
+| `fix(schema-docs)` | M1, M2, M8, M9, M10, M11, H3 + polish — schema/example/guide tightening, nested-enum validation |
+| `fix(polish)` | QR-S4 + LOWs — prompt-injection fencing, escalation cross-links, doc notes |
+
+### Deferred (documented, with rationale — not silently dropped)
+- **QR-R3** (enforce ≤10 Anki cards / ≤1 new grammar concept per session): the session
+  log has no structured field for these counts; enforcing it cleanly needs a schema
+  addition, not speculative field-invention. → v1.2.
+- **QR-L5** (dialect advisory searches only `prescriptive_episodes`, not podcasts/tv/
+  audiobooks): low impact; the code already flags the future taxonomy refactor (CC-3). → v1.2.
+- **QR-L4** (stale REQUIREMENTS.md / ROADMAP.md progress tables): these live in
+  `.planning/`, which is now correctly gitignored and untracked — internal planning
+  artifacts that don't affect the shipped system.
+- **M9 sub-claim** `next_session.session_type: normal`: confirmed a FALSE POSITIVE
+  (free-text field, "normal" is documented) — no change, correctly left as-is.
+- **Register Shifting wikilink ambiguity** (vault): vault is gitignored/regenerated and
+  the underlying grammar-vs-cultural naming is now disambiguated in CLAUDE.md.
+
+**Status: ready for the canary first session.** Run `docs/canary-first-session.md`.
