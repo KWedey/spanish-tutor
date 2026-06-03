@@ -28,31 +28,16 @@ BASE_EXPECTED = check_mod.BASE_EXPECTED
 check_log = check_mod.check_log
 get_nested = check_mod.get_nested
 
-# ENGINE Phase 4 function reference (will raise AttributeError until implemented — RED state)
-check_recasts_required = getattr(check_mod, "check_recasts_required", None)
-
-_missing_recasts_fn = pytest.mark.skipif(
-    check_recasts_required is None,
-    reason="check_recasts_required not yet implemented — RED phase"
-)
-
-# LOAD Phase 5 function/constant references (None until 05-03/05-04 ship — RED state)
-check_assignment_budget = getattr(check_mod, "check_assignment_budget", None)
-compute_assignment_budget_total = getattr(check_mod, "compute_assignment_budget_total", None)
-check_homework_load_rating_required = getattr(check_mod, "check_homework_load_rating_required", None)
-PHASE_5_CUTOFF = getattr(check_mod, "PHASE_5_CUTOFF", None)
-
-_missing_budget_fns = pytest.mark.skipif(
-    check_assignment_budget is None or compute_assignment_budget_total is None or PHASE_5_CUTOFF is None,
-    reason="LOAD Phase 5 budget enforcement not yet implemented — RED phase",
-)
-_missing_load_rating_fn = pytest.mark.skipif(
-    check_homework_load_rating_required is None,
-    reason="LOAD Phase 5 homework_load_rating conditional not yet implemented — RED phase",
-)
-
-# Grab the individual constants (will exist after implementation)
-# We test via EXPECTED_BY_TYPE dict lookup instead, which is more robust.
+# Hard references — these shipped long ago. Binding them directly (not via
+# getattr-with-default) means a rename or deletion fails LOUD at collection
+# rather than silently skipping the gated tests (the project's tested-but-
+# unwired defect; the old `getattr(..., None)` + skipif scaffolding was a
+# permanent silent-pass channel once the code landed).
+check_recasts_required = check_mod.check_recasts_required
+check_assignment_budget = check_mod.check_assignment_budget
+compute_assignment_budget_total = check_mod.compute_assignment_budget_total
+check_homework_load_rating_required = check_mod.check_homework_load_rating_required
+PHASE_5_CUTOFF = check_mod.PHASE_5_CUTOFF
 
 
 # ---------------------------------------------------------------------------
@@ -430,7 +415,6 @@ class TestFluency:
 # ENGINE Phase 4: Conditional recasts enforcement (D-06)
 # ---------------------------------------------------------------------------
 
-@_missing_recasts_fn
 class TestRecasts:
     """D-06: recasts field conditionally required based on session content."""
 
@@ -518,7 +502,6 @@ class TestBudgetEnforcement:
     """LOAD-03 / D-07: check_assignment_budget returns (level, msg, total).
     Levels: OK, WARN, FAIL. See RESEARCH.md Ex-3 for reference implementation."""
 
-    @_missing_budget_fns
     def test_non_numeric_estimated_minutes_does_not_crash(self):
         """M3: a tutor typo like '15 min' must not raise ValueError (which
         post-session.sh would surface as a misleading 'missing fields' block).
@@ -535,7 +518,6 @@ class TestBudgetEnforcement:
         assert total == 10  # bad field -> 0, plus the valid 10
         assert level in ("OK", "WARN", "FAIL")
 
-    @_missing_budget_fns
     def test_non_numeric_budget_field_does_not_crash(self):
         """M3: a malformed budget field (e.g. daily_maximum: '60m') degrades to
         0 instead of crashing."""
@@ -549,7 +531,6 @@ class TestBudgetEnforcement:
         level, msg, total = check_assignment_budget(data, schedule)  # must not raise
         assert total == 20
 
-    @_missing_budget_fns
     def test_pass_within_target(self):
         data = {"date": "2026-04-22", "assignments": [
             {"task": "Anki", "estimated_minutes": 15},
@@ -563,7 +544,6 @@ class TestBudgetEnforcement:
         assert level == "OK", f"D-07: sum=25 <= daily_target(30) must be OK; got {level!r} ({msg})"
         assert total == 25
 
-    @_missing_budget_fns
     def test_warn_over_target(self):
         data = {"date": "2026-04-22", "assignments": [
             {"task": "Anki", "estimated_minutes": 20},
@@ -578,7 +558,6 @@ class TestBudgetEnforcement:
         assert total == 40
         assert "daily_target" in msg
 
-    @_missing_budget_fns
     def test_fail_over_maximum(self):
         data = {"date": "2026-04-22", "assignments": [
             {"task": "Anki", "estimated_minutes": 30},
@@ -594,7 +573,6 @@ class TestBudgetEnforcement:
         assert total == 80
         assert "daily_maximum" in msg
 
-    @_missing_budget_fns
     def test_stretch_extends_ceiling(self):
         data = {"date": "2026-04-22", "assignments": [
             {"task": "Anki", "estimated_minutes": 40},
@@ -608,7 +586,6 @@ class TestBudgetEnforcement:
         # 70 > target(30), 70 <= max(60)+stretch(15)=75 → WARN
         assert level == "WARN", f"D-04: today_stretch must extend the ceiling; got {level!r}"
 
-    @_missing_budget_fns
     def test_pre_cutoff_grandfathered(self):
         data = {"date": "2020-01-01", "assignments": [
             {"task": "Anki", "estimated_minutes": 500},  # way over any budget
@@ -620,7 +597,6 @@ class TestBudgetEnforcement:
         level, msg, total = check_assignment_budget(data, schedule)
         assert level == "OK", f"Pitfall-4: pre-PHASE_5_CUTOFF logs must grandfather; got {level!r}"
 
-    @_missing_budget_fns
     def test_no_assignments_skip(self):
         data = {"date": "2026-04-22", "assignments": []}
         schedule = {"study_time_budget": {"daily_maximum": 60, "daily_target": 30, "daily_minimum": 15, "weekly_goal": 180, "today_stretch": 0}}
@@ -628,14 +604,12 @@ class TestBudgetEnforcement:
         assert level == "OK"
         assert total == 0
 
-    @_missing_budget_fns
     def test_missing_schedule_fails(self):
         data = {"date": "2026-04-22", "assignments": [{"task": "Anki", "estimated_minutes": 15}]}
         level, msg, total = check_assignment_budget(data, schedule=None)
         assert level == "FAIL"
         assert "schedule" in msg.lower() or "study_time_budget" in msg
 
-    @_missing_budget_fns
     def test_estimated_minutes_is_summed_not_duration(self):
         """Pitfall 1 guard: if the implementation reads `estimated_duration`, the sum will be 0 and FAIL won't fire."""
         data = {"date": "2026-04-22", "assignments": [
@@ -659,38 +633,32 @@ class TestHomeworkLoadRatingEnforcement:
     - Post-cutoff standard/onboarding-2+/sprint/fluency: required
     """
 
-    @_missing_load_rating_fn
     def test_standard_session_2_plus_requires_rating(self):
         data = {"session_type": "standard", "session_number": 2}
         assert check_homework_load_rating_required(data) is True, (
             "D-10: standard session_number>=2 must require homework_load_rating"
         )
 
-    @_missing_load_rating_fn
     def test_first_session_exempt(self):
         data = {"session_type": "first-session", "session_number": 1}
         assert check_homework_load_rating_required(data) is False, (
             "Pitfall-5: first-session has no prior homework — exempt"
         )
 
-    @_missing_load_rating_fn
     def test_onboarding_session_1_exempt(self):
         data = {"session_type": "onboarding", "session_number": 1}
         assert check_homework_load_rating_required(data) is False, (
             "Pitfall-5: onboarding session_number=1 exempt"
         )
 
-    @_missing_load_rating_fn
     def test_onboarding_session_2_required(self):
         data = {"session_type": "onboarding", "session_number": 2}
         assert check_homework_load_rating_required(data) is True
 
-    @_missing_load_rating_fn
     def test_fluency_required(self):
         data = {"session_type": "fluency", "session_number": 5}
         assert check_homework_load_rating_required(data) is True
 
-    @_missing_load_rating_fn
     def test_sprint_required(self):
         data = {"session_type": "sprint", "session_number": 3}
         assert check_homework_load_rating_required(data) is True
@@ -747,7 +715,7 @@ class TestDialectAdvisoryRule:
         a dialect-mismatch trigger (e.g. learner target_dialect=es-AR + resource dialect=mixed)
         but omitting dialect_advisory. Invoking check-session-log.py on it must fail with a
         message naming `dialect_advisory` and the trigger condition."""
-        check_dialect_advisory = getattr(check_mod, "check_dialect_advisory_required", None)
+        check_dialect_advisory = check_mod.check_dialect_advisory_required
         if check_dialect_advisory is None:
             pytest.fail(
                 "CURR-FOLLOWUP-02: check-session-log.py must expose "
@@ -787,7 +755,7 @@ class TestDialectAdvisoryRule:
         there's a media-bank resource with a `dialect:` tag. This codifies the silent-pass
         behavior as contract, not an accident — protects against a future change that adds
         a fall-through validator default."""
-        check_dialect_advisory = getattr(check_mod, "check_dialect_advisory_required", None)
+        check_dialect_advisory = check_mod.check_dialect_advisory_required
         if check_dialect_advisory is None:
             pytest.fail(
                 "CURR-FOLLOWUP-02: check-session-log.py must expose "
@@ -912,7 +880,7 @@ class TestDialectAdvisoryIntegration:
         This test asserts that adding any of the previously-uncovered LATAM
         tags to media-bank correctly triggers the advisory for an es-ES
         learner. Verifies the H-1 set expansion is load-bearing."""
-        check_dialect_advisory = getattr(check_mod, "check_dialect_advisory_required", None)
+        check_dialect_advisory = check_mod.check_dialect_advisory_required
         assert check_dialect_advisory is not None
         learner = {"target_dialect": "es-ES"}
         for dialect_tag in ("neutral_latam", "colombian", "mexican", "rioplatense", "chilean"):

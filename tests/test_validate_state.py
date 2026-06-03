@@ -44,41 +44,16 @@ check_session_logs = validate_mod.check_session_logs
 check_resource_skill_map_levels = validate_mod.check_resource_skill_map_levels
 check_curriculum_cross_refs = validate_mod.check_curriculum_cross_refs
 
-# ENGINE Phase 4 function references (will raise AttributeError until implemented — RED state)
-check_learner_interest_range = getattr(validate_mod, "check_learner_interest_range", None)
-check_recast_uptake_stats_consistency = getattr(validate_mod, "check_recast_uptake_stats_consistency", None)
-check_learner_interest_staleness = getattr(validate_mod, "check_learner_interest_staleness", None)
-
-_missing_engine_fns = pytest.mark.skipif(
-    check_learner_interest_range is None
-    or check_recast_uptake_stats_consistency is None
-    or check_learner_interest_staleness is None,
-    reason="ENGINE Phase 4 validate-state functions not yet implemented — RED phase"
-)
-
-# LOAD Phase 5 function references (will be None until implemented by 05-02/05-04 — RED state)
-check_study_time_budget_consistency = getattr(validate_mod, "check_study_time_budget_consistency", None)
-check_daily_target_tier_drift = getattr(validate_mod, "check_daily_target_tier_drift", None)
-
-# Per-function skipifs so TestStudyTimeBudgetConsistency can flip GREEN after
-# plan 05-02 wires check_study_time_budget_consistency even though plan 05-04
-# (check_daily_target_tier_drift) has not yet landed. The original combined
-# gate kept both test classes SKIPped until both functions existed, preventing
-# 05-02's 7 target tests from ever going GREEN without 05-04 in the same wave.
-_missing_load_budget_fn = pytest.mark.skipif(
-    check_study_time_budget_consistency is None,
-    reason="LOAD 05-02 check_study_time_budget_consistency not yet implemented — RED phase",
-)
-_missing_load_drift_fn = pytest.mark.skipif(
-    check_daily_target_tier_drift is None,
-    reason="LOAD 05-04 check_daily_target_tier_drift not yet implemented — RED phase",
-)
-# Backward-compat alias: tests that want either function gated preserve the
-# original name (used only where still appropriate).
-_missing_load_fns = pytest.mark.skipif(
-    check_study_time_budget_consistency is None or check_daily_target_tier_drift is None,
-    reason="LOAD Phase 5 validators not yet implemented — RED phase",
-)
+# Hard references — these validators shipped long ago. Binding them directly
+# (not via getattr-with-default + skipif) means a rename or deletion fails LOUD
+# at collection instead of silently skipping the gated tests. The old RED-phase
+# scaffolding was a permanent silent-pass channel once the code landed —
+# exactly the project's tested-but-unwired defect, in the harness itself.
+check_learner_interest_range = validate_mod.check_learner_interest_range
+check_recast_uptake_stats_consistency = validate_mod.check_recast_uptake_stats_consistency
+check_learner_interest_staleness = validate_mod.check_learner_interest_staleness
+check_study_time_budget_consistency = validate_mod.check_study_time_budget_consistency
+check_daily_target_tier_drift = validate_mod.check_daily_target_tier_drift
 
 
 @pytest.fixture(autouse=True)
@@ -963,15 +938,10 @@ class TestCheckSkillMap:
 # 29. ENFORCE-06: last_session_date drift detection + auto-fix
 # ---------------------------------------------------------------------------
 
-check_last_session_date = getattr(validate_mod, "check_last_session_date", None)
-
-_missing_check_last_session_date = pytest.mark.skipif(
-    check_last_session_date is None,
-    reason="check_last_session_date not yet implemented — RED phase"
-)
+check_last_session_date = validate_mod.check_last_session_date
 
 
-@_missing_check_last_session_date
+
 class TestLastSessionDateDrift:
     def test_detects_drift(self, tmp_path, monkeypatch):
         """ENFORCE-06: stale last_session_date is auto-fixed and logged to system-health."""
@@ -1016,7 +986,6 @@ class TestLastSessionDateDrift:
         assert any("Auto-fixed" in p for p in passes)
 
 
-@_missing_check_last_session_date
 class TestLastSessionDateDriftDryRun:
     def test_dry_run_does_not_mutate(self, tmp_path, monkeypatch):
         """ENFORCE-06: --dry-run flag prevents writes, emits WARN."""
@@ -1062,7 +1031,6 @@ class TestLastSessionDateDriftDryRun:
 # ENGINE Phase 4 tests
 # ---------------------------------------------------------------------------
 
-@_missing_engine_fns
 class TestLearnerInterestRange:
     """ENGINE-02 / D-02: learner_interest.score must be 0-3."""
 
@@ -1122,7 +1090,6 @@ class TestLearnerInterestRange:
             "ENGINE-02/D-03: vocabulary score=4 must FAIL"
 
 
-@_missing_engine_fns
 class TestRecastUptakeStatsConsistency:
     """D-07: landed + missed + partial must be <= recasts_given."""
 
@@ -1159,7 +1126,6 @@ class TestRecastUptakeStatsConsistency:
             "D-10: missing recast_uptake_stats must NOT fail"
 
 
-@_missing_engine_fns
 class TestLearnerInterestStaleness:
     """D-03: staleness > 28 days should WARN (not FAIL)."""
 
@@ -1207,14 +1173,12 @@ class TestStudyTimeBudgetConsistency:
     - missing subfield after sessions → FAIL
     """
 
-    @_missing_load_budget_fn
     def test_null_pre_session_1_passes(self):
         sched = {"study_time_budget": None}
         check_study_time_budget_consistency(sched, has_sessions=False, res=results)
         assert _fails() == []
         assert any("pre-first-session" in m for m in _passes())
 
-    @_missing_load_budget_fn
     def test_null_after_sessions_fails(self):
         sched = {"study_time_budget": None}
         check_study_time_budget_consistency(sched, has_sessions=True, res=results)
@@ -1223,7 +1187,6 @@ class TestStudyTimeBudgetConsistency:
             f"D-06: expected FAIL with 'required after first-session'; got {fails!r}"
         )
 
-    @_missing_load_budget_fn
     def test_invariant_violation_min_gt_target(self):
         sched = {"study_time_budget": {
             "daily_minimum": 45, "daily_target": 30, "daily_maximum": 60,
@@ -1235,7 +1198,6 @@ class TestStudyTimeBudgetConsistency:
             f"D-04: expected invariant FAIL; got {fails!r}"
         )
 
-    @_missing_load_budget_fn
     def test_invariant_violation_target_gt_max(self):
         sched = {"study_time_budget": {
             "daily_minimum": 15, "daily_target": 90, "daily_maximum": 60,
@@ -1244,7 +1206,6 @@ class TestStudyTimeBudgetConsistency:
         check_study_time_budget_consistency(sched, has_sessions=True, res=results)
         assert any("invariant" in m.lower() for m in _fails())
 
-    @_missing_load_budget_fn
     def test_negative_today_stretch_fails(self):
         sched = {"study_time_budget": {
             "daily_minimum": 15, "daily_target": 30, "daily_maximum": 60,
@@ -1253,7 +1214,6 @@ class TestStudyTimeBudgetConsistency:
         check_study_time_budget_consistency(sched, has_sessions=True, res=results)
         assert any("today_stretch" in m and "negative" in m.lower() for m in _fails())
 
-    @_missing_load_budget_fn
     def test_all_populated_passes(self):
         sched = {"study_time_budget": {
             "daily_minimum": 15, "daily_target": 30, "daily_maximum": 60,
@@ -1263,7 +1223,6 @@ class TestStudyTimeBudgetConsistency:
         assert _fails() == [], f"Expected no FAILs; got {_fails()!r}"
         assert any("consistency OK" in m for m in _passes())
 
-    @_missing_load_budget_fn
     def test_missing_subfield_after_session_fails(self):
         sched = {"study_time_budget": {
             "daily_minimum": 15, "daily_target": 30,  # missing daily_maximum, weekly_goal
@@ -1281,7 +1240,6 @@ class TestDailyTargetTierDrift:
     "too-much" twice consecutively but schedule.study_time_budget.daily_target
     was never reduced (tutor forgot the tier adjustment)."""
 
-    @_missing_load_drift_fn
     def test_drift_detected_when_counter_ignored(self):
         sched = {
             "study_time_budget": {"daily_target": 30, "daily_maximum": 60, "daily_minimum": 15, "weekly_goal": 180, "today_stretch": 0},
@@ -1297,7 +1255,6 @@ class TestDailyTargetTierDrift:
             f"D-11: expected drift FAIL (2 too-much + daily_target unchanged); got {fails!r}"
         )
 
-    @_missing_load_drift_fn
     def test_reduced_correctly_passes(self):
         # daily_target was 30, reduced 20% → 24, rounded to nearest 5 → 25
         sched = {
@@ -1312,7 +1269,6 @@ class TestDailyTargetTierDrift:
         # should NOT fail — reduction already applied, counter reset
         assert not any("drift" in m.lower() for m in _fails())
 
-    @_missing_load_drift_fn
     def test_single_too_much_no_reduction_passes(self):
         sched = {
             "study_time_budget": {"daily_target": 30, "daily_maximum": 60, "daily_minimum": 15, "weekly_goal": 180, "today_stretch": 0},
@@ -1400,8 +1356,9 @@ class TestSessionLogEnumsHomeworkLoad:
         schema_doc = yaml.safe_load(schema_path.read_text()) or {}
         # Schedule/session-log schemas wrap field specs under `fields:` — tolerate either layout.
         fields = schema_doc.get("fields") or schema_doc
-        if "homework_load_rating" not in fields:
-            pytest.skip("homework_load_rating not yet in schema — RED phase")
+        assert "homework_load_rating" in fields, (
+            "LOAD-04: homework_load_rating must be present in session-log.schema.yaml"
+        )
         spec = fields["homework_load_rating"] or {}
         enum = spec.get("enum") or []
         assert "too-much" in enum, "LOAD-04: 'too-much' must be in homework_load_rating enum"
