@@ -412,6 +412,27 @@ else
 fi
 
 # ---------------------------------------------------------------------------
+# Step 5e: Update fluency-day tracking (C1 wiring)
+# ---------------------------------------------------------------------------
+#
+# On a fluency session, increment schedule.yaml's week-aware
+# fluency_days_this_week counter and stamp last_fluency_day. The router reads
+# these at session START to decide fluency days; nothing wrote them before C1,
+# leaving the fluency route permanently dead. No-op for non-fluency sessions.
+# Additive on top of the Step 0 snapshot.
+
+step "Step 5e/8: Updating fluency-day tracking"
+if $DRY_RUN; then
+    printf "${YELLOW}[dry-run]${RESET} Would update fluency_days_this_week / last_fluency_day\n"
+else
+    if ! python3 "$ROOT/scripts/update-fluency-tracking.py" "$DATE"; then
+        error "Fluency tracking update failed"
+        exit 1
+    fi
+    info "Fluency tracking updated"
+fi
+
+# ---------------------------------------------------------------------------
 # Step 6: Git commit
 # ---------------------------------------------------------------------------
 

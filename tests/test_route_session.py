@@ -237,9 +237,16 @@ class TestRouteSessionRows:
 
     def test_fluency_day_blocked_when_counter_reaches_target(self, tmp_path):
         """Production-realistic fixture: Phase B-conversational has a weekly
-        target of 1 fluency day. Once `fluency_days_this_week >= 1`, the row
-        must NOT fire. Regression guard for the audit C-2 bug where the field
-        name was wrong and the count was effectively always 0."""
+        target of 1 fluency day. Once `fluency_days_this_week >= 1` *within the
+        current ISO week*, the row must NOT fire. Regression guard for the audit
+        C-2 bug where the field name was wrong and the count was effectively 0.
+
+        C1: the counter is week-aware — `last_fluency_day` must fall in today's
+        ISO week (2026-05-11 is the Monday of week 20, same week as 2026-05-14
+        and 3 days back so the consecutive-day guard is not what blocks here)
+        for the stored count to apply. The old fixture paired count=1 with
+        last_fluency_day=None, an inconsistent state the week-aware router now
+        reads as a fresh week."""
         state = _write_state(
             tmp_path,
             schedule={
@@ -247,7 +254,44 @@ class TestRouteSessionRows:
                 "last_session_date": "2026-05-13",
                 "current_phase": "B-conversational",
                 "fluency_days_this_week": 1,
-                "last_fluency_day": None,
+                "last_fluency_day": "2026-05-11",  # wk20, same week as today
+            },
+            sessions=[{"date": "2026-05-13"}],
+        )
+        assert route_session(state, today=date(2026, 5, 14)) == "standard"
+
+    def test_fluency_counter_self_resets_on_new_week(self, tmp_path):
+        """C1: a stale counter from a PRIOR ISO week must not block this week.
+
+        The writer (update-fluency-tracking.py) runs at session END; the router
+        reads at session START. So the router must self-correct a stale counter:
+        if last_fluency_day is in a prior ISO week, the stored count is treated
+        as 0 for this week. Without this, the first fluency day of a new week
+        never fires (count stuck >= target) and the counter never resets —
+        a week-boundary deadlock."""
+        state = _write_state(
+            tmp_path,
+            schedule={
+                "onboarding_complete": True,
+                "last_session_date": "2026-05-13",
+                "current_phase": "B-conversational",
+                "fluency_days_this_week": 3,  # stale, from last week
+                "last_fluency_day": "2026-05-06",  # wk19, a prior week
+            },
+            sessions=[{"date": "2026-05-13"}],
+        )
+        assert route_session(state, today=date(2026, 5, 14)) == "fluency"
+
+    def test_fluency_day_blocked_on_consecutive_day(self, tmp_path):
+        """C1: even below target, two fluency days back-to-back is disallowed."""
+        state = _write_state(
+            tmp_path,
+            schedule={
+                "onboarding_complete": True,
+                "last_session_date": "2026-05-13",
+                "current_phase": "D-advanced",  # target 3, count 1 < 3
+                "fluency_days_this_week": 1,
+                "last_fluency_day": "2026-05-13",  # yesterday, same week
             },
             sessions=[{"date": "2026-05-13"}],
         )
@@ -548,7 +592,7 @@ def _apply_fluency_day_phase_b(state: Path) -> None:
     _write_schedule(state, {
         "current_phase": "B-conversational",
         "fluency_days_this_week": 0,
-        "last_fluency_day": "2026-05-06",
+        "last_fluency_day": None,  # no fluency day yet → robustly routable
     })
     _write_session(state, _RECENT_DATE)
 
@@ -664,34 +708,20 @@ def _pred_placement_validation(state: Path) -> bool:
 
 
 def _pred_fluency(state: Path, today: date) -> bool:
-    """Mirror the production predicate at scripts.route_session._is_fluency_day.
+    """Re-validate the fluency condition by DELEGATING to the production
+    predicate `scripts.route_session._is_fluency_day`.
 
-    Audit C-1/C-2: the production code now uses canonical phase strings
-    ("B-conversational" etc.) and reads `fluency_days_this_week` directly
-    (not the never-existed `fluency_days_per_week`). Keep this re-validator
-    in sync — drift here was the original source of the pairwise test giving
-    false-green coverage."""
-    from scripts.route_session import _FLUENCY_DAYS_PER_PHASE
+    This used to reimplement the predicate inline, which made the pairwise
+    harness vulnerable to silent drift from the production logic (the audit
+    C-1/C-2 false-green came from exactly that mirror going stale). Calling the
+    real function instead means this re-validator can never diverge — and the
+    C1 week-aware logic is exercised for free."""
+    from scripts.route_session import _is_fluency_day
     schedule_path = state / "schedule.yaml"
     if not schedule_path.exists():
         return False
     schedule = _yaml.safe_load(schedule_path.read_text()) or {}
-    phase = schedule.get("current_phase") or ""
-    target = _FLUENCY_DAYS_PER_PHASE.get(phase, 0)
-    if target <= 0:
-        return False
-    this_week = int(schedule.get("fluency_days_this_week") or 0)
-    if this_week >= target:
-        return False
-    last_raw = schedule.get("last_fluency_day")
-    if last_raw:
-        try:
-            lf = date.fromisoformat(str(last_raw))
-            if (today - lf).days <= 1:
-                return False
-        except ValueError:
-            return True
-    return True
+    return _is_fluency_day(schedule, today)
 
 
 _PREDICATES = {

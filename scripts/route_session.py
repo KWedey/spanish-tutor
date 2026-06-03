@@ -155,38 +155,51 @@ _FLUENCY_DAYS_PER_PHASE = {
 }
 
 
+def _same_iso_week(a: date, b: date) -> bool:
+    """True if two dates fall in the same ISO (year, week)."""
+    return a.isocalendar()[:2] == b.isocalendar()[:2]
+
+
 def _is_fluency_day(schedule: dict, today: date) -> bool:
     """True if today qualifies as a fluency day per CLAUDE.md Step 2.9.
 
     Conditions (all must hold):
       - current_phase is B/C/D (canonical "X-name" form per schedule.schema.yaml)
       - phase-specific weekly fluency target > 0
-      - fluency_days_this_week count < weekly target
+      - fluency_days *this ISO week* < weekly target
       - today is not consecutive with last_fluency_day
 
-    Reads `fluency_days_this_week` directly from schedule.yaml — the explicit
-    counter the post-session.sh ritual maintains. The audit (C-1/C-2) caught
-    that the previous version read a non-existent `fluency_days_per_week`
-    field AND compared against bare-letter phase strings the schema never
-    writes, leaving the predicate permanently False in production.
+    The counter is week-aware. `fluency_days_this_week`/`last_fluency_day` are
+    written by scripts/update-fluency-tracking.py (run by post-session.sh at
+    session END), but this predicate runs at session START — one read ahead of
+    that writer. So a counter whose `last_fluency_day` is in a PRIOR ISO week is
+    treated as 0: the week reset is derived here rather than persisted, which
+    avoids a week-boundary deadlock (a stale count >= target would otherwise
+    block the first fluency day of the new week forever, so the writer that
+    would reset it never runs).
     """
     current_phase = schedule.get("current_phase") or ""
     target = _FLUENCY_DAYS_PER_PHASE.get(current_phase, 0)
     if target <= 0:
         return False
 
-    fluency_this_week = _as_int(schedule.get("fluency_days_this_week"), 0)
-    if fluency_this_week >= target:
-        return False
-
     last_fluency_raw = schedule.get("last_fluency_day")
+    last_fluency = None
     if last_fluency_raw:
         try:
             last_fluency = date.fromisoformat(str(last_fluency_raw))
         except ValueError:
-            return True  # malformed date — don't block the routing
-        if (today - last_fluency).days <= 1:
-            return False
+            last_fluency = None  # malformed date — treat as no prior fluency day
+
+    if last_fluency is not None and _same_iso_week(last_fluency, today):
+        fluency_this_week = _as_int(schedule.get("fluency_days_this_week"), 0)
+    else:
+        fluency_this_week = 0  # null / prior-week counter is stale → 0 this week
+    if fluency_this_week >= target:
+        return False
+
+    if last_fluency is not None and 0 <= (today - last_fluency).days <= 1:
+        return False
     return True
 
 
