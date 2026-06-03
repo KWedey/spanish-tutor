@@ -1,14 +1,11 @@
-"""Tests for scripts/init-student.py template generation and reset logic."""
+"""Tests for scripts/init-student.py template generation and reset logic.
+
+scripts/ is placed on sys.path by tests/conftest.py — no per-file bootstrap.
+"""
 import importlib
-import sys
-from pathlib import Path
 
 import pytest
 import yaml
-
-SCRIPTS_DIR = Path(__file__).resolve().parent.parent / "scripts"
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
 
 init_mod = importlib.import_module("init-student")
 

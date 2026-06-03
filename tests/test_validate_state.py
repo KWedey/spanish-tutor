@@ -1,15 +1,12 @@
-"""Tests for scripts/validate-state.py validation functions."""
+"""Tests for scripts/validate-state.py validation functions.
+
+scripts/ is placed on sys.path by tests/conftest.py — no per-file bootstrap.
+"""
 import copy
-import sys
 from pathlib import Path
 
 import pytest
 import yaml
-
-# Ensure scripts/ is importable
-SCRIPTS_DIR = Path(__file__).resolve().parent.parent / "scripts"
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
 
 # We need to set up ROOT/STATE before importing validate-state functions
 # because the module references STATE at import time.

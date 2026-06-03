@@ -5,19 +5,15 @@ session types. Each class verifies that EXPECTED_BY_TYPE has the correct
 entries and that check_log() fails when required fields are missing.
 """
 import copy
-import sys
 from pathlib import Path
 
 import pytest
 import yaml
 
 # ---------------------------------------------------------------------------
-# Import check-session-log module via importlib (hyphenated filename)
+# Import check-session-log module via importlib (hyphenated filename).
+# scripts/ is placed on sys.path by tests/conftest.py — no per-file bootstrap.
 # ---------------------------------------------------------------------------
-
-SCRIPTS_DIR = Path(__file__).resolve().parent.parent / "scripts"
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
 
 import importlib
 

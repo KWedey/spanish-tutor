@@ -1,15 +1,13 @@
-"""Tests for scripts/snapshot-state.py snapshot/rollback mechanism."""
-import sys
+"""Tests for scripts/snapshot-state.py snapshot/rollback mechanism.
+
+scripts/ is placed on sys.path by tests/conftest.py — no per-file bootstrap.
+"""
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
 
 import pytest
 import yaml
-
-SCRIPTS_DIR = Path(__file__).resolve().parent.parent / "scripts"
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
 
 import importlib
 snapshot_state = importlib.import_module("snapshot-state")

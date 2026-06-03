@@ -1,14 +1,15 @@
-"""Tests for scripts/setup.py — specifically has_existing_state()."""
+"""Tests for scripts/setup.py — specifically has_existing_state().
+
+scripts/ is placed on sys.path by tests/conftest.py — no per-file bootstrap.
+SCRIPTS_DIR is still defined below because several tests load files by path.
+"""
 import ast
 import importlib.util
-import sys
 from pathlib import Path
 
 import pytest
 
 SCRIPTS_DIR = Path(__file__).resolve().parent.parent / "scripts"
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
 
 
 def _load_setup_module():

@@ -8,15 +8,10 @@ be caught by validate-state.py. No logic is duplicated here; the corruption
 functions and the runner live in the harness.
 """
 import importlib
-import sys
-from pathlib import Path
 
 import pytest
 
-SCRIPTS_DIR = Path(__file__).resolve().parent.parent / "scripts"
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
-
+# scripts/ is placed on sys.path by tests/conftest.py — no per-file bootstrap.
 ter = importlib.import_module("test-error-recovery")
 
 
