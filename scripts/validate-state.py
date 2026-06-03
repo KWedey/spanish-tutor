@@ -166,6 +166,53 @@ def check_curriculum_cross_refs(sm: dict, sched: dict | None,
                 res.pass_(f"schedule active_pronunciation.focus '{focus}' has matching curriculum file")
 
 
+def _collect_media_bank_dialects(media_bank: dict) -> set:
+    """Collect every `dialect:` tag value anywhere in the media-bank tree."""
+    found: set = set()
+
+    def walk(node):
+        if isinstance(node, dict):
+            d = node.get("dialect")
+            if isinstance(d, str) and d:
+                found.add(d)
+            for v in node.values():
+                walk(v)
+        elif isinstance(node, list):
+            for item in node:
+                walk(item)
+
+    walk(media_bank or {})
+    return found
+
+
+def check_media_bank_dialect_coverage(media_bank: dict, dialects: dict,
+                                      res: ValidationResults) -> None:
+    """CC-3 (C9): every media-bank `dialect:` tag must be recognized by the
+    *resource* sets in curriculum/dialects.yaml. An unrecognized tag means the
+    dialect-advisory matrix in check-session-log.py silently cannot classify
+    that resource — the matrix would never fire for it. The taxonomy is the
+    single source of truth shared by both scripts."""
+    recognized = (
+        set(dialects.get("peninsular_resource_dialects") or [])
+        | set(dialects.get("latam_resource_dialects") or [])
+        | set(dialects.get("mixed_neutral_resource_dialects") or [])
+    )
+    tags = _collect_media_bank_dialects(media_bank)
+    unknown = sorted(t for t in tags if t not in recognized)
+    if unknown:
+        res.fail(
+            f"media-bank dialect tag(s) {unknown} not recognized by "
+            f"curriculum/dialects.yaml resource sets — the dialect-advisory "
+            f"matrix (check-session-log.py) cannot classify them (CC-3). Add "
+            f"each to the appropriate *_resource_dialects set."
+        )
+    else:
+        res.pass_(
+            f"media-bank: all {len(tags)} dialect tag(s) recognized by "
+            f"curriculum/dialects.yaml (CC-3)"
+        )
+
+
 def check_schedule_refs(sched: dict, sm: dict,
                         res: ValidationResults) -> None:
     grammar_ids = sm.get("grammar", {})
@@ -1005,6 +1052,12 @@ def main() -> None:
     if skill_map is not None:
         check_curriculum_cross_refs(skill_map, schedule, res)
         check_vocab_passive_active(skill_map, res)
+
+    # CC-3 (C9): media-bank dialect tags must be covered by curriculum/dialects.yaml.
+    media_bank = load_yaml(CURRICULUM / "media-bank.yaml")
+    dialects = load_yaml(CURRICULUM / "dialects.yaml")
+    if media_bank is not None and dialects is not None:
+        check_media_bank_dialect_coverage(media_bank, dialects, res)
     if schedule is not None and skill_map is not None:
         check_schedule_refs(schedule, skill_map, res)
 

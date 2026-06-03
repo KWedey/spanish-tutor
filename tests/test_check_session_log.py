@@ -678,6 +678,38 @@ class TestHomeworkLoadRatingEnforcement:
 
 
 # =============================================================================
+# C9 / CC-3: dialect taxonomy is sourced from curriculum/dialects.yaml
+# =============================================================================
+
+
+class TestDialectTaxonomySourcedFromYaml:
+    """C9: the four dialect sets in check-session-log.py must be LOADED from
+    curriculum/dialects.yaml, not re-hardcoded. This locks the wiring so a
+    future edit to dialects.yaml actually changes the advisory matrix (and a
+    silent re-hardcode or a broken loader fails loudly here)."""
+
+    def _taxonomy(self):
+        import yaml as _yaml
+        from pathlib import Path
+        root = Path(__file__).resolve().parent.parent
+        return _yaml.safe_load((root / "curriculum" / "dialects.yaml").read_text())
+
+    def test_sets_match_yaml(self):
+        tax = self._taxonomy()
+        assert check_mod._VOSEO_DIALECTS == set(tax["voseo_target_dialects"])
+        assert check_mod._PENINSULAR_RESOURCE_DIALECTS == set(tax["peninsular_resource_dialects"])
+        assert check_mod._LATAM_RESOURCE_DIALECTS == set(tax["latam_resource_dialects"])
+        assert check_mod._MIXED_NEUTRAL_RESOURCE_DIALECTS == set(tax["mixed_neutral_resource_dialects"])
+
+    def test_missing_taxonomy_fails_loud(self, tmp_path, monkeypatch):
+        """A missing dialects.yaml must raise (fail loud), never silently yield
+        empty sets that disable the advisory matrix."""
+        monkeypatch.setattr(check_mod, "ROOT", tmp_path)
+        with pytest.raises(RuntimeError, match="dialects.yaml"):
+            check_mod._load_dialect_taxonomy()
+
+
+# =============================================================================
 # Phase 8 FOLLOWUP: CURR-FOLLOWUP-02 — dialect_advisory schema + validator
 # =============================================================================
 

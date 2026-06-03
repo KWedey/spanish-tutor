@@ -52,6 +52,7 @@ check_learner_interest_staleness = validate_mod.check_learner_interest_staleness
 check_study_time_budget_consistency = validate_mod.check_study_time_budget_consistency
 check_daily_target_tier_drift = validate_mod.check_daily_target_tier_drift
 check_just_right_restore_drift = validate_mod.check_just_right_restore_drift
+check_media_bank_dialect_coverage = validate_mod.check_media_bank_dialect_coverage
 
 
 @pytest.fixture(autouse=True)
@@ -1278,6 +1279,60 @@ class TestDailyTargetTierDrift:
         check_daily_target_tier_drift(sched, session_logs, results)
         # 1 too-much does not trigger reduction per D-11
         assert not any("drift" in m.lower() for m in _fails())
+
+
+class TestMediaBankDialectCoverage:
+    """C9 / CC-3: every media-bank `dialect:` tag must be recognized by the
+    resource sets in curriculum/dialects.yaml. An unrecognized tag means the
+    dialect-advisory matrix in check-session-log.py silently can't classify
+    that resource — exactly the kind of dead-rule drift this guards.
+    """
+
+    _DIALECTS = {
+        "peninsular_resource_dialects": ["peninsular", "mixed_with_spain"],
+        "latam_resource_dialects": ["mixed_latin_american", "colombian"],
+        "mixed_neutral_resource_dialects": ["mixed", "neutral"],
+    }
+
+    def test_unknown_dialect_tag_fails(self):
+        media_bank = {
+            "prescriptive_episodes": {
+                "listening": [{"title": "X", "dialect": "klingon"}],
+            }
+        }
+        check_media_bank_dialect_coverage(media_bank, self._DIALECTS, results)
+        fails = _fails()
+        assert any("klingon" in m for m in fails), (
+            f"CC-3: an unrecognized media-bank dialect tag must FAIL; got {fails!r}"
+        )
+
+    def test_known_tags_pass(self):
+        media_bank = {
+            "youtube_channels": [{"name": "A", "dialect": "mixed"}],
+            "prescriptive_episodes": {
+                "listening": [{"title": "X", "dialect": "colombian"}],
+                "reading": [{"title": "Y", "dialect": "peninsular"}],
+            },
+        }
+        check_media_bank_dialect_coverage(media_bank, self._DIALECTS, results)
+        assert not any("dialect" in m and "not recognized" in m for m in _fails())
+
+    def test_empty_media_bank_passes(self):
+        check_media_bank_dialect_coverage({}, self._DIALECTS, results)
+        assert not _fails()
+
+    def test_real_media_bank_against_real_taxonomy(self):
+        """End-to-end on the actual files: the shipped media-bank must be fully
+        covered by the shipped curriculum/dialects.yaml (no drift today)."""
+        import yaml as _yaml
+        from pathlib import Path
+        root = Path(__file__).resolve().parent.parent
+        media_bank = _yaml.safe_load((root / "curriculum" / "media-bank.yaml").read_text())
+        dialects = _yaml.safe_load((root / "curriculum" / "dialects.yaml").read_text())
+        check_media_bank_dialect_coverage(media_bank, dialects, results)
+        assert not any("not recognized" in m for m in _fails()), (
+            f"shipped media-bank has dialect tags missing from curriculum/dialects.yaml: {_fails()!r}"
+        )
 
 
 class TestJustRightRestoreDrift:

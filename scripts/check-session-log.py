@@ -390,22 +390,25 @@ def _append_load_adjustment_warn(session_date: str, total: int,
 # undersized set, the row-4 vosotros advisory silently never fired for the
 # most common case in production.
 #
-# Future structural fix (audit CC-3): move this taxonomy to a single
-# curriculum/dialects.yaml that media-bank, l1-interference, and this
-# validator all read from. Until then the explicit lists are the single
-# source of truth and validate-state should flag any new media-bank
-# dialect tag that isn't in EITHER set.
-_VOSEO_DIALECTS = {"es-AR", "es-UY"}
-_PENINSULAR_RESOURCE_DIALECTS = {"peninsular", "mixed_with_spain"}
-_LATAM_RESOURCE_DIALECTS = {
-    "mixed_latin_american",
-    "neutral_latam",
-    "colombian",
-    "mexican",
-    "rioplatense",
-    "chilean",
-}
-_MIXED_NEUTRAL_RESOURCE_DIALECTS = {"mixed", "mixed_latin_american", "neutral"}
+# Dialect taxonomy (audit CC-3): the source of truth is curriculum/dialects.yaml,
+# read by both this validator and validate-state.py's media-bank drift check.
+# Loaded at import; a missing/empty file is a setup error (fail loud rather than
+# silently disabling the advisory matrix).
+def _load_dialect_taxonomy() -> dict:
+    data = load_yaml(ROOT / "curriculum" / "dialects.yaml")
+    if not data:
+        raise RuntimeError(
+            "curriculum/dialects.yaml is missing or empty — it is the single "
+            "source of truth for the dialect-advisory matrix (audit CC-3)."
+        )
+    return data
+
+
+_DIALECT_TAXONOMY = _load_dialect_taxonomy()
+_VOSEO_DIALECTS = set(_DIALECT_TAXONOMY.get("voseo_target_dialects") or [])
+_PENINSULAR_RESOURCE_DIALECTS = set(_DIALECT_TAXONOMY.get("peninsular_resource_dialects") or [])
+_LATAM_RESOURCE_DIALECTS = set(_DIALECT_TAXONOMY.get("latam_resource_dialects") or [])
+_MIXED_NEUTRAL_RESOURCE_DIALECTS = set(_DIALECT_TAXONOMY.get("mixed_neutral_resource_dialects") or [])
 
 
 def _lookup_resource_dialect(resource: str, media_bank: dict) -> str | None:

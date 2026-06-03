@@ -1,0 +1,41 @@
+# Dialect taxonomy — single source of truth (audit CC-3).
+#
+# Previously these sets were hardcoded in scripts/check-session-log.py. They are
+# now centralized here so the dialect-advisory matrix and the media-bank
+# drift check read from one place.
+#
+# Consumers:
+#   - scripts/check-session-log.py — the dialect-advisory trigger matrix
+#     (input-orchestration.md Section 1 Step 2) reads all four sets below.
+#   - scripts/validate-state.py — check_media_bank_dialect_coverage FAILs if a
+#     media-bank `dialect:` tag is not recognized by the *resource* sets.
+#
+# Two distinct categories live here:
+#   * voseo_target_dialects  — values of learner-profile.yaml > target_dialect
+#     (the learner's goal dialect), NOT resource tags.
+#   * *_resource_dialects    — values of media-bank prescriptive_episodes[].dialect
+#     (the dialect a resource is delivered in).
+
+# TARGET dialects (learner goal) that use voseo — drives matrix rows 1 & 2.
+voseo_target_dialects:
+  - es-AR
+  - es-UY
+
+# RESOURCE dialect tags grouped by family. The union of the three *_resource_*
+# sets is the set of media-bank dialect tags the advisory matrix can classify.
+peninsular_resource_dialects:
+  - peninsular
+  - mixed_with_spain
+
+latam_resource_dialects:
+  - mixed_latin_american
+  - neutral_latam
+  - colombian
+  - mexican
+  - rioplatense
+  - chilean
+
+mixed_neutral_resource_dialects:
+  - mixed
+  - mixed_latin_american
+  - neutral
