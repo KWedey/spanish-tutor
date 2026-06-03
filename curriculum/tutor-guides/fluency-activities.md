@@ -14,8 +14,12 @@ Loaded when: Phase B+ and today is a fluency day.
 - Begin tracking fluency metrics. Balanced correction.
 - Only correct meaning-impeding errors and current focus-area errors.
 
-### Phase D (every session)
-- Every session includes a fluency component.
+### Phase D (fluency component every session)
+- Every Phase-D session embeds a fluency **component** — part of the standard
+  session, not a separately-routed session type. (Dedicated fluency-day
+  *sessions*, routed by `route_session.py`, still cap at 3/week and skip
+  consecutive days per CLAUDE.md Step 2.9; on the other days the fluency
+  component is embedded in the standard session.)
 - Metrics are the primary assessment tool.
 - Correct only meaning-impeding errors during fluency work.
 - Batch everything else for post-activity review.

@@ -762,11 +762,42 @@ def check_session_logs(res: ValidationResults) -> None:
             for field in missing:
                 res.fail(f"Session log {f.name}: missing required field '{field}'")
 
-        # Check enum values
+        # Check enum values (top-level scalars)
         for fname, allowed in enum_fields.items():
             val = data.get(fname)
             if val is not None and val not in allowed:
                 res.fail(f"Session log {f.name}: {fname}='{val}' is not a valid enum value (expected one of {sorted(str(v) for v in allowed if v is not None)})")
+
+        # Check nested enums in list-of-dict fields (item_shape / item_schema).
+        # Covers recasts[].uptake, recasts[].activity_stage,
+        # assignments[].dialect_advisory (audit M10 — previously unvalidated).
+        for fname, spec in fields_spec.items():
+            if not isinstance(spec, dict):
+                continue
+            item_spec = spec.get("item_shape") or spec.get("item_schema")
+            if not isinstance(item_spec, dict):
+                continue
+            item_enums = {
+                k: set(v["enum"])
+                for k, v in item_spec.items()
+                if isinstance(v, dict) and "enum" in v
+            }
+            if not item_enums:
+                continue
+            items = data.get(fname)
+            if not isinstance(items, list):
+                continue
+            for i, item in enumerate(items):
+                if not isinstance(item, dict):
+                    continue
+                for k, allowed in item_enums.items():
+                    val = item.get(k)
+                    if val is not None and val not in allowed:
+                        res.fail(
+                            f"Session log {f.name}: {fname}[{i}].{k}='{val}' "
+                            f"is not a valid enum value (expected one of "
+                            f"{sorted(str(v) for v in allowed if v is not None)})"
+                        )
 
         checked += 1
 

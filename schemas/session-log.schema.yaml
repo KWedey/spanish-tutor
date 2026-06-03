@@ -66,7 +66,47 @@ fields:
     type: list
     required: false
     default: []
-    description: "Input comprehension debrief entries"
+    description: "Input comprehension debrief entries. NOTE: comprehension_assessment here (per-session debrief) feeds the running receptive_skills.comprehension_quality in skill-map (CLAUDE.md State Updates step 3) — the two are intentionally named differently (event log vs. cumulative state)."
+    item_shape:
+      resource:
+        type: string
+        required: true
+        description: "Resource name (matches resource-tracker)"
+      type:
+        type: string
+        required: true
+        enum: ["listening", "reading"]
+        description: "Input modality"
+      duration_minutes:
+        type: int
+        required: false
+        description: "Minutes of input reviewed"
+      passes:
+        type: int
+        required: false
+        description: "Multi-pass count (L2-L3: recommend 2-3)"
+      comprehension_assessment:
+        type: string
+        required: false
+        enum: [null, "gist", "main_ideas", "details", "inference"]
+        description: "Depth of comprehension demonstrated in the debrief"
+      vocabulary_extracted:
+        type: list
+        required: false
+        description: "Words/phrases the learner reported acquiring"
+      production_gaps_observed:
+        type: list
+        required: false
+        description: "Words the learner reached for but couldn't produce"
+      difficulty_self_report:
+        type: string
+        required: false
+        enum: [null, "too_easy", "just_right", "too_hard"]
+        description: "Learner's difficulty self-report"
+      level_at_time:
+        type: string
+        required: false
+        description: "Learner's level when the input was assigned (e.g. L2)"
 
   session_activities:
     type: list

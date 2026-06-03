@@ -222,7 +222,9 @@ else
 import sys, yaml
 with open(sys.argv[1]) as f:
     data = yaml.safe_load(f)
-print(data.get('session_number', 1))
+# `or 1`: a null session_number would yield "None" and the bash `-gt` compare
+# would silently treat it as session 1, skipping the transcript gate (audit LOW).
+print(data.get('session_number') or 1)
 PYEOF
     )
 

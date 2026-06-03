@@ -152,32 +152,40 @@ learner_observations:
 decision_engine_trace:
   candidates_scored: 6
   top_candidates:
+    # INTEREST (D-04, 0-3) is recorded for EVERY top candidate, always; TOTAL includes it.
     - id: A-02-ser-vs-estar
       NEED: 9
       GAP: 7
       DECAY: 2
       TOPIC: 1
       VARIETY: 0
-      TOTAL: 19
+      INTEREST: 2
+      TOTAL: 21
     - id: A-03-gender-agreement
       NEED: 7
       GAP: 5
       DECAY: 5
       TOPIC: 0
       VARIETY: 2
-      TOTAL: 15
+      INTEREST: 1
+      TOTAL: 16
     - id: A-01-present-regular
       NEED: 6
       GAP: 3
       DECAY: 5
       TOPIC: 0
       VARIETY: 1
+      INTEREST: 0
       TOTAL: 13
   selected_primary: A-02-ser-vs-estar
   selected_secondary: tier1-food-restaurant
   override_reason: null
 
 session_difficulty_rating: just-right
+# homework_load_rating: captured at THIS session's warm-up about the PRIOR
+# session's homework (D-12). Required by check-session-log.py when the session
+# had prior homework. Enum: too-much | just-right | too-light (null if declined).
+homework_load_rating: just-right
 
 next_session:
   recommended_focus: A-02-ser-vs-estar

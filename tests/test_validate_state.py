@@ -421,6 +421,50 @@ class TestOnboardingCounterRange:
 
 
 # ---------------------------------------------------------------------------
+# 12c. nested enum validation in session logs (M10)
+# ---------------------------------------------------------------------------
+
+class TestSessionLogNestedEnums:
+    def _write_log(self, tmp_path, monkeypatch, log: dict):
+        monkeypatch.setattr(validate_mod, "STATE", tmp_path)
+        sdir = tmp_path / "sessions"
+        sdir.mkdir()
+        (sdir / "2026-06-03.yaml").write_text(yaml.safe_dump(log), encoding="utf-8")
+
+    def _valid_base(self):
+        return {
+            "date": "2026-06-03", "session_number": 2, "duration_minutes": 30,
+            "session_type": "standard", "session_status": "complete",
+            "learner_energy": "medium", "session_activities": [],
+            "learner_observations": {"mood": "ok", "engagement": "high"},
+        }
+
+    def test_bad_recast_uptake_fails(self, tmp_path, monkeypatch):
+        log = self._valid_base()
+        log["recasts"] = [{"concept_id": "A-01", "error_form": "x",
+                           "corrected_form": "y", "uptake": "YES"}]
+        self._write_log(tmp_path, monkeypatch, log)
+        check_session_logs(results)
+        assert any("uptake" in f and "YES" in f for f in _fails())
+
+    def test_valid_recast_uptake_passes(self, tmp_path, monkeypatch):
+        log = self._valid_base()
+        log["recasts"] = [{"concept_id": "A-01", "error_form": "x",
+                           "corrected_form": "y", "uptake": "landed"}]
+        self._write_log(tmp_path, monkeypatch, log)
+        check_session_logs(results)
+        assert not any("uptake" in f for f in _fails())
+
+    def test_bad_dialect_advisory_fails(self, tmp_path, monkeypatch):
+        log = self._valid_base()
+        log["assignments"] = [{"task": "x", "type": "writing",
+                               "estimated_minutes": 10, "dialect_advisory": "klingon"}]
+        self._write_log(tmp_path, monkeypatch, log)
+        check_session_logs(results)
+        assert any("dialect_advisory" in f and "klingon" in f for f in _fails())
+
+
+# ---------------------------------------------------------------------------
 # 13. session filename validation — non-date filename warns
 # ---------------------------------------------------------------------------
 

@@ -136,7 +136,7 @@ Probe at chapter granularity, not whole-book. Reading is consumed in chunks — 
 **c) Detail probe (from content_summary)**
 The reading entries in `media-bank.yaml > prescriptive_episodes.reading` each carry a `content_summary` written for this debrief. Load it before the probe and ask 1-2 specific questions that the summary anticipates (e.g., for Cajas de Cartón Story 1: "What does the family pack their belongings in? Why?").
 
-For entries that lack a content summary (rare — every entry in 07-01 has one), fall back to depth-of-elaboration as the comprehension proxy, same as listening.
+For entries that lack a content summary (rare — every entry in `media-bank.yaml > prescriptive_episodes.reading` has one), fall back to depth-of-elaboration as the comprehension proxy, same as listening.
 
 **d) Vocabulary extraction (passive recognition first)**
 Reading is the modality where passive vocabulary grows fastest. Ask: "¿Hubo palabras que te confundieron pero entendiste por el contexto?" / "Were there words that tripped you up but you figured out from context?"

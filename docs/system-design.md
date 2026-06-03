@@ -750,7 +750,7 @@ learner_energy: ""              # high, medium, low (self-reported or inferred)
                                         # Inference signals: explicit self-report ("I'm tired"), slow response pace,
                                         # increased error rate vs recent sessions, request for shorter session.
                                         # When uncertain, ask: "How's your energy today?"
-session_type: ""                # standard, micro, weekly-review, phase-transition, return
+session_type: ""                # enum (source of truth: schemas/session-log.schema.yaml): standard, micro, weekly-review, phase-transition, return, first-session, onboarding, sprint, fluency, maintenance, onboarding-with-return-overlay, maintenance-with-weekly-review, placement-validation
 session_status: complete        # complete, partial, aborted — partial if session was cut short
 gap_days: 0                     # days since last session (0 if consecutive)
 

@@ -198,7 +198,7 @@ Highest score = primary focus. Second highest = secondary (if time allows and no
 
 ## Step 5 — Route to Activity
 
-**Fluency days** (1x/week in Phase B, 2x/week in Phase C, every session in Phase D): Run Steps 1-4 normally to select concept(s). At Step 5, route to `fluency-activities.md` instead of the stage-based routing below.
+**Fluency days** (Phase A: none; 1x/week in Phase B; 2x/week in Phase C; up to 3x/week non-consecutive in Phase D — `route_session.py` is authoritative): Run Steps 1-4 normally to select concept(s). At Step 5, route to `fluency-activities.md` instead of the stage-based routing below. In Phase D, sessions that are NOT routed as dedicated fluency days still embed a fluency *component* per `fluency-activities.md` (Phase D), so fluency exposure is in every session even though dedicated fluency-day routing caps at 3/week.
 
 **Non-fluency days** — check `error_rate_drills` and `error_rate_production`:
 
@@ -217,7 +217,7 @@ After selecting the primary concept and routing to an activity stage, select 1-3
 
 ### Selection
 
-1. Query skill-map for concepts with status "acquired" or "practicing" at Stage 3+ (guided production or later)
+1. Query skill-map for eligible interleaving concepts: status `acquired` or `automatic`, OR status `practicing` with `performance_unscaffolded: competent` (concepts solid enough to weave in without derailing the primary). Note: there is no persisted per-concept activity "stage" in skill-map — the activity stage (1-4) is an ephemeral in-session routing artifact derived from error rates (Step 5), so interleaving eligibility is judged from the persisted `status` and `performance_unscaffolded` fields, not a stored stage.
 2. Rank by DECAY score (highest = longest since practiced)
 3. Prefer stalled carryover concepts (serves double duty as escalation — see Step 0b)
 4. Select count based on primary concept's stage:
@@ -226,7 +226,7 @@ After selecting the primary concept and routing to an activity stage, select 1-3
 |----------------------|-------------------|------|
 | Stage 1-2 (first session with concept) | 0-1 | At most 1 acquired concept. New concepts need focused attention. |
 | Stage 2 (controlled practice, subsequent sessions) | 1 | 1 acquired concept embedded in drill sentences |
-| Stage 3 (guided production) | 2 | 1 acquired + 1 practicing (Stage 3+) woven into prompts |
+| Stage 3 (guided production) | 2 | 1 acquired + 1 practicing-but-competent (per `performance_unscaffolded`) woven into prompts |
 | Stage 4 (integration) | 2-3 | Concepts across status levels combined in conversation |
 
 ### How to Interleave
