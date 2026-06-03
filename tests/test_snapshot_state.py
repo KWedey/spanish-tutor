@@ -85,6 +85,35 @@ class TestRollback:
         rc = snapshot_state.cmd_rollback()
         assert rc == 1
 
+    def test_rollback_preserves_session_log_absent_from_snapshot(self, mock_state):
+        """QR-S3: a session log written after the snapshot must survive rollback
+        (STUDENT-GUIDE promises 'your session log stays' while skill-map etc.
+        revert)."""
+        snapshot_state.cmd_snapshot()
+        # Simulate a session: modify skill-map AND add today's log (not in snapshot)
+        (mock_state / "skill-map.yaml").write_text("modified: true\n", encoding="utf-8")
+        today_log = mock_state / "sessions" / "2026-06-03.yaml"
+        today_log.write_text("session_number: 2\n", encoding="utf-8")
+
+        rc = snapshot_state.cmd_rollback()
+
+        assert rc == 0
+        # skill-map reverted...
+        assert (mock_state / "skill-map.yaml").read_text() == "file: skill-map.yaml\n"
+        # ...but today's session log preserved
+        assert today_log.exists(), "QR-S3: today's session log must survive rollback"
+        assert today_log.read_text() == "session_number: 2\n"
+
+    def test_rollback_restores_session_log_present_in_snapshot(self, mock_state):
+        """A session log that WAS in the snapshot is restored to its snapshot
+        content (not the preservation path)."""
+        snapshot_state.cmd_snapshot()
+        # Modify the pre-existing (snapshotted) log
+        (mock_state / "sessions" / "2026-04-10.yaml").write_text("session: 999\n", encoding="utf-8")
+        rc = snapshot_state.cmd_rollback()
+        assert rc == 0
+        assert (mock_state / "sessions" / "2026-04-10.yaml").read_text() == "session: 1\n"
+
 
 # ---------------------------------------------------------------------------
 # 3. List shows available snapshots

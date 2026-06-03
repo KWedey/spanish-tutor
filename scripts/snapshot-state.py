@@ -174,8 +174,30 @@ def cmd_rollback(dry_run: bool = False) -> int:
                 print(f"  {dim(str(f.relative_to(latest)))}")
         return 0
 
-    # Remove current state files (except .snapshot/)
+    # QR-S3: preserve session logs written AFTER the snapshot. STUDENT-GUIDE
+    # promises "your session log stays (for transparency)" while skill-map /
+    # schedule / profile revert. A session log present now but absent from the
+    # snapshot is newer than it — keep it instead of unlinking. (Logs already
+    # in the snapshot are restored normally below.)
+    snapshot_rel = {
+        f.relative_to(latest) for f in latest.rglob("*") if f.is_file()
+    }
+
+    def _is_session_log(rel: Path) -> bool:
+        # state/sessions/<date>.yaml — NOT sessions/archive/* or other subdirs
+        return (
+            len(rel.parts) == 2
+            and rel.parts[0] == "sessions"
+            and rel.suffix == ".yaml"
+        )
+
+    # Remove current state files (except .snapshot/ and preserved session logs)
+    preserved = 0
     for f in _state_files():
+        rel = f.relative_to(STATE_DIR)
+        if _is_session_log(rel) and rel not in snapshot_rel:
+            preserved += 1
+            continue
         f.unlink()
 
     # Copy snapshot contents back into state/
@@ -189,7 +211,10 @@ def cmd_rollback(dry_run: bool = False) -> int:
         shutil.copy2(f, target)
         restored += 1
 
-    print(green(f"Rolled back to snapshot {label} ({restored} files restored)"))
+    msg = f"Rolled back to snapshot {label} ({restored} files restored)"
+    if preserved:
+        msg += f"; {preserved} newer session log(s) preserved"
+    print(green(msg))
     return 0
 
 

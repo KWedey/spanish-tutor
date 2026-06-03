@@ -519,6 +519,37 @@ class TestBudgetEnforcement:
     Levels: OK, WARN, FAIL. See RESEARCH.md Ex-3 for reference implementation."""
 
     @_missing_budget_fns
+    def test_non_numeric_estimated_minutes_does_not_crash(self):
+        """M3: a tutor typo like '15 min' must not raise ValueError (which
+        post-session.sh would surface as a misleading 'missing fields' block).
+        The malformed field degrades to 0 and the check still returns a verdict."""
+        data = {"date": "2026-04-22", "assignments": [
+            {"task": "Anki", "estimated_minutes": "15 min"},
+            {"task": "listening", "estimated_minutes": 10},
+        ]}
+        schedule = {"study_time_budget": {
+            "daily_minimum": 15, "daily_target": 30, "daily_maximum": 60,
+            "weekly_goal": 180, "today_stretch": 0,
+        }}
+        level, msg, total = check_assignment_budget(data, schedule)  # must not raise
+        assert total == 10  # bad field -> 0, plus the valid 10
+        assert level in ("OK", "WARN", "FAIL")
+
+    @_missing_budget_fns
+    def test_non_numeric_budget_field_does_not_crash(self):
+        """M3: a malformed budget field (e.g. daily_maximum: '60m') degrades to
+        0 instead of crashing."""
+        data = {"date": "2026-04-22", "assignments": [
+            {"task": "Anki", "estimated_minutes": 20},
+        ]}
+        schedule = {"study_time_budget": {
+            "daily_minimum": 15, "daily_target": 30, "daily_maximum": "60m",
+            "weekly_goal": 180, "today_stretch": 0,
+        }}
+        level, msg, total = check_assignment_budget(data, schedule)  # must not raise
+        assert total == 20
+
+    @_missing_budget_fns
     def test_pass_within_target(self):
         data = {"date": "2026-04-22", "assignments": [
             {"task": "Anki", "estimated_minutes": 15},

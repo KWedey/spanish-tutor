@@ -270,6 +270,25 @@ def _load_schedule() -> dict | None:
         return None
 
 
+def _coerce_minutes(value) -> int:
+    """Coerce a minutes value to a non-negative int, tolerating tutor typos.
+
+    A non-numeric estimated_minutes (e.g. "15 min") previously crashed the
+    budget check with an uncaught ValueError, which post-session.sh surfaced
+    as a misleading "missing fields" commit block (audit M3). We degrade to 0
+    so the guardrail keeps working rather than aborting the whole post-session
+    run on a single malformed field.
+    """
+    if isinstance(value, bool):  # bool is an int subclass — exclude
+        return 0
+    if isinstance(value, (int, float)):
+        return max(0, int(value))
+    try:
+        return max(0, int(str(value).strip()))
+    except (TypeError, ValueError):
+        return 0
+
+
 def compute_assignment_budget_total(data: dict) -> int:
     """Sum the estimated_minutes field across the per-log homework list.
 
@@ -282,7 +301,7 @@ def compute_assignment_budget_total(data: dict) -> int:
     total = 0
     for a in data.get("assignments") or []:
         if isinstance(a, dict):
-            total += int(a.get("estimated_minutes") or 0)
+            total += _coerce_minutes(a.get("estimated_minutes"))
     return total
 
 
@@ -317,9 +336,9 @@ def check_assignment_budget(data: dict, schedule: dict | None) -> tuple[str, str
                 "(required after first-session per D-06)",
                 total)
 
-    d_max = int(budget.get("daily_maximum") or 0)
-    stretch = int(budget.get("today_stretch") or 0)
-    d_tgt = int(budget.get("daily_target") or 0)
+    d_max = _coerce_minutes(budget.get("daily_maximum"))
+    stretch = _coerce_minutes(budget.get("today_stretch"))
+    d_tgt = _coerce_minutes(budget.get("daily_target"))
 
     ceiling = d_max + stretch
     if total > ceiling:

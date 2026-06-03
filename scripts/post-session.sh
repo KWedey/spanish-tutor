@@ -113,6 +113,29 @@ run() {
 # Step 0: Snapshot state (must run before any writes; provides rollback point)
 # ---------------------------------------------------------------------------
 
+# Auto-rollback trap: if any step fails AFTER the snapshot is taken, restore
+# state from that snapshot. This wires the rollback the script header has always
+# promised but never performed (audit H5) — the explicit `exit 1` failure paths
+# below all route through this EXIT trap.
+SNAPSHOT_TAKEN=false
+ROLLED_BACK=false
+on_exit() {
+    local code=$?
+    if $DRY_RUN || ! $SNAPSHOT_TAKEN || $ROLLED_BACK || [[ $code -eq 0 ]]; then
+        exit "$code"
+    fi
+    ROLLED_BACK=true
+    error "post-session.sh failed (exit $code) after the Step 0 snapshot."
+    error "Rolling back state to the snapshot taken at the start of this run..."
+    if python3 "$ROOT/scripts/snapshot-state.py" rollback; then
+        error "Rollback complete. Fix the issue and re-run post-session.sh."
+    else
+        error "AUTOMATIC ROLLBACK FAILED — restore manually: python3 scripts/snapshot-state.py rollback"
+    fi
+    exit "$code"
+}
+trap on_exit EXIT
+
 step "Step 0/8: Snapshotting state before writes"
 if $DRY_RUN; then
     printf "${YELLOW}[dry-run]${RESET} Skipping snapshot (dry-run writes nothing)\n"
@@ -122,6 +145,7 @@ else
         error "Fix the snapshot error before running post-session.sh again."
         exit 1
     fi
+    SNAPSHOT_TAKEN=true
     info "State snapshot created"
 fi
 
@@ -251,12 +275,28 @@ if $DRY_RUN; then
     printf "${YELLOW}[dry-run]${RESET} Would aggregate recasts from %s\n" "$SESSION_LOG"
 else
     if ! python3 - "$SESSION_LOG" "$ROOT/state/skill-map.yaml" "$DATE" <<'PYEOF'
-import yaml, sys
+import yaml, sys, os
 from pathlib import Path
 
 LOG  = Path(sys.argv[1])
 SM   = Path(sys.argv[2])
 DATE = sys.argv[3]
+
+def _leading_header(text):
+    """Return the top comment/blank-line block (the schema-pointer header)."""
+    out = []
+    for ln in text.splitlines(keepends=True):
+        if ln.lstrip().startswith("#") or not ln.strip():
+            out.append(ln)
+        else:
+            break
+    return "".join(out)
+
+def _atomic_write_yaml(path, data, header):
+    body = yaml.safe_dump(data, sort_keys=False, allow_unicode=True)
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(header + body, encoding="utf-8")
+    os.replace(tmp, path)
 
 with LOG.open() as f:
     session = yaml.safe_load(f) or {}
@@ -265,6 +305,7 @@ if not recasts:
     print("No recasts to aggregate")
     sys.exit(0)
 
+_sm_header = _leading_header(SM.read_text(encoding="utf-8"))
 with SM.open() as f:
     sm = yaml.safe_load(f) or {}
 grammar = sm.setdefault("grammar", {})
@@ -286,8 +327,7 @@ for r in recasts:
     stats["last_updated"] = DATE
     aggregated += 1
 
-with SM.open("w") as f:
-    yaml.safe_dump(sm, f, sort_keys=False, allow_unicode=True)
+_atomic_write_yaml(SM, sm, _sm_header)
 print(f"Aggregated {aggregated} recasts into skill-map")
 PYEOF
     then
@@ -310,12 +350,23 @@ if $DRY_RUN; then
     printf "${YELLOW}[dry-run]${RESET} Would reset today_stretch in schedule.yaml\n"
 else
     if ! python3 - "$ROOT/state/schedule.yaml" <<'PYEOF'
-import yaml, sys
+import yaml, sys, os
 from pathlib import Path
 SCHED = Path(sys.argv[1])
 if not SCHED.exists():
     print("No schedule.yaml found - skipping today_stretch reset")
     sys.exit(0)
+
+def _leading_header(text):
+    out = []
+    for ln in text.splitlines(keepends=True):
+        if ln.lstrip().startswith("#") or not ln.strip():
+            out.append(ln)
+        else:
+            break
+    return "".join(out)
+
+_header = _leading_header(SCHED.read_text(encoding="utf-8"))
 with SCHED.open() as f:
     sched = yaml.safe_load(f) or {}
 stb = sched.get("study_time_budget")
@@ -324,8 +375,10 @@ if not isinstance(stb, dict):
     sys.exit(0)
 prev = stb.get("today_stretch", 0) or 0
 stb["today_stretch"] = 0
-with SCHED.open("w") as f:
-    yaml.safe_dump(sched, f, sort_keys=False, allow_unicode=True)
+_body = yaml.safe_dump(sched, sort_keys=False, allow_unicode=True)
+_tmp = SCHED.with_name(SCHED.name + ".tmp")
+_tmp.write_text(_header + _body, encoding="utf-8")
+os.replace(_tmp, SCHED)
 print(f"today_stretch reset: {prev} -> 0")
 PYEOF
     then
