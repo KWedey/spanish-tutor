@@ -145,6 +145,37 @@ class TestHasExistingState:
         monkeypatch.setattr(setup_module, "ROOT", tmp_path)
         assert setup_module.has_existing_state() is True
 
+    def test_corrupt_profile_returns_true(self, tmp_path, monkeypatch, setup_module):
+        """A1 fail-safe: a corrupt learner-profile.yaml must NOT read as 'no state'.
+
+        Before the fix, ``except Exception: pass`` swallowed the YAMLError and
+        execution fell through to ``return False`` — setup would then run
+        ``init-student --force`` and WIPE the corrupt-but-recoverable file.
+        has_existing_state() must instead treat an unparseable state file as
+        state-present (return True) so setup refuses to clobber it.
+        """
+        _seed_pristine(tmp_path, setup_module)
+        # Unbalanced brackets / bad indentation → yaml.YAMLError on parse.
+        (tmp_path / "state" / "learner-profile.yaml").write_text(
+            "name: [unclosed\n  : : :\n", encoding="utf-8"
+        )
+        monkeypatch.setattr(setup_module, "ROOT", tmp_path)
+        assert setup_module.has_existing_state() is True
+
+    def test_corrupt_resource_tracker_returns_true(self, tmp_path, monkeypatch, setup_module):
+        """A1 fail-safe: a corrupt resource-tracker.yaml must NOT read as 'no state'.
+
+        Same footgun as the profile path — a parse failure here must fail safe
+        to True so the resource tracker is never wiped by init-student --force.
+        """
+        _seed_pristine(tmp_path, setup_module)
+        # Keep the profile pristine so the only signal is the corrupt tracker.
+        (tmp_path / "state" / "resource-tracker.yaml").write_text(
+            "resources: [\n  - id: x\n    : broken\n", encoding="utf-8"
+        )
+        monkeypatch.setattr(setup_module, "ROOT", tmp_path)
+        assert setup_module.has_existing_state() is True
+
     def test_parking_lot_template_matches_init_student(self, setup_module):
         """Ensure setup.PARKING_LOT_TEMPLATE stays in sync with init-student.py.
 

@@ -131,16 +131,22 @@ def has_existing_state():
             pass
 
     # YAML parses — most expensive checks go last.
+    # A1 fail-safe: a parse failure (corrupt-but-present state) must read as
+    # "state present" (return True), NOT swallowed into the fall-through
+    # `return False`. Otherwise setup proceeds to `init-student --force` and
+    # WIPES a recoverable file. Narrow the except to the parse/IO errors we
+    # expect and fail safe on them.
+    import yaml
     profile_path = ROOT / "state" / "learner-profile.yaml"
     if profile_path.exists():
         try:
-            import yaml
             data = yaml.safe_load(profile_path.read_text(encoding="utf-8")) or {}
             name = data.get("name")
             if name and str(name).strip():
                 return True
-        except Exception:
-            pass
+        except (OSError, yaml.YAMLError):
+            # Corrupt or unreadable — refuse to clobber it.
+            return True
 
     # Resource tracker: any populated `resources` list counts as user data.
     # The pristine template has `resources: []`; init-student would wipe
@@ -148,12 +154,12 @@ def has_existing_state():
     rt_path = ROOT / "state" / "resource-tracker.yaml"
     if rt_path.exists():
         try:
-            import yaml
             data = yaml.safe_load(rt_path.read_text(encoding="utf-8")) or {}
             if data.get("resources"):
                 return True
-        except Exception:
-            pass
+        except (OSError, yaml.YAMLError):
+            # Corrupt or unreadable — refuse to clobber it.
+            return True
 
     return False
 
