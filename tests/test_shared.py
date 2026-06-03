@@ -46,6 +46,59 @@ class TestLoadYaml:
 
 
 # ---------------------------------------------------------------------------
+# 1b. load_yaml_strict — non-lossy loader for write-back paths (A3)
+# ---------------------------------------------------------------------------
+
+
+class TestLoadYamlStrict:
+    """A3: load_yaml_strict must distinguish corrupt from empty/missing so a
+    write-back caller never silently re-serializes a corrupt file as {}.
+    """
+
+    def test_valid_yaml_returns_dict(self, tmp_path):
+        f = tmp_path / "ok.yaml"
+        f.write_text("a: 1\nb: two\n", encoding="utf-8")
+        result = shared.load_yaml_strict(f)
+        assert result == {"a": 1, "b": "two"}
+
+    def test_empty_file_returns_empty_dict(self, tmp_path):
+        """An empty file is valid (not corrupt) — return {}, like load_yaml."""
+        f = tmp_path / "empty.yaml"
+        f.write_text("", encoding="utf-8")
+        assert shared.load_yaml_strict(f) == {}
+
+    def test_null_only_returns_empty_dict(self, tmp_path):
+        f = tmp_path / "null.yaml"
+        f.write_text("null\n", encoding="utf-8")
+        assert shared.load_yaml_strict(f) == {}
+
+    def test_corrupt_yaml_raises(self, tmp_path):
+        """The whole point: corrupt YAML must RAISE, not collapse to None/{}.
+
+        Contrast with load_yaml, which returns None here and lets a
+        `load_yaml(p) or {}` caller overwrite p with {}.
+        """
+        f = tmp_path / "bad.yaml"
+        f.write_text("key: [unterminated\n  : : :\n", encoding="utf-8")
+        with pytest.raises(yaml.YAMLError):
+            shared.load_yaml_strict(f)
+
+    def test_corrupt_yaml_error_names_path(self, tmp_path):
+        """The raised error must mention the offending path for a clean message."""
+        f = tmp_path / "bad.yaml"
+        f.write_text("key: [unterminated\n  : : :\n", encoding="utf-8")
+        with pytest.raises(yaml.YAMLError) as excinfo:
+            shared.load_yaml_strict(f)
+        assert "bad.yaml" in str(excinfo.value)
+
+    def test_missing_file_raises(self, tmp_path):
+        """A missing file on a strict (write-back) path is a real error."""
+        f = tmp_path / "nope.yaml"
+        with pytest.raises(FileNotFoundError):
+            shared.load_yaml_strict(f)
+
+
+# ---------------------------------------------------------------------------
 # 2. load_yaml returns empty dict for empty file
 # ---------------------------------------------------------------------------
 

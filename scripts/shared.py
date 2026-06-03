@@ -78,6 +78,34 @@ def load_yaml(path: Path) -> dict | None:
         return None
 
 
+def load_yaml_strict(path: Path) -> dict:
+    """Load a YAML file for a *write-back* path, failing loudly on corruption.
+
+    Unlike :func:`load_yaml` — which collapses both a missing file and a
+    corrupt file to ``None`` and lets ``load_yaml(p) or {}`` callers silently
+    re-serialize a corrupt state file as ``{}`` (data loss) — this loader
+    distinguishes the cases so a read-modify-write never erases unparseable
+    state:
+
+    * missing file → ``FileNotFoundError`` (a write-back read presupposes the
+      file exists; absence is a real error, not "empty state")
+    * corrupt YAML → ``yaml.YAMLError`` annotated with the offending path
+    * empty file / ``null`` → ``{}`` (a valid, distinct-from-corrupt state)
+    * otherwise → the parsed mapping
+
+    Use this on any path that is loaded, mutated, and written back. Leave
+    :func:`load_yaml` for read-only callers that tolerate missing/corrupt.
+    """
+    if not path.exists():
+        raise FileNotFoundError(f"YAML file not found: {path}")
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+    except yaml.YAMLError as e:
+        raise yaml.YAMLError(f"Corrupt YAML in {path}: {e}") from e
+    return data if data is not None else {}
+
+
 def atomic_write(path: Path, content: str) -> None:
     """Write *content* to *path* atomically.
 

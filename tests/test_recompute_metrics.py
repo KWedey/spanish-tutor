@@ -97,3 +97,25 @@ class TestSystemHealthCounters:
         (state / "sessions").mkdir(parents=True)
         summary = rm.recompute(state, date(2026, 6, 3))  # no skill-map / health
         assert summary["reteach_total"] == 0
+
+
+class TestCorruptInputNotClobbered:
+    """A3: a corrupt skill-map on this write-back path must RAISE, not be
+    silently re-serialized as {} (which would erase every concept).
+    """
+
+    def test_corrupt_skill_map_raises_and_preserves_file(self, tmp_path):
+        import pytest
+
+        state = tmp_path / "state"
+        (state / "sessions").mkdir(parents=True)
+        sm = state / "skill-map.yaml"
+        corrupt = "# skill-map header\ngrammar: [unterminated\n  : : :\n"
+        sm.write_text(corrupt, encoding="utf-8")
+
+        with pytest.raises(yaml.YAMLError):
+            rm.recompute(state, date(2026, 6, 3))
+
+        # The corrupt-but-recoverable file must be left byte-for-byte intact,
+        # never overwritten with an empty/default mapping.
+        assert sm.read_text(encoding="utf-8") == corrupt

@@ -30,7 +30,7 @@ from pathlib import Path
 
 import yaml
 
-from shared import STATE_DIR, atomic_write
+from shared import STATE_DIR, atomic_write, load_yaml_strict
 
 _REGRESSED = "regressed"
 _REACQUIRED = ("acquired", "automatic")
@@ -128,7 +128,9 @@ def recompute(state_dir: Path, today: date) -> dict:
                "too_easy_30d": 0, "too_hard_30d": 0}
 
     if sm_path.exists():
-        skill_map = yaml.safe_load(sm_path.read_text(encoding="utf-8")) or {}
+        # Write-back path: load strictly so a corrupt skill-map raises instead
+        # of collapsing to {} and erasing every concept on the write below (A3).
+        skill_map = load_yaml_strict(sm_path)
         summary["regression_touched"] = recompute_regression_counts(skill_map)
         reteach = count_reteach(skill_map)
         summary["reteach_total"] = reteach
@@ -141,7 +143,9 @@ def recompute(state_dir: Path, today: date) -> dict:
     summary["too_hard_30d"] = too_hard
 
     if health_path.exists():
-        health = yaml.safe_load(health_path.read_text(encoding="utf-8")) or {}
+        # Write-back path: strict load so a corrupt system-health raises rather
+        # than being silently overwritten with just the three counters (A3).
+        health = load_yaml_strict(health_path)
         health["concepts_requiring_reteach_total"] = reteach
         health["sessions_rated_too_easy_30d"] = too_easy
         health["sessions_rated_too_hard_30d"] = too_hard
