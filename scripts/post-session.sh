@@ -110,9 +110,14 @@ fi
 # below all route through this EXIT trap.
 SNAPSHOT_TAKEN=false
 ROLLED_BACK=false
+# COMMIT_PHASE (A2): set true once all pedagogy steps (5b–5e) have succeeded and
+# we enter Step 6 (git). A git-layer failure (hook reject, GPG, no signing key)
+# is NOT a reason to discard correct, already-validated pedagogy state — the
+# rollback trap skips when this flag is set so the user can simply re-commit.
+COMMIT_PHASE=false
 on_exit() {
     local code=$?
-    if $DRY_RUN || ! $SNAPSHOT_TAKEN || $ROLLED_BACK || [[ $code -eq 0 ]]; then
+    if $DRY_RUN || ! $SNAPSHOT_TAKEN || $ROLLED_BACK || $COMMIT_PHASE || [[ $code -eq 0 ]]; then
         exit "$code"
     fi
     ROLLED_BACK=true
@@ -447,6 +452,11 @@ fi
 # ---------------------------------------------------------------------------
 # Step 6: Git commit
 # ---------------------------------------------------------------------------
+
+# A2: from here on, a non-zero exit is a VCS-layer error, not a pedagogy-state
+# error. Mark the commit phase so the rollback trap leaves validated state on
+# disk (steps 5b–5e already succeeded above).
+COMMIT_PHASE=true
 
 if $NO_COMMIT; then
     step "Step 6/8: Skipping git commit (--no-commit)"

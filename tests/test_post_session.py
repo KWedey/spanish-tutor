@@ -1,13 +1,21 @@
 """Structural tests for scripts/post-session.sh.
 
-These tests read the shell script and assert that required patterns are
+Most tests here read the shell script and assert that required patterns are
 present, that ordering invariants hold (Step 0 before Step 1), and that
 dry-run and failure branches exist.  They do NOT execute the script at
 runtime — this mirrors the TestSetupBatExitCode / test_pre_commit_hook
 structural-assertion pattern from Phases 1 and 2.
 
-Requirements covered: ENFORCE-01 (Step 0 snapshot), ENFORCE-09 (transcript FAIL).
+The TestCommitPhaseRollback class at the end is the exception: it executes
+the real script against a stubbed temp ROOT to verify the A2 rollback-scope
+behavior at runtime.
+
+Requirements covered: ENFORCE-01 (Step 0 snapshot), ENFORCE-09 (transcript FAIL),
+A2 (commit-phase failures must not roll back validated state).
 """
+import os
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -310,4 +318,147 @@ class TestTodayStretchReset:
         real_lines = [l for l in script.splitlines() if not l.lstrip().startswith("#") and "/7:" in l]
         assert not real_lines, (
             f"Step count not renumbered: {len(real_lines)} line(s) still reference /7: {real_lines[:3]}"
+        )
+
+
+# ---------------------------------------------------------------------------
+# A2: Commit-phase failures must NOT roll back already-validated state
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.skipif(
+    shutil.which("bash") is None or shutil.which("git") is None,
+    reason="A2 runtime test requires bash and git",
+)
+class TestCommitPhaseRollback:
+    """A2: runtime behavior of the Step 0 rollback trap.
+
+    The trap must roll back the snapshot when a *pedagogy* step (validate,
+    aggregate, recompute, ...) fails, but must NOT roll back when only the
+    git commit (Step 6) fails — a VCS-layer error (hook reject, GPG, no
+    signing key) should leave the already-validated state on disk.
+
+    These tests run the REAL post-session.sh against a temp ROOT whose
+    helper scripts are stubs. snapshot-state.py's `rollback` stub drops a
+    ROLLBACK_HAPPENED sentinel so the test can detect whether the trap
+    actually rolled back.
+    """
+
+    DATE = "2026-04-15"
+
+    def _build_root(self, tmp_path: Path, *, fail_step: str | None) -> Path:
+        """Lay out a temp ROOT with a copy of post-session.sh + stub scripts.
+
+        ``fail_step`` names a stub script that should exit 1 to simulate a
+        pre-commit-phase failure (e.g. "validate-state.py"); None means every
+        pedagogy step succeeds and only the (separately arranged) git commit
+        will fail.
+        """
+        root = tmp_path / "root"
+        scripts = root / "scripts"
+        scripts.mkdir(parents=True)
+
+        # The real script under test.
+        shutil.copy(SCRIPT_PATH, scripts / "post-session.sh")
+
+        # snapshot-state.py stub: snapshot succeeds; rollback drops a sentinel.
+        (scripts / "snapshot-state.py").write_text(
+            "import sys\n"
+            "from pathlib import Path\n"
+            "ROOT = Path(__file__).resolve().parent.parent\n"
+            "action = sys.argv[1] if len(sys.argv) > 1 else ''\n"
+            "if action == 'rollback':\n"
+            "    (ROOT / 'ROLLBACK_HAPPENED').write_text('1')\n"
+            "sys.exit(0)\n",
+            encoding="utf-8",
+        )
+
+        # All other pedagogy-step stubs: succeed unless this is the fail_step.
+        stub_names = [
+            "generate-vault.py",
+            "archive-sessions.py",
+            "validate-state.py",
+            "check-session-log.py",
+            "recompute-metrics.py",
+            "update-fluency-tracking.py",
+        ]
+        for name in stub_names:
+            code = "import sys; sys.exit(1)\n" if name == fail_step else "import sys; sys.exit(0)\n"
+            (scripts / name).write_text(code, encoding="utf-8")
+
+        # Minimal valid session log (session_number 1 => transcript is exempt,
+        # warns instead of failing). No recasts/schedule => Steps 5b/5c no-op.
+        sessions = root / "state" / "sessions"
+        sessions.mkdir(parents=True)
+        (sessions / f"{self.DATE}.yaml").write_text(
+            f"date: {self.DATE}\nsession_number: 1\n", encoding="utf-8"
+        )
+
+        # Step 6 runs `git add state/ vault/ transcripts/ progress-reports/
+        # journal/`; git errors if a pathspec matches nothing. Create the dirs
+        # so `git add` succeeds and the ONLY failure is the rejecting commit hook.
+        for d in ("vault", "transcripts", "progress-reports", "journal"):
+            (root / d).mkdir(parents=True, exist_ok=True)
+            (root / d / ".gitkeep").write_text("", encoding="utf-8")
+
+        # Make ROOT a git repo so Step 6 can stage + attempt a commit.
+        env = self._git_env()
+        subprocess.run(["git", "init", "-q"], cwd=root, check=True, env=env)
+        subprocess.run(
+            ["git", "config", "user.email", "test@example.com"],
+            cwd=root, check=True, env=env,
+        )
+        subprocess.run(
+            ["git", "config", "user.name", "Test"], cwd=root, check=True, env=env
+        )
+        # A failing pre-commit hook isolates the failure to the commit itself.
+        hooks = root / ".git" / "hooks"
+        hooks.mkdir(parents=True, exist_ok=True)
+        hook = hooks / "pre-commit"
+        hook.write_text("#!/bin/sh\nexit 1\n", encoding="utf-8")
+        hook.chmod(0o755)
+        return root
+
+    @staticmethod
+    def _git_env() -> dict:
+        env = dict(os.environ)
+        # Deterministic identity + ignore any global hooksPath override.
+        env.setdefault("GIT_CONFIG_NOSYSTEM", "1")
+        return env
+
+    def _run(self, root: Path) -> subprocess.CompletedProcess:
+        return subprocess.run(
+            ["bash", str(root / "scripts" / "post-session.sh"), self.DATE],
+            cwd=root,
+            capture_output=True,
+            text=True,
+            env=self._git_env(),
+        )
+
+    def test_commit_failure_does_not_roll_back(self, tmp_path):
+        """A2 core: a Step 6 git-commit failure must NOT roll back state."""
+        root = self._build_root(tmp_path, fail_step=None)
+        result = self._run(root)
+        # The script still exits non-zero (the commit genuinely failed)...
+        assert result.returncode != 0, (
+            "expected non-zero exit from the failed commit; "
+            f"stdout={result.stdout!r} stderr={result.stderr!r}"
+        )
+        # ...but the validated pedagogy state must remain (no rollback).
+        assert not (root / "ROLLBACK_HAPPENED").exists(), (
+            "A2 regression: a commit-phase failure rolled back already-validated "
+            f"state. stdout={result.stdout!r} stderr={result.stderr!r}"
+        )
+
+    def test_pre_commit_failure_still_rolls_back(self, tmp_path):
+        """A2 guard: a pedagogy-step failure (Step 3) must STILL roll back.
+
+        Ensures the COMMIT_PHASE carve-out did not disable rollback wholesale.
+        """
+        root = self._build_root(tmp_path, fail_step="validate-state.py")
+        result = self._run(root)
+        assert result.returncode != 0, "expected non-zero exit from the failed step"
+        assert (root / "ROLLBACK_HAPPENED").exists(), (
+            "A2 regression: a pre-commit-phase failure did NOT roll back. "
+            f"stdout={result.stdout!r} stderr={result.stderr!r}"
         )
