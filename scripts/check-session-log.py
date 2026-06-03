@@ -26,7 +26,7 @@ except ImportError:
     print("Error: PyYAML required. Install with: pip install pyyaml", file=sys.stderr)
     sys.exit(1)
 
-from shared import ROOT, STATE_DIR, green, yellow, red, dim
+from shared import ROOT, STATE_DIR, load_yaml, green, yellow, red, dim
 
 
 
@@ -251,15 +251,8 @@ PHASE_5_CUTOFF = "2026-04-21"
 
 
 def _load_schedule() -> dict | None:
-    """Load state/schedule.yaml, returning None on missing-file or YAML error."""
-    schedule_path = STATE_DIR / "schedule.yaml"
-    if not schedule_path.exists():
-        return None
-    try:
-        with schedule_path.open() as f:
-            return yaml.safe_load(f) or {}
-    except yaml.YAMLError:
-        return None
+    """Load state/schedule.yaml (None on missing-file or YAML error)."""
+    return load_yaml(STATE_DIR / "schedule.yaml")
 
 
 def _coerce_minutes(value) -> int:
@@ -411,14 +404,6 @@ _LATAM_RESOURCE_DIALECTS = {
     "mexican",
     "rioplatense",
     "chilean",
-    # Reasonable forward-looking additions for tags media-bank may add in v1.2+
-    "argentinian",
-    "uruguayan",
-    "peruvian",
-    "venezuelan",
-    "bolivian",
-    "ecuadorian",
-    "paraguayan",
 }
 _MIXED_NEUTRAL_RESOURCE_DIALECTS = {"mixed", "mixed_latin_american", "neutral"}
 
@@ -500,29 +485,13 @@ def check_dialect_advisory_required(
 
 
 def _load_learner_profile() -> dict | None:
-    """Load state/learner-profile.yaml, returning None on missing-file or YAML error.
-    Mirrors _load_schedule's contract."""
-    profile_path = STATE_DIR / "learner-profile.yaml"
-    if not profile_path.exists():
-        return None
-    try:
-        with profile_path.open() as f:
-            return yaml.safe_load(f) or {}
-    except yaml.YAMLError:
-        return None
+    """Load state/learner-profile.yaml (None on missing-file or YAML error)."""
+    return load_yaml(STATE_DIR / "learner-profile.yaml")
 
 
 def _load_media_bank() -> dict | None:
-    """Load curriculum/media-bank.yaml, returning None on missing-file or YAML error.
-    Mirrors _load_schedule's contract."""
-    media_bank_path = ROOT / "curriculum" / "media-bank.yaml"
-    if not media_bank_path.exists():
-        return None
-    try:
-        with media_bank_path.open() as f:
-            return yaml.safe_load(f) or {}
-    except yaml.YAMLError:
-        return None
+    """Load curriculum/media-bank.yaml (None on missing-file or YAML error)."""
+    return load_yaml(ROOT / "curriculum" / "media-bank.yaml")
 
 
 def check_dialect_advisory_violations(data: dict) -> list[tuple[int, str]]:

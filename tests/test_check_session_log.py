@@ -156,6 +156,23 @@ class TestSessionTypeEnum:
         missing = required - enum_values
         assert not missing, f"session_type enum missing required values: {sorted(missing)}"
 
+    def test_expected_by_type_matches_session_type_enum(self):
+        """H3 drift guard: EXPECTED_BY_TYPE's keys must equal the schema's
+        session_type enum exactly. EXPECTED_BY_TYPE hand-lists per-type field
+        profiles; if a session type is added to the schema/router but not here,
+        check_log silently routes it to the soft-WARN branch and enforces
+        nothing. Asserting set-equality makes that drift fail loud instead."""
+        schema_path = Path(__file__).resolve().parent.parent / "schemas" / "session-log.schema.yaml"
+        with open(schema_path) as f:
+            schema = yaml.safe_load(f)
+        enum_values = set(schema["fields"]["session_type"]["enum"])
+        keys = set(EXPECTED_BY_TYPE)
+        assert keys == enum_values, (
+            f"EXPECTED_BY_TYPE drifted from session_type enum: "
+            f"only in schema={sorted(enum_values - keys)}, "
+            f"only in EXPECTED_BY_TYPE={sorted(keys - enum_values)}"
+        )
+
 
 # ---------------------------------------------------------------------------
 # EXPECTED_BY_TYPE tests (Task 2 verification)

@@ -272,8 +272,23 @@ def check_acquired_consistency(sm: dict, res: ValidationResults) -> None:
     else:        res.pass_("No acquired concepts to check (all unseen/practicing)")
 
 
+def _schema_enum(schema: dict, *path: str) -> set:
+    """Return the `enum` of a nested schema field as a set (YAML null -> None).
+
+    Drives validator enums from schemas/*.yaml so they cannot silently drift
+    from the schema (the single source of truth). Raises KeyError loudly if the
+    schema path or `enum` key is missing rather than falling back to a stale
+    hardcoded copy.
+    """
+    node = schema
+    for key in path:
+        node = node[key]
+    return set(node["enum"])
+
+
 def check_performance_enums(sm: dict, res: ValidationResults) -> None:
-    valid_perf = {None, "struggling", "competent"}
+    valid_perf = _schema_enum(load_schema("skill-map"),
+                              "grammar_entry_template", "performance_scaffolded")
     grammar = sm.get("grammar", {})
     for cid, e in grammar.items():
         if not isinstance(e, dict): continue
@@ -428,11 +443,12 @@ def check_onboarding_counter_range(sched: dict, res: ValidationResults) -> None:
 
 
 def check_schedule_enums(sched: dict, res: ValidationResults) -> None:
-    valid_phases = {"A-foundation", "B-conversational", "C-intermediate", "D-advanced"}
+    sched_fields = load_schema("schedule")["fields"]
+    valid_phases = _schema_enum(sched_fields, "current_phase")
     phase = sched.get("current_phase", "")
     if phase and phase not in valid_phases:
         res.fail(f"schedule.current_phase='{phase}' is not a valid phase")
-    valid_balance = {"accuracy-leaning", "balanced", "fluency-leaning"}
+    valid_balance = _schema_enum(sched_fields, "fluency_accuracy_balance")
     balance = sched.get("fluency_accuracy_balance", "")
     if balance and balance not in valid_balance:
         res.fail(f"schedule.fluency_accuracy_balance='{balance}' is not valid")
@@ -611,10 +627,12 @@ def check_receptive_skills(skill_map: dict, res: ValidationResults) -> None:
         res.warn('receptive_skills section missing from skill-map')
         return
 
-    valid_listening = {'L1', 'L2', 'L3', 'L4', 'L5'}
-    valid_reading = {'R1', 'R2', 'R3', 'R4', 'R5'}
-    valid_quality = {None, 'gist', 'main_ideas', 'details', 'inference'}
-    valid_lookup = {None, 'frequent', 'occasional', 'rare', 'none'}
+    rs_schema = load_schema("skill-map")["receptive_skills"]
+    valid_listening = _schema_enum(rs_schema, "listening", "children", "current_level")
+    valid_reading = _schema_enum(rs_schema, "reading", "children", "current_level")
+    valid_quality = _schema_enum(rs_schema, "listening", "children", "comprehension_quality")
+    # schema enum omits null; the validator tolerates an absent/null value
+    valid_lookup = _schema_enum(rs_schema, "reading", "children", "lookup_frequency") | {None}
 
     listening = rs.get('listening', {})
     reading = rs.get('reading', {})
@@ -685,8 +703,9 @@ def check_resource_tracker(resource_tracker: dict,
         res.warn('resource-tracker missing input_summary section')
         return
 
-    valid_listening = {'L1', 'L2', 'L3', 'L4', 'L5'}
-    valid_reading = {'R1', 'R2', 'R3', 'R4', 'R5'}
+    rs_schema = load_schema("skill-map")["receptive_skills"]
+    valid_listening = _schema_enum(rs_schema, "listening", "children", "current_level")
+    valid_reading = _schema_enum(rs_schema, "reading", "children", "current_level")
 
     cl = summary.get('current_listening_level')
     if cl and cl not in valid_listening:
