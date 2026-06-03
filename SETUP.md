@@ -53,7 +53,8 @@ Your learning progress is stored locally and won't conflict with upstream change
 
 ```bash
 git pull
-python3 scripts/generate-vault.py --full   # regenerate vault with new content
+python3 scripts/migrate-state.py          # bring existing state files up to the current schema
+python3 scripts/generate-vault.py --full  # regenerate vault with new content
 ```
 
 Your state files, session logs, and journal entries are untouched.

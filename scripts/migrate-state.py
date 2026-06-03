@@ -12,6 +12,7 @@ except ImportError:
     print("Error: PyYAML is required. Install with: pip install pyyaml", file=sys.stderr)
     sys.exit(1)
 
+import shared
 from shared import ROOT, STATE_DIR
 CURRENT_VERSION = 1
 _C = sys.stdout.isatty()
@@ -105,7 +106,7 @@ def save_state_file(rel_path: str, data: dict, original_text: str) -> None:
             hdr.pop()
     header = "\n".join(hdr) + "\n\n" if hdr else ""
     body = yaml.dump(data, default_flow_style=False, allow_unicode=True, sort_keys=False)
-    (ROOT / rel_path).write_text(header + body, encoding="utf-8")
+    shared.atomic_write(ROOT / rel_path, header + body)
 
 
 def main() -> None:
@@ -162,7 +163,7 @@ def main() -> None:
                             print(green(f"    + {field_path}"))
                         file_changes += 1
         data["schema_version"] = CURRENT_VERSION
-        if not args.dry_run and file_changes > 0:
+        if not args.dry_run:
             save_state_file(rel_path, data, original_text)
         total_added += file_changes
 
