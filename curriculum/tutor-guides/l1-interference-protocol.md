@@ -21,6 +21,13 @@ When introducing any new concept:
 
 ## Error Escalation
 
+This section is the L1-specific *technique* overlay. The canonical session-count
+escalation ladder is `curriculum/activities/error-correction.md` Escalation
+Protocol (3 / 5 / 8 sessions → change approach / fossilized risk / directly
+inform), and `decision-engine.md` Step 0c is the concept-selection side. When a
+persistent L1 error is also a regression, follow error-correction.md's ladder for
+*when* to escalate and use the techniques below for *how*.
+
 If the same L1 interference error appears 3+ sessions in a row:
 1. Try a different explanation approach
 2. Create a dedicated contrast drill

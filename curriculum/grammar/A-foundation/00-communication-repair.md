@@ -139,3 +139,5 @@ These phrases must be automatic by session 5. The tutor verifies acquisition thr
 | Switches to English or freezes | Not yet automatic | Targeted practice |
 
 **Escalation:** If not automatic by session 7, dedicate a full practice segment. Assign self-monitoring homework: "Count how many times you used a repair phrase during Anki review."
+
+*Note: the Dialect Notes section (present in other grammar files) is N/A here — these fixed phrases carry no dialect-conditioned forms. The L1-interference omission is already noted under "When to Teach" above.*

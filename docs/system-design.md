@@ -831,6 +831,7 @@ assignments:
     priority: ""                # required, recommended, bonus
     narrow_topic_aligned: false # true if this assignment is part of the weekly topic block
     retrieval_target: ""        # prior concept to revisit in this assignment (e.g., "include 2 ser/estar sentences")
+    dialect_advisory: ""        # voseo / vosotros / voseo+vosotros — set when the resource's dialect differs from the learner's target (enforced by check-session-log.py)
     notes: ""
 
 # Journal entry review (if applicable)
