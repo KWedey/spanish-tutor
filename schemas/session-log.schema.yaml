@@ -62,6 +62,9 @@ fields:
     default: []
     description: "How yesterday's homework went"
 
+  # Agent-maintained: written by the tutor (CLAUDE.md Standard Session Flow /
+  # State Updates step 3 input debrief) and read by curriculum + the LLM next
+  # session. No Python reader; validate-state only checks nested enums here.
   input_reviewed:
     type: list
     required: false
@@ -120,6 +123,8 @@ fields:
     default: []
     description: "Assessment updates to apply to skill-map"
 
+  # Agent-maintained: written by the tutor (decision-engine.md interleaving)
+  # and read by curriculum + the LLM next session. No Python reader.
   interleaved_concepts:
     type: list
     required: false
@@ -160,13 +165,8 @@ fields:
     required: false
     default: []
     description: "Homework assignments for before next session"
-    # Per-assignment recognized fields (item_schema — validated in check-session-log.py,
-    # not by the schema loader; loader extension deferred to v1.2):
-    #   type            (string, required) — anki, writing, listening, reading, drill, journal, etc.
-    #   estimated_minutes (int, required)  — minutes the learner should expect to spend
-    #   resource        (string, optional) — resource title from curriculum/media-bank.yaml
-    #   dialect_advisory — see below
-    item_schema:
+    # Per-assignment fields are additionally enforced by check-session-log.py.
+    item_shape:
       type:
         type: string
         required: true
@@ -192,6 +192,9 @@ fields:
           target_dialect, or peninsular resource + non-es-ES target_dialect).
         enum: ["voseo", "vosotros", "voseo+vosotros"]
 
+  # Agent-maintained: written by the tutor when a journal entry is submitted
+  # (CLAUDE.md Review & Warm-up journal review) and read by the human / the LLM
+  # next session. No Python reader.
   journal_review:
     type: map
     required: false

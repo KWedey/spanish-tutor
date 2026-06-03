@@ -44,15 +44,3 @@ fields:
     required: false
     default: []
     description: "Active and tracked resources"
-
-  active_resources:
-    type: list
-    required: false
-    default: []
-    description: "Currently active resources (legacy/simplified format)"
-
-  retired_resources:
-    type: list
-    required: false
-    default: []
-    description: "Previously used resources no longer in rotation"
