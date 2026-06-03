@@ -236,6 +236,8 @@ fields:
     type: int
     required: false
     default: 8
+    # Hard ceiling: the per-session new_anki_cards count is capped at 10 by
+    # check-session-log.py (MAX_NEW_ANKI_CARDS); keep this planning default <= 10.
     description: "SRS new cards per session"
 
   anki_retirement_threshold_days:
