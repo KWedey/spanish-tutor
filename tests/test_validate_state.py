@@ -54,6 +54,7 @@ check_recast_uptake_stats_consistency = validate_mod.check_recast_uptake_stats_c
 check_learner_interest_staleness = validate_mod.check_learner_interest_staleness
 check_study_time_budget_consistency = validate_mod.check_study_time_budget_consistency
 check_daily_target_tier_drift = validate_mod.check_daily_target_tier_drift
+check_just_right_restore_drift = validate_mod.check_just_right_restore_drift
 
 
 @pytest.fixture(autouse=True)
@@ -1280,6 +1281,66 @@ class TestDailyTargetTierDrift:
         check_daily_target_tier_drift(sched, session_logs, results)
         # 1 too-much does not trigger reduction per D-11
         assert not any("drift" in m.lower() for m in _fails())
+
+
+class TestJustRightRestoreDrift:
+    """A4 / D-11 (restore side): companion to TestDailyTargetTierDrift. The
+    too-much ladder has check_daily_target_tier_drift guarding it; the
+    +10%-restore-after-3-just-right ladder had no validator, so if the tutor
+    never reset consecutive_just_right_count after restoring (or never restored
+    despite the counter reaching 3), nothing noticed. This locks the parity.
+    """
+
+    def test_restore_drift_detected_when_counter_ignored(self):
+        # 3 consecutive 'just-right' AND counter pinned at 3 => the +10% restore
+        # (and the counter reset) is pending but unapplied => FAIL.
+        sched = {
+            "study_time_budget": {"daily_target": 25, "daily_maximum": 60, "daily_minimum": 15, "weekly_goal": 180, "today_stretch": 0},
+            "consecutive_just_right_count": 3,
+        }
+        session_logs = [
+            {"date": "2026-04-22", "homework_load_rating": "just-right"},
+            {"date": "2026-04-23", "homework_load_rating": "just-right"},
+            {"date": "2026-04-24", "homework_load_rating": "just-right"},
+        ]
+        check_just_right_restore_drift(sched, session_logs, results)
+        fails = _fails()
+        assert any(
+            "daily_target" in m
+            and ("restore" in m.lower() or "just_right" in m.lower() or "just-right" in m.lower())
+            for m in fails
+        ), f"A4/D-11: expected restore-drift FAIL (3 just-right + counter=3); got {fails!r}"
+
+    def test_restored_correctly_passes(self):
+        # daily_target restored +10% (25 -> 27.5 -> nearest 5 = 30) and counter reset.
+        sched = {
+            "study_time_budget": {"daily_target": 30, "daily_maximum": 60, "daily_minimum": 15, "weekly_goal": 180, "today_stretch": 0},
+            "consecutive_just_right_count": 0,  # reset after restore per D-11
+        }
+        session_logs = [
+            {"date": "2026-04-22", "homework_load_rating": "just-right"},
+            {"date": "2026-04-23", "homework_load_rating": "just-right"},
+            {"date": "2026-04-24", "homework_load_rating": "just-right"},
+        ]
+        check_just_right_restore_drift(sched, session_logs, results)
+        assert not any("restore" in m.lower() for m in _fails())
+
+    def test_two_just_right_below_threshold_passes(self):
+        # Only 2 consecutive just-right — below the 3-rating restore threshold.
+        sched = {
+            "study_time_budget": {"daily_target": 25, "daily_maximum": 60, "daily_minimum": 15, "weekly_goal": 180, "today_stretch": 0},
+            "consecutive_just_right_count": 2,
+        }
+        session_logs = [
+            {"date": "2026-04-23", "homework_load_rating": "just-right"},
+            {"date": "2026-04-24", "homework_load_rating": "just-right"},
+        ]
+        check_just_right_restore_drift(sched, session_logs, results)
+        assert not any("restore" in m.lower() for m in _fails())
+
+    def test_no_study_time_budget_passes(self):
+        check_just_right_restore_drift({"consecutive_just_right_count": 3}, [], results)
+        assert not any("restore" in m.lower() for m in _fails())
 
 
 class TestAcquiredConsistencyCoreOnly:

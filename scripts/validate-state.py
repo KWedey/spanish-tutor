@@ -557,6 +557,60 @@ def check_daily_target_tier_drift(sched: dict, session_logs: list,
     )
 
 
+def check_just_right_restore_drift(sched: dict, session_logs: list,
+                                   res: ValidationResults) -> None:
+    """A4 / D-11 (restore side): companion to check_daily_target_tier_drift.
+
+    The D-11 ladder restores daily_target by +10% after 3 consecutive
+    'just-right' homework_load_rating ratings (following an earlier reduction).
+    check_daily_target_tier_drift guards the *reduction* (too-much) side via
+    consecutive_too_much_count; nothing guarded the *restore* side, so if the
+    tutor let consecutive_just_right_count reach 3 without applying the restore
+    (and resetting the counter), it went unnoticed. This mirrors the too-much
+    tripwire for parity.
+
+    Semantic (locked by tests/test_validate_state.py::TestJustRightRestoreDrift):
+
+    - If the most recent three session logs all have
+      homework_load_rating='just-right' AND
+      schedule['consecutive_just_right_count'] >= 3 → FAIL (the counter reached
+      the D-11 restore threshold; the tutor must restore daily_target by +10%
+      AND reset consecutive_just_right_count to 0).
+    - If counter == 0 after 3 just-right in logs → PASS (restore already applied,
+      counter reset per the D-11 ladder).
+    - Fewer than 3 'just-right' in recent logs → PASS regardless of counter
+      (below threshold; not enough to trigger a restore).
+
+    Does nothing (PASS) if session_logs is empty or schedule has no
+    study_time_budget.
+    """
+    stb = (sched or {}).get("study_time_budget")
+    if not isinstance(stb, dict):
+        res.pass_("just-right restore drift: no study_time_budget configured")
+        return
+    # Scan the most recent 3 logs for 'just-right'.
+    recent = [l for l in (session_logs or []) if isinstance(l, dict)][-3:]
+    just_right_count = sum(
+        1 for l in recent if l.get("homework_load_rating") == "just-right"
+    )
+    counter = int(sched.get("consecutive_just_right_count") or 0)
+    if just_right_count >= 3 and counter >= 3:
+        res.fail(
+            f"just-right restore drift: observed {just_right_count} consecutive "
+            f"'just-right' ratings in last 3 session logs AND "
+            f"consecutive_just_right_count={counter} (>=3) — D-11 requires "
+            f"restoring daily_target by +10% once the counter reaches 3 "
+            f"consecutive 'just-right' ratings (after a prior reduction) and then "
+            f"resetting consecutive_just_right_count to 0. The pending restore "
+            f"has not been applied."
+        )
+        return
+    res.pass_(
+        f"just-right restore drift check: {just_right_count} recent 'just-right', "
+        f"consecutive_just_right_count={counter} (consistent with D-11 ladder)"
+    )
+
+
 def check_integration_tested_with(sm: dict, res: ValidationResults) -> None:
     grammar = sm.get("grammar", {})
     grammar_ids = set(grammar.keys())
@@ -974,17 +1028,18 @@ def main() -> None:
         check_onboarding_counter_range(schedule, res)
         # LOAD-07 / D-04 / D-06: study_time_budget consistency
         check_study_time_budget_consistency(schedule, has_sessions, res)
-        # LOAD-04 / D-11: daily_target tier drift detector — loads last 2 session
-        # logs by filename (YYYY-MM-DD sorts chronologically) and checks whether
-        # consecutive_too_much_count has been advanced to match observed
-        # 'too-much' homework_load_rating ratings.
+        # LOAD-04 / D-11: daily_target tier drift detectors — load the last 3
+        # session logs by filename (YYYY-MM-DD sorts chronologically) and check
+        # whether the consecutive_* counters have been advanced to match observed
+        # homework_load_rating ratings. The too-much detector re-slices to the
+        # last 2 internally; the just-right restore detector needs all 3.
         session_logs_recent: list = []
         sessions_dir = STATE / "sessions"
         if sessions_dir.exists():
             yaml_files = sorted(
                 p for p in sessions_dir.glob("*.yaml") if p.is_file()
             )
-            for p in yaml_files[-2:]:
+            for p in yaml_files[-3:]:
                 try:
                     with p.open() as f:
                         d = yaml.safe_load(f) or {}
@@ -993,6 +1048,7 @@ def main() -> None:
                 except (OSError, yaml.YAMLError):
                     continue
         check_daily_target_tier_drift(schedule, session_logs_recent, res)
+        check_just_right_restore_drift(schedule, session_logs_recent, res)
         check_placement_validation_consistency(schedule, res)
     if schedule is not None and skill_map is not None:
         check_carryover_concepts(schedule, skill_map, res)
