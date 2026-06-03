@@ -75,18 +75,57 @@ class TestInterestCap:
     """Verify INTEREST cap mechanics are documented."""
 
     def test_cap_value_documented(self, doc_content):
-        """Maximum contribution is 3."""
-        assert "Maximum contribution is 3" in doc_content
+        """INTEREST's maximum contribution is documented as 3.
+
+        Whitespace/format-tolerant: asserts the rule (cap == 3), not the exact
+        prose, so reflowing the sentence can't silently break the test.
+        """
+        assert re.search(r"maximum contribution is\s+3\b", doc_content, re.I), (
+            "INTEREST cap of 3 not documented (expected 'Maximum contribution is 3')"
+        )
 
     def test_cap_validator_reference(self, doc_content):
-        """validate-state.py enforcement referenced."""
+        """validate-state.py enforcement referenced with the >3 FAIL rule."""
         assert "validate-state.py" in doc_content
-        assert "score > 3 = FAIL" in doc_content
+        assert re.search(r"score\s*>\s*3\s*=\s*FAIL", doc_content), (
+            "INTEREST >3 validator FAIL rule not documented (expected 'score > 3 = FAIL')"
+        )
 
     def test_regression_beats_interest_math(self, doc_content):
-        """Cap explanation shows regression baseline beats max interest."""
-        assert "NEED 10 + GAP 10 = 20 baseline" in doc_content
-        assert "NEED 7 + GAP 3 + INTEREST 3 = 13" in doc_content
+        """Cap explanation shows a regression baseline beats max interest.
+
+        Asserts the RULE — by parsing the operands and checking the stated sums
+        are internally consistent AND that the regression baseline outscores the
+        interest-inflated total — rather than transcribing the exact arithmetic
+        prose. Reformatting the example keeps the test green; a genuine math
+        error in the doc (or a cap that no longer wins) turns it red.
+        """
+        m_base = re.search(
+            r"NEED\s+(\d+)\s*\+\s*GAP\s+(\d+)\s*=\s*(\d+)\s*baseline", doc_content
+        )
+        assert m_base, "regression-baseline arithmetic line missing from cap explanation"
+        need_b, gap_b, base_total = (int(g) for g in m_base.groups())
+        assert need_b + gap_b == base_total, (
+            f"baseline arithmetic is internally inconsistent in the doc: "
+            f"{need_b} + {gap_b} != {base_total}"
+        )
+
+        m_int = re.search(
+            r"NEED\s+(\d+)\s*\+\s*GAP\s+(\d+)\s*\+\s*INTEREST\s+(\d+)\s*=\s*(\d+)",
+            doc_content,
+        )
+        assert m_int, "interest-inflated arithmetic line missing from cap explanation"
+        need_i, gap_i, interest_i, int_total = (int(g) for g in m_int.groups())
+        assert need_i + gap_i + interest_i == int_total, (
+            f"interest-inflated arithmetic is internally inconsistent in the doc: "
+            f"{need_i} + {gap_i} + {interest_i} != {int_total}"
+        )
+
+        assert base_total > int_total, (
+            f"cap explanation must show the regression baseline ({base_total}) "
+            f"beating the max-interest total ({int_total}) — that is the rule the "
+            f"INTEREST cap exists to guarantee"
+        )
 
 
 class TestWorkedExamplesUpdated:
