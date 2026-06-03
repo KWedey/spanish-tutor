@@ -733,13 +733,6 @@ class TestDialectAdvisoryRule:
         but omitting dialect_advisory. Invoking check-session-log.py on it must fail with a
         message naming `dialect_advisory` and the trigger condition."""
         check_dialect_advisory = check_mod.check_dialect_advisory_required
-        if check_dialect_advisory is None:
-            pytest.fail(
-                "CURR-FOLLOWUP-02: check-session-log.py must expose "
-                "check_dialect_advisory_required(assignment, learner_profile, media_bank). "
-                "See .planning/phases/08-followup-v1.1-improvements/08-02-PLAN.md."
-            )
-
         learner = {"target_dialect": "es-AR"}
         media_bank = {
             "prescriptive_episodes": {
@@ -773,12 +766,6 @@ class TestDialectAdvisoryRule:
         behavior as contract, not an accident — protects against a future change that adds
         a fall-through validator default."""
         check_dialect_advisory = check_mod.check_dialect_advisory_required
-        if check_dialect_advisory is None:
-            pytest.fail(
-                "CURR-FOLLOWUP-02: check-session-log.py must expose "
-                "check_dialect_advisory_required(assignment, learner_profile, media_bank)."
-            )
-
         learner = {"target_dialect": "es-AR"}
         media_bank = {
             "prescriptive_episodes": {
