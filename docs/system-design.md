@@ -909,6 +909,10 @@ decision_engine_trace:
 
 session_difficulty_rating: null   # learner self-report at checkout: too-easy | just-right | too-hard | null
 
+# QR-R3 per-session load guardrails (check-session-log.py enforces the ceilings)
+new_anki_cards: 0                 # NEW cards added this session; > 10 FAILs the commit
+new_grammar_concepts_introduced: []  # grammar concept IDs introduced; > 1 FAILs the commit
+
 # Next session recommendation
 next_session:
   recommended_focus: ""

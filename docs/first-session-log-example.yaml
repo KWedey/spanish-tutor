@@ -62,6 +62,10 @@ skill_map_updates:
     to: practicing
     note: "Introduced as memorized chunks; highest-priority concept through session 5."
 
+# QR-R3 load guardrails (enforced by check-session-log.py):
+new_anki_cards: 10                                      # 6 repair phrases + 4 greetings (==10, the ceiling ✓)
+new_grammar_concepts_introduced: [A-00-communication-repair]  # one concept introduced (≤1 ✓)
+
 # Homework for the next session (optional for first-session; no SRS-load gate yet).
 assignments:
   - task: "Memorize the 6 repair phrases — say them aloud"

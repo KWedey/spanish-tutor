@@ -212,9 +212,9 @@ The recent **`.omc/audit/` wave (2026-05-14) was the most thorough prior pass �
 
 # Resolution Log — 2026-06-03 (all gaps closed)
 
-Fixed on branch `audit-fixes-2026-06-03` (14 commits). Final state: **565 tests pass**
-(was 535; +30), **validate-state 34/34** (was 33; +1 guard), router → `first-session`,
-golden CLAUDE.md test green, working tree clean.
+Fixed on branch `audit-fixes-2026-06-03` (merged to `main`). Final state: **577 tests pass**
+(was 535; +42 — includes the QR-R3 follow-up below), **validate-state 34/34** (was 33;
++1 guard), router → `first-session`, golden CLAUDE.md test green, working tree clean.
 
 | Commit | Findings closed |
 |--------|-----------------|
@@ -231,11 +231,13 @@ golden CLAUDE.md test green, working tree clean.
 | `fix(migrate)` | QR-M2, QR-M3, QR-M4 — version-stamp persist, atomic write, wired into SETUP |
 | `fix(schema-docs)` | M1, M2, M8, M9, M10, M11, H3 + polish — schema/example/guide tightening, nested-enum validation |
 | `fix(polish)` | QR-S4 + LOWs — prompt-injection fencing, escalation cross-links, doc notes |
+| `fix(guardrails)` | **QR-R3** (2026-06-03 follow-up) — added `new_anki_cards` + `new_grammar_concepts_introduced` schema fields; `check_new_anki_cards`/`check_new_grammar_concepts` wired into `check-session-log.py` as hard fails; examples, system-design, CLAUDE.md, +12 tests |
 
 ### Deferred (documented, with rationale — not silently dropped)
-- **QR-R3** (enforce ≤10 Anki cards / ≤1 new grammar concept per session): the session
-  log has no structured field for these counts; enforcing it cleanly needs a schema
-  addition, not speculative field-invention. → v1.2.
+- ~~**QR-R3**~~ **CLOSED 2026-06-03** — the "no structured field" blocker was the fix:
+  added `new_anki_cards` (int) and `new_grammar_concepts_introduced` (list) to the
+  session-log schema, then enforced both ceilings in `check-session-log.py` (wired into
+  `check_log`, proven by `TestLoadGuardrailsWiredIntoCheckLog`). No longer v1.2.
 - **QR-L5** (dialect advisory searches only `prescriptive_episodes`, not podcasts/tv/
   audiobooks): low impact; the code already flags the future taxonomy refactor (CC-3). → v1.2.
 - **QR-L4** (stale REQUIREMENTS.md / ROADMAP.md progress tables): these live in

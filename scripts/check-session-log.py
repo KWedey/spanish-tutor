@@ -562,6 +562,48 @@ def check_dialect_advisory_violations(data: dict) -> list[tuple[int, str]]:
 
 
 # ---------------------------------------------------------------------------
+# QR-R3: Per-session load guardrails (structured-field enforcement)
+# ---------------------------------------------------------------------------
+#
+# Two CLAUDE.md guardrails were previously prose-only ("Never add more than 10
+# new Anki cards per session", "Never introduce more than 1 new grammar concept
+# per session") with no structured field to check against. The session log now
+# carries `new_anki_cards` (int) and `new_grammar_concepts_introduced` (list);
+# these checks enforce the ceilings. No date cutoff is needed — pre-QR-R3 logs
+# omit the fields, defaulting to 0/[], which passes.
+
+MAX_NEW_ANKI_CARDS = 10
+MAX_NEW_GRAMMAR_CONCEPTS = 1
+
+
+def check_new_anki_cards(data: dict) -> tuple[str, str]:
+    """QR-R3: ≤10 new Anki cards per session. Returns (level, message) where
+    level is 'OK' or 'FAIL'. A non-numeric value degrades to 0 (same tolerance
+    as the budget check, audit M3) rather than crashing the post-session run."""
+    count = _coerce_minutes(data.get("new_anki_cards", 0))  # generic non-neg int coercion
+    if count > MAX_NEW_ANKI_CARDS:
+        return ("FAIL", f"new_anki_cards={count} exceeds the {MAX_NEW_ANKI_CARDS}-"
+                        f"new-cards-per-session guardrail (CLAUDE.md). Split the new "
+                        f"vocabulary across multiple sessions.")
+    return ("OK", "")
+
+
+def check_new_grammar_concepts(data: dict) -> tuple[str, str]:
+    """QR-R3: ≤1 new grammar concept introduced per session. A non-list value
+    degrades to an empty list (passes) rather than crashing."""
+    raw = data.get("new_grammar_concepts_introduced") or []
+    if not isinstance(raw, list):
+        return ("OK", "")
+    if len(raw) > MAX_NEW_GRAMMAR_CONCEPTS:
+        ids = ", ".join(str(c) for c in raw)
+        return ("FAIL", f"{len(raw)} new grammar concepts introduced [{ids}] — "
+                        f"exceeds the {MAX_NEW_GRAMMAR_CONCEPTS}-new-grammar-concept-"
+                        f"per-session guardrail (CLAUDE.md). Consolidate before "
+                        f"introducing another.")
+    return ("OK", "")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -626,6 +668,14 @@ def check_log(date: str, strict: bool) -> int:
         # The key is present. Its value may be null/None (learner declined)
         # which is a valid enum option per D-10; out-of-range string values
         # are caught by the schema-driven enum loop in validate-state.py.
+
+    # QR-R3: Hard load guardrails enforceable from structured fields. Run
+    # before the EXPECTED scan / early-return so they block regardless of
+    # session type. No date cutoff — absent fields default to 0/[] and pass.
+    for level, msg in (check_new_anki_cards(data), check_new_grammar_concepts(data)):
+        if level == "FAIL":
+            print(red(f"FAIL: {msg}"))
+            return 1
 
     expected = EXPECTED_BY_TYPE.get(session_type)
     if expected is None:

@@ -947,3 +947,102 @@ class TestDialectAdvisoryIntegration:
             "audit-followup: missing target_dialect must silently skip the rule, "
             "not fail check_log with a false positive."
         )
+
+
+# ---------------------------------------------------------------------------
+# QR-R3: Per-session load guardrails (new_anki_cards / new_grammar_concepts)
+# ---------------------------------------------------------------------------
+
+check_new_anki_cards = check_mod.check_new_anki_cards
+check_new_grammar_concepts = check_mod.check_new_grammar_concepts
+
+
+class TestNewAnkiCardsGuardrail:
+    """QR-R3: ≤10 new Anki cards per session."""
+
+    def test_at_ceiling_passes(self):
+        level, _ = check_new_anki_cards({"new_anki_cards": 10})
+        assert level == "OK", "10 new cards is exactly the ceiling — must pass"
+
+    def test_over_ceiling_fails(self):
+        level, msg = check_new_anki_cards({"new_anki_cards": 11})
+        assert level == "FAIL"
+        assert "11" in msg and "guardrail" in msg
+
+    def test_absent_field_passes(self):
+        # Pre-QR-R3 logs omit the field → default 0 → pass (no false fail).
+        level, _ = check_new_anki_cards({})
+        assert level == "OK"
+
+    def test_nonnumeric_degrades_to_pass(self):
+        # Tutor typo must not crash the post-session run (audit M3 policy).
+        level, _ = check_new_anki_cards({"new_anki_cards": "a bunch"})
+        assert level == "OK"
+
+
+class TestNewGrammarConceptsGuardrail:
+    """QR-R3: ≤1 new grammar concept introduced per session."""
+
+    def test_one_concept_passes(self):
+        level, _ = check_new_grammar_concepts(
+            {"new_grammar_concepts_introduced": ["A-02-ser-vs-estar"]})
+        assert level == "OK"
+
+    def test_two_concepts_fail(self):
+        level, msg = check_new_grammar_concepts(
+            {"new_grammar_concepts_introduced": ["A-02-ser-vs-estar", "A-03-gender-agreement"]})
+        assert level == "FAIL"
+        assert "A-02-ser-vs-estar" in msg and "A-03-gender-agreement" in msg
+
+    def test_empty_list_passes(self):
+        level, _ = check_new_grammar_concepts({"new_grammar_concepts_introduced": []})
+        assert level == "OK"
+
+    def test_absent_field_passes(self):
+        level, _ = check_new_grammar_concepts({})
+        assert level == "OK"
+
+    def test_nonlist_degrades_to_pass(self):
+        level, _ = check_new_grammar_concepts(
+            {"new_grammar_concepts_introduced": "A-02-ser-vs-estar"})
+        assert level == "OK"
+
+
+class TestLoadGuardrailsWiredIntoCheckLog:
+    """Proves the QR-R3 guardrails are actually invoked by check_log() — the
+    'defined + unit-tested but never called' anti-pattern this whole audit
+    exists to catch. Uses an unknown session_type so check_log's only failure
+    surface is the guardrail itself (EXPECTED-field scan is skipped for unknown
+    types, returning 0). Date < PHASE_5_CUTOFF skips the budget/load-rating
+    checks, isolating the guardrail."""
+
+    def _log(self, **extra):
+        log = _make_session_log("qr-r3-isolation-type")  # unknown type → no EXPECTED scan
+        log["date"] = "2026-04-15"                        # < PHASE_5_CUTOFF
+        log.update(extra)
+        return log
+
+    def test_acceptable_loads_pass(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(check_mod, "STATE_DIR", tmp_path / "state")
+        monkeypatch.setattr(check_mod, "ROOT", tmp_path)
+        _write_session_log(tmp_path / "state", "2026-04-15",
+                           self._log(new_anki_cards=10,
+                                     new_grammar_concepts_introduced=["A-02-ser-vs-estar"]))
+        assert check_log("2026-04-15", strict=False) == 0
+
+    def test_too_many_anki_fails_through_check_log(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(check_mod, "STATE_DIR", tmp_path / "state")
+        monkeypatch.setattr(check_mod, "ROOT", tmp_path)
+        _write_session_log(tmp_path / "state", "2026-04-15",
+                           self._log(new_anki_cards=11))
+        assert check_log("2026-04-15", strict=False) == 1, (
+            "QR-R3: 11 new Anki cards must FAIL through check_log. If this passes, "
+            "the guardrail is no longer wired into check_log().")
+
+    def test_too_many_grammar_fails_through_check_log(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(check_mod, "STATE_DIR", tmp_path / "state")
+        monkeypatch.setattr(check_mod, "ROOT", tmp_path)
+        _write_session_log(tmp_path / "state", "2026-04-15",
+                           self._log(new_grammar_concepts_introduced=["A-01", "A-02"]))
+        assert check_log("2026-04-15", strict=False) == 1, (
+            "QR-R3: 2 new grammar concepts must FAIL through check_log.")

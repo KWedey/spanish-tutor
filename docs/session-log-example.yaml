@@ -187,6 +187,10 @@ session_difficulty_rating: just-right
 # had prior homework. Enum: too-much | just-right | too-light (null if declined).
 homework_load_rating: just-right
 
+# QR-R3 load guardrails (check-session-log.py enforces the ceilings):
+new_anki_cards: 5                       # the Anki assignment adds 5 cards (≤10 ✓)
+new_grammar_concepts_introduced: []     # consolidation session — no NEW grammar (≤1 ✓)
+
 next_session:
   recommended_focus: A-02-ser-vs-estar
   reason: "Production error still at 28%, but improving. One more session of communicative practice before spot-checking."

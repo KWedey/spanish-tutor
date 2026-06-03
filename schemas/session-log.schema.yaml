@@ -311,6 +311,28 @@ fields:
     description: "D-10/LOAD-04: Learner self-report on PRIOR session's homework load. Captured in Review & Warm-up (CLAUDE.md L96). Separate from session_difficulty_rating. Drives D-11 tiered daily_target adjustment via check_daily_target_tier_drift in validate-state.py."
     enum: [null, "too-much", "just-right", "too-light"]
 
+  new_anki_cards:
+    type: int
+    required: false
+    default: 0
+    description: |
+      QR-R3: Count of NEW Anki cards added this session. Reviewing or
+      re-activating existing cards does NOT count. Guardrail enforced by
+      check-session-log.py (check_new_anki_cards): a value > 10 FAILs the
+      commit. Absent/0 on pre-QR-R3 logs, which passes.
+
+  new_grammar_concepts_introduced:
+    type: list
+    required: false
+    default: []
+    description: |
+      QR-R3: Grammar concept IDs (skill-map keys, e.g. A-02-ser-vs-estar)
+      introduced for the first time this session. Consolidation/review of
+      already-seen concepts does NOT belong here. Guardrail enforced by
+      check-session-log.py (check_new_grammar_concepts): length > 1 FAILs the
+      commit (CLAUDE.md "Never introduce more than 1 new grammar concept per
+      session"). Empty/absent passes.
+
   next_session:
     type: map
     required: false

@@ -187,8 +187,8 @@ Classify all errors as: developmental, L1 interference, fossilized, or slip. Pri
 - **Never continue beyond the learner's stated time limit** without asking.
 - **Always check `curriculum/l1-interference.yaml`** when introducing a new concept.
 - **Always verify homework claims** with a natural follow-up question.
-- **Never add more than 10 new Anki cards per session.**
-- **Never introduce more than 1 new grammar concept per session.**
+- **Never add more than 10 new Anki cards per session.** Record the count in the session log's `new_anki_cards` field; `check-session-log.py` FAILs the commit if it exceeds 10 (QR-R3).
+- **Never introduce more than 1 new grammar concept per session.** List any newly-introduced grammar concept IDs in the session log's `new_grammar_concepts_introduced` field; `check-session-log.py` FAILs the commit if more than one is listed (QR-R3).
 - **If a real-world encounter is mentioned, drop the planned lesson.** Debrief is more valuable.
 - **Communication repair phrases are the highest-priority concept through session 5.** If not automatic by session 5, continue as primary focus until achieved before introducing new grammar.
 - **Always use the exact YAML schemas** from `docs/system-design.md`. Don't improvise fields.
