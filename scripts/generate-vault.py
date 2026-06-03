@@ -20,8 +20,8 @@ except ImportError:
     sys.exit(1)
 
 from shared import (ROOT, STATE_DIR, CURRICULUM_DIR, VAULT_DIR,
-                     PHASE_DIRS as PHASE_DIR_MAP, TIER_DIRS as TIER_DIR_MAP,
-                     load_yaml, yaml_value as _yaml_value)
+                     PHASE_DIRS, TIER_DIRS as TIER_DIR_MAP,
+                     load_yaml, atomic_write, yaml_value as _yaml_value)
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -114,12 +114,28 @@ def prereq_to_wikilink(prereq_id: str) -> str:
     return f"[[{concept_id_to_title(prereq_id)}]]"
 
 
-def strip_source_frontmatter(content: str) -> str:
-    """Remove YAML frontmatter from source file content if present."""
+def split_frontmatter(content: str) -> tuple[dict | None, str | None]:
+    """Split *content* into (parsed_frontmatter, body) on ``---`` delimiters.
+
+    Returns ``(None, None)`` when no leading frontmatter block is present
+    (content does not start with ``---`` or has no closing ``---``). When a
+    frontmatter block is present, the first element is the result of
+    ``yaml.safe_load`` on the block (which may be ``None`` for an empty block)
+    and the second element is the raw body following the closing delimiter
+    (no whitespace stripping).
+    """
     if content.startswith("---"):
         end = content.find("---", 3)
         if end != -1:
-            return content[end + 3:].lstrip("\n")
+            return yaml.safe_load(content[3:end]), content[end + 3:]
+    return None, None
+
+
+def strip_source_frontmatter(content: str) -> str:
+    """Remove YAML frontmatter from source file content if present."""
+    _, body = split_frontmatter(content)
+    if body is not None:
+        return body.lstrip("\n")
     return content
 
 
@@ -138,12 +154,10 @@ def file_has_generated_marker(path: Path) -> bool:
     try:
         with open(path, "r", encoding="utf-8") as f:
             content = f.read(1024)  # Only need to check the beginning
-        if content.startswith("---"):
-            end = content.find("---", 3)
-            if end != -1:
-                fm = yaml.safe_load(content[3:end])
-                return isinstance(fm, dict) and fm.get("generated") is True
-    except Exception:
+        fm, body = split_frontmatter(content)
+        if body is not None:
+            return isinstance(fm, dict) and fm.get("generated") is True
+    except yaml.YAMLError:
         pass
     return False
 
@@ -157,9 +171,7 @@ def write_vault_file(path: Path, content: str, force: bool = False) -> None:
     if path.exists() and not force and not file_has_generated_marker(path):
         # Protect hand-edited files
         return
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(content)
+    atomic_write(path, content)
 
 
 _FRONTMATTER_FIELD_ORDER = [
@@ -213,7 +225,7 @@ def yaml_frontmatter(data: dict) -> str:
 def grammar_source_path(concept_id: str) -> Path:
     """Resolve a grammar concept ID to its curriculum source file path."""
     phase = concept_id[0]
-    phase_dir = PHASE_DIR_MAP.get(phase, "")
+    phase_dir = PHASE_DIRS.get(phase, "")
     # Strip phase letter and dash to get the number-name portion
     file_stem = concept_id[2:]  # e.g. "01-present-regular"
     return CURRICULUM_DIR / "grammar" / phase_dir / f"{file_stem}.md"
@@ -907,24 +919,18 @@ def update_frontmatter_in_file(path: Path, updates: dict) -> bool:
     with open(path, "r", encoding="utf-8") as f:
         content = f.read()
 
-    if not content.startswith("---"):
+    parsed_fm, body = split_frontmatter(content)
+    if body is None:
         return False
 
-    end = content.find("---", 3)
-    if end == -1:
-        return False
-
-    fm_str = content[3:end]
-    fm = yaml.safe_load(fm_str) or {}
-    body = content[end + 3:]
+    fm = parsed_fm or {}
 
     fm.update(updates)
     fm["last_generated"] = today_str()
 
     new_content = yaml_frontmatter(fm) + body
 
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(new_content)
+    atomic_write(path, new_content)
     return True
 
 
@@ -1021,11 +1027,7 @@ def run_session(skill_map: dict, session_date: str) -> None:
 
     # Regenerate Home and Roadmap
     if SCHEDULE_PATH.exists():
-        try:
-            schedule = load_yaml(SCHEDULE_PATH)
-        except yaml.YAMLError as exc:
-            print(f"Warning: malformed schedule.yaml: {exc}", file=sys.stderr)
-            schedule = {}
+        schedule = load_yaml(SCHEDULE_PATH)
     else:
         schedule = {}
     path, content = generate_home(schedule, skill_map)
@@ -1073,13 +1075,7 @@ def main():
     skill_map = load_yaml(SKILL_MAP_PATH)
 
     if SCHEDULE_PATH.exists():
-        try:
-            schedule = load_yaml(SCHEDULE_PATH)
-        except yaml.YAMLError as exc:
-            print(f"Error: malformed schedule.yaml at {SCHEDULE_PATH}: {exc}",
-                  file=sys.stderr)
-            print("Continuing with empty schedule defaults.", file=sys.stderr)
-            schedule = {}
+        schedule = load_yaml(SCHEDULE_PATH)
     else:
         schedule = {}
 
