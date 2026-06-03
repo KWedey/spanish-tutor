@@ -26,13 +26,8 @@ except ImportError:
     print("Error: PyYAML required. Install with: pip install pyyaml", file=sys.stderr)
     sys.exit(1)
 
-from shared import ROOT, STATE_DIR
+from shared import ROOT, STATE_DIR, green, yellow, red, dim
 
-_C = sys.stdout.isatty()
-green = lambda t: f"\033[32m{t}\033[0m" if _C else t
-yellow = lambda t: f"\033[33m{t}\033[0m" if _C else t
-red = lambda t: f"\033[31m{t}\033[0m" if _C else t
-dim = lambda t: f"\033[2m{t}\033[0m" if _C else t
 
 
 # ---------------------------------------------------------------------------

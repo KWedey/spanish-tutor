@@ -11,11 +11,7 @@ except ImportError:
     print("Error: PyYAML is required. Install with: pip install pyyaml", file=sys.stderr)
     sys.exit(1)
 
-from shared import ROOT, STATE_DIR, load_schema, get_field_default, yaml_value as _yaml_value
-_C = sys.stdout.isatty()
-green = lambda t: f"\033[32m{t}\033[0m" if _C else t
-yellow = lambda t: f"\033[33m{t}\033[0m" if _C else t
-red = lambda t: f"\033[31m{t}\033[0m" if _C else t
+from shared import ROOT, STATE_DIR, load_schema, get_field_default, yaml_value as _yaml_value, green, yellow, red
 
 # ---------------------------------------------------------------------------
 # Schema-driven template generation

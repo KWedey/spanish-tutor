@@ -1,5 +1,6 @@
 """Shared constants and helpers used across tutoring system scripts."""
 import os
+import sys
 import tempfile
 from pathlib import Path
 
@@ -35,6 +36,27 @@ TIER_DIRS = {
     "3": "tier3-social",
     "4": "tier4-abstract",
 }
+
+# ---------------------------------------------------------------------------
+# Terminal color helpers (ANSI; no-op when stdout is not a TTY)
+# ---------------------------------------------------------------------------
+#
+# isatty is snapshotted at import time, matching the per-script blocks these
+# replace. Scripts import only the colors they use.
+
+_COLOR_ENABLED = sys.stdout.isatty()
+
+
+def _ansi(code: str):
+    return lambda t: f"\033[{code}m{t}\033[0m" if _COLOR_ENABLED else t
+
+
+green = _ansi("32")
+yellow = _ansi("33")
+red = _ansi("31")
+dim = _ansi("2")
+bold = _ansi("1")
+
 
 # ---------------------------------------------------------------------------
 # YAML helpers

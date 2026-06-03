@@ -13,12 +13,8 @@ except ImportError:
     sys.exit(1)
 
 import shared
-from shared import ROOT, STATE_DIR
+from shared import ROOT, STATE_DIR, green, yellow, red
 CURRENT_VERSION = 1
-_C = sys.stdout.isatty()
-green = lambda t: f"\033[32m{t}\033[0m" if _C else t
-yellow = lambda t: f"\033[33m{t}\033[0m" if _C else t
-red = lambda t: f"\033[31m{t}\033[0m" if _C else t
 
 # Migrations: version -> list of migration entries.
 # Each entry is either:

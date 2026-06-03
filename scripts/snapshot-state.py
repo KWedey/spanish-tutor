@@ -14,17 +14,7 @@ import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from shared import ROOT, STATE_DIR
-
-# ---------------------------------------------------------------------------
-# Color helpers (same pattern as init-student.py)
-# ---------------------------------------------------------------------------
-
-_C = sys.stdout.isatty()
-green = lambda t: f"\033[32m{t}\033[0m" if _C else t
-yellow = lambda t: f"\033[33m{t}\033[0m" if _C else t
-red = lambda t: f"\033[31m{t}\033[0m" if _C else t
-dim = lambda t: f"\033[2m{t}\033[0m" if _C else t
+from shared import ROOT, STATE_DIR, green, yellow, red, dim
 
 SNAPSHOT_DIR = STATE_DIR / ".snapshot"
 TIMESTAMP_FMT = "%Y%m%d-%H%M%S"

@@ -3,15 +3,11 @@
 import subprocess
 import sys
 from pathlib import Path
+from shared import green, yellow, red, bold
 
 ROOT = Path(__file__).resolve().parent.parent
 SCRIPTS = ROOT / "scripts"
 
-_C = sys.stdout.isatty()
-green = lambda t: f"\033[32m{t}\033[0m" if _C else t
-yellow = lambda t: f"\033[33m{t}\033[0m" if _C else t
-red = lambda t: f"\033[31m{t}\033[0m" if _C else t
-bold = lambda t: f"\033[1m{t}\033[0m" if _C else t
 
 
 def check_python():

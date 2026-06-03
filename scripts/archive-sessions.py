@@ -12,21 +12,10 @@ Usage:
 import argparse
 import re
 import shutil
-import sys
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
-from shared import ROOT, STATE_DIR
-
-# ---------------------------------------------------------------------------
-# Color helpers (same pattern as other scripts)
-# ---------------------------------------------------------------------------
-
-_C = sys.stdout.isatty()
-green = lambda t: f"\033[32m{t}\033[0m" if _C else t
-yellow = lambda t: f"\033[33m{t}\033[0m" if _C else t
-red = lambda t: f"\033[31m{t}\033[0m" if _C else t
-dim = lambda t: f"\033[2m{t}\033[0m" if _C else t
+from shared import ROOT, STATE_DIR, green, yellow
 
 # ---------------------------------------------------------------------------
 # Constants
