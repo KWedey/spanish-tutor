@@ -161,7 +161,7 @@ interference_patterns:
     severity: medium
     persistence: "Persistent — tied to broader subjunctive acquisition"
 
-  - id: age-with-ser
+  - id: tener-for-age
     english_cause: "English uses 'to be' for age: 'I am 20 years old'"
     common_errors:
       - wrong: "Soy 20 años"
@@ -305,3 +305,38 @@ interference_patterns:
       plural you). It's recognition-only for you — read it, you don't need to
       produce these forms. Tell me which vosotros forms you noticed on the
       debrief."
+
+  - id: conditional-in-si-clause
+    english_cause: "English allows 'If I would have...' constructions; learners carry this into Spanish si clauses"
+    common_errors:
+      - wrong: "Si tendría dinero, viajaría"
+        right: "Si tuviera dinero, viajaría"
+        explanation: "The si clause always takes the subjunctive, never the conditional"
+      - wrong: "Si habría sabido, habría ido"
+        right: "Si hubiera sabido, habría ido"
+        explanation: "The si clause takes pluperfect subjunctive, not conditional perfect"
+      - wrong: "Si yo era tú, hablaría con el jefe"
+        right: "Si yo fuera tú, hablaría con el jefe"
+        explanation: "Hypothetical/contrary-to-fact conditions require past subjunctive, not indicative"
+    preempt_at: D-02-si-clauses
+    severity: high
+    persistence: "Persistent — the English 'If I would...' pattern is deeply ingrained in informal speech"
+
+  - id: passive-overuse
+    english_cause: "English uses passive voice far more frequently than Spanish; direct translation produces stilted, unnatural Spanish"
+    common_errors:
+      - wrong: "El español es hablado aquí"
+        right: "Aquí se habla español"
+        explanation: "Passive se is more natural than true passive for everyday speech"
+      - wrong: "Es dicho que va a llover"
+        right: "Se dice que va a llover"
+        explanation: "Impersonal se, not true passive, for 'it is said that' constructions"
+      - wrong: "Profesores son necesitados"
+        right: "Se necesitan profesores"
+        explanation: "Passive se for impersonal statements about what is needed"
+      - wrong: "La comida es preparada por mi mamá"
+        right: "Mi mamá prepara la comida"
+        explanation: "Active voice is preferred in everyday speech; true passive sounds bookish"
+    preempt_at: D-04-passive-voice
+    severity: medium
+    persistence: "Moderate — learners continue defaulting to passive structures from English for months; resolves with sustained input and feedback"

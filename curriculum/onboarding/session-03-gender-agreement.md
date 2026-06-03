@@ -38,7 +38,7 @@ Show pairs: "el gato negro / la gata negra, los gatos negros / las gatas negras.
 
 **Gender rules (4 min):**
 - Most nouns ending in -o are masculine, -a are feminine
-- Key exceptions: el dia, la mano, el agua (feminine but uses el)
+- Key exceptions: el día, la mano, el agua (feminine but uses el)
 - Nouns ending in -e or consonant: must be learned individually
 
 **Number and adjective agreement (4 min):**
