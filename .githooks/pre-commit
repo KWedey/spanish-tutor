@@ -14,13 +14,16 @@ while IFS= read -r file; do
         state/sessions/*.yaml)      MATCHED_FILES+=("$file"); MATCHED_CATS+=("session-log") ;;
         state/summaries/*.yaml)     MATCHED_FILES+=("$file"); MATCHED_CATS+=("summary") ;;
         state/milestones/*.yaml)    MATCHED_FILES+=("$file"); MATCHED_CATS+=("milestone") ;;
-        journal/*.md)
+        # All extensions, not just .md — .gitignore uses the broad glob, so the
+        # hook (the -f-bypass backstop) must match it or a learner can leak a
+        # journal/feedback note saved as .txt/.org via `git add -f` (audit QR-S1/S2).
+        journal/*)
             [[ "$(basename "$file")" != ".gitkeep" ]] && MATCHED_FILES+=("$file") && MATCHED_CATS+=("journal") ;;
-        transcripts/*.md)
+        transcripts/*)
             [[ "$(basename "$file")" != ".gitkeep" ]] && MATCHED_FILES+=("$file") && MATCHED_CATS+=("transcript") ;;
-        progress-reports/*.md)
+        progress-reports/*)
             [[ "$(basename "$file")" != ".gitkeep" ]] && MATCHED_FILES+=("$file") && MATCHED_CATS+=("progress-report") ;;
-        feedback/*.md)
+        feedback/*)
             base="$(basename "$file")"
             [[ "$base" != "TEMPLATE.md" && "$base" != ".gitkeep" ]] && MATCHED_FILES+=("$file") && MATCHED_CATS+=("feedback") ;;
         parking-lot.md)             MATCHED_FILES+=("$file"); MATCHED_CATS+=("parking-lot") ;;
@@ -38,13 +41,19 @@ while IFS= read -r file; do
         state/offline-guides/*)
             [[ "$(basename "$file")" != ".gitkeep" ]] && \
                 MATCHED_FILES+=("$file") && MATCHED_CATS+=("offline-guide") ;;
-        # --- LEAK-08: generated vault markdown (BOTH depth levels needed) ---
+        # --- LEAK-08: generated vault markdown. In POSIX `case`, `*` matches `/`,
+        # so this single pattern covers vault/X.md AND vault/Daily/X.md at any
+        # depth (the old `vault/**/*.md` line was dead code — audit QR-L2). ---
         vault/*.md)                   MATCHED_FILES+=("$file"); MATCHED_CATS+=("vault-generated") ;;
-        vault/**/*.md)                MATCHED_FILES+=("$file"); MATCHED_CATS+=("vault-generated") ;;
         # --- LEAK-13: planning state ---
         .planning/*)                  MATCHED_FILES+=("$file"); MATCHED_CATS+=("planning") ;;
+        # --- QR-S5: OMC orchestration state (audit/session metadata) ---
+        .omc/*)                       MATCHED_FILES+=("$file"); MATCHED_CATS+=("omc-state") ;;
     esac
-done < <(git diff --cached --name-only)
+# --diff-filter=ACMR: guard files being added/copied/modified/renamed-in, but
+# NOT deletions (D) — untracking personal data that was committed by mistake
+# must be allowed through (otherwise the cleanup commit is un-committable).
+done < <(git diff --cached --name-only --diff-filter=ACMR)
 
 if [[ ${#MATCHED_FILES[@]} -gt 0 ]]; then
     echo ""

@@ -11,6 +11,12 @@ __pycache__/
 # Claude Code user data (memory, settings — personal per user)
 .claude/
 
+# GSD planning state (local workflow only — never committed)
+.planning/
+
+# OMC orchestration state (audit reports, session metadata — local only)
+.omc/
+
 # Superpowers plugin state
 .superpowers/
 docs/superpowers/
@@ -31,9 +37,11 @@ state/skill-map.yaml
 state/system-health.yaml
 state/resource-tracker.yaml
 
-# Learner feedback files — personal notes about the program experience
-feedback/*.md
+# Learner feedback files — personal notes about the program experience.
+# Broad glob (all extensions) — a learner may paste a .txt note (audit QR-S1).
+feedback/*
 !feedback/TEMPLATE.md
+!feedback/.gitkeep
 
 # Session logs and archives
 state/sessions/*

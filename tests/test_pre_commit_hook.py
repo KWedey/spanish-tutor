@@ -261,13 +261,30 @@ class TestLeak08VaultMarkdown:
             "bash 3.2 requires this to catch vault/Home.md"
         )
 
-    def test_deep_vault_arm_present(self):
-        """LEAK-08: hook has arm for vault/**/*.md (nested vault files)."""
-        content = _read_hook()
-        assert "vault/**/*.md)" in content, (
-            "LEAK-08: deep arm 'vault/**/*.md)' missing — "
-            "required to catch files in vault subdirectories"
+    def test_deep_vault_files_blocked_behaviorally(self, tmp_path):
+        """LEAK-08: nested vault files are blocked by the single vault/*.md arm.
+
+        In POSIX `case`, `*` matches `/`, so vault/*.md covers vault/Daily/X.md
+        at any depth — the old separate vault/**/*.md arm was dead code (QR-L2).
+        Verify behaviorally by running the hook against a staged nested vault md.
+        """
+        repo = tmp_path / "repo"
+        repo.mkdir()
+        subprocess.run(["git", "init", "-q"], cwd=repo, check=True)
+        subprocess.run(["git", "config", "user.email", "t@t"], cwd=repo, check=True)
+        subprocess.run(["git", "config", "user.name", "t"], cwd=repo, check=True)
+        (repo / "vault" / "Daily").mkdir(parents=True)
+        nested = repo / "vault" / "Daily" / "2026-06-03.md"
+        nested.write_text("personal daily note", encoding="utf-8")
+        subprocess.run(["git", "add", "-f", str(nested)], cwd=repo, check=True)
+        result = subprocess.run(
+            ["bash", str(HOOK_PATH)], cwd=repo, capture_output=True, text=True
         )
+        assert result.returncode == 1, (
+            "LEAK-08: nested vault md file was not blocked by the hook "
+            f"(stdout: {result.stdout})"
+        )
+        assert "vault-generated" in result.stdout
 
     def test_vault_generated_category_on_shallow_arm(self):
         """LEAK-08: shallow vault arm assigns 'vault-generated' category."""
@@ -278,13 +295,12 @@ class TestLeak08VaultMarkdown:
             "LEAK-08: 'vault-generated' category not assigned in vault/*.md arm"
         )
 
-    def test_vault_generated_category_on_deep_arm(self):
-        """LEAK-08: deep vault arm assigns 'vault-generated' category."""
-        lines = _hook_lines()
-        arm_lines = [l for l in lines if "vault/**/*.md)" in l]
-        assert arm_lines, "LEAK-08: deep vault arm not found"
-        assert any("vault-generated" in l for l in arm_lines), (
-            "LEAK-08: 'vault-generated' category not assigned in vault/**/*.md arm"
+    def test_dead_deep_vault_arm_removed(self):
+        """QR-L2: the redundant vault/**/*.md arm was removed (dead code in POSIX case)."""
+        content = _read_hook()
+        assert "vault/**/*.md)" not in content, (
+            "QR-L2: dead 'vault/**/*.md)' arm should be removed — "
+            "vault/*.md already covers all depths in a POSIX case statement"
         )
 
 
@@ -422,10 +438,12 @@ class TestRetrofittedOriginalArms:
         )
 
     @pytest.mark.parametrize("dir_pattern,expected_cat", [
-        ("journal/*.md)", "journal"),
-        ("transcripts/*.md)", "transcript"),
-        ("progress-reports/*.md)", "progress-report"),
-        ("feedback/*.md)", "feedback"),
+        # Broadened to all extensions (audit QR-S1/S2) — the .md-only globs let
+        # a `git add -f journal/x.txt` leak past the hook.
+        ("journal/*)", "journal"),
+        ("transcripts/*)", "transcript"),
+        ("progress-reports/*)", "progress-report"),
+        ("feedback/*)", "feedback"),
     ])
     def test_conditional_arm_has_category(self, dir_pattern, expected_cat):
         """LEAK-09 retrofit: conditional arm (with .gitkeep guard) assigns category."""
@@ -442,3 +460,64 @@ class TestRetrofittedOriginalArms:
                 break
         else:
             pytest.fail(f"Arm '{dir_pattern}' not found in hook")
+
+
+# ---------------------------------------------------------------------------
+# QR-S1/S2/L1: leak-boundary behavioral tests (broadened patterns + deletions)
+# ---------------------------------------------------------------------------
+
+def _init_repo(tmp_path):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    subprocess.run(["git", "init", "-q"], cwd=repo, check=True)
+    subprocess.run(["git", "config", "user.email", "t@t"], cwd=repo, check=True)
+    subprocess.run(["git", "config", "user.name", "t"], cwd=repo, check=True)
+    return repo
+
+
+class TestLeakBoundaryBehavioral:
+    @pytest.mark.parametrize("relpath", [
+        "journal/2026-06-03.txt",
+        "feedback/note.txt",
+        "transcripts/2026-06-03.org",
+    ])
+    def test_nonmd_personal_file_blocked(self, tmp_path, relpath):
+        """QR-S1/S2: personal files in any extension are blocked (not just .md)."""
+        repo = _init_repo(tmp_path)
+        f = repo / relpath
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text("personal content", encoding="utf-8")
+        subprocess.run(["git", "add", "-f", str(f)], cwd=repo, check=True)
+        result = subprocess.run(
+            ["bash", str(HOOK_PATH)], cwd=repo, capture_output=True, text=True
+        )
+        assert result.returncode == 1, f"{relpath} not blocked (stdout: {result.stdout})"
+
+    def test_deletion_of_personal_file_allowed(self, tmp_path):
+        """QR-L1: untracking previously-committed personal data must pass the hook
+        (deletions are excluded via --diff-filter=ACMR), so cleanup is committable."""
+        repo = _init_repo(tmp_path)
+        # commit a personal file with --no-verify, then stage its removal
+        f = repo / "parking-lot.md"
+        f.write_text("personal", encoding="utf-8")
+        subprocess.run(["git", "add", "-f", str(f)], cwd=repo, check=True)
+        subprocess.run(["git", "commit", "-q", "--no-verify", "-m", "seed"], cwd=repo, check=True)
+        subprocess.run(["git", "rm", "--cached", "-q", str(f)], cwd=repo, check=True)
+        result = subprocess.run(
+            ["bash", str(HOOK_PATH)], cwd=repo, capture_output=True, text=True
+        )
+        assert result.returncode == 0, (
+            f"deletion of personal file should pass the hook (stdout: {result.stdout})"
+        )
+
+    def test_omc_state_blocked(self, tmp_path):
+        """QR-S5: .omc/ orchestration state is blocked from commit."""
+        repo = _init_repo(tmp_path)
+        f = repo / ".omc" / "audit" / "report.md"
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text("audit", encoding="utf-8")
+        subprocess.run(["git", "add", "-f", str(f)], cwd=repo, check=True)
+        result = subprocess.run(
+            ["bash", str(HOOK_PATH)], cwd=repo, capture_output=True, text=True
+        )
+        assert result.returncode == 1, f".omc not blocked (stdout: {result.stdout})"
