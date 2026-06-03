@@ -38,7 +38,8 @@ Ser vs estar is not formally introduced until session 5 (A-02). In sessions 2-4,
    - Sessions 5-6: Language Transfer queued, graded reader obtained
    - Sessions 7-8: Speechling account created
    - Session 10: Whisper transcription script set up (optional, if learner is technical)
-5. Sessions 7 and 11 are consolidation sessions (no new grammar concept). Use session 7 for midpoint review of sessions 2-6. If the learner has already been consolidating due to pacing adjustments, use the consolidation session for the next planned concept instead.
+5. Sessions 6 and 10 are scheduled consolidation sessions (no new grammar concept) — they correspond to `session-06-consolidation-midpoint.md` and `session-10-consolidation-final.md`. Use session 6 for midpoint review of sessions 1-5. If the learner has already been consolidating due to pacing adjustments, use the consolidation session for the next planned concept instead.
+6. **Advance the onboarding counter.** Once today's planned concept has been delivered, set `current_onboarding_session` to the next session number (`N+1`) in `schedule.yaml` before finishing (CLAUDE.md State Updates step 4 also covers this). **Hold the number** (do not advance) on a partial/interrupted session, a gap-resume session (see "Gap During Onboarding"), or an *ad-hoc inserted* consolidation session (the unscheduled ones from "Struggling During Onboarding"). The two *scheduled* consolidations (sessions 6 and 10) are part of the normal 10-session arc and do advance. Without this step the next session silently re-serves the same content.
 
 ## At Session 10 (Final Consolidation)
 

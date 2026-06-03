@@ -6,6 +6,8 @@ Loaded when: No session logs exist in `state/sessions/`.
 
 This session is NOT about teaching Spanish. It's about building the learner profile. Everything you learn here informs every future session.
 
+**This session also delivers onboarding session 1.** `curriculum/onboarding/session-01-discovery.md` is the full session-1 plan and treats the discovery flow below as its sub-protocol. For **true-beginner and Early-A** learners, after the discovery/placement flow, also deliver that file's A-00 communication-repair portion (the 6 repair phrases, 5 basic greetings, vowel pronunciation check-in, and Anki setup) — A-00 is memorized chunks, not grammar, so it fits this profile-building session. **Late-A and Early-B+** placements skip onboarding session 1 per the Onboarding Skip Rules below (their counter starts past it). After this session, advance `current_onboarding_session` per §7 — without that, onboarding never progresses.
+
 ## Flow
 
 ### 1. Welcome & Program Orientation (5-7 min)
@@ -232,6 +234,7 @@ After the session, create and populate:
 - `state/schedule.yaml` — set initial phase, onboarding_complete
   - Populate `study_time_budget` map with the five sub-fields captured in §4 (daily_minimum, daily_target, daily_maximum, weekly_goal, today_stretch).
   - Populate `consecutive_too_much_count: 0` and `consecutive_just_right_count: 0` (fresh counters).
+  - Set `current_onboarding_session` to the placement-determined start (session 1 has just been delivered): **true beginner / Early A → `2`**; **Late A → `5`** (onboarding sessions 2-4 skipped — log them under `placement_skipped_sessions`); **Early B+ → set `onboarding_complete: true`** and leave the counter unused (onboarding skipped entirely, placement validation runs instead). Each subsequent onboarding session advances this counter by 1 (per CLAUDE.md State Updates step 4) until session 10 sets `onboarding_complete: true`.
 - `state/system-health.yaml` — initialize all counters
 - `state/resource-tracker.yaml` — add Anki as first resource
 

@@ -393,6 +393,40 @@ def check_carryover_concepts(sched: dict, sm: dict,
     res.pass_(f"Checked {len(carryover)} carryover concepts")
 
 
+def check_onboarding_counter_range(sched: dict, res: ValidationResults) -> None:
+    """Guard the onboarding progression counter (CLAUDE.md C1 fix).
+
+    While onboarding is in progress (onboarding_complete is false),
+    current_onboarding_session must be an int in [1, 10]. A value stuck at 1
+    across sessions is the symptom of the never-incremented bug; a value > 10
+    or < 1 means the counter advanced past the onboarding arc without
+    onboarding_complete being set, or was corrupted. Once onboarding_complete
+    is true the counter is unused, so no constraint applies.
+    """
+    if sched.get("onboarding_complete", False):
+        res.pass_("onboarding_complete is true — onboarding counter unconstrained")
+        return
+    counter = sched.get("current_onboarding_session")
+    if counter is None:
+        # null is valid only before the first session populates it
+        res.pass_("current_onboarding_session is null (pre-first-session)")
+        return
+    if not isinstance(counter, int) or isinstance(counter, bool):
+        res.fail(
+            f"schedule.current_onboarding_session must be an integer while "
+            f"onboarding is in progress, got {counter!r}"
+        )
+        return
+    if counter < 1 or counter > 10:
+        res.fail(
+            f"schedule.current_onboarding_session={counter} is out of range "
+            f"[1, 10] while onboarding_complete is false (onboarding sessions "
+            f"are 1-10; session 10 sets onboarding_complete: true)"
+        )
+        return
+    res.pass_(f"current_onboarding_session={counter} is within onboarding range [1, 10]")
+
+
 def check_schedule_enums(sched: dict, res: ValidationResults) -> None:
     valid_phases = {"A-foundation", "B-conversational", "C-intermediate", "D-advanced"}
     phase = sched.get("current_phase", "")
@@ -887,6 +921,7 @@ def main() -> None:
     if schedule is not None:
         check_last_session_date(schedule, res, dry_run=args.dry_run)
         check_schedule_enums(schedule, res)
+        check_onboarding_counter_range(schedule, res)
         # LOAD-07 / D-04 / D-06: study_time_budget consistency
         check_study_time_budget_consistency(schedule, has_sessions, res)
         # LOAD-04 / D-11: daily_target tier drift detector — loads last 2 session

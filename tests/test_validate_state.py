@@ -29,6 +29,7 @@ check_system_health = validate_mod.check_system_health
 check_acquired_consistency = validate_mod.check_acquired_consistency
 check_performance_enums = validate_mod.check_performance_enums
 check_schedule_enums = validate_mod.check_schedule_enums
+check_onboarding_counter_range = validate_mod.check_onboarding_counter_range
 check_receptive_skills = validate_mod.check_receptive_skills
 check_vocab_error_tracking = validate_mod.check_vocab_error_tracking
 check_resource_tracker = validate_mod.check_resource_tracker
@@ -371,6 +372,52 @@ class TestScheduleEnumValidation:
         fails = _fails()
         assert len(fails) >= 1
         assert any("E-expert" in f for f in fails)
+
+
+# ---------------------------------------------------------------------------
+# 12b. onboarding counter range (C1 fix — guards the never-incremented stall)
+# ---------------------------------------------------------------------------
+
+class TestOnboardingCounterRange:
+    def test_counter_one_in_progress_passes(self):
+        # Seed state: onboarding in progress, counter at 1 — valid (pre/at session 1)
+        check_onboarding_counter_range(
+            {"onboarding_complete": False, "current_onboarding_session": 1}, results
+        )
+        assert len(_fails()) == 0
+
+    def test_counter_in_range_passes(self):
+        check_onboarding_counter_range(
+            {"onboarding_complete": False, "current_onboarding_session": 7}, results
+        )
+        assert len(_fails()) == 0
+
+    def test_counter_above_range_fails(self):
+        check_onboarding_counter_range(
+            {"onboarding_complete": False, "current_onboarding_session": 11}, results
+        )
+        fails = _fails()
+        assert len(fails) >= 1
+        assert any("11" in f for f in fails)
+
+    def test_counter_zero_fails(self):
+        check_onboarding_counter_range(
+            {"onboarding_complete": False, "current_onboarding_session": 0}, results
+        )
+        assert len(_fails()) >= 1
+
+    def test_counter_unconstrained_when_complete(self):
+        # Once onboarding_complete, the counter is unused — even 11 is fine
+        check_onboarding_counter_range(
+            {"onboarding_complete": True, "current_onboarding_session": 11}, results
+        )
+        assert len(_fails()) == 0
+
+    def test_counter_null_pre_first_session_passes(self):
+        check_onboarding_counter_range(
+            {"onboarding_complete": False, "current_onboarding_session": None}, results
+        )
+        assert len(_fails()) == 0
 
 
 # ---------------------------------------------------------------------------
