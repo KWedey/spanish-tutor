@@ -62,7 +62,7 @@ Run at session start for each concept whose status transitioned from `acquired` 
 
 **Cross-link:** `curriculum/activities/error-correction.md` Escalation Protocol (3/5/8 sessions -> change approach / fossilized risk / directly inform) is the EXECUTION side of regression handling -- what to do mid-activity. This ladder is the DECISION side -- concept selection and scoring. Both can fire simultaneously on the same concept without conflict.
 
-After checking, update `regression_session_count` for each regressed concept. Update `escalation_stage` if a threshold was crossed.
+After checking, update `escalation_stage` if a threshold was crossed. (`regression_session_count` itself is maintained automatically by `post-session.sh` Step 5d — `scripts/recompute-metrics.py` increments it for each `regressed` concept and resets it to 0 on re-acquisition — so do NOT hand-edit it here; just read it.)
 
 ## Step 1 — Gather Candidates
 

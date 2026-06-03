@@ -389,6 +389,27 @@ PYEOF
 fi
 
 # ---------------------------------------------------------------------------
+# Step 5d: Recompute derived pedagogy metrics (QR-P1/QR-P2)
+# ---------------------------------------------------------------------------
+#
+# Updates the calibration counters that the decision engine + CLAUDE.md read
+# but nothing previously wrote: per-concept regression_session_count in
+# skill-map, and concepts_requiring_reteach_total / sessions_rated_too_easy_30d
+# / sessions_rated_too_hard_30d in system-health. Deterministic — derived from
+# state, not the LLM. Additive on top of the Step 0 snapshot.
+
+step "Step 5d/8: Recomputing derived pedagogy metrics"
+if $DRY_RUN; then
+    printf "${YELLOW}[dry-run]${RESET} Would recompute regression/reteach/difficulty metrics\n"
+else
+    if ! python3 "$ROOT/scripts/recompute-metrics.py" "$DATE"; then
+        error "Metric recomputation failed"
+        exit 1
+    fi
+    info "Pedagogy metrics recomputed"
+fi
+
+# ---------------------------------------------------------------------------
 # Step 6: Git commit
 # ---------------------------------------------------------------------------
 
