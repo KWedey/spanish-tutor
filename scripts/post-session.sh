@@ -59,9 +59,12 @@ while [[ $# -gt 0 ]]; do
             echo "  2. Archive session logs older than 60 days"
             echo "  3. Validate state files"
             echo "  4. Verify session log exists and is well-formed"
+            echo "  4.5 Check transcript file exists"
             echo "  5. Check session log protocol compliance"
             echo "  5b. Aggregate recast_uptake_stats into skill-map"
             echo "  5c. Reset study_time_budget.today_stretch to 0"
+            echo "  5d. Recompute derived pedagogy metrics"
+            echo "  5e. Update fluency-day tracking"
             echo "  6. Git commit all changes"
             echo ""
             echo "Options:"
@@ -96,18 +99,6 @@ if ! [[ "$DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
     error "Invalid date format: $DATE (expected YYYY-MM-DD)"
     exit 1
 fi
-
-# ---------------------------------------------------------------------------
-# Dry-run wrapper — prints instead of executing when --dry-run is set
-# ---------------------------------------------------------------------------
-
-run() {
-    if $DRY_RUN; then
-        printf "${YELLOW}[dry-run]${RESET} Would run: %s\n" "$*"
-        return 0
-    fi
-    "$@"
-}
 
 # ---------------------------------------------------------------------------
 # Step 0: Snapshot state (must run before any writes; provides rollback point)
@@ -154,24 +145,45 @@ fi
 # ---------------------------------------------------------------------------
 
 step "Step 1/8: Generating vault content for $DATE"
-run python3 "$ROOT/scripts/generate-vault.py" --session --date "$DATE"
-if ! $DRY_RUN; then info "Vault generation complete"; fi
+if $DRY_RUN; then
+    printf "${YELLOW}[dry-run]${RESET} Would run: generate-vault.py --session --date $DATE\n"
+else
+    if ! python3 "$ROOT/scripts/generate-vault.py" --session --date "$DATE"; then
+        error "Vault generation failed"
+        exit 1
+    fi
+    info "Vault generation complete"
+fi
 
 # ---------------------------------------------------------------------------
 # Step 2: Archive old session logs
 # ---------------------------------------------------------------------------
 
 step "Step 2/8: Archiving session logs older than 60 days"
-run python3 "$ROOT/scripts/archive-sessions.py"
-if ! $DRY_RUN; then info "Session archival complete"; fi
+if $DRY_RUN; then
+    printf "${YELLOW}[dry-run]${RESET} Would run: archive-sessions.py\n"
+else
+    if ! python3 "$ROOT/scripts/archive-sessions.py"; then
+        error "Session archival failed"
+        exit 1
+    fi
+    info "Session archival complete"
+fi
 
 # ---------------------------------------------------------------------------
 # Step 3: Validate state files
 # ---------------------------------------------------------------------------
 
 step "Step 3/8: Validating state files"
-run python3 "$ROOT/scripts/validate-state.py"
-if ! $DRY_RUN; then info "State validation passed"; fi
+if $DRY_RUN; then
+    printf "${YELLOW}[dry-run]${RESET} Would run: validate-state.py\n"
+else
+    if ! python3 "$ROOT/scripts/validate-state.py"; then
+        error "State validation failed"
+        exit 1
+    fi
+    info "State validation passed"
+fi
 
 # ---------------------------------------------------------------------------
 # Step 4: Verify session log exists and is well-formed
@@ -443,13 +455,12 @@ else
     if $DRY_RUN; then
         printf "${YELLOW}[dry-run]${RESET} Would run: git add + git commit\n"
     else
-        cd "$ROOT"
-        git add state/ vault/ transcripts/ progress-reports/ journal/
+        git -C "$ROOT" add state/ vault/ transcripts/ progress-reports/ journal/
         # Only commit if there are staged changes
-        if git diff --cached --quiet; then
+        if git -C "$ROOT" diff --cached --quiet; then
             warn "No staged changes to commit"
         else
-            git commit -m "session $DATE: [auto-committed by post-session.sh]"
+            git -C "$ROOT" commit -m "session $DATE: [auto-committed by post-session.sh]"
             info "Changes committed"
         fi
     fi

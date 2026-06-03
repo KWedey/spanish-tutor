@@ -2,10 +2,8 @@
 """One-command setup for new users. Initializes learner state and vault."""
 import subprocess
 import sys
-from pathlib import Path
-from shared import green, yellow, red, bold
+from shared import ROOT, green, yellow, red, bold
 
-ROOT = Path(__file__).resolve().parent.parent
 SCRIPTS = ROOT / "scripts"
 
 
