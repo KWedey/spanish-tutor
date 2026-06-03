@@ -646,14 +646,23 @@ SORT cluster_id ASC
     return VAULT_DIR / "Progress" / "Vocabulary Progress.md", content
 
 
+# NOTE: Weekly Reports and Milestones are APPEND-TARGETS — the tutor appends real
+# history to them (CLAUDE.md State Updates 12b/12c). They carry `generated: false`
+# so write_vault_file's marker-guard treats them as hand-edited and never
+# clobbers accumulated history. run_full writes them with force=False so the
+# placeholder is created only once (on first run, when the file is absent).
+# Audit H4: with `generated: true` + force=True they were wiped on every --full.
+_APPEND_TARGET_BANNER = "%%Append-only — the tutor adds entries below. Not regenerated.%%"
+
+
 def generate_weekly_reports() -> tuple[Path, str]:
     content = f"""\
 ---
-generated: true
+generated: false
 last_generated: "{today_str()}"
 tags: ["progress", "weekly"]
 ---
-{GENERATED_BANNER}
+{_APPEND_TARGET_BANNER}
 
 # Weekly Reports
 
@@ -668,11 +677,11 @@ tags: ["progress", "weekly"]
 def generate_milestones() -> tuple[Path, str]:
     content = f"""\
 ---
-generated: true
+generated: false
 last_generated: "{today_str()}"
 tags: ["progress", "milestones"]
 ---
-{GENERATED_BANNER}
+{_APPEND_TARGET_BANNER}
 
 # Milestones
 
@@ -848,14 +857,23 @@ def run_full(skill_map: dict, schedule: dict) -> None:
     write_vault_file(path, content, force=True)
     files_written += 1
 
-    # Progress dashboards (grammar/vocab receive skill_map for summary stats)
+    # Progress dashboards (grammar/vocab receive skill_map for summary stats) —
+    # regenerated every run.
     for path, content in (
         generate_grammar_progress(skill_map),
         generate_vocab_progress(skill_map),
+    ):
+        write_vault_file(path, content, force=True)
+        files_written += 1
+
+    # Append-targets (Weekly Reports, Milestones) — force=False so accumulated
+    # history is never clobbered; the placeholder is created only on first run
+    # (when the file is absent). See generate_weekly_reports() note (audit H4).
+    for path, content in (
         generate_weekly_reports(),
         generate_milestones(),
     ):
-        write_vault_file(path, content, force=True)
+        write_vault_file(path, content, force=False)
         files_written += 1
 
     # Templates

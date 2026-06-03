@@ -267,6 +267,31 @@ class TestRunFullFileCount:
             f"+ {self.EXPECTED_STATIC}s), got {len(all_files)}"
         )
 
+    def test_full_preserves_appended_weekly_reports_and_milestones(self, tmp_path, monkeypatch):
+        """H4: a second run_full must NOT clobber history appended to the
+        Weekly Reports / Milestones append-targets (they carry generated: false
+        and are written force=False)."""
+        skill_map = copy.deepcopy(self.SYNTHETIC_SKILL_MAP)
+        schedule = copy.deepcopy(MINIMAL_SCHEDULE)
+        monkeypatch.setattr(gv, "VAULT_DIR", tmp_path / "vault")
+
+        run_full(skill_map, schedule)  # first run creates placeholders
+        wr = tmp_path / "vault" / "Progress" / "Weekly Reports.md"
+        ms = tmp_path / "vault" / "Progress" / "Milestones.md"
+        assert wr.exists() and ms.exists()
+        # neither should advertise itself as auto-generated
+        assert not file_has_generated_marker(wr)
+        assert not file_has_generated_marker(ms)
+
+        # tutor appends real history
+        wr.write_text(wr.read_text() + "\n## Week 2026-W23\nReal weekly entry.\n", encoding="utf-8")
+        ms.write_text(ms.read_text() + "\n## 2026-06-03 — first 100 words\nMilestone.\n", encoding="utf-8")
+
+        run_full(skill_map, schedule)  # second run must preserve
+
+        assert "Real weekly entry." in wr.read_text(), "H4: weekly history wiped by --full"
+        assert "first 100 words" in ms.read_text(), "H4: milestone history wiped by --full"
+
     def test_file_categories_match(self, tmp_path, monkeypatch):
         """Verify each category produces the right number of files."""
         skill_map = copy.deepcopy(self.SYNTHETIC_SKILL_MAP)
