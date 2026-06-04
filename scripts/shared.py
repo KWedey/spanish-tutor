@@ -14,7 +14,13 @@ except ImportError:
 # ---------------------------------------------------------------------------
 
 ROOT = Path(__file__).resolve().parent.parent
-STATE_DIR = ROOT / "state"
+# STATE_DIR defaults to <repo>/state but can be redirected via the
+# TUTOR_STATE_DIR env var. This is the supported way to point validate-state.py
+# (and other state-reading scripts) at a throwaway copy without touching live
+# learner state — e.g. the corruption-stress harness in
+# scripts/test-error-recovery.py runs the validator against a temp copy.
+STATE_DIR = (Path(os.environ["TUTOR_STATE_DIR"]).resolve()
+             if os.environ.get("TUTOR_STATE_DIR") else ROOT / "state")
 CURRICULUM_DIR = ROOT / "curriculum"
 VAULT_DIR = ROOT / "vault"
 SCHEMAS_DIR = ROOT / "schemas"

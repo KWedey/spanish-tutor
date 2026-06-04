@@ -28,7 +28,13 @@ jobs:
         run: python -m pytest -q
 
       - name: Validate state schemas
-        run: python3 scripts/validate-state.py
+        # Live learner state (state/*.yaml) is gitignored, so a clean CI checkout
+        # has none to validate. Seed a fresh template-based state first — this
+        # doubles as an integration smoke test of the init → validate path that
+        # every new user runs via scripts/setup.py.
+        run: |
+          python3 scripts/init-student.py --force
+          python3 scripts/validate-state.py
 
       - name: Check pre-commit hook syntax
         # Confirms the hook is valid bash; catches syntax regressions introduced

@@ -57,19 +57,34 @@ results = ValidationResults()
 # YAML loader (delegates to shared.load_yaml, reports to results)
 # ---------------------------------------------------------------------------
 
+def display_path(path: Path):
+    """Render *path* relative to ROOT for display, tolerating paths outside it.
+
+    The validator can be pointed at a STATE dir outside the repo (the
+    corruption-stress harness redirects STATE to a temp copy via
+    TUTOR_STATE_DIR). ``Path.relative_to(ROOT)`` raises ValueError for such
+    paths, so fall back to the absolute path rather than crashing on a purely
+    cosmetic display string.
+    """
+    try:
+        return path.relative_to(ROOT)
+    except ValueError:
+        return path
+
+
 def load_yaml_validated(path: Path, res: ValidationResults) -> dict | None:
     """Load a YAML file, reporting missing/invalid files to *res*."""
     if not path.exists():
-        res.fail(f"Missing file: {path.relative_to(ROOT)}")
+        res.fail(f"Missing file: {display_path(path)}")
         return None
     data = load_yaml(path)
     if data is None:
-        res.fail(f"YAML syntax error in {path.relative_to(ROOT)}")
+        res.fail(f"YAML syntax error in {display_path(path)}")
         return None
     if not isinstance(data, dict):
-        res.fail(f"Expected mapping at top level: {path.relative_to(ROOT)}")
+        res.fail(f"Expected mapping at top level: {display_path(path)}")
         return None
-    res.pass_(f"YAML syntax OK: {path.relative_to(ROOT)}")
+    res.pass_(f"YAML syntax OK: {display_path(path)}")
     return data
 
 

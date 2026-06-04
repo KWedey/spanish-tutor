@@ -20,13 +20,17 @@ ter = importlib.import_module("test-error-recovery")
     ter.SCENARIOS,
     ids=[s[0] for s in ter.SCENARIOS],
 )
-def test_validator_catches_corruption(scenario_id, description, corrupt_fn):
+def test_validator_catches_corruption(scenario_id, description, corrupt_fn, state_dir):
     """validate-state.py must emit a FAIL/WARN for each known corruption.
 
     A scenario the validator silently passes is a blind spot — exactly what the
     harness exists to catch, now run on every `pytest` invocation rather than
     never.
+
+    The baseline is conftest's minimal valid ``state_dir`` fixture, not the live
+    state/ tree: live learner state is gitignored, so a CI checkout has none of
+    it and the harness would otherwise fail to even find a file to corrupt.
     """
-    assert ter.run_scenario(scenario_id, description, corrupt_fn), (
+    assert ter.run_scenario(scenario_id, description, corrupt_fn, base_state=state_dir), (
         f"Validator blind spot: {scenario_id} — {description}"
     )

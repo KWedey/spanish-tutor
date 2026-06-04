@@ -12,11 +12,11 @@ For each scenario:
 Exit 0 — all scenarios were caught by the validator.
 Exit 1 — at least one scenario was NOT caught (validator blind spot).
 """
+import os
 import shutil
 import subprocess
 import sys
 import tempfile
-import textwrap
 from pathlib import Path
 
 try:
@@ -28,7 +28,6 @@ except ImportError:
 ROOT = Path(__file__).resolve().parent.parent
 STATE = ROOT / "state"
 VALIDATOR = Path(__file__).resolve().parent / "validate-state.py"
-SCRIPTS_DIR = Path(__file__).resolve().parent
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -42,49 +41,47 @@ def dump(data: dict, path: Path) -> None:
     path.write_text(yaml.dump(data, default_flow_style=False, allow_unicode=True))
 
 
-def copy_state_to_temp(tmp: Path) -> Path:
-    """Copy the entire state/ tree to tmp/state/ and return the new state path."""
-    dest = tmp / "state"
-    shutil.copytree(STATE, dest)
+def copy_state_to_temp(dest: Path, source: Path) -> Path:
+    """Copy the *source* state/ tree to *dest* and return *dest*."""
+    shutil.copytree(source, dest)
     return dest
 
 
 def run_validator(state_dir: Path) -> tuple[int, str]:
-    """Run validate-state.py against *state_dir* via TUTOR_STATE_DIR env override.
+    """Run validate-state.py against *state_dir*, returning (exit_code, output).
 
-    The validator imports STATE_DIR from shared.py which is hardcoded.
-    To redirect it to the temp copy without modifying shared.py, we run a
-    thin wrapper script that patches shared.STATE_DIR before importing the
-    validator module.
+    STATE redirection goes through the TUTOR_STATE_DIR env var (see shared.py),
+    so the validator runs as an ordinary subprocess — no import-time patching of
+    shared.py, and no fragile inline wrapper to keep working.
     """
-    # Build a small wrapper that patches the state path before running the
-    # validator's main(). This avoids modifying shared.py (owned by another agent).
-    wrapper = textwrap.dedent(f"""\
-        import sys, importlib
-        from pathlib import Path
-
-        # Patch shared.STATE_DIR before validate-state.py imports it
-        sys.path.insert(0, {str(SCRIPTS_DIR)!r})
-        import shared
-        shared.STATE_DIR = Path({str(state_dir)!r})
-
-        # Now import and run the validator
-        spec = importlib.util.spec_from_file_location("validate_state", {str(VALIDATOR)!r})
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        mod.main()
-    """)
+    env = {**os.environ, "TUTOR_STATE_DIR": str(state_dir)}
     result = subprocess.run(
-        [sys.executable, "-c", wrapper, "--verbose"],
+        [sys.executable, str(VALIDATOR), "--verbose"],
         capture_output=True,
         text=True,
+        env=env,
     )
     return result.returncode, result.stdout + result.stderr
 
 
-def validator_caught(output: str, exit_code: int) -> bool:
-    """Return True if the validator signalled at least one FAIL or WARN."""
-    return exit_code != 0 or "[FAIL]" in output or "[WARN]" in output
+def validator_markers(state_dir: Path) -> set[str]:
+    """Run the validator against *state_dir* and return its FAIL/WARN markers.
+
+    Volatile temp paths in marker text are normalized to ``<state>`` so the same
+    finding compares equal across two different temp copies. A traceback means
+    the validator crashed rather than reporting a result — surface it as an error
+    instead of silently counting a crash as a caught corruption (the exact blind
+    spot a non-zero-exit==caught check used to hide).
+    """
+    _, output = run_validator(state_dir)
+    if "Traceback (most recent call last)" in output:
+        raise RuntimeError(f"validate-state.py crashed against {state_dir}:\n{output}")
+    sd = str(state_dir)
+    return {
+        line.replace(sd, "<state>")
+        for line in output.splitlines()
+        if line.startswith("[FAIL]") or line.startswith("[WARN]")
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -206,20 +203,30 @@ SCENARIOS: list[tuple[str, str, object]] = [
 # Runner
 # ---------------------------------------------------------------------------
 
-def run_scenario(scenario_id: str, description: str, corrupt_fn) -> bool:
+def run_scenario(scenario_id: str, description: str, corrupt_fn,
+                 base_state: Path | None = None) -> bool:
     """
-    Execute one scenario. Returns True if the validator caught the corruption.
+    Execute one scenario. Returns True if the corruption introduced a NEW
+    validator FAIL/WARN that the clean baseline did not already emit.
 
-    Each scenario gets its own temp copy of state/ — live state is never touched.
-    The temp directory is cleaned up automatically when the context manager exits.
+    Diffing against a clean copy — rather than asserting "any FAIL/WARN
+    appeared" — keeps the test honest even when the baseline itself carries
+    pre-existing markers: only a marker the corruption *adds* counts as caught.
+
+    *base_state* selects the baseline to corrupt. Tests pass a committed minimal
+    state because CI has no live learner state (state/*.yaml is gitignored); the
+    standalone CLI defaults to the live state/ tree. Each scenario works on its
+    own temp copies — live state is never touched — and the temp directory is
+    cleaned up automatically when the context manager exits.
     """
+    source = base_state if base_state is not None else STATE
     with tempfile.TemporaryDirectory(prefix="lang-state-test-") as tmp_str:
         tmp = Path(tmp_str)
         try:
-            temp_state = copy_state_to_temp(tmp)
-            corrupt_fn(temp_state)
-            exit_code, output = run_validator(temp_state)
-            caught = validator_caught(output, exit_code)
+            baseline = validator_markers(copy_state_to_temp(tmp / "clean", source))
+            dirty = copy_state_to_temp(tmp / "dirty", source)
+            corrupt_fn(dirty)
+            caught = bool(validator_markers(dirty) - baseline)
         except Exception as exc:
             print(f"[ERROR] {scenario_id}: raised an exception: {exc}")
             return False
