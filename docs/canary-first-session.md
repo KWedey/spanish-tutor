@@ -1,6 +1,6 @@
 # Canary: First Real Tutoring Session
 
-**Purpose:** v1.1 audit-fix shipped 2026-05-13. Phases 1-7 (38 plans, 455 tests passing,
+**Purpose:** v1.1 audit-fix shipped 2026-05-13. Phases 1-7 (38 plans, 622 tests passing,
 all validate-state checks green) are infrastructure that has never run end-to-end against a real
 tutoring session. The first session is a canary — its job is to exercise every code
 path under realistic conditions and surface the latent failures.
@@ -217,7 +217,7 @@ All of the following return exit code 0 and produce the expected artifact:
 
 1. Pre-session steps 2-6 all return 0 (validate-state, snapshot, routing-harness, hook-config check, hook fire-test).
 2. `bash scripts/post-session.sh $(date -u +%Y-%m-%d)` returns 0.
-3. `python3 scripts/check-session-log.py state/sessions/$(date -u +%Y-%m-%d).yaml` returns 0.
+3. `python3 scripts/check-session-log.py $(date -u +%Y-%m-%d)` returns 0. (The script takes a **date**, not a path — it builds `state/sessions/<date>.yaml` itself.)
 4. `python3 scripts/generate-vault.py --session --date $(date -u +%Y-%m-%d)` returns 0.
 5. `python3 scripts/validate-state.py` returns 0 (same PASS count as the pre-session baseline) AFTER the session.
 6. `transcripts/$(date -u +%Y-%m-%d).md` exists and is non-empty.

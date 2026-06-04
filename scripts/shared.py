@@ -134,6 +134,20 @@ def atomic_write(path: Path, content: str) -> None:
         raise
 
 
+def leading_header(text: str) -> str:
+    """Return the top comment/blank-line block of a state/schedule YAML file (the
+    ``# Schema:`` pointer header) so a read-modify-write preserves it instead of
+    stripping it. Shared by every script that rewrites a state file in place
+    (validate-state, check-session-log, recompute-metrics, update-fluency-tracking)."""
+    out = []
+    for ln in text.splitlines(keepends=True):
+        if ln.lstrip().startswith("#") or not ln.strip():
+            out.append(ln)
+        else:
+            break
+    return "".join(out)
+
+
 def load_schema(schema_name: str) -> dict:
     """Load a schema file from the schemas/ directory.
 

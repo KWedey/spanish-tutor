@@ -12,7 +12,8 @@ not from the LLM, and is invoked by post-session.sh after the session log
 validates. Run once per session (the regression counter is a per-session tally).
 
 Recomputed:
-  - skill-map: regression_session_count per grammar/vocabulary concept
+  - skill-map: regression_session_count per grammar concept (grammar-only, per
+      the schema + system-design.md — vocabulary_entry_template has no such field)
       regressed status  -> += 1 (consecutive sessions in regression)
       acquired/automatic -> reset to 0 (re-acquired)
       (other statuses left untouched)
@@ -30,29 +31,19 @@ from pathlib import Path
 
 import yaml
 
-from shared import STATE_DIR, atomic_write, load_yaml_strict
+from shared import STATE_DIR, atomic_write, leading_header, load_yaml_strict
 
 _REGRESSED = "regressed"
 _REACQUIRED = ("acquired", "automatic")
-_REGRESSION_CATEGORIES = ("grammar", "vocabulary")
+_REGRESSION_CATEGORIES = ("grammar", "vocabulary")  # reteach total spans both
+_REGRESSION_COUNT_CATEGORIES = ("grammar",)  # regression_session_count is grammar-only (P2-t)
 _WINDOW_DAYS = 30
-
-
-def _leading_header(text: str) -> str:
-    """Return the top comment/blank-line block (the schema-pointer header)."""
-    out = []
-    for ln in text.splitlines(keepends=True):
-        if ln.lstrip().startswith("#") or not ln.strip():
-            out.append(ln)
-        else:
-            break
-    return "".join(out)
 
 
 def recompute_regression_counts(skill_map: dict) -> int:
     """Update regression_session_count in place. Returns concepts touched."""
     touched = 0
-    for category in _REGRESSION_CATEGORIES:
+    for category in _REGRESSION_COUNT_CATEGORIES:
         entries = skill_map.get(category)
         if not isinstance(entries, dict):
             continue
@@ -115,7 +106,7 @@ def count_difficulty_ratings(sessions_dir: Path, today: date) -> tuple[int, int]
 
 
 def _write_yaml_preserving_header(path: Path, data: dict) -> None:
-    header = _leading_header(path.read_text(encoding="utf-8")) if path.exists() else ""
+    header = leading_header(path.read_text(encoding="utf-8")) if path.exists() else ""
     body = yaml.safe_dump(data, sort_keys=False, allow_unicode=True)
     atomic_write(path, header + body)
 

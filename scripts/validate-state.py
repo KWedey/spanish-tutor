@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Validate state files against expected schemas and cross-references."""
-import argparse, re, sys
+import argparse
+import re
+import sys
 from datetime import datetime
 from pathlib import Path
 try:
@@ -10,7 +12,8 @@ except ImportError:
 
 from shared import (ROOT, STATE_DIR as STATE, CURRICULUM_DIR as CURRICULUM,
                      PHASE_DIRS, TIER_DIRS, load_yaml, load_schema,
-                     get_required_fields, atomic_write)
+                     get_required_fields, atomic_write, leading_header)
+import phase_prereqs
 
 
 # ---------------------------------------------------------------------------
@@ -291,22 +294,24 @@ def check_vocab_passive_active(sm: dict, res: ValidationResults) -> None:
 # --- 3. Consistency checks ----------------------------------------------------
 
 def check_acquired_consistency(sm: dict, res: ValidationResults) -> None:
-    """LOAD-01 / D-02: Core-only by design.
+    """LOAD-01 / D-02: CORE acquisition consistency for grammar AND vocabulary.
 
-    Only iterates `sm["grammar"]`. Secondary categories (pronunciation, writing,
-    cultural_awareness) are intentionally NOT iterated here because their schema
-    templates have no error_rate_drills / error_rate_production fields — applying
-    a numeric acquired+high-error check to them would FAIL on null data.
+    Iterates the two CORE categories (CLAUDE.md L196). An 'acquired' grammar
+    concept must have error_rate_drills < 0.10 AND error_rate_production < 0.10
+    AND performance_unscaffolded == 'competent'. An 'acquired' vocabulary cluster
+    must have error_tracking.error_rate_production < 0.10 (vocab carries no
+    error_rate_drills / performance_unscaffolded by schema design).
 
-    Secondary acquisition is governed by tutor judgment (CLAUDE.md L191 SECONDARY
-    bullet) and, for cultural, by the `assessed_through` field on the entry.
-    A future refactor that broadens this loop to all skill-map sections will
+    Secondary categories (pronunciation, writing, cultural_awareness) are
+    intentionally NOT iterated here — their schema templates have no error_rate
+    fields, so a numeric check would FAIL on null data. Secondary acquisition is
+    tutor judgment (CLAUDE.md SECONDARY bullet) and, for cultural, the
+    `assessed_through` field. Broadening this loop to the SECONDARY sections would
     break tests/test_validate_state.py::TestAcquiredConsistencyCoreOnly and must
-    first update the secondary schemas to carry the required numeric fields.
+    first update those schemas to carry the numeric fields.
 
-    Vocabulary is checked separately by check_vocab_error_tracking (L507+),
-    which validates the 0.0 <= error_rate_production <= 1.0 range. The vocabulary
-    variant of the acquired+high-error cross-check is left to check_vocab_error_tracking.
+    check_vocab_error_tracking separately validates the 0.0-1.0 range of every
+    vocabulary error_rate_production regardless of status.
     """
     grammar = sm.get("grammar", {})
     acquired = []
@@ -314,16 +319,26 @@ def check_acquired_consistency(sm: dict, res: ValidationResults) -> None:
         if not isinstance(e, dict) or e.get("status") != "acquired": continue
         acquired.append(cid)
         err = e.get("error_rate_production")
-        # E-05: threshold matches CLAUDE.md spec (< 10%)
-        if err is not None and err > 0.10:
-            res.fail(f"Grammar '{cid}': acquired but error_rate_production={err} (> 0.10)")
+        # E-05/P2-j: CLAUDE.md gate is error_rate < 0.10, so a rate >= 0.10 is
+        # invalid for 'acquired' (the prior `> 0.10` wrongly permitted exactly 0.10).
+        if err is not None and err >= 0.10:
+            res.fail(f"Grammar '{cid}': acquired but error_rate_production={err} (>= 0.10)")
         err_drills = e.get("error_rate_drills")
-        # ENFORCE-07: threshold matches CLAUDE.md acquisition rule (< 0.10)
-        if err_drills is not None and err_drills > 0.10:
-            res.fail(f"Grammar '{cid}': acquired but error_rate_drills={err_drills} (> 0.10)")
+        # ENFORCE-07/P2-j: threshold matches CLAUDE.md acquisition rule (< 0.10).
+        if err_drills is not None and err_drills >= 0.10:
+            res.fail(f"Grammar '{cid}': acquired but error_rate_drills={err_drills} (>= 0.10)")
         perf = e.get("performance_unscaffolded")
         if perf is not None and perf != "competent":
             res.fail(f"Grammar '{cid}': acquired but performance_unscaffolded='{perf}' (expected 'competent')")
+    # P1-2: vocabulary is a CORE category (CLAUDE.md L196) — enforce the same
+    # acquired+high-error gate via the nested error_tracking.error_rate_production.
+    for cid, e in sm.get("vocabulary", {}).items():
+        if not isinstance(e, dict) or e.get("status") != "acquired": continue
+        acquired.append(cid)
+        et = e.get("error_tracking")
+        verr = et.get("error_rate_production") if isinstance(et, dict) else None
+        if verr is not None and verr >= 0.10:
+            res.fail(f"Vocabulary '{cid}': acquired but error_tracking.error_rate_production={verr} (>= 0.10)")
     if acquired: res.pass_(f"Checked {len(acquired)} acquired concepts for consistency")
     else:        res.pass_("No acquired concepts to check (all unseen/practicing)")
 
@@ -690,6 +705,12 @@ def check_integration_tested_with(sm: dict, res: ValidationResults) -> None:
 
 def check_acquired_zero_practice(sm: dict, profile: dict,
                                  res: ValidationResults) -> None:
+    """LOAD-01 / D-02 (P2-k): CORE grammar acquisition requires 3+ separate
+    sessions of practice. WARN when an 'acquired' grammar concept has
+    practice_count < 3, unless it is placement-exempt (a concept below the
+    learner's initial_placement phase, pre-acquired during placement). Vocabulary
+    has no practice_count field by schema design, so this floor is grammar-only.
+    (Name retained for back-compat; historically checked only practice_count==0.)"""
     grammar = sm.get("grammar", {})
     placement_level = None
     if isinstance(profile, dict):
@@ -704,17 +725,18 @@ def check_acquired_zero_practice(sm: dict, profile: dict,
     for cid, entry in grammar.items():
         if not isinstance(entry, dict): continue
         if entry.get("status") != "acquired": continue
-        if (entry.get("practice_count") or 0) != 0: continue
-        # Concept is acquired with practice_count == 0
+        pc = entry.get("practice_count") or 0
+        if pc >= 3: continue
+        # acquired grammar concept with fewer than 3 practice sessions
         concept_phase = cid[0].upper() if cid else None
         if (placement_phase
                 and concept_phase in phase_order
                 and placement_phase in phase_order
                 and phase_order[concept_phase] < phase_order[placement_phase]):
-            # Below placement level — exempt
-            res.pass_(f"Grammar '{cid}': acquired with practice_count=0 (placement-exempt: below {placement_phase}-level placement)")
+            # Below placement level — placement-exempt from the session count
+            res.pass_(f"Grammar '{cid}': acquired with practice_count={pc} (placement-exempt: below {placement_phase}-level placement)")
         else:
-            res.warn(f"Grammar '{cid}': acquired with practice_count=0 — cannot acquire without practice unless placement-validated")
+            res.warn(f"Grammar '{cid}': acquired with practice_count={pc} (< 3) — CORE acquisition requires 3+ separate sessions unless placement-validated")
 
 
 def check_placement_validation_consistency(sched: dict,
@@ -1010,7 +1032,8 @@ def check_last_session_date(sched: dict, res: ValidationResults,
 
     sched_path = STATE / "schedule.yaml"
     sched["last_session_date"] = most_recent
-    atomic_write(sched_path, yaml.dump(sched, default_flow_style=False, allow_unicode=True, sort_keys=False))
+    sched_header = leading_header(sched_path.read_text(encoding="utf-8")) if sched_path.exists() else ""
+    atomic_write(sched_path, sched_header + yaml.dump(sched, default_flow_style=False, allow_unicode=True, sort_keys=False))
 
     health_path = STATE / "system-health.yaml"
     if health_path.exists():
@@ -1024,7 +1047,8 @@ def check_last_session_date(sched: dict, res: ValidationResults,
             "reason": "Disagreed with most recent session log filename",
             "detected_by": "validate-state.py:check_last_session_date",
         })
-        atomic_write(health_path, yaml.dump(health, default_flow_style=False, allow_unicode=True, sort_keys=False))
+        health_header = leading_header(health_path.read_text(encoding="utf-8"))
+        atomic_write(health_path, health_header + yaml.dump(health, default_flow_style=False, allow_unicode=True, sort_keys=False))
     else:
         res.warn("system-health.yaml missing — auto-fix applied to schedule.yaml but not logged to health file")
 
@@ -1032,6 +1056,86 @@ def check_last_session_date(sched: dict, res: ValidationResults,
         f"Auto-fixed last_session_date: '{recorded}' → '{most_recent}' "
         f"(logged in system-health.yaml)"
     )
+
+
+def check_phase_prereqs_acquired(sm: dict, sched: dict,
+                                 res: ValidationResults) -> None:
+    """P1-3 / LOAD-02 / D-03: a learner whose current_phase is past a transition
+    must have that transition's CORE prerequisites at a status that reached
+    acquisition — 'acquired' or 'automatic', or 'regressed' (which implies it was
+    acquired earlier and later slipped, a path the regression ladder handles). A
+    Core prereq still at unseen/introduced/practicing means the phase was advanced
+    before the prereq was ever acquired — the guardrail violation. Dormant for
+    Phase A (no prior transition), so it can never block a first session.
+
+    Core prereq sets come from scripts/phase_prereqs.py (the single code-side
+    source of truth, kept in lockstep with the prose by
+    tests/test_phase_transition_parity.py). Values are ID prefixes matched against
+    full skill-map keys (e.g. 'A-01' -> 'A-01-present-regular')."""
+    phase = (sched or {}).get("current_phase") or ""
+    letter = phase[:1].upper()
+    prereqs = phase_prereqs.CORE_PREREQS_FOR_ENTRY.get(letter)
+    if not prereqs:
+        res.pass_(f"Phase prereq gate: current_phase '{phase or '(unset)'}' has no prior transition to check")
+        return
+    grammar = sm.get("grammar", {})
+    reached = {"acquired", "automatic", "regressed"}
+    violations = []
+    for prefix in sorted(prereqs):
+        matches = [e for cid, e in grammar.items()
+                   if isinstance(e, dict) and (cid == prefix or cid.startswith(prefix + "-"))]
+        if not matches:
+            res.warn(f"Phase prereq gate: Core prereq '{prefix}' for phase '{phase}' has no matching skill-map grammar concept")
+            continue
+        if not any(m.get("status") in reached for m in matches):
+            statuses = ", ".join(sorted({str(m.get("status")) for m in matches}))
+            violations.append(f"{prefix} (status: {statuses})")
+    if violations:
+        res.fail(
+            f"Phase prereq gate (LOAD-02/D-03): current_phase '{phase}' but these CORE "
+            f"prerequisites never reached acquisition: {'; '.join(violations)}. A phase "
+            f"must not be advanced until its Core prereqs are acquired."
+        )
+    else:
+        res.pass_(f"Phase prereq gate: all {len(prereqs)} Core prereqs for entry into '{phase}' reached acquisition")
+
+
+def check_consolidation_cap(sm: dict, sched: dict, session_logs: list,
+                            res: ValidationResults) -> None:
+    """P1-4 / consolidation guardrail (CLAUDE.md L183): the tutor must not
+    introduce a NEW grammar concept while 3+ concepts (4 with carryover) are
+    already in 'practicing'. Backstop: if the most recent session log lists a
+    newly-introduced grammar concept AND, excluding those new concepts, the cap is
+    still met or exceeded across grammar+vocabulary 'practicing' status, WARN — the
+    introduction likely violated the cap. WARN (not FAIL) because this is a
+    cumulative-state planning heuristic and the decision engine is the primary
+    enforcement; aborting the session save would be disproportionate."""
+    recent = [l for l in (session_logs or []) if isinstance(l, dict)]
+    if not recent:
+        res.pass_("Consolidation cap: no session logs to check")
+        return
+    new_ids = recent[-1].get("new_grammar_concepts_introduced") or []
+    if not isinstance(new_ids, list) or not new_ids:
+        res.pass_("Consolidation cap: latest session introduced no new grammar concept")
+        return
+    new_set = set(new_ids)
+    carryover = (sched or {}).get("carryover_concepts") or []
+    cap = 4 if carryover else 3
+    practicing = [
+        cid
+        for section in ("grammar", "vocabulary")
+        for cid, e in (sm.get(section) or {}).items()
+        if isinstance(e, dict) and e.get("status") == "practicing" and cid not in new_set
+    ]
+    if len(practicing) >= cap:
+        res.warn(
+            f"Consolidation cap (CLAUDE.md L183): latest session introduced new grammar "
+            f"{sorted(new_set)} while {len(practicing)} concept(s) are already 'practicing' "
+            f"({', '.join(sorted(practicing))}) — cap is {cap} "
+            f"({'4 with carryover' if carryover else '3, no carryover'}). Consolidate first."
+        )
+    else:
+        res.pass_(f"Consolidation cap: {len(practicing)} practicing concept(s) (< cap {cap}) when a new concept was introduced")
 
 
 # --- Main ---------------------------------------------------------------------
@@ -1116,6 +1220,8 @@ def main() -> None:
         check_placement_validation_consistency(schedule, res)
     if schedule is not None and skill_map is not None:
         check_carryover_concepts(schedule, skill_map, res)
+        check_phase_prereqs_acquired(skill_map, schedule, res)
+        check_consolidation_cap(skill_map, schedule, session_logs_recent, res)
     if resource_tracker is not None:
         check_resource_tracker(resource_tracker, res)
     if resource_tracker is not None and skill_map is not None:

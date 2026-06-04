@@ -26,9 +26,14 @@ def check_pyyaml():
         # source of truth. Bare `pip install pyyaml` was unpinned and would happily
         # pull in a future incompatible major.
         requirements = ROOT / "requirements.txt"
-        subprocess.check_call(
-            [sys.executable, "-m", "pip", "install", "-r", str(requirements), "-q"]
-        )
+        try:
+            subprocess.check_call(
+                [sys.executable, "-m", "pip", "install", "-r", str(requirements), "-q"]
+            )
+        except (subprocess.CalledProcessError, FileNotFoundError) as e:
+            print(red(f"  Could not auto-install PyYAML ({e})."))
+            print(red(f"  Install it manually:  {sys.executable} -m pip install -r {requirements}"))
+            sys.exit(1)
         print(green("  PyYAML installed"))
 
 
@@ -183,7 +188,7 @@ def main():
     run_script("generate-vault.py", ["--full"])
 
     print("\nValidating state...")
-    result = run_script("validate-state.py")
+    run_script("validate-state.py")
 
     print("\nConfiguring safety hooks...")
     configure_git_hooks()

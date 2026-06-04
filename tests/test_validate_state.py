@@ -2,7 +2,6 @@
 
 scripts/ is placed on sys.path by tests/conftest.py — no per-file bootstrap.
 """
-import copy
 from pathlib import Path
 
 import pytest
@@ -53,6 +52,8 @@ check_study_time_budget_consistency = validate_mod.check_study_time_budget_consi
 check_daily_target_tier_drift = validate_mod.check_daily_target_tier_drift
 check_just_right_restore_drift = validate_mod.check_just_right_restore_drift
 check_media_bank_dialect_coverage = validate_mod.check_media_bank_dialect_coverage
+check_phase_prereqs_acquired = validate_mod.check_phase_prereqs_acquired
+check_consolidation_cap = validate_mod.check_consolidation_cap
 
 
 @pytest.fixture(autouse=True)
@@ -105,8 +106,10 @@ class TestAcquiredHighErrorRate:
         assert len(fails) >= 1
         assert any("0.12" in f for f in fails)
 
-    def test_acquired_error_at_ten_percent_passes(self, skill_map_data):
-        """E-05: error == 0.10 should pass (boundary)."""
+    def test_acquired_error_at_ten_percent_fails(self, skill_map_data):
+        """P2-j: error == 0.10 must FAIL — CLAUDE.md gate is strict `< 0.10`, so
+        exactly 0.10 is not acquirable (corrected from the prior `> 0.10` which
+        contradicted the validator's own `< 0.10` comment and the spec)."""
         sm = skill_map_data
         sm["grammar"]["A-01-present-regular"]["status"] = "acquired"
         sm["grammar"]["A-01-present-regular"]["error_rate_production"] = 0.10
@@ -115,7 +118,9 @@ class TestAcquiredHighErrorRate:
         check_acquired_consistency(sm, results)
 
         fails = _fails()
-        assert len(fails) == 0
+        assert any("error_rate_production=0.1" in f for f in fails), (
+            f"P2-j: error_rate_production==0.10 must FAIL the acquired gate; got {fails!r}"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -149,8 +154,9 @@ class TestAcquiredHighErrorRateDrills:
         assert len(fails) >= 1
         assert any("0.12" in f for f in fails)
 
-    def test_drills_0_10_boundary_passes(self, skill_map_data):
-        """ENFORCE-07: error_rate_drills == 0.10 should pass (threshold is >, not >=)."""
+    def test_drills_0_10_boundary_fails(self, skill_map_data):
+        """P2-j: error_rate_drills == 0.10 must FAIL — CLAUDE.md gate is strict
+        `< 0.10` (corrected from the prior `> 0.10` which permitted exactly 0.10)."""
         sm = skill_map_data
         sm["grammar"]["A-01-present-regular"]["status"] = "acquired"
         sm["grammar"]["A-01-present-regular"]["error_rate_drills"] = 0.10
@@ -160,7 +166,9 @@ class TestAcquiredHighErrorRateDrills:
         check_acquired_consistency(sm, results)
 
         fails = _fails()
-        assert len(fails) == 0
+        assert any("error_rate_drills=0.1" in f for f in fails), (
+            f"P2-j: error_rate_drills==0.10 must FAIL the acquired gate; got {fails!r}"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -197,6 +205,31 @@ class TestAcquiredZeroPractice:
         warns = _warns()
         assert len(warns) >= 1
         assert any("practice_count=0" in w for w in warns)
+
+    def test_acquired_practice_count_two_warns(self, skill_map_data):
+        """P2-k: acquired with practice_count in {1,2} also warns — CORE acquisition
+        requires 3+ separate sessions, not just non-zero practice."""
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["status"] = "acquired"
+        sm["grammar"]["A-01-present-regular"]["practice_count"] = 2
+
+        profile = {"initial_placement": {"level": None}}
+        check_acquired_zero_practice(sm, profile, results)
+
+        assert any("practice_count=2" in w and "< 3" in w for w in _warns()), (
+            f"P2-k: acquired with practice_count=2 must warn (3-session floor); got {_warns()!r}"
+        )
+
+    def test_acquired_practice_count_three_passes(self, skill_map_data):
+        """P2-k: practice_count >= 3 satisfies the session floor (no warn for it)."""
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["status"] = "acquired"
+        sm["grammar"]["A-01-present-regular"]["practice_count"] = 3
+
+        profile = {"initial_placement": {"level": None}}
+        check_acquired_zero_practice(sm, profile, results)
+
+        assert not any("A-01-present-regular" in w for w in _warns())
 
 
 # ---------------------------------------------------------------------------
@@ -1335,7 +1368,6 @@ class TestMediaBankDialectCoverage:
         """End-to-end on the actual files: the shipped media-bank must be fully
         covered by the shipped curriculum/dialects.yaml (no drift today)."""
         import yaml as _yaml
-        from pathlib import Path
         root = Path(__file__).resolve().parent.parent
         media_bank = _yaml.safe_load((root / "curriculum" / "media-bank.yaml").read_text())
         dialects = _yaml.safe_load((root / "curriculum" / "dialects.yaml").read_text())
@@ -1406,12 +1438,36 @@ class TestJustRightRestoreDrift:
 
 
 class TestAcquiredConsistencyCoreOnly:
-    """LOAD-01 / D-02: check_acquired_consistency must scope to grammar only.
-    Cultural/pronunciation/writing concepts with status: acquired must NOT trigger a FAIL
-    from this check (they have no error_rate_drills field by design).
+    """LOAD-01 / D-02: check_acquired_consistency scopes to the CORE categories
+    (grammar + vocabulary). SECONDARY concepts (cultural/pronunciation/writing)
+    with status: acquired must NOT trigger a FAIL (they have no error_rate fields
+    by design). These tests lock the SECONDARY-exclusion boundary so a future
+    refactor can't silently broaden scope into the secondary sections."""
 
-    This test RUNS NOW — it locks the currently-correct behavior (L237-256 iterates grammar only)
-    so a future refactor can't silently broaden scope."""
+    def test_vocab_acquired_high_error_fails(self):
+        """P1-2: vocabulary is CORE — an acquired cluster with
+        error_tracking.error_rate_production >= 0.10 must FAIL (was unenforced)."""
+        sm = {"grammar": {}, "vocabulary": {
+            "tier1-food-restaurant": {
+                "status": "acquired",
+                "error_tracking": {"error_rate_production": 0.50},
+            }
+        }}
+        check_acquired_consistency(sm, results)
+        assert any("tier1-food-restaurant" in f for f in _fails()), (
+            f"P1-2: acquired vocab with high error_rate_production must FAIL; got {_fails()!r}"
+        )
+
+    def test_vocab_acquired_low_error_passes(self):
+        """P1-2 control: an acquired vocab cluster under the 0.10 gate must NOT FAIL."""
+        sm = {"grammar": {}, "vocabulary": {
+            "tier2-daily-life": {
+                "status": "acquired",
+                "error_tracking": {"error_rate_production": 0.05},
+            }
+        }}
+        check_acquired_consistency(sm, results)
+        assert not any("tier2-daily-life" in f for f in _fails())
 
     def test_cultural_acquired_does_not_fail(self):
         # Cultural concept has no error_rate_drills. Injecting it at status=acquired
@@ -1474,7 +1530,6 @@ class TestSessionLogEnumsHomeworkLoad:
     def test_valid_values_accepted(self):
         """Placeholder — exercises the enum loop via minimal session-log fixture with valid value."""
         import yaml
-        from pathlib import Path
         schema_path = Path(__file__).resolve().parent.parent / "schemas" / "session-log.schema.yaml"
         schema_doc = yaml.safe_load(schema_path.read_text()) or {}
         # Schedule/session-log schemas wrap field specs under `fields:` — tolerate either layout.
@@ -1488,3 +1543,73 @@ class TestSessionLogEnumsHomeworkLoad:
         assert "just-right" in enum, "LOAD-04: 'just-right' must be in homework_load_rating enum"
         assert "too-light" in enum, "LOAD-04: 'too-light' must be in homework_load_rating enum"
         assert None in enum, "LOAD-04: null must be in homework_load_rating enum"
+
+
+class TestPhasePrereqsAcquired:
+    """P1-3 / LOAD-02 / D-03: current_phase must not be past a transition whose
+    CORE prereqs never reached acquisition (acquired/automatic/regressed)."""
+
+    def test_phase_a_is_noop(self):
+        """Phase A has no prior transition — never fails (cannot block a first session)."""
+        sm = {"grammar": {"A-01-present-regular": {"status": "practicing"}}}
+        check_phase_prereqs_acquired(sm, {"current_phase": "A-foundation"}, results)
+        assert _fails() == []
+
+    def test_phase_b_unacquired_core_prereq_fails(self):
+        sm = {"grammar": {
+            "A-01-present-regular": {"status": "acquired"},
+            "A-02-ser-vs-estar": {"status": "practicing"},   # never reached acquisition
+            "A-04-articles-prepositions": {"status": "acquired"},
+        }}
+        check_phase_prereqs_acquired(sm, {"current_phase": "B-conversational"}, results)
+        assert any("A-02" in f for f in _fails()), f"expected A-02 violation; got {_fails()!r}"
+
+    def test_phase_b_all_core_acquired_passes(self):
+        sm = {"grammar": {
+            "A-01-present-regular": {"status": "acquired"},
+            "A-02-ser-vs-estar": {"status": "automatic"},
+            "A-04-articles-prepositions": {"status": "acquired"},
+        }}
+        check_phase_prereqs_acquired(sm, {"current_phase": "B-conversational"}, results)
+        assert _fails() == []
+
+    def test_phase_b_regressed_prereq_is_allowed(self):
+        """'regressed' implies the concept was acquired earlier — advancement was
+        legitimate and the regression ladder handles the slip. Must NOT fail."""
+        sm = {"grammar": {
+            "A-01-present-regular": {"status": "acquired"},
+            "A-02-ser-vs-estar": {"status": "regressed"},
+            "A-04-articles-prepositions": {"status": "acquired"},
+        }}
+        check_phase_prereqs_acquired(sm, {"current_phase": "B-conversational"}, results)
+        assert _fails() == []
+
+
+class TestConsolidationCap:
+    """P1-4 (CLAUDE.md L183): WARN when the latest session introduced a new grammar
+    concept while 3+ (4 with carryover) others are already 'practicing'."""
+
+    @staticmethod
+    def _practicing(n):
+        return {"grammar": {f"X-{i:02d}-concept": {"status": "practicing"} for i in range(n)}}
+
+    def test_warn_when_crowded(self):
+        logs = [{"new_grammar_concepts_introduced": ["B-09-imperatives"]}]
+        check_consolidation_cap(self._practicing(3), {"carryover_concepts": []}, logs, results)
+        assert any("Consolidation cap (CLAUDE.md L183)" in w for w in _warns()), f"got {_warns()!r}"
+
+    def test_no_warn_under_cap(self):
+        logs = [{"new_grammar_concepts_introduced": ["B-09-imperatives"]}]
+        check_consolidation_cap(self._practicing(2), {"carryover_concepts": []}, logs, results)
+        assert not any("Consolidation cap (CLAUDE.md L183)" in w for w in _warns())
+
+    def test_carryover_raises_cap_to_four(self):
+        logs = [{"new_grammar_concepts_introduced": ["B-09-imperatives"]}]
+        sched = {"carryover_concepts": [{"concept_id": "A-02-ser-vs-estar"}]}
+        check_consolidation_cap(self._practicing(3), sched, logs, results)
+        assert not any("Consolidation cap (CLAUDE.md L183)" in w for w in _warns())
+
+    def test_no_warn_when_no_new_concept(self):
+        logs = [{"new_grammar_concepts_introduced": []}]
+        check_consolidation_cap(self._practicing(5), {"carryover_concepts": []}, logs, results)
+        assert not any("Consolidation cap (CLAUDE.md L183)" in w for w in _warns())

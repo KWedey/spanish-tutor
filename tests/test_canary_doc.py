@@ -35,3 +35,14 @@ class TestCanaryFirstSessionDoc:
             f"{missing}. Each phase must be a level-2 heading; substring matches "
             "elsewhere in the doc do not count."
         )
+
+    def test_check_session_log_invocations_use_date_not_path(self):
+        """Audit P1-6: check-session-log.py takes a DATE and builds
+        state/sessions/<date>.yaml itself. Passing a path (e.g.
+        `... state/sessions/$(date).yaml`) doubles the path -> always exits 1,
+        which would misreport a SUCCESSFUL first session as an infra FAILURE."""
+        content = CANARY_DOC.read_text(encoding="utf-8")
+        assert "check-session-log.py state/sessions/" not in content, (
+            "P1-6: canary doc invokes check-session-log.py with a PATH; it takes a "
+            "DATE. Use `check-session-log.py $(date -u +%Y-%m-%d)`."
+        )

@@ -126,7 +126,13 @@ def split_frontmatter(content: str) -> tuple[dict | None, str | None]:
     if content.startswith("---"):
         end = content.find("---", 3)
         if end != -1:
-            return yaml.safe_load(content[3:end]), content[end + 3:]
+            try:
+                return yaml.safe_load(content[3:end]), content[end + 3:]
+            except yaml.YAMLError:
+                # Malformed frontmatter: treat as no parseable frontmatter (P2-n) so a
+                # bad source file falls back to raw content and a bad vault file is
+                # treated as unmarked — never aborting run_full mid-loop.
+                return None, None
     return None, None
 
 
@@ -152,7 +158,7 @@ def file_has_generated_marker(path: Path) -> bool:
         return False
     try:
         with open(path, "r", encoding="utf-8") as f:
-            content = f.read(1024)  # Only need to check the beginning
+            content = f.read()  # read fully — a marker's closing '---' can sit past 1024B (P2-o)
         fm, body = split_frontmatter(content)
         if body is not None:
             return isinstance(fm, dict) and fm.get("generated") is True
@@ -373,7 +379,7 @@ def generate_cultural_note(concept_id: str, data: dict) -> tuple[Path, str]:
     source_path = cultural_source_path(concept_id)
 
     status = data.get("status", "unseen")
-    phase = data.get("introduced_at_phase", "B")
+    phase = data.get("introduced_at_phase") or "B"  # P2-p: coalesce explicit null
     tags = ["cultural", f"phase-{phase.lower()}", status]
 
     fm = {
@@ -403,8 +409,8 @@ def generate_cultural_note(concept_id: str, data: dict) -> tuple[Path, str]:
 def generate_home(schedule: dict, skill_map: dict) -> tuple[Path, str]:
     phase = schedule.get("current_phase", "A-foundation")
     week = schedule.get("current_week", 1)
-    listening = skill_map.get('receptive_skills', {}).get('listening', {})
-    reading = skill_map.get('receptive_skills', {}).get('reading', {})
+    listening = (skill_map.get('receptive_skills') or {}).get('listening') or {}  # P2-p: null subsection or null entry
+    reading = (skill_map.get('receptive_skills') or {}).get('reading') or {}
     listening_level = listening.get('current_level') or '—'
     reading_level = reading.get('current_level') or '—'
     listening_quality = listening.get('comprehension_quality') or 'not assessed'
@@ -483,7 +489,7 @@ def generate_roadmap(skill_map: dict) -> tuple[Path, str]:
 
     lines = [
         "---",
-        f'generated: true',
+        'generated: true',
         f'last_generated: "{today_str()}"',
         'tags: ["roadmap"]',
         "---",
@@ -533,8 +539,8 @@ def generate_roadmap(skill_map: dict) -> tuple[Path, str]:
         lines.append("")
 
     # Input levels section
-    listening_level = skill_map.get('receptive_skills', {}).get('listening', {}).get('current_level') or '—'
-    reading_level = skill_map.get('receptive_skills', {}).get('reading', {}).get('current_level') or '—'
+    listening_level = ((skill_map.get('receptive_skills') or {}).get('listening') or {}).get('current_level') or '—'
+    reading_level = ((skill_map.get('receptive_skills') or {}).get('reading') or {}).get('current_level') or '—'
     lines.append("## Input Levels")
     lines.append("")
     lines.append("### Listening")
@@ -830,32 +836,35 @@ def run_full(skill_map: dict, schedule: dict) -> None:
     """Generate all vault content."""
     files_written = 0
 
-    # Grammar notes
-    grammar = skill_map.get("grammar", {})
+    # Per-concept notes use force=False (P2-a): the notes carry generated:true so a
+    # normal regen still rewrites them, but if a learner removes the marker to keep a
+    # hand-edit (e.g. added mnemonics), the marker guard now protects it instead of
+    # silently clobbering. `(... or {})` guards a present-but-null subsection (P2-p).
+    grammar = skill_map.get("grammar") or {}
     for concept_id, data in grammar.items():
         path, content = generate_grammar_note(concept_id, data)
-        write_vault_file(path, content, force=True)
+        write_vault_file(path, content, force=False)
         files_written += 1
 
     # Vocabulary notes
-    vocabulary = skill_map.get("vocabulary", {})
+    vocabulary = skill_map.get("vocabulary") or {}
     for cluster_id, data in vocabulary.items():
         path, content = generate_vocab_note(cluster_id, data)
-        write_vault_file(path, content, force=True)
+        write_vault_file(path, content, force=False)
         files_written += 1
 
     # Pronunciation notes
-    pronunciation = skill_map.get("pronunciation", {})
+    pronunciation = skill_map.get("pronunciation") or {}
     for sound_id, data in pronunciation.items():
         path, content = generate_pronunciation_note(sound_id, data)
-        write_vault_file(path, content, force=True)
+        write_vault_file(path, content, force=False)
         files_written += 1
 
     # Cultural awareness notes
-    cultural = skill_map.get("cultural_awareness", {})
+    cultural = skill_map.get("cultural_awareness") or {}
     for concept_id, data in cultural.items():
         path, content = generate_cultural_note(concept_id, data)
-        write_vault_file(path, content, force=True)
+        write_vault_file(path, content, force=False)
         files_written += 1
 
     # Home
@@ -938,7 +947,7 @@ def run_session(skill_map: dict, session_date: str) -> None:
     updates = 0
 
     # Update grammar notes
-    grammar = skill_map.get("grammar", {})
+    grammar = skill_map.get("grammar") or {}  # P2-p: guard present-but-null subsection (matches run_full)
     for concept_id, data in grammar.items():
         phase = concept_id[0]
         title = concept_id_to_title(concept_id)
@@ -964,7 +973,7 @@ def run_session(skill_map: dict, session_date: str) -> None:
             updates += 1
 
     # Update vocabulary notes
-    vocabulary = skill_map.get("vocabulary", {})
+    vocabulary = skill_map.get("vocabulary") or {}
     for cluster_id, data in vocabulary.items():
         tier_num = cluster_id[4]
         title = cluster_id_to_title(cluster_id)
@@ -988,7 +997,7 @@ def run_session(skill_map: dict, session_date: str) -> None:
             updates += 1
 
     # Update pronunciation notes
-    pronunciation = skill_map.get("pronunciation", {})
+    pronunciation = skill_map.get("pronunciation") or {}
     for sound_id, data in pronunciation.items():
         title = sound_id_to_title(sound_id)
         note_path = VAULT_DIR / "Pronunciation" / f"{title}.md"
@@ -1005,13 +1014,13 @@ def run_session(skill_map: dict, session_date: str) -> None:
             updates += 1
 
     # Update cultural awareness notes
-    cultural = skill_map.get("cultural_awareness", {})
+    cultural = skill_map.get("cultural_awareness") or {}
     for concept_id, data in cultural.items():
         title = cultural_id_to_title(concept_id)
         note_path = VAULT_DIR / "Cultural" / f"{title}.md"
 
         status = data.get("status", "unseen")
-        phase = data.get("introduced_at_phase", "B")
+        phase = data.get("introduced_at_phase") or "B"  # P2-p: coalesce explicit null
         tags = ["cultural", f"phase-{phase.lower()}", status]
 
         fm_updates = {

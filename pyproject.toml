@@ -1,0 +1,16 @@
+# Ruff configuration — conservative pre-flight lint for the guardrail scripts.
+#
+# Keeps ruff's DEFAULT rule set (E4/E7/E9 pycodestyle errors + F pyflakes),
+# which catches the real-bug classes: unused imports, unused variables,
+# undefined names, redefinitions. The deliberate one-liner style used
+# throughout the guardrail scripts is silenced below so `ruff check` stays
+# signal-not-noise and is repeatable in CI.
+[tool.ruff.lint]
+ignore = [
+    "E701",  # one-line `if cond: stmt` guard clauses — deliberate style here
+    "E702",  # one-line `stmt; stmt` compound statements — deliberate style here
+    "E741",  # short names (l/I/O) in tight loops — pre-existing convention
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E402"]  # test harness mutates sys.path before importing the script under test

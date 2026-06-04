@@ -62,7 +62,7 @@ fields:
     type: int
     required: true
     default: 0
-    description: "Should stay <= 2"
+    description: "Soft comfort target ~2; new-concept introduction is blocked at 3+ (4 with carryover) per the CLAUDE.md consolidation guardrail (validate-state check_consolidation_cap)."
 
   average_session_duration_30d:
     type: int
@@ -258,6 +258,18 @@ fields:
         required: false
         default: []
         description: "Last 5 session difficulty ratings for trend analysis"
+
+  maintenance_sessions_total:
+    type: int
+    required: false
+    default: 0
+    description: "Maintenance-mode only (post-Phase-D): cumulative count of maintenance sessions. Written by the tutor per maintenance-mode.md."
+
+  regressions_detected_in_maintenance:
+    type: int
+    required: false
+    default: 0
+    description: "Maintenance-mode only: count of concept regressions caught during maintenance. Written by the tutor per maintenance-mode.md."
 
   last_system_review:
     type: string

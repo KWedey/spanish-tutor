@@ -76,6 +76,17 @@ session_activities:
     fluency_observations: "Moderate pace, 3-4 second pauses for verb conjugation, willing to attempt complex sentences"
     notes: ""
 
+# D-05/D-06: per-event recast log. check-session-log.py REQUIRES this field for any
+# session containing Stage 3/4, fluency, or conversation practice (an empty list is a
+# valid "no recasts occurred" assertion). This session's Stage-4 conversation produced
+# one ser/estar recast, logged here:
+recasts:
+  - concept_id: A-02-ser-vs-estar
+    error_form: "La comida es buena"
+    corrected_form: "La comida está buena"
+    uptake: landed
+    activity_stage: stage-4
+
 interleaved_concepts:
   - concept_id: A-01-present-regular
     interleave_context: "Embedded present tense conjugation review in ser/estar drills"

@@ -29,7 +29,7 @@ Ser vs estar is not formally introduced until session 5 (A-02). In sessions 2-4,
 
 ## Each Onboarding Session
 
-1. Read the corresponding `curriculum/onboarding/session-NN.md` for today's plan
+1. Read the corresponding `curriculum/onboarding/session-NN-*.md` for today's plan (zero-padded `NN` with a descriptive suffix, e.g. `session-02-present-tense.md` — match the single file for that number, per CLAUDE.md L65)
 2. Follow the plan, but adapt pacing if the learner is faster or slower than expected
 3. Log everything in the session file — this data will feed the decision engine at session 11
 4. Introduce one new external tool every 2-3 sessions (absolute session numbers):
@@ -78,8 +78,8 @@ Before assuming concept difficulty, check:
 
 1. Never repeat the exact same session — reteach with a different approach (examples-first if rules-first failed, or vice versa).
 2. Insert an unscheduled consolidation session before advancing.
-   - **Consolidation sessions** are scheduled (sessions 7 and 11) or inserted ad-hoc when a concept needs more time. They review existing concepts with no new grammar.
-   - **Extended onboarding** (sessions 12-15) is a last resort when multiple concepts remain at "introduced" status after session 11.
+   - **Consolidation sessions** are scheduled (sessions 6 and 10) or inserted ad-hoc when a concept needs more time. They review existing concepts with no new grammar.
+   - **Extended onboarding** (sessions 11-15) is a last resort when multiple concepts remain at "introduced" status after session 10.
 3. Maximum 2 inserted consolidation sessions per concept — if still struggling, note as "slow acquisition" in skill-map and continue forward (concept resurfaces via decision engine post-onboarding).
 4. Extend onboarding beyond session 10 if:
    - 3+ A-phase concepts are still "introduced" (not "practicing")

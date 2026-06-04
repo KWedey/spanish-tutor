@@ -425,7 +425,7 @@ grammar:
 
 **Recast uptake statistics (D-07):** `recast_uptake_stats` is a per-concept field on grammar entries only. Aggregated from session-log `recasts[]` entries by `post-session.sh` Step 5b. Invariant: `landed + missed + partial <= recasts_given`. `validate-state.py` FAILs on invariant violation. Missing field = backward-compatible all-zeros (no FAIL).
 
-**Regression session count (D-09/ENGINE-05):** `regression_session_count` is a per-concept integer on grammar entries only. Tracks consecutive sessions where a concept's status is `regressed` or `practicing` after previously being `acquired` or `automatic`. Incremented by `post-session.sh`; read by `decision-engine.md` Step 0c regression escalation ladder to determine escalation stage (normal/flagged/approach_changed/sprint/surfaced). Reset to 0 when the concept re-acquires `acquired` status. Missing field = backward-compatible default 0 (no FAIL).
+**Regression session count (D-09/ENGINE-05):** `regression_session_count` is a per-concept integer on grammar entries only. Tracks consecutive sessions a concept's status is `regressed` (a slip from `acquired`/`automatic` is encoded as `regressed`). Incremented by `post-session.sh` (recompute-metrics.py); read by `decision-engine.md` Step 0c regression escalation ladder to determine escalation stage (normal/flagged/approach_changed/sprint/surfaced). Reset to 0 when the concept re-acquires `acquired` or `automatic` status. Missing field = backward-compatible default 0 (no FAIL).
 
 vocabulary:
   tier1-greetings-introductions:
@@ -633,9 +633,11 @@ fluency_days_this_week: 0
 last_fluency_day: null
 
 # Fluency day determination algorithm (checked during startup):
-#   expected_this_week: 0 if Phase A, 1 if Phase B, 2 if Phase C, every session if Phase D
+#   expected_this_week: 0 if Phase A, 1 if Phase B, 2 if Phase C, 3 if Phase D
+#                       (Phase D embeds a fluency COMPONENT in non-fluency sessions; dedicated
+#                        fluency-day SESSIONS stay capped at 3/week — see fluency-activities.md)
 #   is_fluency_day: fluency_days_this_week < expected_this_week
-#                   AND last_fluency_day != today
+#                   AND last_fluency_day is neither today nor yesterday (no consecutive fluency days)
 #                   AND (Phase D, OR enough non-fluency days remain this week for grammar work)
 
 # Upcoming queue — what's next when current items are acquired
@@ -938,7 +940,7 @@ Learner self-report on the PRIOR session's homework load. Captured in Review & W
 
 Conditional enforcement (Pitfall 5): required on post-`PHASE_5_CUTOFF` sessions of type `standard`, `onboarding` (session_number ≥ 2), `sprint`, or `fluency`. Exempt: `first-session`, `onboarding` session 1, `weekly-review`, `phase-transition`, `return`, `micro`.
 
-Invariant enforcement: `scripts/validate-state.py check_daily_target_tier_drift` cross-references the last N session logs against `schedule.consecutive_too_much_count` and FAILs if the counter disagrees with observed ratings.
+Invariant enforcement: `scripts/validate-state.py` runs `check_daily_target_tier_drift` internally (it takes NO positional arguments — do not pass the check name on the command line) and FAILs when `schedule.consecutive_too_much_count` has reached the D-11 threshold (>= 2) while the `daily_target` reduction has not been applied.
 
 **Session recovery:** If `session_status` is `partial`, the next session's agent should:
 1. Note that the previous session was incomplete
@@ -1342,7 +1344,7 @@ For each candidate concept/activity:
       Add +3 to DECAY to trigger a spot-check.
       Do not treat as a primary focus — embed in conversation or warm-up.
 
-  PRIORITY = NEED + GAP + DECAY + TOPIC_BOOST - VARIETY_PENALTY
+  PRIORITY = NEED + GAP + DECAY_ADJUSTED + TOPIC_BOOST + INTEREST - VARIETY_PENALTY
   (filtered by READINESS and SPRINT_OVERRIDE, modified by ENERGY, MOTIVATION, FLUENCY_BALANCE, PARKING_LOT, MAINTENANCE_DECAY)
 ```
 

@@ -130,6 +130,31 @@ class TestHomeworkLoadRatingInReview:
             "LOAD-04/D-12: CLAUDE.md Review & Warm-up must reference homework_load_rating capture"
 
 
+class TestD11CounterMaintenance:
+    """P1-1 (audit): CLAUDE.md must instruct the tutor to MAINTAIN the D-11 streak
+    counters (consecutive_too_much_count / consecutive_just_right_count). They are
+    tutor-maintained 'pending-action' flags; without explicit maintenance they stay
+    at 0 in production and validate-state's check_daily_target_tier_drift /
+    check_just_right_restore_drift can never fire (the D-11 guardrail is dormant)."""
+
+    def test_both_counters_instructed(self):
+        content = CLAUDE_MD.read_text(encoding="utf-8")
+        for field in ("consecutive_too_much_count", "consecutive_just_right_count"):
+            assert field in content, (
+                f"P1-1: CLAUDE.md must instruct maintaining {field} so the D-11 "
+                "tier-drift validator can fire (the counter is tutor-maintained)."
+            )
+
+    def test_maintenance_lives_in_state_updates(self):
+        content = CLAUDE_MD.read_text(encoding="utf-8")
+        su = content.find("## State Updates")
+        assert su != -1, "CLAUDE.md must have a State Updates section"
+        assert content.find("consecutive_too_much_count", su) != -1, (
+            "P1-1: the D-11 counter-maintenance bookkeeping must appear in the "
+            "State Updates section (where schedule.yaml counters are persisted)."
+        )
+
+
 # =============================================================================
 # Phase 6 ROUTE: Wave 0 RED-scaffolding tests for CLAUDE.md Step 3 precedence
 # =============================================================================

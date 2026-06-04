@@ -45,14 +45,17 @@ class TestRegressionCounts:
         sm = yaml.safe_load((state / "skill-map.yaml").read_text())
         assert sm["grammar"]["Y"]["regression_session_count"] == 0
 
-    def test_vocab_regressed_initializes_counter(self, tmp_path):
+    def test_vocab_regressed_does_not_get_grammar_only_counter(self, tmp_path):
+        """P2-t: regression_session_count is grammar-only (schema + system-design.md);
+        a regressed vocabulary cluster must NOT receive it (no reader; not declared on
+        vocabulary_entry_template). count_reteach still counts vocab — see below."""
         state = _seed(tmp_path,
             skill_map={"vocabulary": {"V": {"status": "regressed"}}},
             health={"concepts_requiring_reteach_total": 0,
                     "sessions_rated_too_easy_30d": 0, "sessions_rated_too_hard_30d": 0})
         rm.recompute(state, date(2026, 6, 3))
         sm = yaml.safe_load((state / "skill-map.yaml").read_text())
-        assert sm["vocabulary"]["V"]["regression_session_count"] == 1
+        assert "regression_session_count" not in sm["vocabulary"]["V"]
 
     def test_header_preserved(self, tmp_path):
         state = _seed(tmp_path,

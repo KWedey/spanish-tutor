@@ -143,7 +143,6 @@ class TestStep0DryRun:
 
     def test_dry_run_branch_in_step_0_region(self):
         """The dry-run skip must be in the Step 0 region (before Step 1)."""
-        lines = _script_lines()
         step0_line = _line_number_of("Step 0/")
         step1_line = _line_number_of("Step 1/")
         assert step0_line > 0, "Step 0/ not found"

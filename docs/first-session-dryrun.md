@@ -28,7 +28,7 @@ python3 scripts/setup.py
 python3 scripts/preflight.py
 ```
 
-- [ ] All 6 checks pass (State validation, Key files exist, Test suite, Vault generation, Obsidian ready, Fresh init cycle)
+- [ ] All default checks pass (State validation, Key files exist, Test suite, Vault generation, Obsidian ready). "Fresh init cycle" shows **SKIP** by default — it is DESTRUCTIVE (resets state); run it only on a brand-new clone via `python3 scripts/preflight.py --include-fresh-init`.
 - [ ] Verdict reads **GO**
 - [ ] No warnings about missing files or empty directories
 

@@ -172,6 +172,16 @@ fields:
         required: true
         default: ""
         description: "Assignment type — anki, writing, listening, reading, drill, journal, etc."
+      task:
+        type: string
+        required: false
+        default: ""
+        description: "Human-readable description of the assignment (input-orchestration.md Section 1 Step 5; docs/system-design.md)."
+      narrow_topic_aligned:
+        type: bool
+        required: false
+        default: false
+        description: "True if this assignment aligns with the week's narrow topic (input-orchestration.md Section 1 Step 5)."
       estimated_minutes:
         type: int
         required: true
@@ -265,6 +275,12 @@ fields:
     required: false
     default: []
     description: "Placement validation spot-checks (sessions 2-4 only)"
+
+  placement_skipped_sessions:
+    type: list
+    required: false
+    default: []
+    description: "Onboarding session numbers skipped due to placement (first-session.md §7: Late-A skips 01-04; Early-B+ logs all 10). Empty/absent for a true-beginner / Early-A first session."
 
   decision_engine_trace:
     type: map

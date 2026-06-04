@@ -5,7 +5,6 @@ scripts/ is placed on sys.path by tests/conftest.py — no per-file bootstrap.
 import importlib
 from pathlib import Path
 
-import pytest
 import yaml
 
 migrate_mod = importlib.import_module("migrate-state")

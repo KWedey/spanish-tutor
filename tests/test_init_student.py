@@ -248,6 +248,32 @@ class TestReinitSafety:
         has_prior = bool(name and str(name).strip())
         assert not has_prior, "Empty name should be treated as fresh install"
 
+    def test_session_logs_with_empty_name_is_prior_data(self, tmp_path):
+        """P2-c: empty profile name BUT existing session logs must count as prior
+        data, so `init --force` snapshots before wiping (the old name-only gate
+        skipped the snapshot and silently destroyed the logs)."""
+        sessions = tmp_path / "state" / "sessions"
+        sessions.mkdir(parents=True)
+        (tmp_path / "state" / "learner-profile.yaml").write_text('name: ""\n', encoding="utf-8")
+        (sessions / "2026-06-01.yaml").write_text("date: '2026-06-01'\n", encoding="utf-8")
+        assert init_mod.has_existing_learner_data(tmp_path) is True
+
+    def test_truly_fresh_is_not_prior_data(self, tmp_path):
+        """P2-c control: empty name + no session logs + no journal = fresh install."""
+        (tmp_path / "state").mkdir(parents=True)
+        (tmp_path / "state" / "learner-profile.yaml").write_text('name: ""\n', encoding="utf-8")
+        assert init_mod.has_existing_learner_data(tmp_path) is False
+
+    def test_archived_only_sessions_with_empty_name_is_prior_data(self, tmp_path):
+        """A2 (code-review): a learner whose only logs were archived (>60d) with an
+        empty profile name must still be detected — else --force wipes the archive
+        with no recovery snapshot."""
+        archive = tmp_path / "state" / "sessions" / "archive"
+        archive.mkdir(parents=True)
+        (tmp_path / "state" / "learner-profile.yaml").write_text('name: ""\n', encoding="utf-8")
+        (archive / "2025-01-01.yaml").write_text("date: '2025-01-01'\n", encoding="utf-8")
+        assert init_mod.has_existing_learner_data(tmp_path) is True
+
     def test_force_help_mentions_snapshot(self, capsys):
         """D-10: --help text for --force mentions snapshot is always taken."""
         import argparse

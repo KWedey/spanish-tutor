@@ -15,7 +15,7 @@ import shutil
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
-from shared import ROOT, STATE_DIR, green, yellow
+from shared import STATE_DIR, green, yellow
 
 # ---------------------------------------------------------------------------
 # Constants

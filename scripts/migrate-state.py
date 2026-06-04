@@ -4,7 +4,6 @@ Run after pulling updates: python3 scripts/migrate-state.py [--dry-run]
 """
 import argparse
 import sys
-from pathlib import Path
 
 try:
     import yaml
@@ -82,7 +81,6 @@ def save_state_file(rel_path: str, data: dict, original_text: str) -> None:
     first YAML key, as well as files that start with blank lines before comments.
     """
     hdr: list[str] = []
-    found_yaml_body = False
     for line in original_text.splitlines():
         stripped = line.strip()
         if stripped.startswith("#"):
@@ -92,7 +90,6 @@ def save_state_file(rel_path: str, data: dict, original_text: str) -> None:
             hdr.append(line)
         else:
             # First non-comment, non-blank line: YAML body starts here
-            found_yaml_body = True
             break
     if hdr:
         # Strip trailing blank lines from header so we control the separator

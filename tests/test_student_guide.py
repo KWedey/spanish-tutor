@@ -12,7 +12,6 @@ no doc-rendering or link-following.
 """
 from pathlib import Path
 
-import pytest
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 GUIDE_PATH = REPO_ROOT / "STUDENT-GUIDE.md"

@@ -1,24 +1,25 @@
 #!/usr/bin/env python3
 """Pre-flight check: verify the tutoring system is ready for a new user.
 
-Runs four checks in sequence and reports go/no-go:
+Runs a sequence of checks and reports go/no-go:
   1. State validation  — all state files parse and pass cross-checks
-  2. Test suite        — all pytest tests pass
-  3. Vault generation  — Obsidian vault builds without errors
-  4. Fresh init        — init-student.py can produce clean templates (dry-run)
+  2. Key files exist   — critical curriculum/state/schema files present
+  3. Test suite        — all pytest tests pass
+  4. Vault generation  — Obsidian vault builds without errors
+  5. Obsidian ready    — vault is browsable (Home, Getting Started, .obsidianignore)
+  6. Fresh init        — (opt-in, DESTRUCTIVE) init + validate run end-to-end; RESETS
+                         real state, so it is OFF unless --include-fresh-init
 
 Usage:
-    python3 scripts/preflight.py           # full pre-flight
-    python3 scripts/preflight.py --quick   # skip test suite (faster)
+    python3 scripts/preflight.py                      # safe, non-destructive
+    python3 scripts/preflight.py --quick              # also skip the slow test suite
+    python3 scripts/preflight.py --include-fresh-init # fresh clones only — RESETS state
 """
 import argparse
 import subprocess
 import sys
-import tempfile
-import shutil
-from pathlib import Path
 
-from shared import ROOT, STATE_DIR, VAULT_DIR, load_yaml, green, red, yellow, bold, dim
+from shared import ROOT, VAULT_DIR, green, red, yellow, bold, dim
 
 
 
@@ -85,41 +86,29 @@ def check_vault_generation() -> tuple[bool, str]:
 
 
 def check_fresh_init() -> tuple[bool, str]:
-    """Check 4: init-student.py can produce clean state in a temp directory.
+    """Opt-in, DESTRUCTIVE: verify init-student.py + validate-state.py run cleanly
+    end-to-end.
 
-    Copies current state to temp, runs init --force there, then validates.
-    Does NOT touch the real state directory.
-    """
-    tmpdir = None
-    try:
-        tmpdir = Path(tempfile.mkdtemp(prefix="preflight-"))
-        # Copy state dir to temp
-        tmp_state = tmpdir / "state"
-        shutil.copytree(STATE_DIR, tmp_state)
-
-        # Run init-student.py --force in a subprocess with modified state
-        # We test that the script runs without error, not that it modifies temp
-        ok, out = run(
-            [sys.executable, "scripts/init-student.py", "--force"],
-            "fresh init",
-        )
-        if not ok:
-            return False, out
-
-        # After init, validate the freshly-reset state
-        ok2, out2 = run(
-            [sys.executable, "scripts/validate-state.py"],
-            "post-init validation",
-        )
-        if not ok2:
-            return False, f"Init succeeded but validation failed:\n{out2}"
-
-        return True, "init + validation passed"
-    except Exception as e:
-        return False, str(e)
-    finally:
-        if tmpdir and tmpdir.exists():
-            shutil.rmtree(tmpdir, ignore_errors=True)
+    WARNING: this runs `init-student.py --force` against the REAL repo — it resets
+    every state/ file to a blank template and clears journal/ and progress-reports/.
+    A recovery snapshot of state/ is taken first, but journal/ and progress-reports/
+    are NOT snapshotted. Run ONLY on a fresh clone, before the first session. It is
+    OFF by default and runs only with --include-fresh-init (the earlier version
+    silently wiped real learner state despite a docstring claiming otherwise — audit
+    P1-7)."""
+    ok, out = run(
+        [sys.executable, "scripts/init-student.py", "--force"],
+        "fresh init",
+    )
+    if not ok:
+        return False, out
+    ok2, out2 = run(
+        [sys.executable, "scripts/validate-state.py"],
+        "post-init validation",
+    )
+    if not ok2:
+        return False, f"Init succeeded but validation failed:\n{out2}"
+    return True, "init + validation passed"
 
 
 def check_key_files_exist() -> tuple[bool, str]:
@@ -208,6 +197,8 @@ QUICK_SKIP = {"Test suite", "Fresh init cycle"}
 def main() -> None:
     parser = argparse.ArgumentParser(description="Pre-flight check for tutoring system.")
     parser.add_argument("--quick", action="store_true", help="Skip test suite and init cycle")
+    parser.add_argument("--include-fresh-init", action="store_true",
+                        help="Run the DESTRUCTIVE fresh-init check (RESETS real state; fresh clones only)")
     args = parser.parse_args()
 
     print(bold("\n=== Pre-flight Check ===\n"))
@@ -221,6 +212,12 @@ def main() -> None:
             print(f"  {yellow('SKIP')}  {name}")
             skipped += 1
             continue
+        if name == "Fresh init cycle" and not args.include_fresh_init:
+            print(f"  {yellow('SKIP')}  {name}  {dim('— destructive; use --include-fresh-init on a fresh clone')}")
+            skipped += 1
+            continue
+        if name == "Fresh init cycle":
+            print(f"  {red('WARNING')}  {name} RESETS real state (--include-fresh-init)")
 
         ok, detail = fn()
         status = green("PASS") if ok else red("FAIL")

@@ -68,7 +68,7 @@ After checking, update `escalation_stage` if a threshold was crossed. (`regressi
 
 All concepts in current phase with status: introduced, practicing, regressed, or acquired (for maintenance). Plus `carryover_concepts` from `schedule.yaml`. Plus maintenance from all previous phases (with decaying priority).
 
-**Cultural concepts:** Also gather `cultural_awareness` concepts from skill-map whose `introduced_at_phase` matches the current phase or earlier. Score them using the same formula but with NEED capped at 5 for non-functional cultural concepts (`regional-awareness`, `humor-and-idioms`). Functional cultural concepts (`politeness-formulas`, `register-shifting`) use their full NEED score — see the NEED table for details. Cultural concepts are never the primary focus — they supplement grammar work during conversation practice or as a secondary concept.
+**Cultural concepts:** Also gather `cultural_awareness` concepts from skill-map whose `introduced_at_phase` matches the current phase or earlier. Score them using the same formula but with NEED capped at 5 for non-functional cultural concepts (`regional_awareness`, `humor_and_idioms`). Functional cultural concepts (`politeness_formulas`, `register_shifting`) use their full NEED score — see the NEED table for details. Cultural concepts are never the primary focus — they supplement grammar work during conversation practice or as a secondary concept.
 
 **Filter:** Exclude any concept where prerequisites are not met. A prerequisite is "met" when its status is "acquired" or "automatic". Status "practicing" or below means the prerequisite is not met and the dependent concept cannot be introduced.
 
@@ -92,7 +92,7 @@ PRIORITY = NEED + GAP + DECAY_ADJUSTED + TOPIC_BOOST + INTEREST - VARIETY_PENALT
 | Two+ phases back maintenance | 0.5 |
 | Cultural concept (any phase) | See note below |
 
-> **Note:** Cultural concepts use the same base scoring as grammar concepts of their type, but the NEED score is capped at 5 for non-functional cultural concepts (`regional-awareness`, `humor-and-idioms`). **Exception:** `politeness-formulas` and `register-shifting` are functionally equivalent to grammar for communication — they use their full base NEED score with no cap. These concepts directly affect whether the learner can communicate appropriately and should compete on equal footing with grammar.
+> **Note:** Cultural concepts use the same base scoring as grammar concepts of their type, but the NEED score is capped at 5 for non-functional cultural concepts (`regional_awareness`, `humor_and_idioms`). **Exception:** `politeness_formulas` and `register_shifting` are functionally equivalent to grammar for communication — they use their full base NEED score with no cap. These concepts directly affect whether the learner can communicate appropriately and should compete on equal footing with grammar.
 
 ### GAP (0-10) — uses `error_rate_production`
 

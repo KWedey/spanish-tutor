@@ -222,10 +222,11 @@ fields:
         default: 0
         description: "Count of sessions this concept has been in carryover; checked against the escalation ladder in decision-engine.md Step 0b"
       escalation_stage:
-        type: int
+        type: string
         required: false
-        default: 0
-        description: "Current rung on the carryover escalation ladder (0 = none)"
+        default: "normal"
+        description: "Current rung on the carryover escalation ladder. String stage name (the tutor writes the name, NOT an int) matching decision-engine.md Step 0b/0c and system-design.md."
+        enum: ["normal", "flagged", "approach_changed", "sprint", "surfaced"]
       current_approach:
         type: string
         required: false
@@ -338,10 +339,16 @@ fields:
     type: int
     required: false
     default: 0
-    description: "D-11: Count of consecutive 'too-much' homework_load_rating ratings. Incremented at post-session; reset after daily_target reduction or on non-'too-much' rating."
+    description: "D-11: Count of consecutive 'too-much' homework_load_rating ratings. Maintained by the tutor agent each session (CLAUDE.md State Updates step 4): incremented on a 'too-much' rating, reset to 0 after a daily_target reduction or on a non-'too-much' rating. validate-state.py check_daily_target_tier_drift FAILs when this reaches 2 with the reduction unapplied."
 
   consecutive_just_right_count:
     type: int
     required: false
     default: 0
-    description: "D-11: For restoration logic. 3+ consecutive 'just-right' after reduction → +10% daily_target."
+    description: "D-11: For restoration logic. Maintained by the tutor agent each session (CLAUDE.md State Updates step 4): incremented on a 'just-right' rating, reset to 0 after a +10% restore or on a non-'just-right' rating. 3 consecutive 'just-right' after a reduction → +10% daily_target; validate-state.py check_just_right_restore_drift FAILs when this reaches 3 with the restore unapplied."
+
+  just_right_streak:
+    type: int
+    required: false
+    default: 0
+    description: "Consecutive 'just-right' session_difficulty_rating values (DISTINCT from the D-11 homework-load consecutive_just_right_count). At 3+, preserve current calibration. Maintained by the tutor per decision-engine.md L192 / weekly-review-guide.md L75; reset on a 'too-easy' or 'too-hard' rating."

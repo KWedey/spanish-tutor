@@ -4,7 +4,6 @@ Wave 0: Tests for ENFORCE-02..05 — first-session, onboarding, sprint, fluency
 session types. Each class verifies that EXPECTED_BY_TYPE has the correct
 entries and that check_log() fails when required fields are missing.
 """
-import copy
 from pathlib import Path
 
 import pytest
@@ -504,6 +503,20 @@ class TestRecasts:
         })
         assert check_recasts_required(log) is True, \
             "D-06: 'recast' substring in notes should trigger required"
+
+    def test_shipped_session_log_example_is_recasts_compliant(self):
+        """Regression guard (audit DRIFT5-F): docs/session-log-example.yaml is the
+        'copy-from' reference for standard logs and contains a conversation activity,
+        so it MUST carry a top-level `recasts` field — otherwise a copy dated
+        >= PHASE_4_CUTOFF would FAIL check-session-log.py (D-06)."""
+        root = Path(__file__).resolve().parent.parent
+        example = yaml.safe_load((root / "docs" / "session-log-example.yaml").read_text())
+        assert isinstance(example, dict), "session-log-example.yaml must parse to a mapping"
+        if check_recasts_required(example):
+            assert "recasts" in example, (
+                "session-log-example.yaml has a conversation/stage-3/4 activity but no "
+                "top-level recasts: — a copy dated >= PHASE_4_CUTOFF would FAIL D-06"
+            )
 
 
 # =============================================================================

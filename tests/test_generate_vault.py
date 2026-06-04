@@ -5,7 +5,6 @@ import re
 import sys
 from pathlib import Path
 
-import pytest
 import yaml
 
 # scripts/ is placed on sys.path by tests/conftest.py — no per-file bootstrap.
@@ -405,3 +404,75 @@ class TestRunSessionFrontmatter:
         content = note_path.read_text(encoding="utf-8")
         assert "status: practicing" in content
         assert "practice_count: 3" in content
+
+
+# ---------------------------------------------------------------------------
+# 7. Marker protection under run_full (P2-a) + frontmatter robustness (P2-n/o)
+# ---------------------------------------------------------------------------
+
+class TestRunFullMarkerProtection:
+    def test_full_protects_marker_stripped_concept_note(self, tmp_path, monkeypatch):
+        """P2-a: run_full must NOT clobber a generated concept note whose marker the
+        learner removed to keep a hand-edit (concept notes are now written force=False)."""
+        skill_map = copy.deepcopy(TestRunFullFileCount.SYNTHETIC_SKILL_MAP)
+        schedule = copy.deepcopy(MINIMAL_SCHEDULE)
+        monkeypatch.setattr(gv, "VAULT_DIR", tmp_path / "vault")
+
+        run_full(skill_map, schedule)
+        note, _ = gv.generate_grammar_note(
+            "A-01-present-regular", skill_map["grammar"]["A-01-present-regular"])
+        assert note.exists() and file_has_generated_marker(note)
+
+        note.write_text("---\ntitle: mine\n---\nMy mnemonic — keep this!\n", encoding="utf-8")
+        run_full(skill_map, schedule)
+        assert "My mnemonic — keep this!" in note.read_text(encoding="utf-8"), (
+            "P2-a: run_full clobbered a marker-stripped hand-edited concept note"
+        )
+
+    def test_full_still_regenerates_marked_concept_note(self, tmp_path, monkeypatch):
+        """P2-a control: a note still carrying generated:true IS rewritten on the next
+        run_full, so dashboards/notes stay current."""
+        skill_map = copy.deepcopy(TestRunFullFileCount.SYNTHETIC_SKILL_MAP)
+        schedule = copy.deepcopy(MINIMAL_SCHEDULE)
+        monkeypatch.setattr(gv, "VAULT_DIR", tmp_path / "vault")
+
+        run_full(skill_map, schedule)
+        note, _ = gv.generate_grammar_note(
+            "A-01-present-regular", skill_map["grammar"]["A-01-present-regular"])
+        note.write_text("---\ngenerated: true\n---\nSTALE BODY\n", encoding="utf-8")
+        run_full(skill_map, schedule)
+        assert "STALE BODY" not in note.read_text(encoding="utf-8"), (
+            "P2-a control: a marker-bearing note must be regenerated, not preserved"
+        )
+
+
+class TestFrontmatterRobustness:
+    def test_malformed_source_frontmatter_falls_back_to_raw(self):
+        """P2-n: split_frontmatter must not raise on malformed YAML; a source file with
+        a bad frontmatter block falls back to raw content instead of aborting run_full."""
+        bad = "---\nkey: [unclosed\n---\nReal body content\n"
+        fm, _ = gv.split_frontmatter(bad)   # must not raise
+        assert fm is None
+        assert "Real body content" in gv.strip_source_frontmatter(bad)
+
+    def test_marker_recognized_past_1024_bytes(self, tmp_path):
+        """P2-o: a generated note whose frontmatter closing '---' sits beyond 1024
+        bytes must still be recognized as generated (not misread as hand-edited)."""
+        filler = "\n".join(f"alias{i}: value{i}" for i in range(120))  # push close past 1024B
+        note = tmp_path / "big.md"
+        note.write_text(f"---\ngenerated: true\n{filler}\n---\nbody\n", encoding="utf-8")
+        assert gv.file_has_generated_marker(note) is True
+
+
+class TestNullReceptiveGuard:
+    def test_null_receptive_entries_do_not_crash(self, tmp_path, monkeypatch):
+        """A1 (code-review): receptive_skills present with null listening/reading
+        entries (plausible pre-session-5 state) must not crash generate_home /
+        generate_roadmap during run_full."""
+        skill_map = copy.deepcopy(TestRunFullFileCount.SYNTHETIC_SKILL_MAP)
+        skill_map["receptive_skills"] = {"listening": None, "reading": None}
+        schedule = copy.deepcopy(MINIMAL_SCHEDULE)
+        monkeypatch.setattr(gv, "VAULT_DIR", tmp_path / "vault")
+        run_full(skill_map, schedule)  # must not raise AttributeError
+        assert (tmp_path / "vault" / "Home.md").exists()
+        assert (tmp_path / "vault" / "Roadmap.md").exists()

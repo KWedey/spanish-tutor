@@ -3,7 +3,6 @@
 import argparse
 import subprocess
 import sys
-from pathlib import Path
 
 try:
     import yaml
@@ -202,17 +201,41 @@ def clear_directory(rel_path: str) -> int:
     return count
 
 
+def has_existing_learner_data(root) -> bool:
+    """True if ANY real learner data exists — a populated profile name, session
+    logs, or journal entries. Broader than a name-only check so `--force` always
+    snapshots before wiping real data (P2-c: a crash or hand-edit can leave session
+    logs behind an empty profile name; setup.py's has_existing_state detects the
+    same case)."""
+    profile = load_yaml(root / "state" / "learner-profile.yaml") or {}
+    pname = profile.get("name")
+    if pname and str(pname).strip():
+        return True
+    # Mirror the destruction scope of the clear_directory list in main() — including
+    # state/sessions/archive (caught by rglob) — so --force never wipes any of these
+    # without a snapshot first (A2: archived-only history was the gap).
+    cleared_dirs = [
+        "state/sessions", "state/summaries", "state/milestones",
+        "state/offline-guides", "journal", "progress-reports",
+    ]
+    for rel in cleared_dirs:
+        d = root / rel
+        if d.exists() and any(f.is_file() and f.name != ".gitkeep" for f in d.rglob("*")):
+            return True
+    return False
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Reset all student data to clean templates.")
     parser.add_argument("--force", action="store_true",
-                        help="Skip the interactive confirmation prompt (snapshot is always taken)")
+                        help="Skip the interactive confirmation prompt (a recovery snapshot is taken whenever prior learner data is detected)")
     args = parser.parse_args()
 
     # --- Step 0: Detect prior learner state (D-09 gate) ---
     profile_path = ROOT / "state" / "learner-profile.yaml"
     profile_data = load_yaml(profile_path) or {}
     name = profile_data.get("name")
-    has_prior_learner = bool(name and str(name).strip())
+    has_prior_learner = has_existing_learner_data(ROOT)
 
     if has_prior_learner:
         # --- Step 1: Snapshot BEFORE any writes (D-07, unconditional even under --force) ---
@@ -251,14 +274,18 @@ def main() -> None:
 
         # --- Step 3: Confirmation (D-08 type-to-confirm, D-10 --force skips prompt) ---
         if not args.force:
-            print(f"\nAbout to erase all progress for: {name}")
+            print(f"\nAbout to erase all progress for: {name or '(unnamed learner — session/journal data present)'}")
             print(f"  Last session: {last_session}")
             print(f"  {session_count} session log(s) will be cleared")
             print(f"  {journal_count} journal entry/entries will be cleared")
             print(f"  Recovery snapshot saved to: {snapshot_path}")
-            print(f'\nType the learner name "{name}" or "RESET" to confirm:')
+            has_name = bool(name and str(name).strip())
+            if has_name:
+                print(f'\nType the learner name "{name}" or "RESET" to confirm:')
+            else:
+                print('\nType "RESET" to confirm:')
             answer = input("> ").strip()
-            if answer != str(name) and answer != "RESET":
+            if not (answer == "RESET" or (has_name and answer == str(name))):
                 print("Aborted.")
                 sys.exit(0)
         else:
@@ -281,17 +308,26 @@ def main() -> None:
 
     print("\n=== Regenerating vault ===")
     vault_script = ROOT / "scripts" / "generate-vault.py"
+    vault_failed = False
     if vault_script.exists():
         r = subprocess.run([sys.executable, str(vault_script), "--full"],
                            cwd=str(ROOT), capture_output=True, text=True)
-        print(green(f"  {r.stdout.strip()}") if r.returncode == 0
-              else red(f"  Vault generation failed: {r.stderr.strip()}"))
+        if r.returncode == 0:
+            print(green(f"  {r.stdout.strip()}"))
+        else:
+            print(red(f"  Vault generation failed: {r.stderr.strip()}"))
+            vault_failed = True
     else:
         print(yellow("  SKIP: generate-vault.py not found"))
 
-    print(f"\n=== Summary ===")
+    print("\n=== Summary ===")
     print(f"  State files reset: {len(TEMPLATES) + 1}")  # +1 for skill-map
     print(f"  Data files removed: {total_removed}")
+    if vault_failed:
+        print(red("\nState was reset, but vault generation FAILED — run "
+                  "`python3 scripts/generate-vault.py --full` and fix the error "
+                  "before the first session."))
+        sys.exit(1)
     print(green("\nStudent data has been reset to a clean state."))
 
 

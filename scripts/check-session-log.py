@@ -18,7 +18,6 @@ Exit codes:
 """
 import argparse
 import sys
-from pathlib import Path
 
 try:
     import yaml
@@ -26,7 +25,7 @@ except ImportError:
     print("Error: PyYAML required. Install with: pip install pyyaml", file=sys.stderr)
     sys.exit(1)
 
-from shared import ROOT, STATE_DIR, load_yaml, green, yellow, red, dim
+from shared import ROOT, STATE_DIR, load_yaml, leading_header, green, yellow, red, dim
 
 
 
@@ -349,9 +348,9 @@ def _append_load_adjustment_warn(session_date: str, total: int,
         # Don't fabricate system-health.yaml; if it's absent the WARN is still printed.
         return
     try:
-        with health_path.open() as f:
-            health = yaml.safe_load(f) or {}
-    except yaml.YAMLError:
+        raw = health_path.read_text(encoding="utf-8")
+        health = yaml.safe_load(raw) or {}
+    except (OSError, yaml.YAMLError):
         return
     budget = (schedule or {}).get("study_time_budget") or {}
     entry = {
@@ -369,7 +368,7 @@ def _append_load_adjustment_warn(session_date: str, total: int,
         from shared import atomic_write
         atomic_write(
             health_path,
-            yaml.safe_dump(health, sort_keys=False, allow_unicode=True),
+            leading_header(raw) + yaml.safe_dump(health, sort_keys=False, allow_unicode=True),
         )
     except OSError:
         return

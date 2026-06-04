@@ -20,23 +20,12 @@ from pathlib import Path
 
 import yaml
 
-from shared import STATE_DIR, atomic_write
+from shared import STATE_DIR, atomic_write, leading_header
 
 
 def same_iso_week(a: date, b: date) -> bool:
     """True if two dates fall in the same ISO (year, week)."""
     return a.isocalendar()[:2] == b.isocalendar()[:2]
-
-
-def _leading_header(text: str) -> str:
-    """Return the top comment/blank-line block (the schema-pointer header)."""
-    out = []
-    for ln in text.splitlines(keepends=True):
-        if ln.lstrip().startswith("#") or not ln.strip():
-            out.append(ln)
-        else:
-            break
-    return "".join(out)
 
 
 def update_fluency_tracking(date_str: str, state_dir: Path) -> dict | None:
@@ -87,7 +76,7 @@ def update_fluency_tracking(date_str: str, state_dir: Path) -> dict | None:
     schedule["last_fluency_day"] = date_str
 
     body = yaml.safe_dump(schedule, sort_keys=False, allow_unicode=True)
-    atomic_write(schedule_path, _leading_header(text) + body)
+    atomic_write(schedule_path, leading_header(text) + body)
     return schedule
 
 
