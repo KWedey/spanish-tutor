@@ -44,3 +44,70 @@ fields:
     required: false
     default: []
     description: "Active and tracked resources"
+    # Per-resource enums (type / comprehension_trend / learner_engagement) are
+    # additionally enforced by check_resource_tracker in scripts/validate-state.py.
+    # Entries are created on first assignment, not pre-populated (system-design.md 4b).
+    item_shape:
+      name:
+        type: string
+        required: true
+        default: ""
+        description: "Resource title, e.g. 'Dreaming Spanish'"
+      type:
+        type: string
+        required: true
+        default: "listening"
+        description: "Input modality"
+        enum: ["listening", "reading", "mixed"]
+      level_range:
+        type: list
+        required: false
+        default: []
+        description: "Comprehension levels this resource spans, e.g. [L2, L4]"
+      sessions_assigned:
+        type: int
+        required: false
+        default: 0
+        description: "Times this resource has been assigned as homework"
+      sessions_completed:
+        type: int
+        required: false
+        default: 0
+        description: "Times the learner reported completing it"
+      hours_logged:
+        type: float
+        required: false
+        default: 0
+        description: "Cumulative hours the learner has spent with this resource"
+      comprehension_trend:
+        type: string
+        required: false
+        default: null
+        description: "Comprehension direction over recent debriefs (null until enough data)"
+        enum: ["improving", "stable", "declining"]
+      vocabulary_extracted:
+        type: int
+        required: false
+        default: 0
+        description: "Count of words surfaced from this resource in debriefs"
+      last_assigned:
+        type: string
+        required: false
+        default: null
+        description: "Date (YYYY-MM-DD) this resource was last assigned, or null"
+      last_completed:
+        type: string
+        required: false
+        default: null
+        description: "Date (YYYY-MM-DD) this resource was last completed, or null"
+      learner_engagement:
+        type: string
+        required: false
+        default: null
+        description: "Learner's attitude toward this resource (null until observed)"
+        enum: ["enthusiastic", "neutral", "reluctant"]
+      notes:
+        type: string
+        required: false
+        default: ""
+        description: "Free-text observations"

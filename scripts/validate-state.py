@@ -868,9 +868,13 @@ def check_resource_tracker(resource_tracker: dict,
             res.fail(f'resource-tracker.input_summary.{field} is negative: {val}')
 
     resources = resource_tracker.get('resources', [])
-    valid_types = {'listening', 'reading', 'mixed'}
-    valid_trends = {None, 'improving', 'stable', 'declining'}
-    valid_engagement = {None, 'enthusiastic', 'neutral', 'reluctant'}
+    # Drive per-resource enums from the schema's resources.item_shape (single
+    # source of truth) — same pattern as the level enums above. None is tolerated
+    # for the two nullable fields (trend/engagement are null until enough data).
+    rt_fields = load_schema("resource-tracker")["fields"]
+    valid_types = _schema_enum(rt_fields, "resources", "item_shape", "type")
+    valid_trends = _schema_enum(rt_fields, "resources", "item_shape", "comprehension_trend") | {None}
+    valid_engagement = _schema_enum(rt_fields, "resources", "item_shape", "learner_engagement") | {None}
 
     for r in resources:
         name = r.get('name', 'unknown')
