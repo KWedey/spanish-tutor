@@ -1,5 +1,7 @@
 # Setup
 
+**Version 1.2.0** — see [CHANGELOG.md](CHANGELOG.md) for what changed across releases.
+
 ## Prerequisites
 
 | Requirement | Details |
@@ -35,6 +37,16 @@ That's it. The tutor detects it's your first session and walks you through onboa
 - Generates the Obsidian vault (grammar notes, vocabulary pages, roadmap)
 - Validates everything is well-formed
 
+## Preview with Demo Data
+
+To explore a populated system before onboarding a real learner, seed a sample mid-course learner:
+
+```bash
+python3 scripts/init-student.py --demo    # Windows: py scripts/init-student.py --demo
+```
+
+This fills `state/` and the vault with an example learner partway through the curriculum. Run `python3 scripts/init-student.py --force` to wipe it back to blank templates before real onboarding.
+
 ## Obsidian (Optional)
 
 After setup, you can open this folder as an Obsidian vault for a visual dashboard of your progress — grammar roadmap, vocabulary tracking, daily session notes.
@@ -64,7 +76,7 @@ Your state files, session logs, and journal entries are untouched.
 | Script | Purpose | Usage |
 |--------|---------|-------|
 | `scripts/setup.py` | One-command setup for new users | `python3 scripts/setup.py` |
-| `scripts/init-student.py` | Reset learner state to blank templates | `python3 scripts/init-student.py [--force]` |
+| `scripts/init-student.py` | Reset learner state to blank templates, or seed a demo learner | `python3 scripts/init-student.py [--force \| --demo]` |
 | `scripts/validate-state.py` | Validate state file integrity | `python3 scripts/validate-state.py [--verbose]` |
 | `scripts/generate-vault.py` | Generate/update Obsidian vault | `python3 scripts/generate-vault.py --full` |
 | `scripts/migrate-state.py` | Run schema migrations | `python3 scripts/migrate-state.py [--dry-run]` |

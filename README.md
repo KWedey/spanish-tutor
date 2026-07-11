@@ -4,6 +4,8 @@ A personal Spanish tutor that runs in your terminal. It tracks your progress in 
 
 The tutor is [Claude Code](https://claude.ai/download) — Anthropic's CLI — running against a curated curriculum, a schema-validated learner state, and a 19-step post-session protocol. You own all the data. It lives in this folder. Nothing is uploaded anywhere.
 
+**Version 1.2.0** — see [CHANGELOG.md](CHANGELOG.md) for release history.
+
 ## Quick start
 
 ```bash
@@ -29,6 +31,16 @@ claude
 
 Your first session walks you through onboarding — goals, target dialect, schedule, tool setup. After that, sessions are ~30-45 minutes daily, with assigned homework between.
 
+### Preview with demo data
+
+To see a populated system before going through onboarding, seed a sample mid-course learner:
+
+```bash
+python3 scripts/init-student.py --demo    # Windows: py scripts/init-student.py --demo
+```
+
+This fills `state/` and the vault with an example learner partway through the curriculum, so you can explore the roadmap, skill map, and progress views. Run `python3 scripts/init-student.py --force` to wipe it back to blank before real onboarding.
+
 ## What you get
 
 - **Daily sessions** that adapt to your level, energy, and available time
@@ -53,7 +65,12 @@ Your first session walks you through onboarding — goals, target dialect, sched
 - **[STUDENT-GUIDE.md](STUDENT-GUIDE.md)** — how the system works, what tools you'll use, what to expect over time, what to do when something goes wrong
 - **[SETUP.md](SETUP.md)** — detailed setup, scripts reference, handing off to a new learner
 - **[docs/first-session-dryrun.md](docs/first-session-dryrun.md)** — developer-only: manual checklist for a fresh-install QA pass before handing the project to a test user
+- **[docs/engine-api.md](docs/engine-api.md)** — the engine boundary and porting contracts (see Architecture & porting below)
 - **[CLAUDE.md](CLAUDE.md)** — the system prompt driving the tutor (useful if you want to understand or modify the tutor's behavior)
+
+## Architecture & porting
+
+The system separates a deterministic **engine** (state validation, session routing, concept scoring, guardrails, and post-session metrics) from the **LLM tutor** (conversation and lesson delivery) and a portable **data layer** (schemas plus curriculum). That boundary is what lets the same curriculum and state model drive a future web or mobile host instead of the terminal. [docs/engine-api.md](docs/engine-api.md) specifies the engine's lifecycle contracts, the `StateStore` interface, the prompt-split boundary, and a porting checklist.
 
 ## How your data works
 
@@ -82,7 +99,7 @@ See [SETUP.md](SETUP.md#handing-off-to-a-new-learner) for details.
 
 ## Status
 
-This is a personal tutoring system built for a single learner and now being shared with a small test group. It's functional but not battle-tested across many users. If you hit a bug, drop a note in `feedback/` or open an issue.
+Version 1.2.0. The engine — state validation, session routing, concept scoring, guardrails, and post-session metrics — is covered by an automated test suite (700+ pytest cases) and a schema-validation gate (`scripts/validate-state.py`), both run in CI on every change along with `ruff` lint. The curriculum spans Phases A–D. See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Getting Help
 

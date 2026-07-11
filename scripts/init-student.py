@@ -3,6 +3,7 @@
 import argparse
 import subprocess
 import sys
+from pathlib import Path
 
 try:
     import yaml
@@ -11,7 +12,7 @@ except ImportError:
     sys.exit(1)
 
 from shared import (ROOT, STATE_DIR, load_schema, get_field_default, load_yaml,
-                    yaml_value as _yaml_value, green, yellow, red)
+                    yaml_value as _yaml_value, atomic_write, green, yellow, red)
 
 # ---------------------------------------------------------------------------
 # Schema-driven template generation
@@ -299,11 +300,450 @@ def has_existing_learner_data(root) -> bool:
     return False
 
 
+# ---------------------------------------------------------------------------
+# Demo seeding (--demo): a realistic mid-Phase-B sample learner
+# ---------------------------------------------------------------------------
+#
+# `--demo` populates state/ with a coherent sample learner ("Alex Demo") so a
+# prospective user can preview a fully-populated system without running
+# onboarding. Every value below is chosen so that scripts/validate-state.py
+# reports 0 warnings AND 0 failures — respecting each invariant that script
+# enforces: the acquired error-rate gate (< 0.10) and performance_unscaffolded
+# == competent, the 3+-session acquisition floor (all acquired grammar has
+# practice_count >= 3), passive_known >= active_known, receptive vs
+# resource-tracker level agreement (L2 / R2), the D-11 homework-load counters
+# pinned at 0, and the Phase-B entry prerequisites (A-01/A-02/A-04) all
+# acquired. Dates are fixed historical strings; NONE are compared against
+# "today" by the validator — learner_interest is deliberately omitted so its
+# 28-day staleness check can never start firing as the demo ages on disk.
+#
+# route_session(state) boots this seed into "first-session" (Row 1: no session
+# logs exist), which is the sane deterministic route for a fresh preview with
+# last_session_date null and an empty sessions/ directory.
+
+# Grammar: 10 Phase-A concepts acquired (placement-acquired at early-B, then
+# reinforced — practice_count 4-8, error rates < 0.10), 2 early-Phase-B
+# concepts practicing (error rates 0.15-0.30). integration_tested_with refs all
+# resolve to concepts present in the skill map.
+DEMO_GRAMMAR = {
+    "A-00-communication-repair": dict(
+        status="acquired", introduced_date="2026-05-02", last_practiced="2026-06-26",
+        practice_count=8, error_rate_drills=0.03, error_rate_production=0.05,
+        error_trend="stable", performance_scaffolded="competent",
+        performance_unscaffolded="competent", integration_tested_with=[]),
+    "A-01-present-regular": dict(
+        status="acquired", introduced_date="2026-05-02", last_practiced="2026-06-28",
+        practice_count=8, error_rate_drills=0.04, error_rate_production=0.06,
+        error_trend="stable", performance_scaffolded="competent",
+        performance_unscaffolded="competent",
+        integration_tested_with=["A-02-ser-vs-estar", "A-07-present-irregular-common"]),
+    "A-02-ser-vs-estar": dict(
+        status="acquired", introduced_date="2026-05-05", last_practiced="2026-06-28",
+        practice_count=7, error_rate_drills=0.05, error_rate_production=0.08,
+        error_trend="stable", performance_scaffolded="competent",
+        performance_unscaffolded="competent",
+        integration_tested_with=["A-01-present-regular"]),
+    "A-03-gender-agreement": dict(
+        status="acquired", introduced_date="2026-05-07", last_practiced="2026-06-22",
+        practice_count=6, error_rate_drills=0.05, error_rate_production=0.08,
+        error_trend="improving", performance_scaffolded="competent",
+        performance_unscaffolded="competent", integration_tested_with=[]),
+    "A-04-articles-prepositions": dict(
+        status="acquired", introduced_date="2026-05-10", last_practiced="2026-06-20",
+        practice_count=6, error_rate_drills=0.06, error_rate_production=0.08,
+        error_trend="stable", performance_scaffolded="competent",
+        performance_unscaffolded="competent", integration_tested_with=[]),
+    "A-05-basic-questions": dict(
+        status="acquired", introduced_date="2026-05-12", last_practiced="2026-06-18",
+        practice_count=5, error_rate_drills=0.04, error_rate_production=0.07,
+        error_trend="stable", performance_scaffolded="competent",
+        performance_unscaffolded="competent", integration_tested_with=[]),
+    "A-06-gustar-type-verbs": dict(
+        status="acquired", introduced_date="2026-05-15", last_practiced="2026-06-15",
+        practice_count=5, error_rate_drills=0.06, error_rate_production=0.09,
+        error_trend="improving", performance_scaffolded="competent",
+        performance_unscaffolded="competent", integration_tested_with=[]),
+    "A-07-present-irregular-common": dict(
+        status="acquired", introduced_date="2026-05-17", last_practiced="2026-06-27",
+        practice_count=7, error_rate_drills=0.05, error_rate_production=0.08,
+        error_trend="stable", performance_scaffolded="competent",
+        performance_unscaffolded="competent",
+        integration_tested_with=["A-01-present-regular"]),
+    "A-08-numbers-quantifiers": dict(
+        status="acquired", introduced_date="2026-05-20", last_practiced="2026-06-12",
+        practice_count=4, error_rate_drills=0.05, error_rate_production=0.07,
+        error_trend="stable", performance_scaffolded="competent",
+        performance_unscaffolded="competent", integration_tested_with=[]),
+    "A-09-accent-stress-rules": dict(
+        status="acquired", introduced_date="2026-05-22", last_practiced="2026-06-10",
+        practice_count=4, error_rate_drills=0.07, error_rate_production=0.09,
+        error_trend="stable", performance_scaffolded="competent",
+        performance_unscaffolded="competent", integration_tested_with=[]),
+    "B-01-preterite-regular": dict(
+        status="practicing", introduced_date="2026-06-14", last_practiced="2026-06-28",
+        practice_count=3, error_rate_drills=0.18, error_rate_production=0.25,
+        error_trend="improving", performance_scaffolded="competent",
+        performance_unscaffolded="struggling", integration_tested_with=[]),
+    "B-02-preterite-irregular": dict(
+        status="practicing", introduced_date="2026-06-21", last_practiced="2026-06-27",
+        practice_count=2, error_rate_drills=0.24, error_rate_production=0.30,
+        error_trend="stable", performance_scaffolded="struggling",
+        performance_unscaffolded="struggling", integration_tested_with=[]),
+}
+
+# Vocabulary: 3 acquired tier-1 clusters (error_rate_production < 0.10) + 1
+# practicing tier-2 cluster. passive_known >= active_known everywhere.
+DEMO_VOCAB = {
+    "tier1-greetings-introductions": dict(
+        status="acquired", words_introduced=49, passive_known=47, active_known=42,
+        weak_production=["presentarse"], weak_recognition=[], last_practiced="2026-06-20",
+        error_tracking=dict(error_rate_production=0.04,
+                            common_errors=["formality: tú vs usted in greetings"],
+                            last_observed="2026-06-20")),
+    "tier1-numbers-time-dates": dict(
+        status="acquired", words_introduced=77, passive_known=70, active_known=60,
+        weak_production=["la madrugada"], weak_recognition=[], last_practiced="2026-06-18",
+        error_tracking=dict(error_rate_production=0.05,
+                            common_errors=["24-hour vs 12-hour time"],
+                            last_observed="2026-06-18")),
+    "tier1-food-restaurant": dict(
+        status="acquired", words_introduced=64, passive_known=58, active_known=48,
+        weak_production=["la cuenta", "el mesero"], weak_recognition=[],
+        last_practiced="2026-06-24",
+        error_tracking=dict(error_rate_production=0.06,
+                            common_errors=["ordering register (¿me da...? vs quiero)"],
+                            last_observed="2026-06-24")),
+    "tier2-home-household": dict(
+        status="practicing", words_introduced=30, passive_known=28, active_known=18,
+        weak_production=["el fregadero", "la cobija"], weak_recognition=["el enchufe"],
+        last_practiced="2026-06-28",
+        error_tracking=dict(error_rate_production=0.16,
+                            common_errors=["gender on appliance nouns"],
+                            last_observed="2026-06-28")),
+}
+
+# Receptive skills: around L2 / R2, with hours_at_level <= hours_total. Kept in
+# lockstep with resource-tracker.input_summary levels (check_resource_skill_map_levels).
+DEMO_RECEPTIVE = {
+    "listening": dict(
+        current_level="L2", comprehension_quality="main_ideas",
+        hours_at_level=12.0, hours_total=22.5,
+        level_up_evidence=["2026-06-15: followed a Dreaming Spanish Beginner story without rewinding"],
+        level_history=[{"level": "L1", "date": "2026-05-01"},
+                       {"level": "L2", "date": "2026-06-05"}]),
+    "reading": dict(
+        current_level="R2", comprehension_quality="main_ideas",
+        lookup_frequency="occasional", hours_at_level=5.0, hours_total=8.0,
+        level_up_evidence=["2026-06-19: finished a graded-reader chapter with occasional lookups"],
+        level_history=[{"level": "R1", "date": "2026-05-01"},
+                       {"level": "R2", "date": "2026-06-12"}]),
+}
+
+DEMO_OVERALL = dict(
+    cefr_estimate="A2", estimated_active_vocabulary=168,
+    estimated_passive_vocabulary=203, production_gap=35,
+    strongest_skill="listening", weakest_skill="speaking",
+    last_formal_assessment="2026-05-01")
+
+DEMO_FLUENCY = dict(
+    speaking_pace="slow-deliberate", hesitation_frequency="occasional",
+    self_correction_rate="high", circumlocution="occasional",
+    willingness_to_risk="tries and sometimes fails",
+    thinking_language="still translating from English")
+
+DEMO_PROFILE = dict(
+    name="Alex Demo",
+    native_language="English",
+    target_dialect="Mexican",
+    started="2026-05-01",
+    primary_goal="Conversational fluency for travel and connecting with family in Mexico",
+    target_level="B2",
+    milestone_goals=[
+        "Order a meal and chat with the staff in Mexico City",
+        "Hold a 10-minute phone call with a Spanish-speaking relative",
+    ],
+    graduation_criteria="Comfortable in unscripted daily conversations without switching to English",
+    typical_weekday_minutes=30,
+    typical_weekend_minutes=45,
+    preferred_session_time="evening",
+    max_new_concepts_per_week=2,
+    weekly_review_day="Sunday",
+    grammar_preference="examples-first",
+    error_correction_preference="gentle-inline",
+    vocabulary_retention_method="contextual",
+    motivation_style="encouragement-driven",
+    energy_pattern="Higher energy on weekday evenings; lighter on weekends",
+    calibration=dict(self_report_accuracy=0.7, tendency="accurate", trust_weight=0.6),
+    motivation=dict(
+        current_level="high", streak_days=3, longest_streak=8, total_sessions=14,
+        days_since_last_milestone=4, plateau_risk=False,
+        high_motivation_triggers=["visible roadmap progress", "real conversations"],
+        low_motivation_triggers=["long grammar drills"],
+        preferred_recovery="a quick win followed by a real-world debrief"),
+    input_hours=dict(listening_total=22.5, reading_total=8.0, last_updated="2026-06-28"),
+    tools=dict(srs="Anki", pronunciation="Speechling", conversation_partner="",
+               listening_primary="Dreaming Spanish",
+               reading_current="Short Stories in Spanish (Olly Richards)"),
+    notes="Sample learner seeded by `init-student.py --demo` to preview a populated system. Not a real learner.",
+    initial_placement=dict(
+        level="early-B", date="2026-05-01", self_report="intermediate",
+        grammar_result="early-B", vocabulary_observation="narrow",
+        reading_result="at-expected", confidence="medium",
+        evidence_summary=("Comfortable with the present tense and ser/estar; beginning the "
+                          "past tenses. Placed at early B with Phase A concepts pre-acquired.")),
+)
+
+DEMO_SCHEDULE = dict(
+    current_phase="B-conversational",
+    current_week=6,
+    onboarding_complete=True,
+    current_onboarding_session=None,
+    last_session_date=None,
+    autonomy_level="guided",
+    active_grammar=dict(primary="B-01-preterite-regular", secondary="A-02-ser-vs-estar",
+                        maintenance=["A-01-present-regular", "A-07-present-irregular-common"]),
+    active_vocabulary=dict(primary="tier2-home-household",
+                           review=["tier1-greetings-introductions", "tier1-food-restaurant"]),
+    active_pronunciation=dict(focus="rr-trill"),
+    active_writing=dict(current_level="sentence", journal_active=True),
+    weekly_topic=dict(topic="Cooking and eating at home",
+                      vocabulary_cluster="tier2-home-household",
+                      grammar_reinforcement="B-01-preterite-regular", started="2026-06-22"),
+    fluency_accuracy_balance="balanced",
+    fluency_days_this_week=0,
+    last_fluency_day=None,
+    grammar_queue=["B-03-imperfect", "B-04-preterite-vs-imperfect"],
+    vocabulary_queue=["tier2-work-office"],
+    placement_validation=dict(active=False, confidence="validated", sessions_completed=3,
+                              listening_baseline_set=True, total_downgrades=0, queue=[]),
+    study_time_budget=dict(daily_minimum=15, daily_target=30, daily_maximum=45,
+                           weekly_goal=180, today_stretch=0),
+    session_number=14,
+    consecutive_too_much_count=0,
+    consecutive_just_right_count=0,
+    just_right_streak=0,
+    topic_history=[
+        {"topic_id": "daily-routines", "week": 4, "date_started": "2026-06-01"},
+        {"topic_id": "cooking-and-eating", "week": 6, "date_started": "2026-06-22"},
+    ],
+)
+
+DEMO_HEALTH = dict(
+    concepts_requiring_reteach_total=1,
+    average_sessions_to_acquire=4,
+    reteach_rate_30d=0.08,
+    homework_completion_rate_30d=0.85,
+    homework_reported_difficulty_avg=3.0,
+    assignment_skip_patterns=[],
+    days_in_current_phase=21,
+    concepts_acquired_per_month=6,
+    concepts_in_practicing_simultaneously=2,
+    average_session_duration_30d=32,
+    session_frequency_30d=4.0,
+    learner_initiated_topics_30d=3,
+    sessions_rated_too_easy_30d=1,
+    sessions_rated_too_hard_30d=1,
+    anki_estimated_deck_size=180,
+    anki_estimated_daily_review_minutes=12,
+    last_validation_issues=[],
+    load_adjustments=[],
+    auto_fixes=[],
+    placement_validation_metrics=dict(
+        placement_level="early-B", initial_confidence="medium",
+        total_concepts_validated=8, total_downgrades=0,
+        final_assessment="placement-confirmed", validation_completed="2026-05-10"),
+    goal_tracking=dict(
+        primary_goal_progress="on-track", estimated_weeks_remaining=18,
+        concepts_remaining_for_next_phase=6, concepts_remaining_for_target_level=40,
+        current_acquisition_rate=1.5, last_goal_review="2026-06-28", milestone_progress=[]),
+    session_difficulty_tracking=dict(
+        last_rating="just-right", consecutive_too_easy=0, consecutive_too_hard=0,
+        recent_ratings=["just-right", "too-easy", "just-right"]),
+    maintenance_sessions_total=0,
+    regressions_detected_in_maintenance=0,
+    last_system_review="2026-06-28",
+)
+
+DEMO_RESOURCE_TRACKER = dict(
+    input_summary=dict(total_listening_hours=22.5, total_reading_hours=8.0,
+                       current_listening_level="L2", current_reading_level="R2"),
+    resources=[
+        dict(name="Dreaming Spanish", type="listening", level_range=["L1", "L3"],
+             sessions_assigned=12, sessions_completed=10, hours_logged=18.0,
+             comprehension_trend="improving", vocabulary_extracted=40,
+             last_assigned="2026-06-28", last_completed="2026-06-28",
+             learner_engagement="enthusiastic", notes="Superbeginner → Beginner playlists"),
+        dict(name="Short Stories in Spanish (Olly Richards)", type="reading",
+             level_range=["R1", "R2"], sessions_assigned=6, sessions_completed=5,
+             hours_logged=6.5, comprehension_trend="stable", vocabulary_extracted=22,
+             last_assigned="2026-06-25", last_completed="2026-06-25",
+             learner_engagement="neutral", notes=""),
+    ],
+)
+
+
+def _deep_update(base: dict, override: dict) -> dict:
+    """Recursively merge *override* into *base*. Nested dicts merge key-by-key;
+    everything else (scalars, lists) is replaced wholesale. Mutates and returns
+    *base*."""
+    for k, v in override.items():
+        if isinstance(v, dict) and isinstance(base.get(k), dict):
+            _deep_update(base[k], v)
+        else:
+            base[k] = v
+    return base
+
+
+def _demo_state_doc(schema_name: str, overrides: dict) -> dict:
+    """Build a demo state document: start from the schema's default template so
+    every field the validator's required-field check expects is present, then
+    layer the demo overrides on top."""
+    base = yaml.safe_load(generate_template_from_schema(schema_name)) or {}
+    return _deep_update(base, overrides)
+
+
+def _demo_skill_map() -> dict:
+    """Build the demo skill map from the pristine tracked template.
+
+    Starts from state/skill-map.template.yaml (all concepts present with every
+    required field) so nothing is missing, then overrides the ~12 practiced
+    grammar concepts, the 4 populated vocabulary clusters, receptive skills,
+    overall estimates, and fluency metrics. The template is read from the repo
+    (ROOT) rather than STATE_DIR, since STATE_DIR may be redirected to an empty
+    scratch directory via TUTOR_STATE_DIR."""
+    template_path = ROOT / "state" / "skill-map.template.yaml"
+    data = yaml.safe_load(template_path.read_text(encoding="utf-8"))
+
+    grammar = data["grammar"]
+    # The template shares one anchored empty list across every
+    # integration_tested_with; give each entry its own list so overrides and the
+    # YAML dump can't alias.
+    for entry in grammar.values():
+        if isinstance(entry, dict):
+            entry["integration_tested_with"] = list(entry.get("integration_tested_with") or [])
+    for cid, override in DEMO_GRAMMAR.items():
+        grammar[cid].update(override)
+
+    vocab = data["vocabulary"]
+    for cid, override in DEMO_VOCAB.items():
+        override = dict(override)
+        et = override.pop("error_tracking", None)
+        vocab[cid].update(override)
+        if et is not None:
+            vocab[cid]["error_tracking"].update(et)
+
+    data["receptive_skills"] = DEMO_RECEPTIVE
+    data["overall_estimates"].update(DEMO_OVERALL)
+    data["fluency_metrics"].update(DEMO_FLUENCY)
+    return data
+
+
+def seed_demo(root: Path, state_dir: Path) -> None:
+    """Write the demo learner's state into *state_dir* (state YAMLs + an empty
+    sessions/ directory) and a pristine parking-lot under *root*."""
+    state_dir.mkdir(parents=True, exist_ok=True)
+    sessions = state_dir / "sessions"
+    sessions.mkdir(parents=True, exist_ok=True)
+    # Keep an empty (but present) sessions/ dir: validate-state WARNs if it is
+    # missing, and route_session boots a log-free seed into "first-session".
+    (sessions / ".gitkeep").write_text("", encoding="utf-8")
+
+    for name, overrides in (("learner-profile", DEMO_PROFILE),
+                            ("schedule", DEMO_SCHEDULE),
+                            ("system-health", DEMO_HEALTH),
+                            ("resource-tracker", DEMO_RESOURCE_TRACKER)):
+        data = _demo_state_doc(name, overrides)
+        header = SCHEMA_TEMPLATES[f"state/{name}.yaml"]["header"]
+        content = header + yaml.dump(data, default_flow_style=False,
+                                     allow_unicode=True, sort_keys=False)
+        atomic_write(state_dir / f"{name}.yaml", content)
+        print(green(f"  SEEDED: {name}.yaml"))
+
+    sm_content = SKILL_MAP_HEADER + yaml.dump(_demo_skill_map(), default_flow_style=False,
+                                              allow_unicode=True, sort_keys=False)
+    atomic_write(state_dir / "skill-map.yaml", sm_content)
+    print(green("  SEEDED: skill-map.yaml"))
+
+    atomic_write(root / "parking-lot.md", TEMPLATES["parking-lot.md"])
+    print(green("  SEEDED: parking-lot.md"))
+
+
+def _clear_demo_data(root: Path, state_dir: Path) -> None:
+    """Remove leftover session/journal data (except .gitkeep) so a --force demo
+    reseed lands on a clean slate. Mirrors the plain-reset clear set, rooted at
+    the demo's state_dir / root."""
+    for d in (state_dir / "sessions", state_dir / "sessions" / "archive",
+              state_dir / "summaries", state_dir / "milestones",
+              state_dir / "offline-guides", root / "journal",
+              root / "progress-reports"):
+        if not d.exists():
+            continue
+        for f in d.iterdir():
+            if f.is_file() and f.name != ".gitkeep":
+                f.unlink()
+
+
+def run_demo(force: bool) -> int:
+    """Seed the demo learner. Returns a process exit code.
+
+    Writes state to STATE_DIR (honoring TUTOR_STATE_DIR) and treats
+    STATE_DIR.parent as the install root — which equals ROOT in normal use and
+    lets a test redirect the whole seed into a scratch dir. Refuses to overwrite
+    real learner data unless *force* is set (taking a recovery snapshot first)."""
+    state_dir = STATE_DIR
+    root = STATE_DIR.parent
+
+    if has_existing_learner_data(root):
+        if not force:
+            print(red(
+                f"Existing learner data detected under {root} — refusing to "
+                f"overwrite it with demo data.\nRe-run with `--demo --force` to "
+                f"replace it (a recovery snapshot is taken first)."))
+            return 1
+        print(yellow("\n=== Taking recovery snapshot before demo overwrite ==="))
+        snap = subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / "snapshot-state.py"), "snapshot"],
+            cwd=str(ROOT),
+        )
+        if snap.returncode != 0:
+            print(red("Snapshot failed — cannot safely overwrite. Aborting."))
+            return 1
+        _clear_demo_data(root, state_dir)
+    else:
+        print(green("No prior learner detected — seeding demo learner into clean state."))
+
+    print("\n=== Seeding demo learner (Alex Demo — mid-Phase-B, Mexican dialect) ===")
+    seed_demo(root, state_dir)
+
+    # Vault preview is a bonus for a real install; skip it when STATE_DIR is
+    # redirected (tests) since generate-vault.py writes to ROOT/vault regardless.
+    if state_dir == ROOT / "state":
+        vault_script = ROOT / "scripts" / "generate-vault.py"
+        if vault_script.exists():
+            r = subprocess.run([sys.executable, str(vault_script), "--full"],
+                               cwd=str(ROOT), capture_output=True, text=True)
+            if r.returncode == 0:
+                print(green(f"  {r.stdout.strip()}"))
+            else:
+                print(yellow(f"  Vault generation skipped (non-fatal): {r.stderr.strip()}"))
+
+    print(green(
+        "\nDemo learner 'Alex Demo' is ready. Start a session to preview the "
+        "populated system, or run `python3 scripts/init-student.py` to reset to "
+        "a blank learner."))
+    return 0
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Reset all student data to clean templates.")
     parser.add_argument("--force", action="store_true",
                         help="Skip the interactive confirmation prompt (a recovery snapshot is taken whenever prior learner data is detected)")
+    parser.add_argument("--demo", action="store_true",
+                        help="Seed a realistic sample learner (Alex Demo — mid-Phase-B, Mexican dialect) instead of blank templates, so you can preview a populated system without running onboarding. Refuses to overwrite existing learner data unless --force is also given (a recovery snapshot is taken first).")
     args = parser.parse_args()
+
+    if args.demo:
+        sys.exit(run_demo(force=args.force))
 
     # --- Step 0: Detect prior learner state (D-09 gate) ---
     profile_path = ROOT / "state" / "learner-profile.yaml"

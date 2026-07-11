@@ -3,6 +3,10 @@
 scripts/ is placed on sys.path by tests/conftest.py — no per-file bootstrap.
 """
 import importlib
+import os
+import subprocess
+import sys
+from pathlib import Path
 
 import pytest
 import yaml
@@ -336,3 +340,84 @@ class TestReinitSafety:
                             help="Skip the interactive confirmation prompt (snapshot is always taken)")
         help_text = parser.format_help()
         assert "snapshot" in help_text.lower()
+
+
+# ---------------------------------------------------------------------------
+# 6. --demo: seed a realistic, validator-clean sample learner
+# ---------------------------------------------------------------------------
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+SCRIPTS_DIR = REPO_ROOT / "scripts"
+
+
+def _run_script(script: str, state_dir: Path, *args: str) -> subprocess.CompletedProcess:
+    """Run a repo script in a subprocess with STATE_DIR redirected to a scratch
+    dir via TUTOR_STATE_DIR, so the seed/validation never touches real state."""
+    env = {**os.environ, "TUTOR_STATE_DIR": str(state_dir)}
+    return subprocess.run(
+        [sys.executable, str(SCRIPTS_DIR / script), *args],
+        cwd=str(REPO_ROOT), env=env, capture_output=True, text=True,
+    )
+
+
+class TestDemoSeed:
+    def test_demo_state_validates_end_to_end(self, tmp_path):
+        """CRITICAL: `init-student.py --demo` must seed state that
+        validate-state.py accepts with 0 warnings AND 0 failures."""
+        state_dir = tmp_path / "state"
+        seed = _run_script("init-student.py", state_dir, "--demo")
+        assert seed.returncode == 0, seed.stdout + seed.stderr
+
+        val = _run_script("validate-state.py", state_dir)
+        assert val.returncode == 0, val.stdout + val.stderr
+        assert "0 warnings, 0 failures" in val.stdout, val.stdout
+
+    def test_demo_seed_contents_and_routing(self, tmp_path):
+        """The seed is a coherent mid-Phase-B Mexican-dialect learner, and with
+        no session logs it boots into first-session (route_session Row 1)."""
+        state_dir = tmp_path / "state"
+        seed = _run_script("init-student.py", state_dir, "--demo")
+        assert seed.returncode == 0, seed.stdout + seed.stderr
+
+        profile = yaml.safe_load((state_dir / "learner-profile.yaml").read_text(encoding="utf-8"))
+        assert profile["name"] == "Alex Demo"
+        assert profile["target_dialect"] == "Mexican"
+        assert profile["initial_placement"]["level"] == "early-B"
+
+        schedule = yaml.safe_load((state_dir / "schedule.yaml").read_text(encoding="utf-8"))
+        assert schedule["onboarding_complete"] is True
+        assert schedule["current_phase"] == "B-conversational"
+        assert schedule["last_session_date"] is None
+
+        skill_map = yaml.safe_load((state_dir / "skill-map.yaml").read_text(encoding="utf-8"))
+        # Phase-B entry prerequisites are acquired; early-B concepts are practicing.
+        assert skill_map["grammar"]["A-01-present-regular"]["status"] == "acquired"
+        assert skill_map["grammar"]["B-01-preterite-regular"]["status"] == "practicing"
+
+        route_mod = importlib.import_module("route_session")
+        assert route_mod.route_session(state_dir) == "first-session"
+
+    def test_demo_overwrite_guard_respects_existing_data(self, tmp_path, monkeypatch):
+        """The demo must refuse to clobber real learner data without --force,
+        reusing has_existing_learner_data as the detector."""
+        state_dir = tmp_path / "state"
+        (state_dir / "sessions").mkdir(parents=True)
+        (state_dir / "sessions" / "2026-06-01.yaml").write_text(
+            "date: '2026-06-01'\n", encoding="utf-8"
+        )
+        monkeypatch.setattr(init_mod, "STATE_DIR", state_dir)
+
+        # Prior data is detected at the demo root (STATE_DIR.parent).
+        assert init_mod.has_existing_learner_data(state_dir.parent) is True
+
+        rc = init_mod.run_demo(force=False)
+        assert rc == 1
+        # The guard aborted before writing any demo state.
+        assert not (state_dir / "learner-profile.yaml").exists()
+
+    def test_plain_learner_profile_template_is_blank(self):
+        """Plain (non-demo) template generation is unchanged: the demo constants
+        never leak into the blank templates."""
+        data = yaml.safe_load(init_mod.generate_template_from_schema("learner-profile"))
+        assert data["name"] == ""
+        assert data["target_dialect"] == ""
