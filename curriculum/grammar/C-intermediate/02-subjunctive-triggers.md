@@ -1,12 +1,12 @@
 # Subjunctive Triggers — The Decision System
 
 ## Overview
-Knowing the subjunctive forms (C-01) is only half the battle. This concept teaches WHEN to use them. The subjunctive is required in specific, predictable contexts -- and avoiding it (using indicative instead) is the most persistent error pattern for English speakers. Mastering this trigger system is what separates B1 from B2 fluency.
+Knowing the subjunctive forms (C-01) is only half the battle. This concept teaches WHEN to use them. The subjunctive is required in specific, predictable contexts — and avoiding it (using indicative instead) is the most persistent error pattern for English speakers. Mastering this trigger system is what separates B1 from B2 fluency.
 
 ## When to Teach
 - Phase: C
 - Prerequisites: C-01-present-subjunctive
-- L1 interference to preempt: subjunctive-avoidance addressed in C-01 (no new interference pattern -- the avoidance instinct was preempted there; this concept drills the system)
+- L1 interference to preempt: subjunctive-avoidance addressed in C-01 (no new interference pattern — the avoidance instinct was preempted there; this concept drills the system)
 
 ## The Pattern
 
@@ -21,7 +21,7 @@ Use the mnemonic **WEIRDO** to remember the categories that trigger the subjunct
 | **I** | Impersonal expressions | General statements about what should be |
 | **R** | Recommendations | Advising, suggesting, insisting |
 | **D** | Doubt / Denial | Questioning or denying reality |
-| **O** | Ojalá | "I hope / God willing" -- always subjunctive |
+| **O** | Ojalá | "I hope / God willing" — always subjunctive |
 
 ### The Master Rule: Two Different Subjects
 
@@ -92,10 +92,10 @@ Trigger expressions followed by que + subjunctive:
 | no es cierto que | No es cierto que **vaya** a llover. | It's not true that it's going to rain. |
 
 **Critical distinction:** Positive belief = indicative. Negative belief = subjunctive.
-- **Creo que viene.** (I think he's coming. -- indicative, I believe this is fact)
-- **No creo que venga.** (I don't think he's coming. -- subjunctive, I doubt this)
+- **Creo que viene.** (I think he's coming. — indicative, I believe this is fact)
+- **No creo que venga.** (I don't think he's coming. — subjunctive, I doubt this)
 
-### O -- Ojalá
+### O — Ojalá
 
 Ojalá (from Arabic, "God willing") **always** triggers the subjunctive. No exceptions.
 
@@ -124,7 +124,7 @@ The subjunctive is about unreality, desire, and doubt. Facts and certainty stay 
 ## Examples in Context
 
 1. Mi profesora quiere que **escribamos** un ensayo. (My teacher wants us to write an essay.)
-2. Me alegro de que **hayas** encontrado trabajo. (I'm glad you've found work.) -- note: present perfect subjunctive with haya
+2. Me alegro de que **hayas** encontrado trabajo. (I'm glad you've found work.) — note: present perfect subjunctive with haya
 3. Es mejor que **salgamos** temprano. (It's better that we leave early.)
 4. Te aconsejo que no **comas** tanto azúcar. (I advise you not to eat so much sugar.)
 5. No creo que **haya** suficiente tiempo. (I don't think there's enough time.)
@@ -140,16 +140,16 @@ The subjunctive is about unreality, desire, and doubt. Facts and certainty stay 
 
 ## Common Errors
 
-1. **Indicative after negative belief verbs.** "No creo que es difícil" instead of "No creo que sea difícil." The negation flips the clause from certainty to doubt, requiring subjunctive. -- L1 interference. Drill the creo/no creo contrast explicitly.
-2. **Subjunctive with same subject (should be infinitive).** "Quiero que yo coma" instead of "Quiero comer." When you are the subject of both clauses, use the infinitive, not the subjunctive. -- developmental. Reinforce the two-subject rule with contrastive pairs.
-3. **Indicative after impersonal expressions.** "Es importante que estudias" instead of "Es importante que estudies." Impersonal expressions don't assert facts about specific people -- they state ideals, which trigger subjunctive. -- L1 interference. "Es importante que" is a reliable drill entry point because the pattern is clear.
-4. **Forgetting subjunctive after emotion triggers.** "Me alegra que estás aquí" instead of "Me alegra que estés aquí." Emotions about other people's situations require subjunctive. -- L1 interference. English "I'm glad you are here" uses indicative, so the instinct carries over.
-5. **Subjunctive after certainty expressions.** "Es cierto que sea verdad" instead of "Es cierto que es verdad." Positive certainty takes indicative. Only doubt, denial, and possibility take subjunctive. -- overgeneralization (learner applies subjunctive everywhere after "que").
+1. **Indicative after negative belief verbs.** "No creo que es difícil" instead of "No creo que sea difícil." The negation flips the clause from certainty to doubt, requiring subjunctive. — L1 interference. Drill the creo/no creo contrast explicitly.
+2. **Subjunctive with same subject (should be infinitive).** "Quiero que yo coma" instead of "Quiero comer." When you are the subject of both clauses, use the infinitive, not the subjunctive. — developmental. Reinforce the two-subject rule with contrastive pairs.
+3. **Indicative after impersonal expressions.** "Es importante que estudias" instead of "Es importante que estudies." Impersonal expressions don't assert facts about specific people — they state ideals, which trigger subjunctive. — L1 interference. "Es importante que" is a reliable drill entry point because the pattern is clear.
+4. **Forgetting subjunctive after emotion triggers.** "Me alegra que estás aquí" instead of "Me alegra que estés aquí." Emotions about other people's situations require subjunctive. — L1 interference. English "I'm glad you are here" uses indicative, so the instinct carries over.
+5. **Subjunctive after certainty expressions.** "Es cierto que sea verdad" instead of "Es cierto que es verdad." Positive certainty takes indicative. Only doubt, denial, and possibility take subjunctive. — overgeneralization (learner applies subjunctive everywhere after "que").
 
 ## Teaching Sequence
 
 ### Stage 1: Noticing
-Present 12 sentences -- some with subjunctive, some with indicative. Ask the learner to sort them into two groups: "Which sentences use the subjunctive verb form?" Then: "What do the subjunctive sentences have in common? Look at the words BEFORE 'que.'"
+Present 12 sentences — some with subjunctive, some with indicative. Ask the learner to sort them into two groups: "Which sentences use the subjunctive verb form?" Then: "What do the subjunctive sentences have in common? Look at the words BEFORE 'que.'"
 
 Subjunctive group:
 - Quiero que vengas.
@@ -180,7 +180,7 @@ Transformation drill: give an indicative sentence, add a trigger, learner conver
 After each item, identify the WEIRDO category.
 
 ### Stage 3: Guided Production
-Prompt: "Your best friend has a problem -- they're stressed about work, not sleeping well, and eating badly. Give them advice. Tell them what you think, what you want for them, what you recommend."
+Prompt: "Your best friend has a problem — they're stressed about work, not sleeping well, and eating badly. Give them advice. Tell them what you think, what you want for them, what you recommend."
 
 This naturally elicits: "Te recomiendo que...", "Es importante que...", "Quiero que...", "Espero que...", "No creo que..." Listen for correct trigger + subjunctive pairs. If the learner avoids subjunctive triggers, prompt: "What do you recommend they do? What do you doubt about their situation?"
 
@@ -213,10 +213,10 @@ See `curriculum/dialect-notes.yaml` for regional vocabulary preferences.
 ## Connection Points
 This concept completes the subjunctive foundation. Everything that follows depends on both the forms (C-01) and the trigger system (this concept):
 
-- **C-07** (relative clauses) adds subjunctive for uncertain/nonexistent referents: "Busco un restaurante que **sirva** comida vegana" (subjunctive -- I haven't found one) vs "Conozco un restaurante que **sirve** comida vegana" (indicative -- it exists).
+- **C-07** (relative clauses) adds subjunctive for uncertain/nonexistent referents: "Busco un restaurante que **sirva** comida vegana" (subjunctive — I haven't found one) vs "Conozco un restaurante que **sirve** comida vegana" (indicative — it exists).
 - **C-08** (indirect speech) requires subjunctive for reported commands and requests: "Me pidió que **fuera**" (past subjunctive, built on this trigger system).
 - **D-01** (past subjunctive) applies these same WEIRDO triggers with past-tense main clauses: "Quería que **vinieras**."
 - **D-02** (si clauses) introduces conditional subjunctive: "Si **tuviera** dinero, viajaría."
 - **D-03** (subjunctive across all tenses) integrates present, past, present perfect, and pluperfect subjunctive into the complete system.
 
-The WEIRDO framework is the decision tree that the learner will use for months. Expect the categories to be learned unevenly -- wishes and recommendations tend to click first, doubt/denial tends to be harder. The decision engine should cycle through weaker categories specifically.
+The WEIRDO framework is the decision tree that the learner will use for months. Expect the categories to be learned unevenly — wishes and recommendations tend to click first, doubt/denial tends to be harder. The decision engine should cycle through weaker categories specifically.

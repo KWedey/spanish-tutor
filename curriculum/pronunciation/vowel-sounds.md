@@ -37,7 +37,7 @@ These pairs differ by a single vowel. Mispronouncing the vowel changes the word.
 | caso / coso | case / thing (colloquial) |
 | mudo / modo | mute / mode |
 | tela / tila | fabric / linden tea |
-| vela / vila | candle / villa |
+| lima / lema | file (tool) / motto |
 
 ## Practice Assignments
 

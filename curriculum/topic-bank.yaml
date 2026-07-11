@@ -269,6 +269,7 @@ topics:
       - "Navigating a business meeting — agenda, proposals, agreeing on next steps"
       - "Networking at a conference — introducing yourself, exchanging contact info, small talk"
 
+  # Phase B/C topics (grammar-coverage additions)
   - name: "Giving directions"
     topic_id: giving-directions
     grammar_alignment: [B-09-imperatives]

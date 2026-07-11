@@ -29,7 +29,7 @@ So "nada" sounds like "na-tha," "todo" sounds like "to-tho," and "cansado" sound
 | Context | Pronunciation | Example |
 |---------|--------------|---------|
 | Start of utterance | /d/ (hard stop) | "Donde..." at start of sentence |
-| After n | /d/ (hard stop) | anda, cuando, undo |
+| After n | /d/ (hard stop) | anda, cuando, mundo |
 | After l | /d/ (hard stop) | el día, falda |
 | Between vowels | /ð/ (soft, "th"-like) | nada, todo, cada, ciudad |
 | After other consonants | /ð/ (soft) | verdad, cansado, pedido |

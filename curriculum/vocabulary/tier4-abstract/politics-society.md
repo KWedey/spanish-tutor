@@ -103,7 +103,7 @@
 - **Formality in political speech**: Politicians use **usted** and formal register universally, even when addressing supporters. This makes political speeches good listening practice for formal register.
 
 ## Pronunciation Alerts
-- **gobierno** — four syllables: go-BIER-no. English speakers tend to add a syllable: go-bi-ER-no.
+- **gobierno** — three syllables: go-BIER-no. English speakers tend to add a syllable: go-bi-ER-no.
 - **democracia** — stress on third syllable: de-mo-CRA-cia. Not de-MO-cra-cia.
 - **inmigración** — stress on final syllable: in-mi-gra-CIÓN. Written accent required.
 - **igualdad** — stress on final syllable: i-gual-DAD. No written accent (stress on final syllable ending in -d is regular).

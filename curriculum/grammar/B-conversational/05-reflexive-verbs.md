@@ -1,18 +1,18 @@
 # Reflexive Verbs
 
 ## Overview
-Reflexive verbs describe actions the subject performs on themselves. They are extremely high-frequency in daily Spanish -- morning routines, getting ready, emotional states, and physical changes all use reflexives. Mastering them unlocks natural conversation about everyday life and introduces pronoun placement patterns that carry forward into object pronouns (B-06, B-07).
+Reflexive verbs describe actions the subject performs on themselves. They are extremely high-frequency in daily Spanish — morning routines, getting ready, emotional states, and physical changes all use reflexives. Mastering them unlocks natural conversation about everyday life and introduces pronoun placement patterns that carry forward into object pronouns (B-06, B-07).
 
 ## When to Teach
 - Phase: B
 - Prerequisites: A-01-present-regular
-- L1 interference to preempt: none (reflexives exist in English but are far less common)
+- L1 interference to preempt: reflexive-pronoun-omission (severity: medium)
 
 ## The Pattern
 
 ### Reflexive Pronouns
 
-A reflexive verb has a pronoun that matches the subject -- the action "reflects" back:
+A reflexive verb has a pronoun that matches the subject — the action "reflects" back:
 
 | Subject | Reflexive Pronoun | Example: levantarse (to get up) |
 |---------|------------------|---------------------------------|
@@ -23,7 +23,7 @@ A reflexive verb has a pronoun that matches the subject -- the action "reflects"
 | vosotros/as | os | os levantáis |
 | ellos / ellas / ustedes | se | se levantan |
 
-The pronoun goes **before** the conjugated verb. The verb itself conjugates normally -- the only addition is the pronoun.
+The pronoun goes **before** the conjugated verb. The verb itself conjugates normally — the only addition is the pronoun.
 
 ### Common Reflexive Verbs
 
@@ -89,7 +89,7 @@ The reflexive pronoun has three possible positions:
 
 **2. Attached to the infinitive (with compound verb forms):**
 - Voy a **levantarme** temprano. (I'm going to get up early.)
-- OR: **Me** voy a levantar temprano. (Same meaning -- pronoun moves to before the conjugated verb.)
+- OR: **Me** voy a levantar temprano. (Same meaning — pronoun moves to before the conjugated verb.)
 - Both are equally correct and common.
 
 **3. Attached to the gerund (with progressive forms):**
@@ -101,18 +101,18 @@ The reflexive pronoun has three possible positions:
 
 With reflexive verbs involving body parts or clothing, Spanish uses the definite article (el, la, los, las) instead of the possessive (mi, tu, su):
 
-- Me lavo **las** manos. (I wash my hands.) -- NOT "mis manos"
-- Se cepilla **los** dientes. (She brushes her teeth.) -- NOT "sus dientes"
-- Me pongo **el** abrigo. (I put on my coat.) -- NOT "mi abrigo"
+- Me lavo **las** manos. (I wash my hands.) — NOT "mis manos"
+- Se cepilla **los** dientes. (She brushes her teeth.) — NOT "sus dientes"
+- Me pongo **el** abrigo. (I put on my coat.) — NOT "mi abrigo"
 
-The reflexive pronoun already tells us whose hands/teeth/coat -- the possessive is redundant.
+The reflexive pronoun already tells us whose hands/teeth/coat — the possessive is redundant.
 
 ## Examples in Context
 
 1. **Me despierto** a las seis y media, pero no **me levanto** hasta las siete. (I wake up at 6:30, but I don't get up until 7.)
 2. Primero **me ducho**, después **me visto** y **me peino**. (First I shower, then I get dressed and comb my hair.)
 3. Los niños no quieren **acostarse** temprano. (The kids don't want to go to bed early.)
-4. ¿Cómo **te llamas**? -- **Me llamo** Carlos. (What's your name? -- My name is Carlos.)
+4. ¿Cómo **te llamas**? — **Me llamo** Carlos. (What's your name? — My name is Carlos.)
 5. Mi mamá **se levanta** antes que todos y **se prepara** un café. (My mom gets up before everyone and makes herself a coffee.)
 6. Estoy **vistiéndome**, un momento por favor. (I'm getting dressed, one moment please.)
 7. **Me siento** cansado hoy. No **me dormí** hasta las dos de la mañana. (I feel tired today. I didn't fall asleep until 2 AM.)
@@ -133,15 +133,15 @@ The reflexive pronoun already tells us whose hands/teeth/coat -- the possessive 
 | I'm getting dressed. | Estoy vistiendo. | Estoy **vistiéndome**. | Pronoun missing on gerund |
 | I wash my hands. | Lavo mis manos. | **Me** lavo **las** manos. | Possessive instead of article |
 
-**Preemption script:** "In English, 'I wake up' doesn't need any extra word -- the meaning is clear. In Spanish, you have to say 'me despierto' -- literally 'I wake myself up.' That 'me' is not optional. If you say 'despierto' without it, it means 'I wake someone else up.' The pronoun tells us the action is directed at yourself."
+**Preemption script:** "In English, 'I wake up' doesn't need any extra word — the meaning is clear. In Spanish, you have to say 'me despierto' — literally 'I wake myself up.' That 'me' is not optional. If you say 'despierto' without it, it means 'I wake someone else up.' The pronoun tells us the action is directed at yourself."
 
 ## Common Errors
 
-1. **Forgetting the reflexive pronoun.** "Levanto a las siete" instead of "Me levanto a las siete." Without the pronoun, the meaning changes or the sentence is incomplete. -- L1 interference. The pronoun feels unnecessary to English speakers.
-2. **Wrong pronoun for the subject.** "Se levanto" (using third-person pronoun for first person) instead of "Me levanto." -- developmental. Drill the subject-pronoun correspondence.
-3. **Wrong placement with compound verb forms.** "Me voy a levanto" instead of "Me voy a levantar" or "Voy a levantarme." When the pronoun moves before the conjugated verb, the infinitive must remain unconjugated. -- developmental. Practice both placement options.
-4. **Missing accent on gerund attachment.** "Estoy duchandome" instead of "Estoy duchándome." Attaching the pronoun adds a syllable, so an accent preserves the original stress. -- developmental. Teach the accent rule explicitly.
-5. **Using possessive instead of definite article.** "Me lavo mis manos" instead of "Me lavo las manos." -- L1 interference. English requires the possessive; Spanish uses the article because the reflexive pronoun already indicates whose body part it is.
+1. **Forgetting the reflexive pronoun.** "Levanto a las siete" instead of "Me levanto a las siete." Without the pronoun, the meaning changes or the sentence is incomplete. — L1 interference. The pronoun feels unnecessary to English speakers.
+2. **Wrong pronoun for the subject.** "Se levanto" (using third-person pronoun for first person) instead of "Me levanto." — developmental. Drill the subject-pronoun correspondence.
+3. **Wrong placement with compound verb forms.** "Me voy a levanto" instead of "Me voy a levantar" or "Voy a levantarme." When the pronoun moves before the conjugated verb, the infinitive must remain unconjugated. — developmental. Practice both placement options.
+4. **Missing accent on gerund attachment.** "Estoy duchandome" instead of "Estoy duchándome." Attaching the pronoun adds a syllable, so an accent preserves the original stress. — developmental. Teach the accent rule explicitly.
+5. **Using possessive instead of definite article.** "Me lavo mis manos" instead of "Me lavo las manos." — L1 interference. English requires the possessive; Spanish uses the article because the reflexive pronoun already indicates whose body part it is.
 
 ## Teaching Sequence
 
@@ -167,9 +167,9 @@ Alternative: "Describe your weekend morning routine vs your weekday routine. Wha
 ## Dialect Notes
 Reflexive verb usage is consistent across dialects. Some verbs are used reflexively in some regions but not others:
 
-- **enfermarse** (Latin America) vs **ponerse enfermo** (Spain) -- to get sick
-- **regresarse** (Mexico) vs **regresar** (other regions) -- to return (reflexive adds emphasis)
-- **robarse** (colloquial, Latin America) -- to steal (reflexive adds colloquial/emphatic tone)
+- **enfermarse** (Latin America) vs **ponerse enfermo** (Spain) — to get sick
+- **regresarse** (Mexico) vs **regresar** (other regions) — to return (reflexive adds emphasis)
+- **robarse** (colloquial, Latin America) — to steal (reflexive adds colloquial/emphatic tone)
 
 Voseo regions (Argentina, parts of Central America): the reflexive pronoun for vos is **te** (same as tú). "Te levantás a las siete."
 
@@ -181,10 +181,10 @@ See `curriculum/dialect-notes.yaml` for regional vocabulary preferences.
 - **Integrated:** Combines reflexive verbs with other tenses (preterite: me levanté, imperfect: me levantaba) and with other concepts (time expressions, sequencing words) without losing the reflexive pronoun under cognitive load.
 
 ## Connection Points
-Reflexive verbs are high-frequency in daily conversation -- morning routines, evening routines, emotional states, and physical changes all require them. This is one of the most immediately useful concepts in Phase B.
+Reflexive verbs are high-frequency in daily conversation — morning routines, evening routines, emotional states, and physical changes all require them. This is one of the most immediately useful concepts in Phase B.
 
 The pronoun placement rules (before conjugated verb, attached to infinitive, attached to gerund) are identical for direct object pronouns (B-06) and indirect object pronouns (B-07). Mastering placement here reduces the learning load for those concepts.
 
 The accent rule for gerund attachment (duchándome, vistiéndose) also applies to all pronoun attachments and will recur in B-06, B-07, and B-09 (imperatives with attached pronouns).
 
-No common regression triggers -- once reflexive pronouns are habitual, they tend to stay. However, when object pronouns are introduced (B-06), some learners briefly confuse "me" as reflexive vs "me" as direct/indirect object. Clarify if this arises.
+No common regression triggers — once reflexive pronouns are habitual, they tend to stay. However, when object pronouns are introduced (B-06), some learners briefly confuse "me" as reflexive vs "me" as direct/indirect object. Clarify if this arises.

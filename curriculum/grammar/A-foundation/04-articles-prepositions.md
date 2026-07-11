@@ -6,7 +6,7 @@ Articles and prepositions are the connective tissue of Spanish sentences — the
 ## When to Teach
 - Phase: A
 - Prerequisites: A-03-gender-agreement
-- L1 interference to preempt: preposition-mapping (severity: medium)
+- L1 interference to preempt: preposition-mapping (severity: medium), personal-a-omission (severity: medium)
 
 ## The Pattern
 

@@ -118,7 +118,8 @@ de que llegara. Al final, se sentó sola en una cafetería del aeropuerto y llam
 1. 'El avión despegó sin ella' — perfecto. Pero antes dijiste 'la mujer miraba por la ventana
    y pensaba' — bien, eso es imperfecto para estado mental. Muy buena distinción.
 2. 'Antes de que llegara' — ¡subjuntivo! Lo usaste perfectamente y de manera natural.
-   Es un uso de C-07 que salió espontáneo. Eso es una señal muy positiva.
+   Es un uso de C-02 (subjuntivo tras la conjunción adverbial temporal 'antes de que')
+   que salió espontáneo. Eso es una señal muy positiva.
 
 Una pequeña sugerencia: después de 'Y en efecto,' podrías decir 'para su mala suerte' —
 suena más narrativo. Guárdalo como expresión."

@@ -1,12 +1,12 @@
 # Por vs Para — Two Words for "For"
 
 ## Overview
-English uses one word -- "for" -- where Spanish uses two: **por** and **para**. This distinction is one of the most persistent challenges for English speakers because the rules are many, the exceptions are real, and both prepositions can appear in similar contexts with different meanings. Mastering por vs para is not a single lesson but an ongoing refinement that deepens with every new context encountered.
+English uses one word — "for" — where Spanish uses two: **por** and **para**. This distinction is one of the most persistent challenges for English speakers because the rules are many, the exceptions are real, and both prepositions can appear in similar contexts with different meanings. Mastering por vs para is not a single lesson but an ongoing refinement that deepens with every new context encountered.
 
 ## When to Teach
 - Phase: C (formal, systematic treatment)
 - Prerequisites: A-04-articles-prepositions (basic preposition knowledge)
-- L1 interference to preempt: none listed in l1-interference.yaml, but this is notoriously difficult because English collapses two distinct concepts into one word
+- L1 interference to preempt: por-para-confusion (severity: high) — English collapses two distinct concepts into one word ("for"), making this notoriously difficult
 - **Early exposure note:** Learners encounter por and para constantly from Phase A onward. During Phases A-B, teach the most common uses informally as they arise (para = "for/to", por = "because of/through") without the full rule system. The systematic treatment here in Phase C formalizes what the learner has already been absorbing through input and practice.
 
 ## The Pattern
@@ -14,8 +14,8 @@ English uses one word -- "for" -- where Spanish uses two: **por** and **para**. 
 ### The Core Distinction
 
 At the highest level:
-- **PARA** looks **forward** -- toward a goal, destination, recipient, or deadline.
-- **POR** looks **backward** or **through** -- toward a cause, an exchange, a route, or a duration.
+- **PARA** looks **forward** — toward a goal, destination, recipient, or deadline.
+- **POR** looks **backward** or **through** — toward a cause, an exchange, a route, or a duration.
 
 This is a simplification, but it provides an anchor when the learner is unsure.
 
@@ -49,23 +49,23 @@ Use the mnemonic **POR** = **P**ayment (exchange), **O**rigin (cause), **R**oute
 
 ### Fixed Expressions
 
-These must be memorized as units -- the por/para choice is lexicalized:
+These must be memorized as units — the por/para choice is lexicalized:
 
 **Por:**
-- **por favor** -- please
-- **por ejemplo** -- for example
-- **por supuesto** -- of course
-- **por fin** -- finally / at last
-- **por eso** -- that's why / for that reason
-- **por lo menos** -- at least
-- **por lo general** -- generally
+- **por favor** — please
+- **por ejemplo** — for example
+- **por supuesto** — of course
+- **por fin** — finally / at last
+- **por eso** — that's why / for that reason
+- **por lo menos** — at least
+- **por lo general** — generally
 
 **Para:**
-- **para siempre** -- forever
-- **para nada** -- not at all
-- **para colmo** -- to top it all off
-- **para entonces** -- by then
-- **para variar** -- for a change
+- **para siempre** — forever
+- **para nada** — not at all
+- **para colmo** — to top it all off
+- **para entonces** — by then
+- **para variar** — for a change
 
 ### The Tricky Contrasts: Same Sentence, Different Meaning
 
@@ -73,7 +73,7 @@ These pairs show how por and para change the meaning of the same sentence:
 
 | Sentence | Meaning |
 |----------|---------|
-| Trabajo **para** Juan. | I work for Juan. (He's my boss -- recipient of my work.) |
+| Trabajo **para** Juan. | I work for Juan. (He's my boss — recipient of my work.) |
 | Trabajo **por** Juan. | I work in place of Juan. (He's absent and I'm covering for him.) |
 
 | Sentence | Meaning |
@@ -83,7 +83,7 @@ These pairs show how por and para change the meaning of the same sentence:
 
 | Sentence | Meaning |
 |----------|---------|
-| Lo hice **para** ti. | I did it for you. (You're the beneficiary -- purpose/recipient.) |
+| Lo hice **para** ti. | I did it for you. (You're the beneficiary — purpose/recipient.) |
 | Lo hice **por** ti. | I did it because of you. (You're the reason/cause.) |
 
 | Sentence | Meaning |
@@ -93,24 +93,24 @@ These pairs show how por and para change the meaning of the same sentence:
 
 ## Examples in Context
 
-1. Estudio español **para** hablar con mi familia. (I study Spanish to speak with my family.) -- purpose
-2. Pagué 500 pesos **por** la cena. (I paid 500 pesos for dinner.) -- exchange
-3. Este café es **para** mi mamá. (This coffee is for my mom.) -- recipient
-4. Viajamos **por** toda la costa. (We traveled along the whole coast.) -- movement through
-5. Necesito terminar **para** el lunes. (I need to finish by Monday.) -- deadline
-6. Gracias **por** tu ayuda. (Thanks for your help.) -- cause/reason
-7. Voy al gimnasio tres veces **por** semana. (I go to the gym three times per week.) -- per/each
-8. **Para** mí, la gramática es lo más difícil. (For me, grammar is the hardest part.) -- opinion
-9. **Por** favor, habla más despacio. (Please, speak more slowly.) -- fixed expression
-10. Ella salió **para** Guadalajara esta mañana. (She left for Guadalajara this morning.) -- destination
-11. El libro fue traducido **por** un experto. (The book was translated by an expert.) -- agent in passive
-12. **Para** ser principiante, pronuncias muy bien. (For a beginner, you pronounce very well.) -- comparison
-13. Lo hizo **por** miedo, no **por** maldad. (He did it out of fear, not out of malice.) -- cause
-14. Compré flores **para** la fiesta. (I bought flowers for the party.) -- purpose/recipient
+1. Estudio español **para** hablar con mi familia. (I study Spanish to speak with my family.) — purpose
+2. Pagué 500 pesos **por** la cena. (I paid 500 pesos for dinner.) — exchange
+3. Este café es **para** mi mamá. (This coffee is for my mom.) — recipient
+4. Viajamos **por** toda la costa. (We traveled along the whole coast.) — movement through
+5. Necesito terminar **para** el lunes. (I need to finish by Monday.) — deadline
+6. Gracias **por** tu ayuda. (Thanks for your help.) — cause/reason
+7. Voy al gimnasio tres veces **por** semana. (I go to the gym three times per week.) — per/each
+8. **Para** mí, la gramática es lo más difícil. (For me, grammar is the hardest part.) — opinion
+9. **Por** favor, habla más despacio. (Please, speak more slowly.) — fixed expression
+10. Ella salió **para** Guadalajara esta mañana. (She left for Guadalajara this morning.) — destination
+11. El libro fue traducido **por** un experto. (The book was translated by an expert.) — agent in passive
+12. **Para** ser principiante, pronuncias muy bien. (For a beginner, you pronounce very well.) — comparison
+13. Lo hizo **por** miedo, no **por** maldad. (He did it out of fear, not out of malice.) — cause
+14. Compré flores **para** la fiesta. (I bought flowers for the party.) — purpose/recipient
 
 ## L1 Interference
 
-**The core problem:** English "for" covers both por and para. Every time the learner wants to say "for," they must decide which Spanish word to use. There is no single rule that resolves all cases -- the learner must internalize the categories.
+**The core problem:** English "for" covers both por and para. Every time the learner wants to say "for," they must decide which Spanish word to use. There is no single rule that resolves all cases — the learner must internalize the categories.
 
 **Common L1-driven mistakes:**
 
@@ -119,23 +119,23 @@ These pairs show how por and para change the meaning of the same sentence:
 | I study to learn. | Estudio **por** aprender. | Estudio **para** aprender. | Purpose/goal = para |
 | I did it for love. | Lo hice **para** amor. | Lo hice **por** amor. | Cause/reason = por |
 | I traveled for two hours. | Viajé **para** dos horas. | Viajé **por** dos horas. | Duration = por |
-| This is for you. | -- (usually correct) | Es **para** ti. | Recipient = para |
-| Thanks for helping. | -- (usually correct) | Gracias **por** ayudar. | Cause = por |
+| This is for you. | — (usually correct) | Es **para** ti. | Recipient = para |
+| Thanks for helping. | — (usually correct) | Gracias **por** ayudar. | Cause = por |
 
-**Preemption script:** "In English, 'for' does a lot of work -- purpose, duration, recipient, cause, exchange. Spanish splits these into two words. When you're unsure, ask yourself: am I looking forward toward a goal or recipient? That's para. Am I looking back at a cause, through a route, or at a price? That's por. It won't always be this clean, but this question will get you the right answer most of the time."
+**Preemption script:** "In English, 'for' does a lot of work — purpose, duration, recipient, cause, exchange. Spanish splits these into two words. When you're unsure, ask yourself: am I looking forward toward a goal or recipient? That's para. Am I looking back at a cause, through a route, or at a price? That's por. It won't always be this clean, but this question will get you the right answer most of the time."
 
 ## Common Errors
 
-1. **Using por for purpose.** "Estudio por aprender" instead of "Estudio para aprender." Purpose and goals are always para. The learner maps English "for" to por because por feels more general. -- L1 interference. Drill purpose sentences: "¿Para qué estudias?" → "Estudio para..."
-2. **Using para for cause.** "Lo hice para amor" instead of "Lo hice por amor." Cause and motivation are por. -- L1 interference. Contrast: "Lo hice para ti" (you're the beneficiary) vs "Lo hice por ti" (you're the reason).
-3. **Using para for duration.** "Viajé para dos horas" instead of "Viajé por dos horas." Duration of time is por. -- L1 interference. Reinforce: "How long?" = por. "By when?" = para.
-4. **Confusing destination and route.** "Caminé por la escuela" (through the school) when "Caminé para la escuela" (toward the school) was intended. -- developmental. Draw diagrams: para = arrow toward, por = path through.
-5. **Avoiding both and using "de" or other prepositions instead.** The learner sidesteps the por/para decision entirely by restructuring the sentence. -- avoidance. Encourage direct use and accept errors as learning data.
+1. **Using por for purpose.** "Estudio por aprender" instead of "Estudio para aprender." Purpose and goals are always para. The learner maps English "for" to por because por feels more general. — L1 interference. Drill purpose sentences: "¿Para qué estudias?" → "Estudio para..."
+2. **Using para for cause.** "Lo hice para amor" instead of "Lo hice por amor." Cause and motivation are por. — L1 interference. Contrast: "Lo hice para ti" (you're the beneficiary) vs "Lo hice por ti" (you're the reason).
+3. **Using para for duration.** "Viajé para dos horas" instead of "Viajé por dos horas." Duration of time is por. — L1 interference. Reinforce: "How long?" = por. "By when?" = para.
+4. **Confusing destination and route.** "Caminé por la escuela" (through the school) when "Caminé para la escuela" (toward the school) was intended. — developmental. Draw diagrams: para = arrow toward, por = path through.
+5. **Avoiding both and using "de" or other prepositions instead.** The learner sidesteps the por/para decision entirely by restructuring the sentence. — avoidance. Encourage direct use and accept errors as learning data.
 
 ## Teaching Sequence
 
 ### Stage 1: Noticing
-Present 12 sentences -- 6 with por, 6 with para. Do not label them yet. Ask the learner to sort them into two groups based on what the preposition seems to communicate:
+Present 12 sentences — 6 with por, 6 with para. Do not label them yet. Ask the learner to sort them into two groups based on what the preposition seems to communicate:
 
 **Para group:**
 - Estudio para aprender.
@@ -158,26 +158,26 @@ After sorting, guide the learner to articulate the pattern: "What do the para se
 ### Stage 2: Controlled Practice
 Fill-in drill: 12 sentences with a blank for por or para. Start with clear-cut cases, then add ambiguous ones:
 
-1. Este café es _____ mi mamá. (para -- recipient)
-2. Pagué mucho _____ estos zapatos. (por -- exchange)
-3. Estudio español _____ hablar con mi familia. (para -- purpose)
-4. Viajé _____ toda la costa. (por -- movement through)
-5. Necesito terminar _____ el lunes. (para -- deadline)
-6. Lo hice _____ miedo. (por -- cause)
-7. Voy al gimnasio tres veces _____ semana. (por -- per)
-8. _____ mí, la gramática es lo más difícil. (para -- opinion)
-9. Trabajo _____ Juan. (tricky -- discuss both meanings)
-10. Camino _____ el parque. (tricky -- discuss both meanings)
+1. Este café es _____ mi mamá. (para — recipient)
+2. Pagué mucho _____ estos zapatos. (por — exchange)
+3. Estudio español _____ hablar con mi familia. (para — purpose)
+4. Viajé _____ toda la costa. (por — movement through)
+5. Necesito terminar _____ el lunes. (para — deadline)
+6. Lo hice _____ miedo. (por — cause)
+7. Voy al gimnasio tres veces _____ semana. (por — per)
+8. _____ mí, la gramática es lo más difícil. (para — opinion)
+9. Trabajo _____ Juan. (tricky — discuss both meanings)
+10. Camino _____ el parque. (tricky — discuss both meanings)
 
 For items 9-10, explore both meanings and how context disambiguates.
 
 ### Stage 3: Guided Production
-Prompt: "Describe a trip you've taken or want to take. Tell me: Where did you go? (destination -- para). How long? (duration -- por). Why? (purpose -- para). What did you walk through or see along the way? (route -- por). What did you buy and how much did you pay? (exchange -- por). Who did you bring gifts for? (recipient -- para)."
+Prompt: "Describe a trip you've taken or want to take. Tell me: Where did you go? (destination — para). How long? (duration — por). Why? (purpose — para). What did you walk through or see along the way? (route — por). What did you buy and how much did you pay? (exchange — por). Who did you bring gifts for? (recipient — para)."
 
 Scaffold by asking targeted questions that elicit specific por/para uses. Gradually let the learner narrate freely, correcting por/para errors through recasting.
 
 ### Stage 4: Communicative Practice
-Prompt: "Explain why you do the things you do. Why do you study Spanish? Who do you do it for? How long do you practice each day? What do you do it for -- what's the goal?"
+Prompt: "Explain why you do the things you do. Why do you study Spanish? Who do you do it for? How long do you practice each day? What do you do it for — what's the goal?"
 
 This naturally mixes cause (por), purpose (para), duration (por), recipient (para), and opinion (para mí). The focus is on genuine self-expression while por/para choices are practiced in context. Follow up: "Tell me about a gift you've given. What was it, who was it for, why did you choose it, and how much did you pay?"
 

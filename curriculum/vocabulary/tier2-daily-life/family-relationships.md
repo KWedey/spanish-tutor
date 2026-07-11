@@ -112,5 +112,5 @@
 - **cuñado** — the **ñ** is its own sound, not "n+y": cu-ÑA-do.
 - **pareja** — the **j** is Spanish /x/ (guttural h): pa-RE-ja.
 - **quinceañera** — five syllables: kin-se-a-ÑE-ra. The **ñ** is critical.
-- **fallecer** — stress on second syllable: fa-ye-SER (with Latin American yeísmo for **ll**).
+- **fallecer** — stress on the final syllable: fa-ye-SER (with Latin American yeísmo for **ll**).
 - **suegra** — the **ue** is a diphthong: SWE-gra. One syllable for "sue."

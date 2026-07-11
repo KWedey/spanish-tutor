@@ -86,19 +86,19 @@ positional (unstressed syllables only) or general.
 ## Activity 3: Stress Pattern Practice
 
 **When to use:** Phase A+. Learner misplaces stress, especially on cognates (information vs
-informacion) or doesn't distinguish stress-meaning pairs.
+información) or doesn't distinguish stress-meaning pairs.
 
 **How to run:**
 1. Present 5-6 words. Learner marks the stressed syllable (clap, tap, or say it louder).
-2. Mix patterns: agudas (last syllable), llanas (penultimate), esdrujulas (antepenultimate).
+2. Mix patterns: agudas (last syllable), llanas (penultimate), esdrújulas (antepenultimate).
 3. Present 2-3 stress-meaning pairs. Learner produces both with correct stress.
 4. Read a short sentence aloud, learner identifies the stressed syllable of each content word.
 
 **Example items:**
-- Agudas: hablar, cafe, informacion, aleman
+- Agudas: hablar, café, información, alemán
 - Llanas: casa, hombre, importante, hermano
-- Esdrujulas: pajaro, medico, telefono, musica
-- Stress-meaning pairs: papa/papa, hablo/hablo, practico/practico
+- Esdrújulas: pájaro, médico, teléfono, música
+- Stress-meaning pairs: papá/papa, habló/hablo, práctico/practico
 
 **Assess and record:** Whether the learner can identify stress patterns and whether production
 matches. Note specific patterns that cause trouble (e.g., always stressing penultimate).
@@ -121,7 +121,7 @@ connected speech. Triggered by stilted rhythm during conversation practice.
 - "Vamos a ver" (linking: vamo-sa-ver)
 - "Estoy en la oficina" (linking: estoy-en-la-oficina, natural elision)
 - "No se lo he dicho" (weak pronoun chain, natural speed)
-- "Que te parece si vamos al cine?" (question rhythm + linking)
+- "¿Qué te parece si vamos al cine?" (question rhythm + linking)
 
 **Assess and record:** Whether the learner links words or inserts pauses between each. Note
 specific linking patterns that are difficult.
@@ -141,7 +141,7 @@ spelling. Triggered by consistent spelling errors in journal or homework.
 4. Give 2-3 new words using the same patterns. Learner predicts spelling before seeing it.
 
 **Example items:**
-- c/s/z: cena, zapato, sociedad, cerveza, azucar
+- c/s/z: cena, zapato, sociedad, cerveza, azúcar
 - g/j: gente, joven, girar, jugar, generoso, jefe
 - ll/y: calle, yerno, lluvia, yema, llegar
 - h (silent): hombre, hacer, ahora, hay, huevo
@@ -161,16 +161,16 @@ questions that sound like statements or statements that sound uncertain.
 **How to run:**
 1. Demonstrate three contours with the same base sentence:
    - Statement (falling): "Tienes hambre."
-   - Yes/no question (rising): "Tienes hambre?"
-   - Information question (falling from wh-word): "Cuando tienes hambre?"
+   - Yes/no question (rising): "¿Tienes hambre?"
+   - Information question (falling from wh-word): "¿Cuándo tienes hambre?"
 2. Learner produces all three. Provide feedback on the contour shape.
 3. Give 3-4 new base sentences. Learner produces each as statement, yes/no, and wh-question.
 4. Short dialogue: tutor and learner alternate, each must use correct intonation for their intent.
 
 **Example items:**
-- Base: "Vamos al parque" -> statement / yes-no / "Cuando vamos al parque?"
-- Base: "Ella habla espanol" -> statement / yes-no / "Quien habla espanol?"
-- Base: "El tren sale a las tres" -> statement / yes-no / "A que hora sale el tren?"
+- Base: "Vamos al parque" -> statement / yes-no / "¿Cuándo vamos al parque?"
+- Base: "Ella habla español" -> statement / yes-no / "¿Quién habla español?"
+- Base: "El tren sale a las tres" -> statement / yes-no / "¿A qué hora sale el tren?"
 
 **Assess and record:** Whether the learner differentiates the three contour types. Note if one type
 is consistently problematic (usually yes/no questions for English speakers).

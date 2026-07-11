@@ -111,7 +111,7 @@
 - **"Right" ambiguity**: **Derecho** can mean "straight ahead" or "right" depending on context and region. To avoid confusion, use **a la derecha** (to the right) and **recto** or **todo derecho** (straight ahead).
 
 ## Pronunciation Alerts
-- **izquierda** — four syllables: is-KYER-da. The **zqu** cluster is unusual for English speakers. The **z** sounds like "s" in Latin America.
+- **izquierda** — three syllables: is-KYER-da. The **zqu** cluster is unusual for English speakers. The **z** sounds like "s" in Latin America.
 - **aeropuerto** — five syllables: a-e-ro-PWER-to. The **ae** at the start are two separate vowel sounds, not a diphthong.
 - **autobús** — stress on the final syllable: au-to-BUS. The accent mark confirms this.
 - **semáforo** — stress on the second syllable: se-MA-fo-ro. Esdrújula word (stressed on the third-to-last syllable).

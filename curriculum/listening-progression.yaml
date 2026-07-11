@@ -56,9 +56,9 @@ levels:
       - name: Coffee Break Spanish
         type: podcast
         notes: Structured lessons. Strong for travel-topic vocabulary.
-      - name: Cuentos de Hadas
+      - name: Spanish Stories for Kids
         type: podcast
-        notes: Fairy tales narrated slowly. Low-pressure listening.
+        notes: Short themed stories in Spanish with an English intro. Low-pressure listening.
       - name: Duolingo Spanish Podcast
         type: podcast
         notes: Bilingual format (English narrator, Spanish story). Good bridge.
@@ -158,7 +158,7 @@ levels:
         notes: Period drama. Clear enunciation, formal register.
       - name: Nada (2023)
         type: tv
-        notes: Simple dialogue, cultural depth. Good L4 entry.
+        notes: Buenos Aires comedy-drama; witty porteño Spanish (voseo). Character-driven, moderate pace. Good L4 entry.
     multi_pass: false
     level_up:
       criteria:

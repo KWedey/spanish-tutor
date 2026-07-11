@@ -1,7 +1,7 @@
 # Diminutives and Augmentatives — The Emotional Layer of Spanish
 
 ## Overview
-Diminutives (-ito/-ita) and augmentatives (-ote/-ota, -azo/-aza) are suffixes that modify nouns and adjectives to express size, affection, intensity, or attitude. Unlike English, where diminutives are rare and mostly lexicalized ("kitty," "doggie"), Spanish uses them productively -- any noun can potentially take a diminutive. In Mexican Spanish, diminutive use is so pervasive that **not** using them can make a speaker sound cold, distant, or overly formal. This is less a grammar rule and more a cultural key.
+Diminutives (-ito/-ita) and augmentatives (-ote/-ota, -azo/-aza) are suffixes that modify nouns and adjectives to express size, affection, intensity, or attitude. Unlike English, where diminutives are rare and mostly lexicalized ("kitty," "doggie"), Spanish uses them productively — any noun can potentially take a diminutive. In Mexican Spanish, diminutive use is so pervasive that **not** using them can make a speaker sound cold, distant, or overly formal. This is less a grammar rule and more a cultural key.
 
 ## When to Teach
 - Phase: C
@@ -21,7 +21,7 @@ The most common and versatile diminutive. Formation depends on the word's ending
 | Consonant (except -n, -r) | Add **-ito/-ita** | árbol → arbol**ito** |
 | -o | Drop -o, add **-ito** | perro → perr**ito** |
 | -a | Drop -a, add **-ita** | casa → cas**ita** |
-| -e | Drop -e, add **-ito/-ita** | grande → grand**ecito** (see -cito below) |
+| -e | Add **-cito/-cita** | grande → grande**cito** (see -cito below) |
 | -n or -r | Add **-cito/-cita** | joven → joven**cito**, amor → amor**cito** |
 
 #### -cito / -cita (after consonants and -e)
@@ -68,7 +68,7 @@ Many -illo/-illa forms have become independent words with their own meanings. In
 | Base | Augmentative | Meaning |
 |------|-------------|---------|
 | grande | grand**ote** | really big, huge |
-| palabra | palabr**ota** | swear word (a "big word" -- pejorative) |
+| palabra | palabr**ota** | swear word (a "big word" — pejorative) |
 | amigo | amig**ote** | big buddy (slightly rough/informal) |
 | libro | libr**ote** | big heavy book |
 
@@ -82,7 +82,7 @@ Many -illo/-illa forms have become independent words with their own meanings. In
 | mano | man**azo** | slap (a blow with a hand) |
 | fiesta | fiest**aza** | great party |
 
-**Note:** -azo often carries a sense of impact or impressiveness rather than just size. "Golazo" is not just a big goal -- it is a beautiful, impressive goal.
+**Note:** -azo often carries a sense of impact or impressiveness rather than just size. "Golazo" is not just a big goal — it is a beautiful, impressive goal.
 
 #### -ón / -ona (big, sometimes pejorative)
 
@@ -101,28 +101,28 @@ Diminutives and augmentatives do far more than indicate size. Understanding thei
 
 | Function | Example | Translation / Nuance |
 |----------|---------|---------------------|
-| **Affection** | abuel**ita**, hij**ito** | grandma (dear), son (dear) -- warmth |
-| **Smallness** | cas**ita**, perr**ito** | little house, little dog -- literal size |
+| **Affection** | abuel**ita**, hij**ito** | grandma (dear), son (dear) — warmth |
+| **Smallness** | cas**ita**, perr**ito** | little house, little dog — literal size |
 | **Softening** | ahor**ita**, momentito | right now (but softer, less urgent), just a moment |
-| **Politeness** | cerquit**a**, poquito | nearby-ish, a little bit -- makes request feel smaller |
-| **Intensifying** | cerqu**ita**, tempranito | very close, very early -- diminutive as intensifier |
+| **Politeness** | cerquit**a**, poquito | nearby-ish, a little bit — makes request feel smaller |
+| **Intensifying** | cerqu**ita**, tempranito | very close, very early — diminutive as intensifier |
 | **Impressiveness** | cochazo, golazo | impressive car, spectacular goal |
 | **Negative judgment** | casucha, pueblucho | ugly house, dumpy town (pejorative -ucho/-ucha) |
 
-**The softening function is critical for Mexican Spanish.** "Ahorita" does not mean "in a tiny now" -- it means "right now" but softer, more polite. "Un momentito" is not a tiny moment -- it is a polite way to say "just a moment." "Cerquita" can mean "very close" (intensifier) or "sort of close" (softener) depending on context. These pragmatic uses cannot be learned from rules -- they require exposure and practice.
+**The softening function is critical for Mexican Spanish.** "Ahorita" does not mean "in a tiny now" — it means "right now" but softer, more polite. "Un momentito" is not a tiny moment — it is a polite way to say "just a moment." "Cerquita" can mean "very close" (intensifier) or "sort of close" (softener) depending on context. These pragmatic uses cannot be learned from rules — they require exposure and practice.
 
 ## Examples in Context
 
-1. ¿Me das un **cafecito**? (Can you give me a little coffee?) -- softening a request
-2. Mi **abuelita** cocina las mejores tortillas. (My grandma makes the best tortillas.) -- affection
-3. Ven **ahorita**, por favor. (Come right now, please.) -- softening urgency
-4. Tiene una **casita** muy bonita en el campo. (She has a cute little house in the countryside.) -- smallness + affection
-5. ¡Qué **golazo**! (What a spectacular goal!) -- augmentative for impressiveness
-6. Es un **grandote** pero muy tímido. (He's a big guy but very shy.) -- augmentative for size
-7. Espera un **momentito**. (Wait just a moment.) -- softening
-8. La tienda está **cerquita** de aquí. (The store is very close to here.) -- intensifier
-9. Dame un **poquito** más, por favor. (Give me a tiny bit more, please.) -- softening + smallness
-10. Ese niño es un **comelón**. (That kid is a big eater.) -- augmentative, mild judgment
+1. ¿Me das un **cafecito**? (Can you give me a little coffee?) — softening a request
+2. Mi **abuelita** cocina las mejores tortillas. (My grandma makes the best tortillas.) — affection
+3. Ven **ahorita**, por favor. (Come right now, please.) — softening urgency
+4. Tiene una **casita** muy bonita en el campo. (She has a cute little house in the countryside.) — smallness + affection
+5. ¡Qué **golazo**! (What a spectacular goal!) — augmentative for impressiveness
+6. Es un **grandote** pero muy tímido. (He's a big guy but very shy.) — augmentative for size
+7. Espera un **momentito**. (Wait just a moment.) — softening
+8. La tienda está **cerquita** de aquí. (The store is very close to here.) — intensifier
+9. Dame un **poquito** más, por favor. (Give me a tiny bit more, please.) — softening + smallness
+10. Ese niño es un **comelón**. (That kid is a big eater.) — augmentative, mild judgment
 
 ## L1 Interference
 
@@ -130,32 +130,32 @@ Diminutives and augmentatives do far more than indicate size. Understanding thei
 
 **English cause:** English has no productive diminutive morphology. English speakers add "little" before nouns ("a little house") or use a few lexicalized forms ("kitty," "doggie"), but there is no system for creating diminutives from any noun. As a result, the learner simply never thinks to use them.
 
-**The problem is absence, not error.** The learner will not say diminutives wrong -- they will not say them at all. Their speech will be grammatically correct but pragmatically flat, especially in casual Mexican Spanish contexts where diminutives are expected.
+**The problem is absence, not error.** The learner will not say diminutives wrong — they will not say them at all. Their speech will be grammatically correct but pragmatically flat, especially in casual Mexican Spanish contexts where diminutives are expected.
 
 **Impact:** Sounds overly formal or distant, especially in Mexican Spanish. A speaker who never uses diminutives in casual conversation sounds like they are reading from a textbook.
 
-**Preemption script:** "In Mexican Spanish, diminutives are everywhere. They're not baby talk -- adults use them constantly. 'Cafecito' doesn't mean a tiny coffee, it means a nice coffee. 'Ahorita' doesn't mean a tiny now, it means right now but softer. Not using diminutives won't cause misunderstanding, but it will make you sound formal and distant. Think of diminutives as the warmth dial in Spanish -- they make everything friendlier."
+**Preemption script:** "In Mexican Spanish, diminutives are everywhere. They're not baby talk — adults use them constantly. 'Cafecito' doesn't mean a tiny coffee, it means a nice coffee. 'Ahorita' doesn't mean a tiny now, it means right now but softer. Not using diminutives won't cause misunderstanding, but it will make you sound formal and distant. Think of diminutives as the warmth dial in Spanish — they make everything friendlier."
 
-**Guidance:** Encourage active use in casual contexts. Start with high-frequency items (cafecito, ahorita, momentito, poquito, cerquita) and expand from there. Do not correct diminutive overuse early on -- overcorrection kills willingness to experiment.
+**Guidance:** Encourage active use in casual contexts. Start with high-frequency items (cafecito, ahorita, momentito, poquito, cerquita) and expand from there. Do not correct diminutive overuse early on — overcorrection kills willingness to experiment.
 
 ## Common Errors
 
-1. **Never using diminutives.** The learner produces grammatically correct Spanish that sounds robotic in casual contexts. "Dame un poco de café" instead of "Dame un cafecito." -- L1 interference (diminutive-underuse). Do not frame this as an error -- frame it as adding warmth. Encourage experimentation.
-2. **Wrong spelling change.** "Pedazito" instead of "pedacito," or "amigito" instead of "amiguito." The z→c, g→gu, and c→qu changes follow standard orthographic rules but are easy to forget. -- Developmental. Drill the three spelling change patterns explicitly.
-3. **Applying diminutives where augmentatives are needed.** Using -ito for emphasis on size when -ote or -azo would be natural. "Es un carrito impresionante" when "Es un cochazo" conveys the right awe. -- Developmental. Teach the semantic distinction: -ito = small/cute/soft; -ote = big/rough; -azo = impressive/impactful.
-4. **Over-diminutivizing in formal contexts.** Using "doctorcito" or "profesorcito" with authority figures, which can sound condescending. -- Developmental. Teach register awareness: diminutives are for casual speech, familiar relationships, and softening. Not appropriate for formal or professional contexts unless deliberately being warm (abuelita to one's own grandmother is fine; abuelita to a stranger's grandmother may be presumptuous).
-5. **Misreading augmentative tone.** Not recognizing that -ón/-ona forms often carry negative judgment. "Solterón" is not a neutral "big bachelor" -- it implies being undesirably single. -- Developmental. Teach these as vocabulary items with connotation notes.
+1. **Never using diminutives.** The learner produces grammatically correct Spanish that sounds robotic in casual contexts. "Dame un poco de café" instead of "Dame un cafecito." — L1 interference (diminutive-underuse). Do not frame this as an error — frame it as adding warmth. Encourage experimentation.
+2. **Wrong spelling change.** "Pedazito" instead of "pedacito," or "amigito" instead of "amiguito." The z→c, g→gu, and c→qu changes follow standard orthographic rules but are easy to forget. — Developmental. Drill the three spelling change patterns explicitly.
+3. **Applying diminutives where augmentatives are needed.** Using -ito for emphasis on size when -ote or -azo would be natural. "Es un carrito impresionante" when "Es un cochazo" conveys the right awe. — Developmental. Teach the semantic distinction: -ito = small/cute/soft; -ote = big/rough; -azo = impressive/impactful.
+4. **Over-diminutivizing in formal contexts.** Using "doctorcito" or "profesorcito" with authority figures, which can sound condescending. — Developmental. Teach register awareness: diminutives are for casual speech, familiar relationships, and softening. Not appropriate for formal or professional contexts unless deliberately being warm (abuelita to one's own grandmother is fine; abuelita to a stranger's grandmother may be presumptuous).
+5. **Misreading augmentative tone.** Not recognizing that -ón/-ona forms often carry negative judgment. "Solterón" is not a neutral "big bachelor" — it implies being undesirably single. — Developmental. Teach these as vocabulary items with connotation notes.
 
 ## Teaching Sequence
 
 ### Stage 1: Noticing
-Present two versions of the same short dialogue -- one without diminutives, one with. Ask the learner how the tone changes:
+Present two versions of the same short dialogue — one without diminutives, one with. Ask the learner how the tone changes:
 
 **Without diminutives:**
-> "¿Quieres un café?" -- "Sí, dame un poco. Espera un momento, voy ahora."
+> "¿Quieres un café?" — "Sí, dame un poco. Espera un momento, voy ahora."
 
 **With diminutives:**
-> "¿Quieres un cafecito?" -- "Sí, dame un poquito. Espera un momentito, voy ahorita."
+> "¿Quieres un cafecito?" — "Sí, dame un poquito. Espera un momentito, voy ahorita."
 
 Ask: "Both say the same thing. What feels different?" Guide toward noticing: the diminutive version sounds warmer, friendlier, more natural in casual Mexican Spanish. Neither version is wrong, but the second sounds like a real conversation between friends.
 
@@ -164,27 +164,27 @@ Ask: "Both say the same thing. What feels different?" Guide toward noticing: the
 
 1. perro → (perrito)
 2. casa → (casita)
-3. pedazo → (pedacito) -- z→c
-4. amigo → (amiguito) -- g→gu
-5. poco → (poquito) -- c→qu
-6. café → (cafecito) -- -e → -cito
-7. joven → (jovencito) -- consonant → -cito
-8. taza → (tacita) -- z→c
-9. flor → (florecita) -- monosyllabic → -ecita
-10. chico → (chiquito) -- c→qu
+3. pedazo → (pedacito) — z→c
+4. amigo → (amiguito) — g→gu
+5. poco → (poquito) — c→qu
+6. café → (cafecito) — -e → -cito
+7. joven → (jovencito) — consonant → -cito
+8. taza → (tacita) — z→c
+9. flor → (florecita) — monosyllabic → -ecita
+10. chico → (chiquito) — c→qu
 
 **Augmentative recognition:** Give augmentative forms, learner identifies the base word and the connotation (size, impressiveness, or negative):
 - golazo (gol + impressive), grandote (grande + size), solterona (soltera + negative), cochazo (coche + impressive), palabrota (palabra + negative)
 
 ### Stage 3: Guided Production
-Prompt: "Describe your daily routine, but make it sound warm and casual -- like you're telling a close friend. Try to use at least five diminutives naturally. 'Me despierto tempranito, tomo un cafecito...'"
+Prompt: "Describe your daily routine, but make it sound warm and casual — like you're telling a close friend. Try to use at least five diminutives naturally. 'Me despierto tempranito, tomo un cafecito...'"
 
 Scaffold by suggesting where diminutives could go, then let the learner try on their own. If they struggle, reframe: "How would you make 'Voy a la tienda' sound friendlier?" → "Voy a la tiendita."
 
 Follow up with augmentatives: "Now tell me about something impressive or dramatic. A great meal, a big storm, an amazing goal."
 
 ### Stage 4: Communicative Practice
-Prompt: "Tell me about your family or close friends. Describe them with affection -- use diminutives for people you're close to and things you find endearing. Then tell me about something impressive or intense you experienced -- try out some augmentatives."
+Prompt: "Tell me about your family or close friends. Describe them with affection — use diminutives for people you're close to and things you find endearing. Then tell me about something impressive or intense you experienced — try out some augmentatives."
 
 This naturally elicits affectionate diminutives (abuelita, hermanito), descriptive diminutives (casita, pueblito), and augmentatives for emphasis (fiestaza, golazo). The focus is on genuine emotional expression, with the suffixes as tools for nuance. After the conversation, highlight 1-2 places where a diminutive would have added warmth and 1-2 augmentative uses that landed well.
 
@@ -207,7 +207,7 @@ In **Mexican Spanish** (the target dialect), diminutives are essential for natur
 - **Frequency:** Higher than almost any other dialect. Mexicans use diminutives where other Spanish speakers would not.
 - **Softening:** "Ahorita" is arguably the most Mexican word. Its meaning ranges from "right now" to "in a while" depending on context and tone.
 - **Social function:** Using diminutives signals friendliness, approachability, and warmth. Not using them can signal distance, formality, or coldness.
-- **Food and drink:** "Cafecito," "agüita," "frijolitos," "tortillitas" -- diminutives for food items are extremely common and expected in casual speech.
+- **Food and drink:** "Cafecito," "agüita," "frijolitos," "tortillitas" — diminutives for food items are extremely common and expected in casual speech.
 
 The learner should treat diminutive usage as a key cultural skill, not an optional decoration.
 
@@ -215,8 +215,8 @@ See `curriculum/dialect-notes.yaml` for regional vocabulary preferences.
 
 ## Signs of Acquisition
 - **Scaffolded:** Correctly forms diminutives with spelling changes (z→c, g→gu, c→qu). Distinguishes between -ito (affection/small) and -ote/-azo (big/impressive). Applies -cito/-cita after consonants and -e endings.
-- **Unscaffolded:** Spontaneously uses diminutives in casual conversation -- especially high-frequency items like cafecito, poquito, ahorita, momentito. Uses augmentatives for emphasis when describing impressive or dramatic things. Diminutive use feels natural rather than forced.
-- **Integrated:** Adjusts diminutive frequency by register -- more in casual speech, fewer in formal contexts. Recognizes and responds appropriately to augmentatives with connotation (golazo vs solterón). Uses diminutives as pragmatic tools (softening, politeness, affection) rather than size markers.
+- **Unscaffolded:** Spontaneously uses diminutives in casual conversation — especially high-frequency items like cafecito, poquito, ahorita, momentito. Uses augmentatives for emphasis when describing impressive or dramatic things. Diminutive use feels natural rather than forced.
+- **Integrated:** Adjusts diminutive frequency by register — more in casual speech, fewer in formal contexts. Recognizes and responds appropriately to augmentatives with connotation (golazo vs solterón). Uses diminutives as pragmatic tools (softening, politeness, affection) rather than size markers.
 
 ## Connection Points
 Diminutives and augmentatives connect to foundational morphology and cultural competence:

@@ -11,18 +11,18 @@ Stress falls on the **second-to-last syllable** (penultimate).
 
 | Word | Syllables | Stress |
 |------|-----------|--------|
-| hablo | hab-lo | **HAB**-lo |
+| hablo | ha-blo | **HA**-blo |
 | comen | co-men | **CO**-men |
-| libros | lib-ros | **LIB**-ros |
+| libros | li-bros | **LI**-bros |
 | casa | ca-sa | **CA**-sa |
-| hablan | hab-lan | **HAB**-lan |
+| hablan | ha-blan | **HA**-blan |
 
 **Rule 2 — Default for words ending in any other consonant:**
 Stress falls on the **last syllable**.
 
 | Word | Syllables | Stress |
 |------|-----------|--------|
-| hablar | hab-lar | hab-**LAR** |
+| hablar | ha-blar | ha-**BLAR** |
 | ciudad | ciu-dad | ciu-**DAD** |
 | comer | co-mer | co-**MER** |
 | español | es-pa-ñol | es-pa-**ÑOL** |

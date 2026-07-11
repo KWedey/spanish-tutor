@@ -161,6 +161,22 @@ interference_patterns:
     severity: medium
     persistence: "Persistent — tied to broader subjunctive acquisition"
 
+  - id: por-para-confusion
+    english_cause: "English 'for' collapses two distinct Spanish prepositions (por = cause/exchange/duration/route; para = purpose/recipient/destination/deadline)"
+    common_errors:
+      - wrong: "Gracias para tu ayuda"
+        right: "Gracias por tu ayuda"
+        explanation: "Thanks for (motive/cause) uses por"
+      - wrong: "Trabajo para tres horas"
+        right: "Trabajo por tres horas"
+        explanation: "Duration uses por"
+      - wrong: "Este regalo es por ti"
+        right: "Este regalo es para ti"
+        explanation: "Recipient uses para"
+    preempt_at: C-05-por-vs-para
+    severity: high
+    persistence: "Long-lasting — refined across every new context; notoriously difficult because English collapses two concepts into one word"
+
   - id: tener-for-age
     english_cause: "English uses 'to be' for age: 'I am 20 years old'"
     common_errors:
@@ -173,6 +189,22 @@ interference_patterns:
     preempt_at: A-08-numbers-quantifiers
     severity: high
     persistence: "Fossilizes quickly if not caught early — one of the first errors English speakers make"
+
+  - id: quantifier-agreement
+    english_cause: "English quantifiers are invariable ('many books', 'many houses' — 'many' never changes form)"
+    common_errors:
+      - wrong: "Mucho personas"
+        right: "Muchas personas"
+        explanation: "Quantifiers agree in gender/number with the noun; personas is feminine plural"
+      - wrong: "Mucho gente"
+        right: "Mucha gente"
+        explanation: "gente is feminine singular, so mucho becomes mucha"
+      - wrong: "Demasiado reuniones"
+        right: "Demasiadas reuniones"
+        explanation: "reuniones is feminine plural, so demasiado becomes demasiadas"
+    preempt_at: A-08-numbers-quantifiers
+    severity: medium
+    persistence: "Corrects with attention to the adjective-agreement analogy; occasional slips when cognitive load is high"
 
   - id: english-stress-patterns
     english_cause: "English stress is unpredictable; Spanish stress follows clear rules"

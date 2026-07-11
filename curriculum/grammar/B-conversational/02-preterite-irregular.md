@@ -80,8 +80,8 @@ Note: decir is sometimes listed with I-stem verbs because of the vowel change (e
 | vosotros/as | **fuisteis** |
 | ellos / ellas / ustedes | **fueron** |
 
-- Fui al mercado. (I went to the market.) -- ir
-- Fue una buena película. (It was a good movie.) -- ser
+- Fui al mercado. (I went to the market.) — ir
+- Fue una buena película. (It was a good movie.) — ser
 
 **Dar** uses -er/-ir regular endings on an irregular stem (short, no accents):
 
@@ -129,11 +129,11 @@ All other forms are regular: buscaste, buscó, buscamos, buscasteis, buscaron.
 
 ## Common Errors
 
-1. **Adding accents to irregular forms:** Writing "tuvé" or "tuvó" instead of tuve, tuvo. The irregular endings are unstressed -- this is the opposite of regular preterites. -- overgeneralization from regular preterite pattern.
-2. **Regularizing irregular stems:** Producing "hací" instead of hice, or "tení" instead of tuve. -- developmental. The irregular stem must replace the infinitive stem entirely.
-3. **Ir/ser confusion in preterite:** "Fue al mercado" -- did someone go, or was it at the market? -- developmental. Context always resolves it, but learners need reassurance that ambiguity is rare.
-4. **J-stem 3rd plural error:** "Dijieron" instead of dijeron, "trajieron" instead of trajeron. -- overgeneralization. The -ieron ending loses its "i" after "j".
-5. **Spelling change overapplication:** Applying -car/-gar/-zar changes to ALL forms instead of just yo. -- overgeneralization. Only the yo form changes because only -é triggers the spelling adjustment.
+1. **Adding accents to irregular forms:** Writing "tuvé" or "tuvó" instead of tuve, tuvo. The irregular endings are unstressed — this is the opposite of regular preterites. — overgeneralization from regular preterite pattern.
+2. **Regularizing irregular stems:** Producing "hací" instead of hice, or "tení" instead of tuve. — developmental. The irregular stem must replace the infinitive stem entirely.
+3. **Ir/ser confusion in preterite:** "Fue al mercado" — did someone go, or was it at the market? — developmental. Context always resolves it, but learners need reassurance that ambiguity is rare.
+4. **J-stem 3rd plural error:** "Dijieron" instead of dijeron, "trajieron" instead of trajeron. — overgeneralization. The -ieron ending loses its "i" after "j".
+5. **Spelling change overapplication:** Applying -car/-gar/-zar changes to ALL forms instead of just yo. — overgeneralization. Only the yo form changes because only -é triggers the spelling adjustment.
 
 ## Teaching Sequence
 
@@ -141,7 +141,7 @@ All other forms are regular: buscaste, buscó, buscamos, buscasteis, buscaron.
 Show a short story about yesterday using 6 high-frequency irregular preterites. Ask: "These are all past tense, but they look different from the regular preterites we learned. Can you spot any patterns?"
 - **Fui** al centro con mi amiga. **Hicimos** muchas cosas. Primero **tuvimos** que buscar estacionamiento. Después **anduvimos** por las calles. Mi amiga **quiso** comprar ropa, pero no **pudo** encontrar su talla.
 
-Then reveal the U-stem group: "Look at tuve, pude, anduve -- what do they share?"
+Then reveal the U-stem group: "Look at tuve, pude, anduve — what do they share?"
 
 ### Stage 2: Controlled Practice
 Stem-matching drill: given the infinitive, learner supplies the irregular stem. Then full conjugation: given stem + subject, learner produces the form. Group by stem type. Most frequent first: ir/ser (fui), hacer (hice), tener (tuve), estar (estuve). Add remaining groups gradually over multiple sessions.
@@ -153,7 +153,7 @@ Prompt: "Tell me about something interesting that happened to you recently. Try 
 Prompt: "Tell me the story of a trip or vacation. Where did you go? What did you do? What happened?" This naturally requires a mix of ir (fui a...), hacer (hicimos...), tener (tuvimos que...), poder (pudimos/no pudimos...), and regular preterites for a complete narrative.
 
 ## Dialect Notes
-**Vosotros** irregular forms (tuvisteis, hicisteis, fuisteis) follow the same pattern -- the irregular stem + -isteis. Latin American Spanish skips these entirely, using ustedes + 3rd plural (tuvieron, hicieron, fueron).
+**Vosotros** irregular forms (tuvisteis, hicisteis, fuisteis) follow the same pattern — the irregular stem + -isteis. Latin American Spanish skips these entirely, using ustedes + 3rd plural (tuvieron, hicieron, fueron).
 
 **Voseo:** Preterite vos forms are identical to tú forms (tuviste, hiciste, fuiste). No vos-specific irregularity.
 
@@ -165,4 +165,4 @@ See `curriculum/dialect-notes.yaml` for vocabulary differences by region.
 - **Integrated:** Maintains irregular preterite accuracy alongside regular preterites and present tense. Does not regress on regular forms when producing irregulars.
 
 ## Connection Points
-This completes the preterite tense. Together with B-01 (regular preterite), the learner now has full access to completed-past narration. B-02 is required for B-04 (preterite vs imperfect), where the challenge shifts from form to meaning. High-frequency irregular preterites (fui, hice, tuve, estuve, dijo, pudo) appear so often that they tend to be acquired faster than some regular forms through sheer repetition. Teach by frequency, not alphabet -- ir/ser, hacer, tener, estar should be automatic before moving to lower-frequency irregulars like andar, producir, or haber.
+This completes the preterite tense. Together with B-01 (regular preterite), the learner now has full access to completed-past narration. B-02 is required for B-04 (preterite vs imperfect), where the challenge shifts from form to meaning. High-frequency irregular preterites (fui, hice, tuve, estuve, dijo, pudo) appear so often that they tend to be acquired faster than some regular forms through sheer repetition. Teach by frequency, not alphabet — ir/ser, hacer, tener, estar should be automatic before moving to lower-frequency irregulars like andar, producir, or haber.

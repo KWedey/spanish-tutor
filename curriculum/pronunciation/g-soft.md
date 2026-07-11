@@ -10,7 +10,7 @@ Before **e** or **i**, the letter G produces a fricative sound identical to J �
 | Context | IPA | Written Example |
 |---------|-----|-----------------|
 | G before e | /x/ or /h/ | gente, general, gerente |
-| G before i | /x/ or /h/ | girar, girasol, gitano |
+| G before i | /x/ or /h/ | girar, girasol, gigante |
 | G before a, o, u (or consonant) | /g/ | gato, goma, gusto, grande |
 
 The soft G and the J (jota) are **the same sound**. "Gente" and "jefe" use identical phonemes. The spelling differs; the mouth position does not.
@@ -32,7 +32,7 @@ To preserve the hard /g/ sound before **e** or **i**, Spanish inserts a silent U
 | gato | gente | cat / people |
 | gusto | girar | taste / to turn |
 | goma | general | rubber/eraser / general |
-| gol | gitano | goal / gypsy |
+| gol | gigante | goal / giant |
 | gordo | gerente | fat / manager |
 
 Also contrast GU (hard) vs G-before-e/i (soft): guerra vs gente, guitarra vs girar.
@@ -40,12 +40,12 @@ Also contrast GU (hard) vs G-before-e/i (soft): guerra vs gente, guitarra vs gir
 ## Practice Assignments
 
 **Speechling recordings:**
-- Record each soft-G word: `gente`, `general`, `girar`, `Argentina`, `gerente`, `gitano`, `gimnasio`, `geografía`, `girasol`
+- Record each soft-G word: `gente`, `general`, `girar`, `Argentina`, `gerente`, `gigante`, `gimnasio`, `geografía`, `girasol`
 - Record minimal pair sets: `gato–gente`, `goma–general`, `gusto–girar`
 - Record a sentence: `La gente de Argentina es muy generosa.`
 
 **Forvo listening:**
-- Listen to native pronunciations: `gente`, `general`, `Argentina`, `girar`, `gitano`, `gerente`, `geografía`
+- Listen to native pronunciations: `gente`, `general`, `Argentina`, `girar`, `gigante`, `gerente`, `geografía`
 - Focus: is the G identical to a J in your target dialect? Can you hear the difference between hard G (gato) and soft G (gente)?
 
 **Self-narration target words:**

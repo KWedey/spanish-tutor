@@ -103,33 +103,33 @@ Expresses what would have happened. Central to hypothetical past speech.
 
 ### The Unbreakable Rule
 
-**Nothing can come between haber and the participle.** In English you can say "I have already eaten" -- the adverb splits the construction. In Spanish, adverbs go before haber or after the participle, never between them:
+**Nothing can come between haber and the participle.** In English you can say "I have already eaten" — the adverb splits the construction. In Spanish, adverbs go before haber or after the participle, never between them:
 
-- "Ya **he comido**." (correct -- adverb before haber)
-- "**He comido** ya." (correct -- adverb after participle)
-- "**He** ya **comido**." (WRONG -- nothing separates haber from participle)
+- "Ya **he comido**." (correct — adverb before haber)
+- "**He comido** ya." (correct — adverb after participle)
+- "**He** ya **comido**." (WRONG — nothing separates haber from participle)
 
 Object pronouns also precede haber, never splitting the pair:
 
-- "**Lo he hecho.**" (I have done it.) -- correct
+- "**Lo he hecho.**" (I have done it.) — correct
 - "**He hecho**lo." (WRONG)
 
 ## Examples in Context
 
-1. **He visitado** México tres veces. (I have visited Mexico three times.) -- present perfect
-2. Cuando llegué, ella ya **había salido**. (When I arrived, she had already left.) -- pluperfect
-3. ¿**Has visto** la nueva película? (Have you seen the new movie?) -- present perfect
-4. Nunca **habíamos comido** comida tan picante. (We had never eaten such spicy food.) -- pluperfect
-5. Para las cinco, ya **habré terminado**. (By five, I will have finished.) -- future perfect
-6. **Habría ido** contigo, pero estaba enfermo. (I would have gone with you, but I was sick.) -- conditional perfect
-7. ¿Quién **ha roto** el vaso? (Who has broken the glass?) -- present perfect, irregular participle
-8. Ellos **habían escrito** la carta antes de la reunión. (They had written the letter before the meeting.) -- pluperfect, irregular participle
-9. No **he dicho** nada. (I haven't said anything.) -- present perfect, irregular participle
-10. Todavía no **hemos abierto** los regalos. (We still haven't opened the gifts.) -- present perfect, irregular participle
+1. **He visitado** México tres veces. (I have visited Mexico three times.) — present perfect
+2. Cuando llegué, ella ya **había salido**. (When I arrived, she had already left.) — pluperfect
+3. ¿**Has visto** la nueva película? (Have you seen the new movie?) — present perfect
+4. Nunca **habíamos comido** comida tan picante. (We had never eaten such spicy food.) — pluperfect
+5. Para las cinco, ya **habré terminado**. (By five, I will have finished.) — future perfect
+6. **Habría ido** contigo, pero estaba enfermo. (I would have gone with you, but I was sick.) — conditional perfect
+7. ¿Quién **ha roto** el vaso? (Who has broken the glass?) — present perfect, irregular participle
+8. Ellos **habían escrito** la carta antes de la reunión. (They had written the letter before the meeting.) — pluperfect, irregular participle
+9. No **he dicho** nada. (I haven't said anything.) — present perfect, irregular participle
+10. Todavía no **hemos abierto** los regalos. (We still haven't opened the gifts.) — present perfect, irregular participle
 
 ## L1 Interference
 
-**The core problem is structural, not conceptual.** English speakers understand compound tenses well -- "I have eaten" maps directly to "He comido." The errors tend to be mechanical rather than conceptual.
+**The core problem is structural, not conceptual.** English speakers understand compound tenses well — "I have eaten" maps directly to "He comido." The errors tend to be mechanical rather than conceptual.
 
 **Common L1-driven mistakes:**
 
@@ -140,20 +140,20 @@ Object pronouns also precede haber, never splitting the pair:
 | Agreement on the participle | Ella ha comida. | Ella ha comido. | Participle is invariable in compound tenses |
 | Use present perfect like English | He comido hoy. (in Latin America) | Comí hoy. | Latin America prefers preterite for recent past |
 
-**Preemption script:** "Good news -- compound tenses work a lot like English. 'He comido' is exactly 'I have eaten.' The two things to watch: never put anything between haber and the participle, and memorize the ten irregular participles. Once you have those, the system is very regular."
+**Preemption script:** "Good news — compound tenses work a lot like English. 'He comido' is exactly 'I have eaten.' The two things to watch: never put anything between haber and the participle, and memorize the ten irregular participles. Once you have those, the system is very regular."
 
 ## Common Errors
 
-1. **Splitting haber and the participle.** "He ya terminado" instead of "Ya he terminado." English freely places adverbs between auxiliary and participle. Spanish treats haber + participle as an inseparable unit. -- L1 interference. Drill word order explicitly.
-2. **Regularizing irregular participles.** "He escribido" instead of "He escrito," or "He ponido" instead of "He puesto." -- Developmental. Drill the ten irregular participles until automatic. Flash cards help.
-3. **Agreeing the participle with the subject.** "Ella ha comida" instead of "Ella ha comido." This is reinforced by the fact that participles DO agree when used as adjectives (la puerta abierta). -- L1 interference / overgeneralization. Emphasize: in compound tenses, always -o.
-4. **Using present perfect where preterite is expected.** In Latin American Spanish, "He comido hoy" sounds unnatural for "I ate today" -- the preterite "Comí hoy" is preferred. -- Dialect mismatch. Teach the regional difference explicitly.
-5. **Confusing haber with tener.** "Tengo comido" instead of "He comido." In some regional/archaic Spanish, tener + participle exists, but with different meaning. Standard Spanish uses haber for compound tenses. -- Developmental.
+1. **Splitting haber and the participle.** "He ya terminado" instead of "Ya he terminado." English freely places adverbs between auxiliary and participle. Spanish treats haber + participle as an inseparable unit. — L1 interference. Drill word order explicitly.
+2. **Regularizing irregular participles.** "He escribido" instead of "He escrito," or "He ponido" instead of "He puesto." — Developmental. Drill the ten irregular participles until automatic. Flash cards help.
+3. **Agreeing the participle with the subject.** "Ella ha comida" instead of "Ella ha comido." This is reinforced by the fact that participles DO agree when used as adjectives (la puerta abierta). — L1 interference / overgeneralization. Emphasize: in compound tenses, always -o.
+4. **Using present perfect where preterite is expected.** In Latin American Spanish, "He comido hoy" sounds unnatural for "I ate today" — the preterite "Comí hoy" is preferred. — Dialect mismatch. Teach the regional difference explicitly.
+5. **Confusing haber with tener.** "Tengo comido" instead of "He comido." In some regional/archaic Spanish, tener + participle exists, but with different meaning. Standard Spanish uses haber for compound tenses. — Developmental.
 
 ## Teaching Sequence
 
 ### Stage 1: Noticing
-Present five pairs of sentences -- one in preterite, one in present perfect. Ask the learner to identify what is different and when each version might be preferred:
+Present five pairs of sentences — one in preterite, one in present perfect. Ask the learner to identify what is different and when each version might be preferred:
 
 - "Comí en ese restaurante." / "He comido en ese restaurante."
 - "Viajé a España." / "He viajado a España."
@@ -174,21 +174,21 @@ Two drill formats:
 Prompt: "Tell me about your experiences. Use '¿Has...alguna vez?' (Have you ever...?) to ask me questions, and I'll ask you the same. Then tell me about a time when something had already happened before something else (pluperfect)."
 
 Example exchange:
-- "¿Has viajado a otro país?" -- "Sí, he viajado a México."
+- "¿Has viajado a otro país?" — "Sí, he viajado a México."
 - "Cuando llegué al aeropuerto, ya había salido el avión."
 
 Scaffold by providing the structure, then reduce prompting as the learner gains confidence.
 
 ### Stage 4: Communicative Practice
-Prompt: "Tell me about three important things you have done in your life and how they changed you. Then tell me about a time when you arrived too late -- something had already happened."
+Prompt: "Tell me about three important things you have done in your life and how they changed you. Then tell me about a time when you arrived too late — something had already happened."
 
 This naturally elicits present perfect (life experiences) and pluperfect (prior completion), the two highest-frequency compound tenses. Let the learner talk freely, noting compound tense errors for post-conversation review.
 
 ## Dialect Notes
 The most significant dialect split in compound tenses is the **present perfect vs preterite for recent past:**
 
-- **Spain:** "¿Qué **has hecho** hoy?" (What have you done today?) -- present perfect for actions within the current time frame (today, this week, this year).
-- **Latin America (including Mexico):** "¿Qué **hiciste** hoy?" -- preterite for the same question. The present perfect is used mainly for life experiences and ongoing relevance.
+- **Spain:** "¿Qué **has hecho** hoy?" (What have you done today?) — present perfect for actions within the current time frame (today, this week, this year).
+- **Latin America (including Mexico):** "¿Qué **hiciste** hoy?" — preterite for the same question. The present perfect is used mainly for life experiences and ongoing relevance.
 
 Since the target dialect is **Mexican Spanish**, teach the Latin American pattern as default:
 - Recent past → preterite ("Comí hace una hora.")

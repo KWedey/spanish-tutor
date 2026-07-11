@@ -5,7 +5,7 @@ Spanish politeness operates on a different axis than English. English speakers t
 
 ## When to Teach
 - Phase: B (introduce after basic verb conjugation and conditional mood exposure)
-- Prerequisites: A-01 present tense, B-05 conditional tense (for podría forms), basic question formation
+- Prerequisites: A-01 present tense, C-04 conditional (for podría forms — early exposure here; formally acquired in Phase C), basic question formation
 - Enablers: Learner has enough vocabulary to make real requests in conversation practice
 
 ## Key Patterns
@@ -18,7 +18,7 @@ Spanish has a gradient of directness for making requests. Native speakers defaul
 |-------|---------|-------------------|---------------|
 | Very direct | Dame el agua. | Give me the water. | Rude with strangers, fine with close family |
 | Direct | Quiero un café. | I want a coffee. | Acceptable in cafes, abrupt in formal settings |
-| Standard polite | ¿Me pone un café? | Could you get me a coffee? | Normal in restaurants and shops |
+| Standard polite | ¿Me da un café? | Could you get me a coffee? | Normal in restaurants and shops (Spain: ¿Me pone…?) |
 | Soft polite | ¿Podría traerme un café? | Could you possibly bring me a coffee? | Professional settings, strangers |
 | Very soft | ¿Sería tan amable de traerme un café? | Would you be so kind as to bring me a coffee? | Formal letters, elderly speakers |
 
@@ -77,7 +77,7 @@ English speakers say "No, I think..." or "I disagree." Spanish speakers almost n
 Play or present 3-4 short dialogues: one at a coffee shop, one asking a stranger for directions, one disagreeing in conversation. Ask: "How does the speaker ask for what they want? Notice they never say 'quiero' — what do they say instead?" Have the learner identify the softening strategies used.
 
 ### Stage 2: Awareness
-Present the directness scale. Give the learner the same request scenario (asking a waiter, asking a boss, asking a friend) and discuss which level fits each. Practice transforming "quiero X" into "¿podría X?" and "¿me pone X?" Compare disagreement styles: give an opinion and have the learner practice disagreeing using the Spanish formulas rather than direct negation.
+Present the directness scale. Give the learner the same request scenario (asking a waiter, asking a boss, asking a friend) and discuss which level fits each. Practice transforming "quiero X" into "¿podría X?" and "¿me da X?" (Spain: "¿me pone X?") Compare disagreement styles: give an opinion and have the learner practice disagreeing using the Spanish formulas rather than direct negation.
 
 ### Stage 3: Guided Practice
 Role-play scenarios with escalating formality:
@@ -98,7 +98,7 @@ Embed in free conversation. When the learner makes a request, expresses disagree
 
 ## Examples in Context
 
-1. **Café:** ¿Me pone un cortado, por favor? (Could you get me a cortado, please? — standard bar/cafe request)
+1. **Café:** ¿Me da un café, por favor? (Could you get me a coffee, please? — standard cafe request; Spain: ¿Me pone un cortado?)
 2. **Stranger:** Disculpe, ¿podría decirme dónde está la estación? (Excuse me, could you tell me where the station is?)
 3. **Declining:** Me encantaría, pero es que tengo un compromiso. (I'd love to, but the thing is I have a commitment.)
 4. **Disagreeing:** Sí, tienes razón en eso, pero a mí me parece que... (Yes, you're right about that, but it seems to me that...)

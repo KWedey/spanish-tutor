@@ -1,7 +1,7 @@
 # Imperfect Tense
 
 ## Overview
-The imperfect (pretérito imperfecto) is the second past tense and the easiest to conjugate -- only 3 irregular verbs in the entire language. The forms are simple. The hard part is knowing WHEN to use it instead of the preterite, which is a separate concept (B-04). This lesson focuses purely on the forms and the meaning: ongoing, habitual, or background actions in the past.
+The imperfect (pretérito imperfecto) is the second past tense and the easiest to conjugate — only 3 irregular verbs in the entire language. The forms are simple. The hard part is knowing WHEN to use it instead of the preterite, which is a separate concept (B-04). This lesson focuses purely on the forms and the meaning: ongoing, habitual, or background actions in the past.
 
 ## When to Teach
 - Phase: B
@@ -23,7 +23,7 @@ The imperfect has two sets of endings: one for -ar verbs, another shared by -er/
 | 2nd plural | vosotros/as | habl**abais** |
 | 3rd plural | ellos / ellas / ustedes | habl**aban** |
 
-> **Key observation:** The yo and él/ella/usted forms are identical (hablaba). Context resolves ambiguity -- same as the present tense pattern with él/ella/usted. The nosotros form has an accent: hablábamos.
+> **Key observation:** The yo and él/ella/usted forms are identical (hablaba). Context resolves ambiguity — same as the present tense pattern with él/ella/usted. The nosotros form has an accent: hablábamos.
 
 ### -ER/-IR Verbs: comer (to eat) / vivir (to live)
 
@@ -96,7 +96,7 @@ These words and phrases signal ongoing, habitual, or background actions:
 2. **Background description:** Setting the scene. "**Hacía** sol y los pájaros **cantaban**." (It was sunny and the birds were singing.)
 3. **Age, time, and weather in the past:** "**Tenía** diez años." (I was ten years old.) "**Eran** las tres de la tarde." (It was three in the afternoon.)
 4. **Ongoing action when interrupted:** "**Caminaba** por la calle cuando empezó a llover." (I was walking down the street when it started to rain.)
-5. **Politeness (softened request):** "**Quería** pedirte un favor." (I wanted to ask you a favor.) This is the imperfect used in the present -- a softer way to make a request.
+5. **Politeness (softened request):** "**Quería** pedirte un favor." (I wanted to ask you a favor.) This is the imperfect used in the present — a softer way to make a request.
 
 ## Examples in Context
 
@@ -125,20 +125,20 @@ These words and phrases signal ongoing, habitual, or background actions:
 | She worked there | Trabajó allí (for a period, then stopped) | Trabajaba allí (ongoing at that time) |
 | We ate at 8 | Comimos a las 8 (that specific time) | Comíamos a las 8 (every day) |
 
-**Preemption script:** "English has one past tense for 'I ate breakfast' and 'I used to eat breakfast every day.' Spanish separates these. The imperfect is for the 'used to' and 'was doing' meanings -- things that were ongoing, repeated, or just part of the background. Don't worry about choosing yet -- just learn these new forms and associate them with habits and descriptions."
+**Preemption script:** "English has one past tense for 'I ate breakfast' and 'I used to eat breakfast every day.' Spanish separates these. The imperfect is for the 'used to' and 'was doing' meanings — things that were ongoing, repeated, or just part of the background. Don't worry about choosing yet — just learn these new forms and associate them with habits and descriptions."
 
 ## Common Errors
 
-1. **Confusing -aba and -ía endings:** Using "comaba" instead of comía, or "hablía" instead of hablaba. -- developmental. -aba is exclusively for -ar verbs. -ía is exclusively for -er/-ir verbs. Drill the distinction.
-2. **Forgetting accent on -íamos:** Writing "comiamos" without the accent, or "viviamos" without it. -- developmental. The nosotros forms of -er/-ir imperfect always carry this accent.
-3. **Forgetting accent on -ábamos:** Writing "hablabamos" without the accent. -- developmental. Same pattern: nosotros forms always need the accent.
-4. **Overusing ser/ir irregulars:** Trying to make other verbs irregular in the imperfect ("tenía" is actually regular! -- the stem is ten- plus the regular -ía ending). Only ser, ir, and ver are irregular. -- overgeneralization.
-5. **Using imperfect for completed single events:** "Ayer comía pizza" instead of "Ayer comí pizza." -- L1 interference. Ayer + single event = preterite. This error is addressed fully in B-04.
+1. **Confusing -aba and -ía endings:** Using "comaba" instead of comía, or "hablía" instead of hablaba. — developmental. -aba is exclusively for -ar verbs. -ía is exclusively for -er/-ir verbs. Drill the distinction.
+2. **Forgetting accent on -íamos:** Writing "comiamos" without the accent, or "viviamos" without it. — developmental. The nosotros forms of -er/-ir imperfect always carry this accent.
+3. **Forgetting accent on -ábamos:** Writing "hablabamos" without the accent. — developmental. Same pattern: nosotros forms always need the accent.
+4. **Overusing ser/ir irregulars:** Trying to make other verbs irregular in the imperfect ("tenía" is actually regular! — the stem is ten- plus the regular -ía ending). Only ser, ir, and ver are irregular. — overgeneralization.
+5. **Using imperfect for completed single events:** "Ayer comía pizza" instead of "Ayer comí pizza." — L1 interference. Ayer + single event = preterite. This error is addressed fully in B-04.
 
 ## Teaching Sequence
 
 ### Stage 1: Noticing
-Show two sets of sentences side by side. Set A uses preterite with "ayer" (completed events). Set B uses imperfect with "de niño" and "siempre" (habitual past). Ask: "What feels different about these two groups? Not just the form -- what kind of past are they describing?"
+Show two sets of sentences side by side. Set A uses preterite with "ayer" (completed events). Set B uses imperfect with "de niño" and "siempre" (habitual past). Ask: "What feels different about these two groups? Not just the form — what kind of past are they describing?"
 
 **Set A (Preterite):** Ayer hablé con mi mamá. Anoche comí pizza. La semana pasada visité a mis abuelos.
 
@@ -160,7 +160,7 @@ Prompt: "Describe your childhood home and neighborhood. What was it like? What d
 
 **Voseo:** Imperfect vos forms are identical to tú forms (hablabas, comías). No vos-specific imperfect forms.
 
-Regional vocabulary for childhood topics varies. See `curriculum/dialect-notes.yaml` -- for example, "swimming" might require nadar (universal) but pool vocabulary differs (alberca in Mexico, pileta in Argentina, piscina elsewhere).
+Regional vocabulary for childhood topics varies. See `curriculum/dialect-notes.yaml` — for example, "swimming" might require nadar (universal) but pool vocabulary differs (alberca in Mexico, pileta in Argentina, piscina elsewhere).
 
 ## Signs of Acquisition
 - **Scaffolded:** Conjugates -ar and -er/-ir imperfect forms correctly in drills, including the 3 irregulars. Distinguishes -aba from -ía endings without mixing them.

@@ -90,15 +90,15 @@ Context and time markers resolve the ambiguity: "Hablamos ayer" (we spoke yester
 | como (I eat) | comió (he/she ate) | Same trap |
 | estudio (I study) | estudió (he/she studied) | Context resolves it |
 
-**Preemption script:** "The accent mark on habló vs hablo is not decoration -- it changes who did the action AND when. If you drop the accent on habló, it becomes 'I speak' instead of 'he spoke.' In speech you'll hear the stress shift: habLÓ vs HAblo."
+**Preemption script:** "The accent mark on habló vs hablo is not decoration — it changes who did the action AND when. If you drop the accent on habló, it becomes 'I speak' instead of 'he spoke.' In speech you'll hear the stress shift: habLÓ vs HAblo."
 
 ## Common Errors
 
-1. **Missing accents on 1st/3rd singular:** Writing "hable" instead of "hablé" for preterite 1st person, or "hablo" instead of "habló" for 3rd person. In speech, this means wrong stress placement. -- developmental. Drill stress patterns with minimal pairs.
-2. **Mixing -ar and -er/-ir endings:** Using "comaron" instead of "comieron," or "hablieron" instead of "hablaron." -- developmental. Reinforce that -er/-ir share endings, -ar has its own set.
-3. **Defaulting to present tense for past events:** "Ayer como pizza" instead of "Ayer comí pizza." -- L1 interference. English learners sometimes forget to shift tense when time markers are present.
-4. **Nosotros ambiguity panic:** Confusion about whether "hablamos" is present or past. -- developmental. Teach that context always resolves it.
-5. **Adding extra syllables:** "Hablemos" (subjunctive) instead of "hablamos" (preterite nosotros), or "comío" instead of "comió." -- developmental. Keep paradigm tables visible during early drills.
+1. **Missing accents on 1st/3rd singular:** Writing "hable" instead of "hablé" for preterite 1st person, or "hablo" instead of "habló" for 3rd person. In speech, this means wrong stress placement. — developmental. Drill stress patterns with minimal pairs.
+2. **Mixing -ar and -er/-ir endings:** Using "comaron" instead of "comieron," or "hablieron" instead of "hablaron." — developmental. Reinforce that -er/-ir share endings, -ar has its own set.
+3. **Defaulting to present tense for past events:** "Ayer como pizza" instead of "Ayer comí pizza." — L1 interference. English learners sometimes forget to shift tense when time markers are present.
+4. **Nosotros ambiguity panic:** Confusion about whether "hablamos" is present or past. — developmental. Teach that context always resolves it.
+5. **Adding extra syllables:** "Hablemos" (subjunctive) instead of "hablamos" (preterite nosotros), or "comío" instead of "comió." — developmental. Keep paradigm tables visible during early drills.
 
 ## Teaching Sequence
 
@@ -125,10 +125,10 @@ If the learner cannot answer these, revisit Stage 1 comparison before drilling. 
 Conjugation drills: provide infinitive + subject + time marker, learner supplies the preterite form. Then translation: give English past-tense sentences, learner translates. Mix -ar, -er, and -ir verbs. Include time markers in every sentence to reinforce the completed-action meaning.
 
 ### Stage 3: Guided Production
-Prompt: "Tell me what you did yesterday -- from morning to night. Use these verbs if you need them: desayunar, trabajar, comer, escribir, correr, cocinar, hablar, leer." Gently recast any present-tense slips into the preterite without interrupting.
+Prompt: "Tell me what you did yesterday — from morning to night. Use these verbs if you need them: desayunar, trabajar, comer, escribir, correr, cocinar, hablar, leer." Gently recast any present-tense slips into the preterite without interrupting.
 
 ### Stage 4: Communicative Practice
-Prompt: "Describe a memorable day -- a birthday, a trip, a special event. What happened? Who was there? What did everyone do?" This naturally requires third-person preterite (habló, comieron) and sequencing with time markers (primero, después, al final).
+Prompt: "Describe a memorable day — a birthday, a trip, a special event. What happened? Who was there? What did everyone do?" This naturally requires third-person preterite (habló, comieron) and sequencing with time markers (primero, después, al final).
 
 ## Dialect Notes
 **Vosotros** forms (hablasteis, comisteis) are used only in Spain. Latin American Spanish uses ustedes + 3rd plural (hablaron, comieron) for all plural "you" contexts, both formal and informal.
@@ -143,4 +143,4 @@ See `curriculum/dialect-notes.yaml` for vocabulary differences by region.
 - **Integrated:** Maintains preterite accuracy while combining with other structures (object pronouns, reflexives, time expressions). Present tense accuracy does not regress when alternating between tenses.
 
 ## Connection Points
-This is the first past tense -- a major milestone. It directly enables B-02 (irregular preterite), which covers the high-frequency verbs that don't follow these patterns. Together, B-01 and B-02 provide the complete preterite, which is required for B-04 (preterite vs imperfect) -- the hardest concept in Phase B. Common regression trigger: when the imperfect is introduced (B-03), learners sometimes over-apply imperfect endings to completed events. Watch for "Ayer hablaba con mi mamá" when "Ayer hablé con mi mamá" is correct.
+This is the first past tense — a major milestone. It directly enables B-02 (irregular preterite), which covers the high-frequency verbs that don't follow these patterns. Together, B-01 and B-02 provide the complete preterite, which is required for B-04 (preterite vs imperfect) — the hardest concept in Phase B. Common regression trigger: when the imperfect is introduced (B-03), learners sometimes over-apply imperfect endings to completed events. Watch for "Ayer hablaba con mi mamá" when "Ayer hablé con mi mamá" is correct.

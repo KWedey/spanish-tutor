@@ -114,7 +114,7 @@
 
 ## Pronunciation Alerts
 - **fábrica** — esdrújula: FÁ-bri-ca. English speakers tend to say fa-BRI-ca.
-- **reunión** — stress on final syllable: re-u-NIÓN. Four syllables, not three.
+- **reunión** — stress on final syllable: re-u-NIÓN. Three syllables, not four.
 - **teléfono** — esdrújula: te-LÉ-fo-no. English stress pattern differs.
 - **correo** — two syllables for the **rr**: co-RRE-o. The double r is a trill.
 - **computadora** — stress on the penultimate: com-pu-ta-DO-ra. Do not stress like English "computer."

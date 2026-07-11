@@ -1,7 +1,7 @@
 # Comparatives and Superlatives
 
 ## Overview
-Comparatives and superlatives let you compare people, places, and things -- bigger, smaller, better, the best, the most interesting. These structures are fundamental to expressing opinions and preferences, which are central to natural conversation. The patterns are mostly regular with a handful of irregular forms that are extremely high-frequency.
+Comparatives and superlatives let you compare people, places, and things — bigger, smaller, better, the best, the most interesting. These structures are fundamental to expressing opinions and preferences, which are central to natural conversation. The patterns are mostly regular with a handful of irregular forms that are extremely high-frequency.
 
 ## When to Teach
 - Phase: B
@@ -57,7 +57,7 @@ These four adjectives have irregular comparative forms. Do NOT use "más" with t
 - For physical size, use "más grande" / "más pequeño": "Mi casa es **más grande** que la tuya." (NOT "mayor")
 - **Mejor/peor** replace "más bueno" / "más malo" entirely. "Más bueno" sounds childish or means "kinder."
 
-### De vs. Que -- The Number Rule
+### De vs. Que — The Number Rule
 
 This is where English speakers make mistakes, because English uses "than" for everything:
 
@@ -94,7 +94,7 @@ The article must match the noun in gender and number:
 
 **Absolute superlative ("-ísimo/a"):**
 
-This intensifies the adjective without comparison -- it means "extremely" or "very, very":
+This intensifies the adjective without comparison — it means "extremely" or "very, very":
 
 | Adjective | Absolute superlative | Meaning |
 |-----------|---------------------|---------|
@@ -129,10 +129,10 @@ The -ísimo form is very common in spoken Spanish and adds expressive emphasis: 
 
 **Contrast pairs:**
 
-| English | Spanish -- correct | Common error |
+| English | Spanish — correct | Common error |
 |---------|-------------------|-------------|
 | More than five. | Más **de** cinco. | ~~Más que cinco.~~ |
-| More than my brother. | Más que mi hermano. | (correct -- "que" before nouns) |
+| More than my brother. | Más que mi hermano. | (correct — "que" before nouns) |
 | Harder than I thought. | Más difícil **de lo que** pensaba. | ~~Más difícil que pensaba.~~ |
 | The tallest in the class. | El más alto **de** la clase. | ~~El más alto en la clase.~~ |
 
@@ -140,11 +140,11 @@ The -ísimo form is very common in spoken Spanish and adds expressive emphasis: 
 
 ## Common Errors
 
-1. **"Más mejor" / "más peor" (double comparative).** The most common beginner error. "Mejor" already means "more good" -- adding "más" is redundant. Same for "más peor." -- Developmental. Drill the four irregulars as replacements, not additions.
-2. **De vs. que confusion.** "Tengo más que cinco libros" instead of "más de cinco." -- L1 interference. The "number test" is simple and effective: if a number follows, use "de."
-3. **Wrong article on superlative.** "El más alta" instead of "La más alta" when describing a feminine noun. -- Developmental / A-03 regression. The article must agree with the noun. Reinforce agreement from A-03.
-4. **"En" instead of "de" with superlatives.** "El más alto en la clase" instead of "de la clase." -- L1 interference (English uses "in"). Spanish superlatives always use "de" for the group.
-5. **Forgetting agreement on tanto.** "Tanto personas" instead of "tantas personas." -- Developmental. Tanto agrees in gender and number with its noun, just like other adjectives.
+1. **"Más mejor" / "más peor" (double comparative).** The most common beginner error. "Mejor" already means "more good" — adding "más" is redundant. Same for "más peor." — Developmental. Drill the four irregulars as replacements, not additions.
+2. **De vs. que confusion.** "Tengo más que cinco libros" instead of "más de cinco." — L1 interference. The "number test" is simple and effective: if a number follows, use "de."
+3. **Wrong article on superlative.** "El más alta" instead of "La más alta" when describing a feminine noun. — Developmental / A-03 regression. The article must agree with the noun. Reinforce agreement from A-03.
+4. **"En" instead of "de" with superlatives.** "El más alto en la clase" instead of "de la clase." — L1 interference (English uses "in"). Spanish superlatives always use "de" for the group.
+5. **Forgetting agreement on tanto.** "Tanto personas" instead of "tantas personas." — Developmental. Tanto agrees in gender and number with its noun, just like other adjectives.
 
 ## Teaching Sequence
 
@@ -172,12 +172,12 @@ Then superlative drill: "Who or what is the MOST in a group?"
 - (restaurant / bueno / la ciudad) → Es **el mejor restaurante de** la ciudad.
 
 ### Stage 3: Guided Production
-"Compare two cities you know well -- where you live now and somewhere you've lived before (or visited). Which is bigger? More interesting? Better food? More expensive?" This naturally produces comparatives. If the learner avoids irregular forms, prompt: "So which city is **better** for living? Which is **worse** for traffic?"
+"Compare two cities you know well — where you live now and somewhere you've lived before (or visited). Which is bigger? More interesting? Better food? More expensive?" This naturally produces comparatives. If the learner avoids irregular forms, prompt: "So which city is **better** for living? Which is **worse** for traffic?"
 
 ### Stage 4: Communicative Practice
-"Who is the most [adjective] person in your family? Tell me about your family members -- compare them. Who is the oldest? The funniest? Who cooks better? Who works the most?" This generates both comparatives (más...que, mejor que) and superlatives (el/la más...de mi familia) in natural conversation.
+"Who is the most [adjective] person in your family? Tell me about your family members — compare them. Who is the oldest? The funniest? Who cooks better? Who works the most?" This generates both comparatives (más...que, mejor que) and superlatives (el/la más...de mi familia) in natural conversation.
 
-Alternative: "You're helping a friend choose between two apartments. Compare them -- price, size, location, neighborhood. Which is better and why?"
+Alternative: "You're helping a friend choose between two apartments. Compare them — price, size, location, neighborhood. Which is better and why?"
 
 ## Dialect Notes
 Comparative and superlative structures are consistent across all major dialects. Minor notes:
@@ -191,13 +191,13 @@ See `curriculum/dialect-notes.yaml` for regional preferences.
 ## Signs of Acquisition
 - **Scaffolded:** Correctly forms más...que and tan...como comparisons with adjective agreement. Uses the four irregular comparatives (mejor, peor, mayor, menor) without "más." Applies de vs. que rule correctly. Forms superlatives with correct article agreement.
 - **Unscaffolded:** Compares things spontaneously in conversation without defaulting to English structure. Uses -ísimo for emphasis naturally. Does not produce "más mejor" or "más peor."
-- **Integrated:** Combines comparatives with other active structures -- uses correct tense when comparing past experiences ("La comida era mejor que..."), combines with object pronouns naturally, uses superlatives to express preferences and opinions in extended conversation.
+- **Integrated:** Combines comparatives with other active structures — uses correct tense when comparing past experiences ("La comida era mejor que..."), combines with object pronouns naturally, uses superlatives to express preferences and opinions in extended conversation.
 
 ## Connection Points
-This concept relies heavily on gender/number agreement from A-03 -- every comparative and superlative must agree with its noun. If A-03 is still shaky, comparatives will expose the weakness and provide additional agreement practice.
+This concept relies heavily on gender/number agreement from A-03 — every comparative and superlative must agree with its noun. If A-03 is still shaky, comparatives will expose the weakness and provide additional agreement practice.
 
 Comparatives are essential building blocks for expressing opinions, which becomes increasingly important through Phases B and C. When por vs. para is introduced in C-05, "más de lo que" structures will reappear in more complex sentence formations.
 
-The -ísimo absolute superlative connects to diminutives and augmentatives in C-09 -- both are morphological processes that modify the meaning of a base word. The learner will already be comfortable with word modification when C-09 arrives.
+The -ísimo absolute superlative connects to diminutives and augmentatives in C-09 — both are morphological processes that modify the meaning of a base word. The learner will already be comfortable with word modification when C-09 arrives.
 
 No common regression triggers. This is a relatively stable concept once learned.

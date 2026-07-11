@@ -1,7 +1,7 @@
 # Relative Clauses — Connecting Ideas
 
 ## Overview
-Relative clauses let the learner combine two short sentences into one complex one: "I met a woman. She speaks three languages." becomes "I met a woman **who** speaks three languages." Spanish uses several relative pronouns -- **que**, **quien**, **donde**, **lo que**, and others -- each with its own rules. Mastering relative clauses transforms choppy speech into fluid, connected discourse.
+Relative clauses let the learner combine two short sentences into one complex one: "I met a woman. She speaks three languages." becomes "I met a woman **who** speaks three languages." Spanish uses several relative pronouns — **que**, **quien**, **donde**, **lo que**, and others — each with its own rules. Mastering relative clauses transforms choppy speech into fluid, connected discourse.
 
 ## When to Teach
 - Phase: C
@@ -14,12 +14,12 @@ Relative clauses let the learner combine two short sentences into one complex on
 
 | Pronoun | Use | English Equivalent |
 |---------|-----|--------------------|
-| **que** | Universal -- people and things, most common relative pronoun | that, which, who |
+| **que** | Universal — people and things, most common relative pronoun | that, which, who |
 | **quien / quienes** | People only, typically after a preposition | who, whom |
 | **donde** | Places | where |
 | **lo que** | Abstract ideas, entire clauses, "the thing that" | what, that which |
 | **el/la/los/las que** | Specific referent from a group, "the one(s) that" | the one that, those who |
-| **cuyo/a/os/as** | Possession -- agrees with the noun it modifies, not the owner | whose |
+| **cuyo/a/os/as** | Possession — agrees with the noun it modifies, not the owner | whose |
 
 ### Que: The Workhorse
 
@@ -28,7 +28,7 @@ Relative clauses let the learner combine two short sentences into one complex on
 - **Subject:** La mujer **que** habla es mi profesora. (The woman who is speaking is my teacher.)
 - **Object:** El libro **que** leí es excelente. (The book that I read is excellent.)
 
-Unlike English, **que** is never omitted. In English you can say "The book I read" -- in Spanish, "El libro que leí" always requires **que**.
+Unlike English, **que** is never omitted. In English you can say "The book I read" — in Spanish, "El libro que leí" always requires **que**.
 
 ### Quien / Quienes: People After Prepositions
 
@@ -54,7 +54,7 @@ With prepositions, **donde** combines naturally:
 
 ### Lo Que: The Abstract Relative
 
-**Lo que** refers to ideas, situations, or entire clauses -- not specific nouns:
+**Lo que** refers to ideas, situations, or entire clauses — not specific nouns:
 
 - **Lo que** me dijiste es verdad. (What you told me is true.)
 - No entiendo **lo que** pasó. (I don't understand what happened.)
@@ -75,11 +75,11 @@ These identify a particular member of a group:
 
 **Cuyo** means "whose" and agrees in gender and number with the **possessed noun** (not the owner):
 
-- El autor **cuyo** libro leí... (The author whose book I read...) -- cuyo agrees with "libro" (masculine singular)
-- La mujer **cuya** hija estudia aquí... (The woman whose daughter studies here...) -- cuya agrees with "hija" (feminine singular)
-- Los países **cuyos** líderes firmaron... (The countries whose leaders signed...) -- cuyos agrees with "líderes" (masculine plural)
+- El autor **cuyo** libro leí... (The author whose book I read...) — cuyo agrees with "libro" (masculine singular)
+- La mujer **cuya** hija estudia aquí... (The woman whose daughter studies here...) — cuya agrees with "hija" (feminine singular)
+- Los países **cuyos** líderes firmaron... (The countries whose leaders signed...) — cuyos agrees with "líderes" (masculine plural)
 
-**Cuyo** is relatively formal. In casual speech, speakers often restructure: "El autor -- leí su libro -- ..." In written and formal Spanish, cuyo is expected.
+**Cuyo** is relatively formal. In casual speech, speakers often restructure: "El autor — leí su libro — ..." In written and formal Spanish, cuyo is expected.
 
 ### Subjunctive in Relative Clauses
 
@@ -102,14 +102,14 @@ The distinction: **indicative** = the thing exists and I know it. **Subjunctive*
 4. **Lo que** necesitas es descansar. (What you need is to rest.)
 5. De todas las opciones, **la que** prefiero es la primera. (Of all the options, the one I prefer is the first.)
 6. El profesor **cuyas** clases tomé se jubiló. (The professor whose classes I took retired.)
-7. Busco un restaurante **que sirva** comida mexicana. (I'm looking for a restaurant that serves Mexican food.) -- subjunctive
-8. Tengo un restaurante **que sirve** comida mexicana excelente. (I have a restaurant that serves excellent Mexican food.) -- indicative
-9. No conozco a nadie **que haya viajado** a Japón. (I don't know anyone who has traveled to Japan.) -- subjunctive
+7. Busco un restaurante **que sirva** comida mexicana. (I'm looking for a restaurant that serves Mexican food.) — subjunctive
+8. Tengo un restaurante **que sirve** comida mexicana excelente. (I have a restaurant that serves excellent Mexican food.) — indicative
+9. No conozco a nadie **que haya viajado** a Japón. (I don't know anyone who has traveled to Japan.) — subjunctive
 10. **Lo que** me sorprendió fue su amabilidad. (What surprised me was his kindness.)
 
 ## L1 Interference
 
-**The core problems:** English allows omitting relative pronouns ("The book I read") -- Spanish never does. English uses "who/whom/that/which" somewhat interchangeably -- Spanish has stricter rules about when to use que vs quien. English "whose" does not change form -- Spanish cuyo agrees with the possessed noun.
+**The core problems:** English allows omitting relative pronouns ("The book I read") — Spanish never does. English uses "who/whom/that/which" somewhat interchangeably — Spanish has stricter rules about when to use que vs quien. English "whose" does not change form — Spanish cuyo agrees with the possessed noun.
 
 **Common L1-driven mistakes:**
 
@@ -120,15 +120,15 @@ The distinction: **indicative** = the thing exists and I know it. **Subjunctive*
 | Keep "whose" invariable | El autor cuyo hija... | El autor **cuya** hija... | Cuyo agrees with the possessed noun |
 | Use indicative for hypothetical | Busco alguien que sabe... | Busco alguien que **sepa**... | Uncertain antecedent requires subjunctive |
 
-**Preemption script:** "Relative clauses in Spanish work a lot like English, with one big difference: you can never drop the relative pronoun. In English you say 'the book I read' -- in Spanish it's always 'el libro que leí.' Also, when you're looking for something that might not exist, the verb in the relative clause switches to subjunctive."
+**Preemption script:** "Relative clauses in Spanish work a lot like English, with one big difference: you can never drop the relative pronoun. In English you say 'the book I read' — in Spanish it's always 'el libro que leí.' Also, when you're looking for something that might not exist, the verb in the relative clause switches to subjunctive."
 
 ## Common Errors
 
-1. **Omitting que.** "El libro leí" instead of "El libro que leí." English freely drops "that" in object relative clauses. Spanish never does. -- L1 interference. Drill by having the learner combine two sentences into one, always requiring a pronoun.
-2. **Using que instead of quien after prepositions.** "La persona con que hablé" instead of "con quien hablé." While "con la que" is an alternative, "con que" alone is not standard. -- Developmental. Practice preposition + quien combinations explicitly.
-3. **Wrong agreement on cuyo.** "El hombre cuyo esposa..." instead of "cuya esposa." Cuyo agrees with what is possessed, not the possessor. -- L1 interference (English "whose" is invariable). Provide explicit agreement drills.
-4. **Using indicative after uncertain antecedents.** "Busco un libro que es interesante" instead of "que sea interesante." The indicative/subjunctive split in relative clauses is subtle and takes time to internalize. -- Developmental / L1 interference. Contrast "tengo un libro que es..." vs "busco un libro que sea..."
-5. **Confusing lo que and que.** "Lo que libro leí" or using "que" for abstract ideas. Lo que has no specific antecedent; que does. -- Developmental. Drill the distinction: "El libro que..." (specific noun) vs "Lo que pasó..." (abstract/no noun).
+1. **Omitting que.** "El libro leí" instead of "El libro que leí." English freely drops "that" in object relative clauses. Spanish never does. — L1 interference. Drill by having the learner combine two sentences into one, always requiring a pronoun.
+2. **Using que instead of quien after prepositions.** "La persona con que hablé" instead of "con quien hablé." While "con la que" is an alternative, "con que" alone is not standard. — Developmental. Practice preposition + quien combinations explicitly.
+3. **Wrong agreement on cuyo.** "El hombre cuyo esposa..." instead of "cuya esposa." Cuyo agrees with what is possessed, not the possessor. — L1 interference (English "whose" is invariable). Provide explicit agreement drills.
+4. **Using indicative after uncertain antecedents.** "Busco un libro que es interesante" instead of "que sea interesante." The indicative/subjunctive split in relative clauses is subtle and takes time to internalize. — Developmental / L1 interference. Contrast "tengo un libro que es..." vs "busco un libro que sea..."
+5. **Confusing lo que and que.** "Lo que libro leí" or using "que" for abstract ideas. Lo que has no specific antecedent; que does. — Developmental. Drill the distinction: "El libro que..." (specific noun) vs "Lo que pasó..." (abstract/no noun).
 
 ## Teaching Sequence
 
@@ -156,9 +156,9 @@ After reviewing, ask: "When do you see que? When donde? When quien? When lo que?
 - "Quiero un coche que (ser) _____ rojo." → "sea" (hypothetical)
 
 ### Stage 3: Guided Production
-Prompt: "Describe your ideal home, job, and vacation. Use 'Busco una casa que...' 'Quiero un trabajo que...' 'Necesito unas vacaciones donde...' -- remember, since these are things you're looking for, the relative clause uses subjunctive."
+Prompt: "Describe your ideal home, job, and vacation. Use 'Busco una casa que...' 'Quiero un trabajo que...' 'Necesito unas vacaciones donde...' — remember, since these are things you're looking for, the relative clause uses subjunctive."
 
-Then switch: "Now tell me about your actual home, job, and daily routine. Use 'Tengo una casa que...' 'Mi trabajo es algo que...' -- these are real, so indicative."
+Then switch: "Now tell me about your actual home, job, and daily routine. Use 'Tengo una casa que...' 'Mi trabajo es algo que...' — these are real, so indicative."
 
 The contrast between hypothetical and real naturally drills the subjunctive/indicative split in relative clauses.
 
@@ -170,7 +170,7 @@ This naturally elicits que (people/things), quien (after prepositions), cuyo (po
 ## Dialect Notes
 Relative pronoun usage is largely consistent across dialects. Minor regional notes:
 
-- In **informal speech across Latin America**, cuyo is rare. Speakers restructure: "El hombre -- su esposa trabaja aquí -- ..." rather than "El hombre cuya esposa trabaja aquí." Teach cuyo for recognition and written Spanish, but don't expect it in casual conversation.
+- In **informal speech across Latin America**, cuyo is rare. Speakers restructure: "El hombre — su esposa trabaja aquí — ..." rather than "El hombre cuya esposa trabaja aquí." Teach cuyo for recognition and written Spanish, but don't expect it in casual conversation.
 - **Queísmo** (using "que" where a preposition + que is expected) occurs in some dialects: "El tema que hablamos" instead of "El tema del que hablamos." This is considered non-standard. Teach the prepositional form.
 - In **Mexican Spanish**, relative clause structures follow standard patterns without significant regional variation.
 

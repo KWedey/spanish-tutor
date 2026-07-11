@@ -6,7 +6,7 @@ Questions and negation are fundamental to conversation — without them, a learn
 ## When to Teach
 - Phase: A
 - Prerequisites: A-01-present-regular
-- L1 interference to preempt: negative-double-negative (severity: medium)
+- L1 interference to preempt: negative-double-negative (severity: medium), english-question-word-order (severity: low)
 
 ## The Pattern
 

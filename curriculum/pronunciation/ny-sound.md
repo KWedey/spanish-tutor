@@ -34,7 +34,7 @@ These pairs differ only in the n vs ñ distinction. The ñ pairs carry different
 | pena | peña | sorrow / rock/club |
 | mono | moño | monkey / hair bun |
 | cana | caña | gray hair / cane/reed |
-| seno | señor | breast / Mr./sir |
+| sonar | soñar | to sound / to dream |
 
 ## Practice Assignments
 

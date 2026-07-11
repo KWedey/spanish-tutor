@@ -1,7 +1,7 @@
 # Indirect Object Pronouns
 
 ## Overview
-Indirect object pronouns indicate to whom or for whom an action is performed. They are essential for talking about giving, telling, sending, showing, buying, and all the other actions that involve a recipient. This concept introduces the redundant doubling pattern (unique to Spanish) and culminates in pronoun stacking -- combining indirect and direct objects in a single clause -- which is one of the most mechanically demanding patterns in Phase B.
+Indirect object pronouns indicate to whom or for whom an action is performed. They are essential for talking about giving, telling, sending, showing, buying, and all the other actions that involve a recipient. This concept introduces the redundant doubling pattern (unique to Spanish) and culminates in pronoun stacking — combining indirect and direct objects in a single clause — which is one of the most mechanically demanding patterns in Phase B.
 
 ## When to Teach
 - Phase: B
@@ -73,7 +73,7 @@ This doubling is:
 ### Gustar Connection
 
 The learner has already been using indirect object pronouns since A-06 without knowing it:
-- **Me** gusta el café. (Coffee pleases **me** -- "me" is an indirect object pronoun.)
+- **Me** gusta el café. (Coffee pleases **me** — "me" is an indirect object pronoun.)
 - **Te** gustan los perros. (Dogs please **you**.)
 - **Le** encanta la música. (Music delights **him/her**.)
 
@@ -83,13 +83,13 @@ Gustar-type verbs always require the indirect object pronoun. This concept forma
 
 When BOTH a direct object pronoun and an indirect object pronoun appear in the same clause, they stack according to strict rules:
 
-**Rule 1 -- Order: Indirect FIRST, then direct.**
+**Rule 1 — Order: Indirect FIRST, then direct.**
 
-- **Me lo** das. (You give it to me.) -- me = indirect, lo = direct
-- **Te la** mando. (I send it to you.) -- te = indirect, la = direct
-- **Nos los** trae. (He/She brings them to us.) -- nos = indirect, los = direct
+- **Me lo** das. (You give it to me.) — me = indirect, lo = direct
+- **Te la** mando. (I send it to you.) — te = indirect, la = direct
+- **Nos los** trae. (He/She brings them to us.) — nos = indirect, los = direct
 
-**Rule 2 -- Le/les become "se" before lo/la/los/las.**
+**Rule 2 — Le/les become "se" before lo/la/los/las.**
 
 This is the critical rule. When the indirect object is le or les, it changes to **se** before any direct object pronoun starting with "l":
 
@@ -99,7 +99,7 @@ This is the critical rule. When the indirect object is le or les, it changes to 
 
 **Why?** Two pronouns starting with "l" in a row (le lo, les las) is difficult to pronounce and hear clearly. Spanish resolved this by changing le/les to se.
 
-**Rule 3 -- Clarification with "a" (because "se" is ambiguous).**
+**Rule 3 — Clarification with "a" (because "se" is ambiguous).**
 
 Since "se" can mean to him, to her, to you (usted), to them, or to you all (ustedes), Spanish adds "a + pronoun" for clarity:
 
@@ -124,8 +124,8 @@ This clarification is optional when context makes the recipient obvious, but com
 With non-finite forms, the stacked pronouns stay together:
 - Voy a dár**selo**. / **Se lo** voy a dar. (I'm going to give it to him/her.)
 - Estoy explicándo**selo**. / **Se lo** estoy explicando. (I'm explaining it to him/her.)
-- Dí**melo**. (Tell it to me.) -- affirmative command
-- No **me lo** digas. (Don't tell it to me.) -- negative command
+- Dí**melo**. (Tell it to me.) — affirmative command
+- No **me lo** digas. (Don't tell it to me.) — negative command
 
 ## Examples in Context
 
@@ -147,7 +147,7 @@ With non-finite forms, the stacked pronouns stay together:
 
 ## L1 Interference
 
-**English lacks doubling:** In English, you never say "I give him the book to John" -- you use either the pronoun or the noun, not both. The Spanish doubling pattern ("Le doy el libro a Juan") feels like a grammar error to English speakers.
+**English lacks doubling:** In English, you never say "I give him the book to John" — you use either the pronoun or the noun, not both. The Spanish doubling pattern ("Le doy el libro a Juan") feels like a grammar error to English speakers.
 
 **English lacks se substitution:** English has no equivalent to the le→se change. This is a purely Spanish-internal rule with no English analogy to lean on.
 
@@ -160,43 +160,43 @@ With non-finite forms, the stacked pronouns stay together:
 | He tells it to me. | Lo me dice. | **Me lo** dice. | Wrong stacking order |
 | I'm going to tell it to you. | Voy a decir te lo. | Voy a decír**telo** / **Te lo** voy a decir. | Separated pronouns |
 
-**Preemption script:** "This is one of those patterns where Spanish works completely differently from English. In English, 'I give it to her' -- done. In Spanish, two things are unusual: first, you can say BOTH 'le' AND 'a María' in the same sentence -- 'Le doy el libro a María.' That doubling is not only OK, it's the natural way to say it. Second, when le and lo end up next to each other, le changes to se -- 'Se lo doy' not 'le lo doy.' These are mechanical rules: once you memorize them, you apply them the same way every time."
+**Preemption script:** "This is one of those patterns where Spanish works completely differently from English. In English, 'I give it to her' — done. In Spanish, two things are unusual: first, you can say BOTH 'le' AND 'a María' in the same sentence — 'Le doy el libro a María.' That doubling is not only OK, it's the natural way to say it. Second, when le and lo end up next to each other, le changes to se — 'Se lo doy' not 'le lo doy.' These are mechanical rules: once you memorize them, you apply them the same way every time."
 
 ## Common Errors
 
-1. **Forgetting the le→se change.** "Le lo doy" instead of "Se lo doy." This is the most common stacking error and the hardest to internalize because there is no English equivalent. -- Developmental. Pure memorization of a mechanical rule. Drill with repetition until automatic.
-2. **Wrong stacking order (direct before indirect).** "Lo me dice" instead of "Me lo dice." English word order ("it to me") pulls learners to put the direct object first. -- L1 interference. The mnemonic is: indirect always comes first -- "to whom" before "what."
-3. **Omitting the redundant indirect pronoun.** "Doy el libro a María" instead of "Le doy el libro a María." English never doubles, so learners drop the pronoun when the full noun is present. -- L1 interference. Reinforce that doubling is not optional in most contexts.
-4. **Confusing le/les with lo/la/los/las.** Using "le" as a direct object or "lo" as an indirect object. The distinction is: direct = what? (lo/la) vs indirect = to whom? (le/les). -- Developmental. Use the "what?" vs "to whom?" test consistently.
-5. **Forgetting clarification with se.** Saying "Se lo doy" without context when "se" is ambiguous. Adding "a ella / a él / a ellos" makes communication clear. -- Developmental. Teach that "se" is a compressed form that often needs a clarifier.
+1. **Forgetting the le→se change.** "Le lo doy" instead of "Se lo doy." This is the most common stacking error and the hardest to internalize because there is no English equivalent. — Developmental. Pure memorization of a mechanical rule. Drill with repetition until automatic.
+2. **Wrong stacking order (direct before indirect).** "Lo me dice" instead of "Me lo dice." English word order ("it to me") pulls learners to put the direct object first. — L1 interference. The mnemonic is: indirect always comes first — "to whom" before "what."
+3. **Omitting the redundant indirect pronoun.** "Doy el libro a María" instead of "Le doy el libro a María." English never doubles, so learners drop the pronoun when the full noun is present. — L1 interference. Reinforce that doubling is not optional in most contexts.
+4. **Confusing le/les with lo/la/los/las.** Using "le" as a direct object or "lo" as an indirect object. The distinction is: direct = what? (lo/la) vs indirect = to whom? (le/les). — Developmental. Use the "what?" vs "to whom?" test consistently.
+5. **Forgetting clarification with se.** Saying "Se lo doy" without context when "se" is ambiguous. Adding "a ella / a él / a ellos" makes communication clear. — Developmental. Teach that "se" is a compressed form that often needs a clarifier.
 
 ## Teaching Sequence
 
 ### Stage 1: Noticing
-Start with indirect objects ONLY -- no stacking yet. Show sentences and ask: "Who receives the action?"
+Start with indirect objects ONLY — no stacking yet. Show sentences and ask: "Who receives the action?"
 - "Doy el libro **a María**." → "**Le** doy el libro."
 - "Escribo una carta **a mis padres**." → "**Les** escribo una carta."
 - "El profesor explica la gramática **a los estudiantes**." → "El profesor **les** explica la gramática."
 
-Then connect to gustar: "You already know this pattern -- 'Me gusta,' 'Te gusta,' 'Le gusta.' That me/te/le is the same thing -- an indirect object pronoun."
+Then connect to gustar: "You already know this pattern — 'Me gusta,' 'Te gusta,' 'Le gusta.' That me/te/le is the same thing — an indirect object pronoun."
 
 ### Stage 2: Controlled Practice
 Two-phase drill:
 
-**Phase A -- Indirect only:** Tutor gives a sentence with a full noun, learner replaces with pronoun:
+**Phase A — Indirect only:** Tutor gives a sentence with a full noun, learner replaces with pronoun:
 - Mando un mensaje a mi amigo. → **Le** mando un mensaje.
 - Compro un regalo a mis padres. → **Les** compro un regalo.
 - Dices la verdad a mí. → **Me** dices la verdad.
 
-**Phase B -- Introduce stacking:** Tutor gives sentences with BOTH objects as full nouns. Learner replaces both:
+**Phase B — Introduce stacking:** Tutor gives sentences with BOTH objects as full nouns. Learner replaces both:
 - Doy el libro a María. → **Se lo** doy.
 - Mando las fotos a mi hermano. → **Se las** mando.
 - Explicas la tarea a mí. → **Me la** explicas.
 
-Focus on the le→se change. If the learner says "le lo," simply recast: "Se lo doy -- remember, le changes to se before lo."
+Focus on the le→se change. If the learner says "le lo," simply recast: "Se lo doy — remember, le changes to se before lo."
 
 ### Stage 3: Guided Production
-Prompt: "Tell me about gift-giving. Last Christmas (or last birthday), who did you give gifts to? What did you give them? Use pronouns -- don't keep repeating the names or the gifts." Expected: "A mi mamá le compré un libro. Se lo di el 25 de diciembre. A mi hermano le compré..." If the learner avoids stacking, prompt: "¿Y el libro? ¿Cuándo se lo diste?"
+Prompt: "Tell me about gift-giving. Last Christmas (or last birthday), who did you give gifts to? What did you give them? Use pronouns — don't keep repeating the names or the gifts." Expected: "A mi mamá le compré un libro. Se lo di el 25 de diciembre. A mi hermano le compré..." If the learner avoids stacking, prompt: "¿Y el libro? ¿Cuándo se lo diste?"
 
 ### Stage 4: Communicative Practice
 Prompt: "You're organizing a party. I'm going to ask you who is bringing what, who you're sending the invitations to, and who you're going to tell the address to. Use pronouns whenever you can."
@@ -222,13 +222,13 @@ See `curriculum/dialect-notes.yaml` for regional preferences.
 - **Integrated:** Maintains correct stacking order and le→se change across tenses (se lo di, se lo voy a dar, se lo estaba explicando). Uses clarification with "a ella/a ellos" when se is ambiguous. Does not confuse direct and indirect pronouns under cognitive load.
 
 ## Connection Points
-This concept builds directly on A-06 (gustar-type verbs), which already trained the learner to use me/te/le as indirect objects -- they just did not have the formal terminology. Recognizing this connection reduces the "new concept" anxiety.
+This concept builds directly on A-06 (gustar-type verbs), which already trained the learner to use me/te/le as indirect objects — they just did not have the formal terminology. Recognizing this connection reduces the "new concept" anxiety.
 
-The pronoun stacking rules introduced here (se lo, me la, te los) are purely mechanical -- the pattern is consistent and rule-governed with no exceptions. Once the le→se substitution is memorized, the system is predictable. This makes it a drilling challenge, not a comprehension challenge.
+The pronoun stacking rules introduced here (se lo, me la, te los) are purely mechanical — the pattern is consistent and rule-governed with no exceptions. Once the le→se substitution is memorized, the system is predictable. This makes it a drilling challenge, not a comprehension challenge.
 
-The doubling pattern (Le doy el libro a María) is culturally important -- omitting the redundant pronoun sounds stilted or incomplete to native speakers. Emphasize this is not optional style but expected usage.
+The doubling pattern (Le doy el libro a María) is culturally important — omitting the redundant pronoun sounds stilted or incomplete to native speakers. Emphasize this is not optional style but expected usage.
 
-Pronoun attachment to commands (Dímelo, No me lo digas) connects to B-09 (imperatives). When imperatives are taught, the stacking rules from this concept apply directly -- no new rules, just a new verb form.
+Pronoun attachment to commands (Dímelo, No me lo digas) connects to B-09 (imperatives). When imperatives are taught, the stacking rules from this concept apply directly — no new rules, just a new verb form.
 
 Possible regression: when stacking is first introduced, learners may temporarily lose confidence with the direct object pronouns from B-06, reverting to full nouns. If this occurs, briefly revisit B-06 drills with single pronouns before returning to stacking.
 

@@ -7,7 +7,6 @@ youtube_channels:
     dialect: mixed
     phase_range: [A, B, C]
     level_range: [L2, L4]
-    levels: [superbeginner, beginner, intermediate, advanced]
     topic_alignment: [all]
     notes: "Primary comprehensible input. 2000+ videos. Assign daily."
   - name: Easy Spanish
@@ -67,7 +66,7 @@ youtube_channels:
 
 podcasts:
   - name: News in Slow Spanish
-    dialect: peninsular
+    dialect: mixed
     editions: [Latino, Peninsular]
     phase_range: [A, B, C]
     level_range: [L2, L3]
@@ -121,12 +120,12 @@ podcasts:
     level_range: [L5]
     topic_alignment: [current-events-and-society, professional-communication]
     notes: "Weekly deep-dive Latin American journalism. Challenging but rewarding."
-  - name: Cuentos de Hadas
+  - name: Spanish Stories for Kids
     dialect: neutral
     phase_range: [A, B]
     level_range: [L2]
     topic_alignment: [telling-stories, childhood-and-family]
-    notes: "Fairy tales narrated slowly. Low-pressure beginner listening."
+    notes: "Short themed stories in Spanish with an English intro and vocab review. Low-pressure beginner listening."
 
 tv_shows:
   - name: Extra en Español
@@ -165,12 +164,12 @@ tv_shows:
     topic_alignment: [work-and-career, emotions-and-relationships, childhood-and-family]
     notes: "Period drama. Clear enunciation, formal register. Phase B stretch listening."
   - name: Nada (2023)
-    platform: Netflix
-    dialect: peninsular
+    platform: Star+ / Disney+
+    dialect: rioplatense
     phase_range: [B, C]
     level_range: [L3, L4]
-    topic_alignment: [childhood-and-family, emotions-and-relationships, my-home-and-neighborhood]
-    notes: "Coming-of-age slice of life. Simple dialogue, cultural depth."
+    topic_alignment: [emotions-and-relationships, food-and-eating-out, opinions-and-debate]
+    notes: "Buenos Aires comedy-drama. An aging, refined food critic (Luis Brandoni) and his new housekeeper; Robert De Niro cameo. Witty, literate porteño Spanish with voseo. Character-driven, moderate pace."
   - name: Siempre Bruja
     platform: Netflix
     dialect: colombian
@@ -202,62 +201,72 @@ tv_shows:
 
 music:
   - artist: Alvaro Soler
-    region: peninsular
+    dialect: peninsular
     phase_range: [A, B]
+    level_range: [L2, L3]
     topic_alignment: [my-daily-routine, weekend-plans-and-activities]
     songs: ["Sofía", "El Mismo Sol", "La Cintura"]
     notes: "Clear, slow pop lyrics. Feel-good. Great for Phase A."
   - artist: Jesse y Joy
-    region: mexican
+    dialect: mexican
     phase_range: [A, B]
+    level_range: [L2, L3]
     topic_alignment: [emotions-and-relationships, childhood-and-family]
     songs: ["Corre", "Me Voy", "Llorar"]
     notes: "Clear vocals, simple structures. Emotional but accessible."
   - artist: Juanes
-    region: colombian
+    dialect: colombian
     phase_range: [A, B]
+    level_range: [L2, L3]
     topic_alignment: [emotions-and-relationships, opinions-and-debate]
     songs: ["A Dios le Pido", "La Camisa Negra", "Fotografía"]
     notes: "Clear pronunciation, moderate tempo. Accessible for beginners."
   - artist: Shakira
-    region: colombian
+    dialect: colombian
     phase_range: [A, B, C]
+    level_range: [L2, L4]
     topic_alignment: [emotions-and-relationships]
     songs: ["Waka Waka", "Loba", "Antes de las Seis"]
     notes: "Mix of simple and complex. Prefer Spanish-only tracks."
   - artist: Manu Chao
-    region: mixed_latin
+    dialect: mixed_latin_american
     phase_range: [B, C]
+    level_range: [L3, L4]
     topic_alignment: [travel-and-culture, current-events-and-society]
     songs: ["Me Gustas Tú", "Clandestino", "Bongo Bong"]
     notes: "Repetitive choruses, clear diction. 'Me Gustas Tú' is a vocab goldmine."
   - artist: Natalia Lafourcade
-    region: mexican
+    dialect: mexican
     phase_range: [B, C]
+    level_range: [L3, L4]
     topic_alignment: [emotions-and-relationships, childhood-and-family, travel-and-culture]
     songs: ["Hasta la Raíz", "Tú Sí Sabes Quererme", "Nunca Es Suficiente"]
     notes: "Beautiful clear vocals. Poetic but accessible. Great for lyric study."
   - artist: Calle 13 / Residente
-    region: puerto_rican
+    dialect: mixed_latin_american
     phase_range: [C, D]
+    level_range: [L4, L5]
     topic_alignment: [current-events-and-society, opinions-and-debate, humor-idioms-and-slang]
     songs: ["Latinoamérica", "Atrévete-te-te", "El Aguante"]
     notes: "Rapid-fire lyrics, social commentary. Advanced vocabulary."
   - artist: Rosalía
-    region: peninsular
+    dialect: peninsular
     phase_range: [C, D]
+    level_range: [L4, L5]
     topic_alignment: [emotions-and-relationships, humor-idioms-and-slang]
     songs: ["Malamente", "Bizcochito", "De Aquí No Sales"]
     notes: "Flamenco-pop fusion. Slang-heavy, fast. Advanced cultural immersion."
   - artist: Jorge Drexler
-    region: uruguayan
+    dialect: rioplatense
     phase_range: [C, D]
+    level_range: [L4, L5]
     topic_alignment: [philosophy-and-big-ideas, emotions-and-relationships, telling-stories]
     songs: ["Todo Se Transforma", "Movimiento", "Telefonía"]
     notes: "Poetic, thoughtful lyrics. Excellent for literary Spanish."
   - artist: Bad Bunny
-    region: puerto_rican
+    dialect: mixed_latin_american
     phase_range: [C, D]
+    level_range: [L4, L5]
     topic_alignment: [humor-idioms-and-slang, current-events-and-society]
     songs: ["Callaíta", "Dakiti", "Yonaguni"]
     notes: "Reggaeton/trap. Heavy slang, elision. Good for informal register."
@@ -364,41 +373,6 @@ prescriptive_episodes:
         construction ("Me gusta cocinar") and ir + a + infinitive for plans.
         Moderate visual support, slightly less repetitive than Super Beginner.
 
-    - source: News in Slow Spanish
-      title: "Weekly News — sample beginner episode"
-      level: L2
-      dialect: peninsular
-      duration_minutes: 10
-      topic_alignment: [current-events-and-society]
-      content_summary: >
-        Current events presented at reduced speed with simplified vocabulary.
-        Each story is 2-3 minutes. Grammar structures are present tense dominant.
-        Useful for building news vocabulary: país, gobierno, personas, problema.
-        Peninsular pronunciation and vocabulary.
-
-    - source: Duolingo Spanish Podcast
-      title: "Sample beginner episode"
-      level: L2
-      dialect: mixed_latin_american
-      duration_minutes: 20
-      topic_alignment: [telling-stories, childhood-and-family]
-      content_summary: >
-        Bilingual format — English narrator provides context, Spanish speaker
-        tells personal story. The Spanish segments use past tense (preterite/
-        imperfect) but at slow, clear pace with context from English framing.
-        Good for passive exposure to past tense before formal introduction.
-
-    - source: Coffee Break Spanish
-      title: "Sample lesson episode"
-      level: L2
-      dialect: peninsular
-      duration_minutes: 20
-      topic_alignment: [greetings-and-introductions, getting-around-town]
-      content_summary: >
-        Structured lesson with native speaker. Introduces situational vocabulary
-        (greetings, directions, ordering) with repetition and explanation.
-        Teacher-student format — the English-speaking host learns alongside listener.
-
     - source: Dreaming Spanish
       title: "Intermediate — Una historia de mi infancia"
       level: L3
@@ -422,30 +396,6 @@ prescriptive_episodes:
         (más...que, menos...que, tan...como), ser vs estar for city descriptions.
         Moderate speed, some natural filler words (bueno, pues, o sea). Good for
         opinion vocabulary: creo que, me parece, en mi opinión.
-
-    - source: Easy Spanish
-      title: "Street interview sample — ¿Qué comes normalmente?"
-      level: L3
-      dialect: mixed
-      duration_minutes: 8
-      topic_alignment: [food-and-eating-out]
-      content_summary: >
-        Street interviews with multiple speakers about eating habits. Varied
-        accents and speaking speeds. Subtitles available. Key vocabulary: comida,
-        desayuno, almuerzo, cena, cocinar, restaurante. Some speakers are fast —
-        subtitles help. Good exposure to natural speech variety.
-
-    - source: Españolistos
-      title: "Sample conversation episode"
-      level: L3
-      dialect: colombian
-      duration_minutes: 25
-      topic_alignment: [emotions-and-relationships]
-      content_summary: >
-        American-Colombian couple discusses a relationship topic naturally.
-        Vocabulary explanations embedded in conversation (Andrea explains Colombian
-        expressions to her husband). Moderate pace, natural back-and-forth.
-        Good model for conversational rhythm and back-channeling.
 
   # Reading entries — graded readers (R2) through transition titles (R3) to
   # authentic short fiction (R4). Summaries written from publicly-available

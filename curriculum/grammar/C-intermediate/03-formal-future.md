@@ -1,7 +1,7 @@
 # Formal Future Tense — Predictions and Probability
 
 ## Overview
-The formal future tense expresses predictions, promises, and probability about the present. While ir + a + infinitive dominates everyday speech for planned actions, the formal future is essential for written Spanish, news, formal speech, and the uniquely Spanish use of the future to express present-time probability ("Serán las tres" -- it's probably three o'clock).
+The formal future tense expresses predictions, promises, and probability about the present. While ir + a + infinitive dominates everyday speech for planned actions, the formal future is essential for written Spanish, news, formal speech, and the uniquely Spanish use of the future to express present-time probability ("Serán las tres" — it's probably three o'clock).
 
 ## When to Teach
 - Phase: C
@@ -38,7 +38,7 @@ Note: all forms except nosotros carry an accent mark.
 
 ### The 12 Irregular Stems
 
-Only 12 verbs have irregular future stems. The endings are always the same -- only the stem changes. These same 12 stems are reused in the conditional (C-04), so learning them here pays double.
+Only 12 verbs have irregular future stems. The endings are always the same — only the stem changes. These same 12 stems are reused in the conditional (C-04), so learning them here pays double.
 
 **Group 1: Drop the -e- from the infinitive**
 
@@ -86,28 +86,28 @@ The formal future also has a unique function: **probability in the present**.
 - **Estará enferma.** (She's probably sick.)
 - **Tendrá unos 30 años.** (He must be about 30.)
 
-This use has no equivalent structure in English -- it expresses a guess about what is happening right now using the future tense form.
+This use has no equivalent structure in English — it expresses a guess about what is happening right now using the future tense form.
 
 ## Examples in Context
 
-1. Mañana **lloverá** todo el día. (Tomorrow it will rain all day.) -- prediction
-2. Te **llamaré** cuando llegue. (I'll call you when I arrive.) -- promise
-3. El presidente **hablará** a las ocho. (The president will speak at eight.) -- formal plan
-4. **Serán** las tres de la tarde. (It's probably three in the afternoon.) -- present probability
-5. ¿Quién **será** esa persona? (Who could that person be?) -- present probability
-6. **Tendré** que estudiar más para el examen. (I'll have to study more for the exam.) -- irregular stem
-7. No **podremos** ir a la fiesta. (We won't be able to go to the party.) -- irregular stem
-8. ¿**Vendrás** a visitarme este verano? (Will you come visit me this summer?) -- irregular stem
-9. Algún día **viviré** en otro país. (Someday I will live in another country.) -- distant future
-10. Los científicos **dirán** los resultados mañana. (The scientists will announce the results tomorrow.) -- irregular stem
+1. Mañana **lloverá** todo el día. (Tomorrow it will rain all day.) — prediction
+2. Te **llamaré** cuando llegue. (I'll call you when I arrive.) — promise
+3. El presidente **hablará** a las ocho. (The president will speak at eight.) — formal plan
+4. **Serán** las tres de la tarde. (It's probably three in the afternoon.) — present probability
+5. ¿Quién **será** esa persona? (Who could that person be?) — present probability
+6. **Tendré** que estudiar más para el examen. (I'll have to study more for the exam.) — irregular stem
+7. No **podremos** ir a la fiesta. (We won't be able to go to the party.) — irregular stem
+8. ¿**Vendrás** a visitarme este verano? (Will you come visit me this summer?) — irregular stem
+9. Algún día **viviré** en otro país. (Someday I will live in another country.) — distant future
+10. Los científicos **dirán** los resultados mañana. (The scientists will announce the results tomorrow.) — irregular stem
 
 ## Common Errors
 
-1. **Using ir + a for predictions and formal contexts.** "Va a llover mañana" instead of "Lloverá mañana" in a written forecast. While ir + a is understood, the formal future is expected in news, academic writing, and formal speech. -- register awareness. Expose learner to news headlines and written predictions.
-2. **Wrong irregular stems.** "Teneré" instead of "tendré," "poneré" instead of "pondré," "haceré" instead of "haré." The irregularities must be memorized by group pattern. -- developmental. Drill by group (drop-e, vowel-to-d, shortened) rather than as isolated items.
-3. **Confusing future and conditional endings.** "Hablaría" (conditional) when "hablará" (future) was intended. The endings are similar in rhythm but different: -é/-ás/-á vs -ía/-ías/-ía. -- developmental. Practice both side by side after C-04 is introduced.
-4. **Using formal future for immediate plans.** "Comeré a las dos" sounds overly formal for a casual plan about lunch. Use "Voy a comer a las dos" in speech. -- register awareness. Reinforce the speech/writing split.
-5. **Missing the probability meaning.** When hearing "Serán las tres," interpreting it as "They will be three" rather than "It's probably three." The probability use is uniquely Spanish and needs explicit exposure. -- developmental. Drill probability sentences with context clues.
+1. **Using ir + a for predictions and formal contexts.** "Va a llover mañana" instead of "Lloverá mañana" in a written forecast. While ir + a is understood, the formal future is expected in news, academic writing, and formal speech. — register awareness. Expose learner to news headlines and written predictions.
+2. **Wrong irregular stems.** "Teneré" instead of "tendré," "poneré" instead of "pondré," "haceré" instead of "haré." The irregularities must be memorized by group pattern. — developmental. Drill by group (drop-e, vowel-to-d, shortened) rather than as isolated items.
+3. **Confusing future and conditional endings.** "Hablaría" (conditional) when "hablará" (future) was intended. The endings are similar in rhythm but different: -é/-ás/-á vs -ía/-ías/-ía. — developmental. Practice both side by side after C-04 is introduced.
+4. **Using formal future for immediate plans.** "Comeré a las dos" sounds overly formal for a casual plan about lunch. Use "Voy a comer a las dos" in speech. — register awareness. Reinforce the speech/writing split.
+5. **Missing the probability meaning.** When hearing "Serán las tres," interpreting it as "They will be three" rather than "It's probably three." The probability use is uniquely Spanish and needs explicit exposure. — developmental. Drill probability sentences with context clues.
 
 ## Teaching Sequence
 
@@ -139,7 +139,7 @@ Prompt: "What will the world be like in 50 years? Make predictions about technol
 Scaffold by providing sentence starters: "En 50 años, la tecnología...", "Las personas...", "El clima..." Gradually remove scaffolding and let the learner produce predictions freely. Listen for correct irregular stems and appropriate use of the formal future for speculative statements.
 
 ### Stage 4: Communicative Practice
-Debate: "Will AI replace teachers?" or "Will humans live on Mars?" The debate format naturally elicits predictions, probability, and speculation -- all ideal for the formal future. The learner must defend a position using future tense statements.
+Debate: "Will AI replace teachers?" or "Will humans live on Mars?" The debate format naturally elicits predictions, probability, and speculation — all ideal for the formal future. The learner must defend a position using future tense statements.
 
 Follow up with a probability guessing game: show photos of people or situations, and the learner guesses using the probability future: "Tendrá unos 25 años." / "Será profesora." / "Estará esperando a alguien."
 
@@ -160,7 +160,7 @@ See `curriculum/dialect-notes.yaml` for regional vocabulary preferences.
 - **Integrated:** Switches between ir + a (casual plans) and formal future (predictions, probability, formal contexts) appropriately. Maintains correct irregular stems when combining with object pronouns and complex sentence structures.
 
 ## Connection Points
-The formal future shares its 12 irregular stems with the conditional (C-04). Learning these stems here means C-04 only requires learning new endings, not new stems -- a significant cognitive advantage. Teach C-03 and C-04 in sequence to leverage this overlap.
+The formal future shares its 12 irregular stems with the conditional (C-04). Learning these stems here means C-04 only requires learning new endings, not new stems — a significant cognitive advantage. Teach C-03 and C-04 in sequence to leverage this overlap.
 
 - **C-04** (conditional) uses the same stems with different endings. Teach together to reinforce: tendré (future) vs tendría (conditional).
 - **C-06** (compound tenses) introduces the future perfect: habré + past participle ("Habré terminado para las cinco").

@@ -5,7 +5,7 @@ Idioms and humor are the final layer of communicative competence. They signal th
 
 ## When to Teach
 - Phase: C (requires solid B2 grammar foundation; premature idiom teaching creates stilted usage)
-- Prerequisites: Subjunctive basics (C-01), conditional (B-05), conversational rhythm, register shifting awareness
+- Prerequisites: Subjunctive basics (C-01), conditional (C-04), conversational rhythm, register shifting awareness
 - Enablers: Learner consuming Spanish media, having extended conversations, motivated to sound more natural
 
 ## Key Patterns
@@ -17,12 +17,12 @@ These appear in daily conversation constantly. A learner will hear them within t
 | Idiom | Literal meaning | Actual meaning | Example |
 |-------|----------------|----------------|---------|
 | No tiene nada que ver | It has nothing to see | It has nothing to do with it | Eso no tiene nada que ver con lo que dije. |
-| Echar de menos | To throw from less | To miss someone/something | Te echo mucho de menos. |
+| Echar de menos | To throw from less | To miss someone/something | Te echo mucho de menos. (Spain; Mexico: extrañar — Te extraño mucho.) |
 | Tener ganas de | To have desires of | To feel like doing something | Tengo ganas de ir a la playa. |
 | Dar igual | To give equal | To not matter | Me da igual dónde comemos. |
 | Caer bien/mal | To fall well/badly | To like/dislike someone | Me cae muy bien tu hermana. |
-| Pasarlo bien/mal | To pass it well/badly | To have a good/bad time | Lo pasamos genial en la fiesta. |
-| Quedar con alguien | To remain with someone | To meet up with someone | Quedé con Ana para tomar café. |
+| Pasarla/pasarlo bien/mal | To pass it well/badly | To have a good/bad time | La pasamos genial en la fiesta. (Mexico/LatAm: pasarla; Spain: pasarlo.) |
+| Quedar con alguien | To remain with someone | To meet up with someone | Quedé con Ana para tomar café. (Mexico often: quedar de + inf, or vernos.) |
 | Valer la pena | To be worth the pain | To be worth it | Vale la pena ver esa película. |
 | Hacer caso | To make case | To pay attention / obey | No me hagas caso, estoy bromeando. |
 | Tener razón | To have reason | To be right | Tienes toda la razón. |
@@ -91,8 +91,8 @@ Teach Tier 1 idioms explicitly. For each, provide: the literal meaning, the actu
 
 ### Stage 3: Guided Practice
 Scenario-based production: give the learner a situation and ask them to respond using an appropriate idiom.
-- "Your friend asks how the party was." → "Lo pasamos genial" or "Estuvo increíble."
-- "Someone suggests a bad restaurant." → "No vale la pena, la última vez lo pasé fatal."
+- "Your friend asks how the party was." → "La pasamos genial" or "Estuvo increíble."
+- "Someone suggests a bad restaurant." → "No vale la pena, la última vez la pasé fatal."
 - "Your friend is daydreaming." → "¡Estás en las nubes!"
 
 Idiom gap-fill in dialogues. Then role-play conversations where the learner must use 2-3 idioms naturally within a 5-minute exchange. Introduce light humor: have the learner try exaggeration ("¡Me muero de hambre!") and irony ("Qué bien, ¿no?" with flat tone).
@@ -115,4 +115,4 @@ During free conversation, note idiom usage and humor attempts. After the convers
 6. **Irony:** "¿Qué tal el examen?" — "Fenomenal. Solo me faltaban tres temas." (How was the exam? Phenomenal. I was only missing three topics.) — ironic, meaning it went badly
 
 ## Dialect Notes
-Many idioms are region-specific. "Mola" (cool) and "flipar" (to freak out) are Castilian. "Padre" and "chido" (cool) are Mexican. "Copado" and "piola" (cool) are Argentine. "Chévere" (cool) is Caribbean/Colombian. Always teach the target dialect's idioms first. When introducing idioms from other regions, label them clearly. Universal idioms (tener ganas de, valer la pena, echar de menos) should be prioritized because they work everywhere. See `curriculum/dialect-notes.yaml` for regional vocabulary.
+Many idioms are region-specific. "Mola" (cool) and "flipar" (to freak out) are Castilian. "Padre" and "chido" (cool) are Mexican. "Copado" and "piola" (cool) are Argentine. "Chévere" (cool) is Caribbean/Colombian. Always teach the target dialect's idioms first. When introducing idioms from other regions, label them clearly. Universal idioms (tener ganas de, valer la pena) should be prioritized because they work everywhere. A few Tier-1 entries are Peninsular defaults, not universal production models: for "to miss someone" Mexican production uses extrañar (Te extraño), while echar de menos is understood everywhere but Spain-leaning; and Mexico plus most of Latin America say pasarla bien (feminine la), not the Peninsular pasarlo bien. See `curriculum/dialect-notes.yaml` for regional vocabulary.

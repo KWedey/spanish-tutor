@@ -101,7 +101,7 @@
 - **Hedging in philosophical claims**: Spanish favors hedging when making claims: **podría ser que**, **es posible que**, **quizás**. Direct assertions of philosophical truth (**la verdad es que...**) sound more dogmatic in Spanish than in English.
 
 ## Pronunciation Alerts
-- **conciencia** — four syllables: con-CIEN-cia. The **cie** is one syllable (diphthong). Not con-ci-EN-cia.
+- **conciencia** — three syllables: con-CIEN-cia. The **cie** is one syllable (diphthong). Not con-ci-EN-cia.
 - **hipótesis** — stress on second syllable: hi-PÓ-te-sis. Written accent required. Invariable plural.
 - **razonamiento** — five syllables: ra-zo-na-MIEN-to. English speakers tend to stress the wrong syllable.
 - **ética** — stress on first syllable: É-ti-ca. Written accent required (esdrújula word).

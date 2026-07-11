@@ -24,8 +24,8 @@ Connectors that express opposition, contradiction, or unexpected outcomes.
 | **en cambio** | on the other hand, whereas (stronger contrast) | Tú estudias mucho. **En cambio**, yo no estudio nada. |
 
 **Aunque + indicative vs subjunctive:**
-- **Aunque llueve**, salgo. (Although it IS raining, I'm going out.) -- fact, indicative
-- **Aunque llueva**, saldre. (Even if it rains, I'll go out.) -- hypothetical, subjunctive
+- **Aunque llueve**, salgo. (Although it IS raining, I'm going out.) — fact, indicative
+- **Aunque llueva**, saldré. (Even if it rains, I'll go out.) — hypothetical, subjunctive
 
 This distinction is critical and connects directly to subjunctive mastery from C-01 and D-01.
 
@@ -42,7 +42,7 @@ Connectors that express reasons, causes, and consequences.
 | **debido a (que)** | due to | El vuelo se canceló **debido al** mal tiempo. / **Debido a que** llovía, cancelaron el vuelo. |
 | **ya que** / **puesto que** | since, given that | **Ya que** tienes tiempo, ayúdame. / **Puesto que** no respondió, lo llamé. |
 
-**De ahi que + subjunctive:** This connector always requires the subjunctive in the following clause. It is a formal way to express "that's why" or "hence."
+**De ahí que + subjunctive:** This connector always requires the subjunctive in the following clause. It is a formal way to express "that's why" or "hence."
 
 ### Category 3: Addition and Emphasis
 
@@ -75,7 +75,7 @@ Connectors that acknowledge a point while maintaining the main argument. Several
 
 ### Category 5: Sequence and Organization
 
-Connectors that structure discourse -- introducing points, ordering arguments, and concluding.
+Connectors that structure discourse — introducing points, ordering arguments, and concluding.
 
 | Connector | Usage | Example |
 |-----------|-------|---------|
@@ -83,9 +83,9 @@ Connectors that structure discourse -- introducing points, ordering arguments, a
 | **a continuación** | next, following | **A continuación**, presentaré los resultados. |
 | **por un lado... por otro (lado)** | on one hand... on the other | **Por un lado**, es barato. **Por otro lado**, es de mala calidad. |
 | **por último** | lastly, finally | **Por último**, quiero agradecer a todos. |
-| **en definitiva** | in short, ultimately | **En definitiva**, fue una buena decision. |
+| **en definitiva** | in short, ultimately | **En definitiva**, fue una buena decisión. |
 | **en resumen** | in summary | **En resumen**, necesitamos más tiempo y más recursos. |
-| **en conclusion** | in conclusion | **En conclusion**, los datos apoyan nuestra hipotesis. |
+| **en conclusión** | in conclusion | **En conclusión**, los datos apoyan nuestra hipótesis. |
 | **dicho de otro modo** | in other words | Es ambidiestro. **Dicho de otro modo**, usa las dos manos. |
 
 ### Summary: Connectors That Require Subjunctive
@@ -100,20 +100,20 @@ Connectors that structure discourse -- introducing points, ordering arguments, a
 
 ## Examples in Context
 
-1. El restaurante es caro. **Sin embargo**, la comida es excelente. (The restaurant is expensive. However, the food is excellent.) -- contrast
-2. Estudio español todos los días. **Además**, escucho podcasts en español. (I study Spanish every day. Moreover, I listen to podcasts in Spanish.) -- addition
-3. **A pesar de que** el examen fue difícil, todos aprobaron. (Despite the exam being difficult, everyone passed.) -- contrast
-4. No practiqué suficiente. **Por lo tanto**, no me fue bien. (I didn't practice enough. Therefore, it didn't go well for me.) -- result
-5. **Aunque llueva** mañana, iremos al parque. (Even if it rains tomorrow, we'll go to the park.) -- contrast, subjunctive
-6. **Ni siquiera** me miró cuando entré. (He didn't even look at me when I entered.) -- negative emphasis
-7. **En primer lugar**, necesitamos definir el problema. **A continuación**, buscaremos soluciones. (First, we need to define the problem. Next, we'll look for solutions.) -- sequence
-8. **Por más que** lo **intente**, no logro pronunciar la erre. (No matter how much I try, I can't pronounce the rolled R.) -- concession, subjunctive
-9. **Si bien** no es perfecto, es un buen comienzo. (Although it's not perfect, it's a good start.) -- concession
-10. **No solo** aprendió español, **sino también** se enamoró de la cultura mexicana. (She not only learned Spanish, but also fell in love with Mexican culture.) -- addition
+1. El restaurante es caro. **Sin embargo**, la comida es excelente. (The restaurant is expensive. However, the food is excellent.) — contrast
+2. Estudio español todos los días. **Además**, escucho podcasts en español. (I study Spanish every day. Moreover, I listen to podcasts in Spanish.) — addition
+3. **A pesar de que** el examen fue difícil, todos aprobaron. (Despite the exam being difficult, everyone passed.) — contrast
+4. No practiqué suficiente. **Por lo tanto**, no me fue bien. (I didn't practice enough. Therefore, it didn't go well for me.) — result
+5. **Aunque llueva** mañana, iremos al parque. (Even if it rains tomorrow, we'll go to the park.) — contrast, subjunctive
+6. **Ni siquiera** me miró cuando entré. (He didn't even look at me when I entered.) — negative emphasis
+7. **En primer lugar**, necesitamos definir el problema. **A continuación**, buscaremos soluciones. (First, we need to define the problem. Next, we'll look for solutions.) — sequence
+8. **Por más que** lo **intente**, no logro pronunciar la erre. (No matter how much I try, I can't pronounce the rolled R.) — concession, subjunctive
+9. **Si bien** no es perfecto, es un buen comienzo. (Although it's not perfect, it's a good start.) — concession
+10. **No solo** aprendió español, **sino también** se enamoró de la cultura mexicana. (She not only learned Spanish, but also fell in love with Mexican culture.) — addition
 
 ## L1 Interference
 
-**English has direct equivalents for most of these connectors.** The challenge is not conceptual but practical -- the learner must move beyond basic connectors (pero, porque, entonces) to the sophisticated alternatives that mark B2-C1 proficiency.
+**English has direct equivalents for most of these connectors.** The challenge is not conceptual but practical — the learner must move beyond basic connectors (pero, porque, entonces) to the sophisticated alternatives that mark B2-C1 proficiency.
 
 **Common L1-driven mistakes:**
 
@@ -125,15 +125,15 @@ Connectors that structure discourse -- introducing points, ordering arguments, a
 | Moreover... | Y también... | Además... / Es más... | "Y también" lacks the emphasis of "además" |
 | Even so... | Pero... | Con todo... / No obstante... | Nuanced concession, not simple opposition |
 
-**Preemption script:** "You already know 'pero,' 'porque,' and 'entonces.' Those are perfectly fine for everyday speech. But when you want to sound articulate -- in a debate, a presentation, or even a thoughtful conversation -- you need more precise tools. 'Sin embargo' instead of 'pero.' 'Por lo tanto' instead of 'entonces.' 'A pesar de que' instead of just 'pero.' These connectors are the difference between sounding conversational and sounding fluent."
+**Preemption script:** "You already know 'pero,' 'porque,' and 'entonces.' Those are perfectly fine for everyday speech. But when you want to sound articulate — in a debate, a presentation, or even a thoughtful conversation — you need more precise tools. 'Sin embargo' instead of 'pero.' 'Por lo tanto' instead of 'entonces.' 'A pesar de que' instead of just 'pero.' These connectors are the difference between sounding conversational and sounding fluent."
 
 ## Common Errors
 
-1. **Overusing "pero" for all contrast.** The learner uses "pero" where "sin embargo," "no obstante," or "a pesar de que" would be more precise and appropriate. -- avoidance / L1 interference. Specifically practice substituting "pero" with the correct nuanced connector.
-2. **Forgetting subjunctive after connectors that require it.** "De ahí que no sale" instead of "De ahí que no salga." "Por más que intenta" instead of "Por más que intente." -- developmental. Drill the subjunctive-requiring connectors as a group.
-3. **Wrong connector for the logical relationship.** "Sin embargo, estudié mucho" (however, I studied a lot) when the meaning is "además, estudié mucho" (moreover, I studied a lot). The learner confuses contrast with addition. -- developmental. Practice categorizing connectors by function.
-4. **Using connectors in unnatural positions.** "Viajaria sin embargo no tengo dinero" -- placing connectors mid-sentence where they don't belong. Most advanced connectors work as sentence openers or after a period/semicolon. -- developmental. Teach standard connector placement.
-5. **Mixing "aunque + indicative" and "aunque + subjunctive" incorrectly.** "Aunque llueva, no salgo" (even if it rains -- hypothetical) when the learner means "Aunque llueve, no salgo" (although it is raining -- fact). The subjunctive changes the meaning. -- developmental. Drill the contrast with clear contexts.
+1. **Overusing "pero" for all contrast.** The learner uses "pero" where "sin embargo," "no obstante," or "a pesar de que" would be more precise and appropriate. — avoidance / L1 interference. Specifically practice substituting "pero" with the correct nuanced connector.
+2. **Forgetting subjunctive after connectors that require it.** "De ahí que no sale" instead of "De ahí que no salga." "Por más que intenta" instead of "Por más que intente." — developmental. Drill the subjunctive-requiring connectors as a group.
+3. **Wrong connector for the logical relationship.** "Sin embargo, estudié mucho" (however, I studied a lot) when the meaning is "además, estudié mucho" (moreover, I studied a lot). The learner confuses contrast with addition. — developmental. Practice categorizing connectors by function.
+4. **Using connectors in unnatural positions.** "Viajaría sin embargo no tengo dinero" — placing connectors mid-sentence where they don't belong. Most advanced connectors work as sentence openers or after a period/semicolon. — developmental. Teach standard connector placement.
+5. **Mixing "aunque + indicative" and "aunque + subjunctive" incorrectly.** "Aunque llueva, no salgo" (even if it rains — hypothetical) when the learner means "Aunque llueve, no salgo" (although it is raining — fact). The subjunctive changes the meaning. — developmental. Drill the contrast with clear contexts.
 
 ## Teaching Sequence
 
@@ -155,7 +155,7 @@ Sentence combination drill: give two simple sentences, learner combines them usi
 6. "No me llamó. No me escribió." + ni siquiera --> "No me llamó. Ni siquiera me escribió."
 
 ### Stage 3: Guided Production
-Prompt: "Give me your opinion on a topic you care about -- education, technology, the environment, anything. Structure your argument: make your first point (en primer lugar), add supporting evidence (además, es más), acknowledge the other side (sin embargo, si bien), and conclude (en definitiva, por lo tanto)."
+Prompt: "Give me your opinion on a topic you care about — education, technology, the environment, anything. Structure your argument: make your first point (en primer lugar), add supporting evidence (además, es más), acknowledge the other side (sin embargo, si bien), and conclude (en definitiva, por lo tanto)."
 
 Scaffold by providing the connector skeleton: "En primer lugar, ___. Además, ___. Sin embargo, ___. Por lo tanto, ___." Then remove the scaffold and ask the learner to structure a second argument independently.
 
@@ -164,7 +164,7 @@ Debate format: "I'm going to take the opposite position from you on a topic. We'
 
 Topics that naturally require argumentation: "Is social media good or bad for society?" / "Should university education be free?" / "Is it better to live in a big city or a small town?"
 
-This requires using connectors under conversational pressure -- the real test of whether they have been internalized beyond drills.
+This requires using connectors under conversational pressure — the real test of whether they have been internalized beyond drills.
 
 ## Dialect Notes
 Connectors are largely universal across Spanish dialects. The formal connectors (no obstante, por consiguiente, asimismo) are used in written and formal speech across all regions.
@@ -174,7 +174,7 @@ Usage notes:
 - "Aunque" (with both indicative and subjunctive) is extremely high-frequency across all dialects and registers. It is the most versatile contrast connector.
 - "A pesar de que" is used across all dialects. In speech, the shortened "a pesar de" + noun is more common than the full clause.
 - "O sea" (that is, I mean) is a very common informal connector in Mexican Spanish that functions as "in other words" or a hedging device. It is not listed above because it is conversational rather than formal, but it should be recognized.
-- "De ahi que" + subjunctive is primarily found in formal or literary contexts across all dialects.
+- "De ahí que" + subjunctive is primarily found in formal or literary contexts across all dialects.
 
 See `curriculum/dialect-notes.yaml` for regional vocabulary preferences.
 
@@ -188,8 +188,8 @@ Connectors elevate every other grammatical structure by enabling complex sentenc
 
 - **C-01 and D-01** (present and past subjunctive) are required for connectors that trigger subjunctive: aunque (hypothetical), de ahí que, aun cuando, por más que. Connector mastery reinforces subjunctive automaticity.
 - **C-07** (relative clauses) works alongside connectors to build complex sentences. A relative clause (que, quien, donde) provides detail; a connector provides structure.
-- **D-04** (passive voice) combines with connectors in formal writing: "La ley fue aprobada. Sin embargo, no todos estan de acuerdo."
-- **D-05** (register shifting) intersects heavily. Advanced connectors are themselves register markers -- using "no obstante" instead of "pero" signals formal register. The choice of connector IS a register choice.
+- **D-04** (passive voice) combines with connectors in formal writing: "La ley fue aprobada. Sin embargo, no todos están de acuerdo."
+- **D-05** (register shifting) intersects heavily. Advanced connectors are themselves register markers — using "no obstante" instead of "pero" signals formal register. The choice of connector IS a register choice.
 - **Vocabulary: storytelling-narration** (tier 3) shares some connectors (al principio, de repente, mientras tanto) at a lower level. This concept builds on that narrative toolkit with more sophisticated alternatives.
 
 Common regression trigger: under conversational pressure, the learner reverts to basic connectors. This is normal and expected. The goal is not to eliminate basic connectors but to expand the repertoire so that advanced connectors are available when register and context demand them.

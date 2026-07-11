@@ -1,7 +1,7 @@
 # Present Subjunctive — A New Mood
 
 ## Overview
-The subjunctive is not a tense -- it is an entirely new **mood**. While indicative states facts about reality, subjunctive expresses desires, doubts, emotions, and unreality. This is the B2 gateway concept: everything in Phase C and D builds on it. Mastering the forms here enables the trigger system in C-02 and unlocks all advanced subjunctive work.
+The subjunctive is not a tense — it is an entirely new **mood**. While indicative states facts about reality, subjunctive expresses desires, doubts, emotions, and unreality. This is the B2 gateway concept: everything in Phase C and D builds on it. Mastering the forms here enables the trigger system in C-02 and unlocks all advanced subjunctive work.
 
 ## When to Teach
 - Phase: C
@@ -103,9 +103,9 @@ The subjunctive appears after expressions of:
 
 ## L1 Interference
 
-**English habit:** English rarely uses the subjunctive. Where Spanish says "Quiero que **vengas**," English says "I want you **to come**" -- no mood change, no special verb form. Your instinct will be to use indicative everywhere. The subjunctive isn't optional -- it's required in specific contexts, and using indicative sounds wrong to native speakers.
+**English habit:** English rarely uses the subjunctive. Where Spanish says "Quiero que **vengas**," English says "I want you **to come**" — no mood change, no special verb form. Your instinct will be to use indicative everywhere. The subjunctive isn't optional — it's required in specific contexts, and using indicative sounds wrong to native speakers.
 
-**The core problem:** English speakers process "I want you to come" as a simple statement and reach for the indicative "vienes." They must learn that the "que" clause after a trigger demands a different verb form -- the subjunctive.
+**The core problem:** English speakers process "I want you to come" as a simple statement and reach for the indicative "vienes." They must learn that the "que" clause after a trigger demands a different verb form — the subjunctive.
 
 **Common L1-driven mistakes:**
 
@@ -116,15 +116,15 @@ The subjunctive appears after expressions of:
 | It's important that he studies. | Es importante que **estudia**. | Es importante que **estudie**. | Impersonal + que = subjunctive |
 | I doubt she knows. | Dudo que **sabe**. | Dudo que **sepa**. | Doubt + que = subjunctive (irregular) |
 
-**Preemption script:** "Everything you've learned so far has been in the indicative mood -- stating facts, describing reality. Now we're entering a completely different territory. The subjunctive is a new mood, and it's used when you're talking about things that aren't facts yet -- wishes, doubts, emotions, possibilities. English barely has a subjunctive, so your brain will want to use the regular indicative forms. That's totally normal. The key is recognizing the trigger words -- quiero que, espero que, dudo que -- and switching to the 'opposite vowel' form. We'll drill this until it becomes automatic."
+**Preemption script:** "Everything you've learned so far has been in the indicative mood — stating facts, describing reality. Now we're entering a completely different territory. The subjunctive is a new mood, and it's used when you're talking about things that aren't facts yet — wishes, doubts, emotions, possibilities. English barely has a subjunctive, so your brain will want to use the regular indicative forms. That's totally normal. The key is recognizing the trigger words — quiero que, espero que, dudo que — and switching to the 'opposite vowel' form. We'll drill this until it becomes automatic."
 
 ## Common Errors
 
-1. **Using indicative after subjunctive triggers.** "Quiero que vienes" instead of "Quiero que vengas." The single most common error. Every trigger expression + que demands the subjunctive. -- L1 interference. Drill trigger + subjunctive pairs until the pattern is automatic.
-2. **Wrong "opposite vowel" direction.** "Quiero que habla" (no change) or "Quiero que comer" (infinitive instead of subjunctive). The learner knows a change is needed but applies it incorrectly. -- developmental. Reinforce: -ar→-e, -er/-ir→-a.
-3. **Irregular form errors.** "Quiero que saba" (wrong stem for saber) or "Es importante que va" (missing irregular stem for ir). The DISHES irregulars must be memorized. -- developmental. Drill the six irregulars explicitly.
-4. **Forgetting the nosotros stem change for -ir verbs.** "Quiere que sentamos" instead of "Quiere que sintamos." The nosotros -ir change (e→i, o→u) is easy to miss. -- developmental. Highlight this as a special case during conjugation drills.
-5. **Using subjunctive in the main clause.** "Quiera que vengas" instead of "Quiero que vengas." Only the subordinate clause (after que) takes the subjunctive. The main clause stays indicative. -- overgeneralization. Clarify the two-clause structure.
+1. **Using indicative after subjunctive triggers.** "Quiero que vienes" instead of "Quiero que vengas." The single most common error. Every trigger expression + que demands the subjunctive. — L1 interference. Drill trigger + subjunctive pairs until the pattern is automatic.
+2. **Wrong "opposite vowel" direction.** "Quiero que habla" (no change) or "Quiero que comer" (infinitive instead of subjunctive). The learner knows a change is needed but applies it incorrectly. — developmental. Reinforce: -ar→-e, -er/-ir→-a.
+3. **Irregular form errors.** "Quiero que saba" (wrong stem for saber) or "Es importante que va" (missing irregular stem for ir). The DISHES irregulars must be memorized. — developmental. Drill the six irregulars explicitly.
+4. **Forgetting the nosotros stem change for -ir verbs.** "Quiere que sentamos" instead of "Quiere que sintamos." The nosotros -ir change (e→i, o→u) is easy to miss. — developmental. Highlight this as a special case during conjugation drills.
+5. **Using subjunctive in the main clause.** "Quiera que vengas" instead of "Quiero que vengas." Only the subordinate clause (after que) takes the subjunctive. The main clause stays indicative. — overgeneralization. Clarify the two-clause structure.
 
 ## Teaching Sequence
 
@@ -135,7 +135,7 @@ Present indicative/subjunctive sentence pairs side by side. Ask the learner what
 - "Tú comes mucho." vs "Es importante que tú comas bien."
 - "Él va al mercado." vs "Necesito que él vaya al mercado."
 
-Guide the learner to notice: (1) the second sentence has a trigger + que, (2) the verb form changes, (3) the vowel seems to flip. Don't explain the full rule yet -- let them articulate what they see.
+Guide the learner to notice: (1) the second sentence has a trigger + que, (2) the verb form changes, (3) the vowel seems to flip. Don't explain the full rule yet — let them articulate what they see.
 
 ### Stage 2: Controlled Practice
 Conjugation drill: give the infinitive and subject, learner produces the subjunctive form. Start with regulars, add stem-changers, then irregulars.
@@ -154,7 +154,7 @@ Then frame them in sentences: "Quiero que [tú / hablar más]" → "Quiero que h
 ### Stage 3: Guided Production
 Prompt: "Tell me what you want other people to do. Your boss, your family, your friends. Use 'Quiero que...' or 'Necesito que...' or 'Espero que...'"
 
-Listen for correct subjunctive forms. Scaffold by providing the trigger phrase if needed, then gradually remove the scaffold. If the learner uses indicative after que, recast: "Quiero que vienes? -- Quiero que vengas. Right, after 'quiero que' we use the subjunctive."
+Listen for correct subjunctive forms. Scaffold by providing the trigger phrase if needed, then gradually remove the scaffold. If the learner uses indicative after que, recast: "Quiero que vienes? — Quiero que vengas. Right, after 'quiero que' we use the subjunctive."
 
 ### Stage 4: Communicative Practice
 Prompt: "Give me advice about learning Spanish. What's important? What do you recommend? Use phrases like 'Es importante que...', 'Recomiendo que...', 'Es mejor que...'"
@@ -166,7 +166,7 @@ The present subjunctive forms are universal across all Spanish dialects. There a
 
 The vosotros forms (habléis, comáis) are Spain-specific. Latin American Spanish uses ustedes forms exclusively, which simplifies the paradigm by one row.
 
-In Mexican Spanish, "ojalá" is extremely common and always triggers subjunctive -- a high-frequency entry point for practice.
+In Mexican Spanish, "ojalá" is extremely common and always triggers subjunctive — a high-frequency entry point for practice.
 
 See `curriculum/dialect-notes.yaml` for regional vocabulary preferences.
 
