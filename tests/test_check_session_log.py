@@ -231,6 +231,70 @@ class TestFirstSession:
         assert result == 0, "first-session log with all fields should PASS"
 
 
+def _make_micro_log() -> dict:
+    """A micro log shaped exactly like docs/system-design.md § Micro Session
+    Log Schema — no session_activities, learner_observations, or
+    skill_map_updates (the recording policy omits them)."""
+    return {
+        "date": "2026-04-15",
+        "session_number": 7,
+        "duration_minutes": 12,
+        "session_type": "micro",
+        "session_status": "complete",
+        "learner_energy": "low",
+        "activity_summary": "Quick ser/estar review over coffee",
+        "concepts_practiced": ["A-02"],
+        "errors_noted": [
+            {"error": "estoy profesor", "correction": "soy profesor", "concept": "A-02"},
+        ],
+        "assignments": [
+            {"task": "Anki review", "resource": "Anki", "estimated_minutes": 10},
+        ],
+        "next_session": {"recommended_focus": "A-02 consolidation", "reason": "recast uptake shaky"},
+    }
+
+
+class TestMicroSession:
+    """Micro logs follow the ABBREVIATED schema. Regression for the review
+    finding that MICRO_EXPECTED inherited BASE_EXPECTED and demanded exactly
+    the fields the micro recording policy omits, aborting post-session.sh on
+    every documented-shape micro log."""
+
+    def test_micro_expected_matches_abbreviated_schema(self):
+        expected = EXPECTED_BY_TYPE["micro"]
+        for banned in (
+            "session_activities",
+            "learner_observations.mood",
+            "learner_observations.engagement",
+            "skill_map_updates",
+        ):
+            assert banned not in expected, (
+                f"micro recording policy omits '{banned}' — requiring it "
+                f"contradicts docs/system-design.md § Micro session recording policy"
+            )
+        for field in ("activity_summary", "concepts_practiced",
+                      "next_session.recommended_focus"):
+            assert field in expected
+
+    def test_doc_shaped_micro_log_passes(self, tmp_path, monkeypatch):
+        state_dir = tmp_path / "state"
+        monkeypatch.setattr(check_mod, "STATE_DIR", state_dir)
+        monkeypatch.setattr(check_mod, "ROOT", tmp_path)
+        _write_session_log(state_dir, "2026-04-15", _make_micro_log())
+        result = check_log("2026-04-15", strict=False)
+        assert result == 0, "documented-shape micro log must PASS check_log"
+
+    def test_micro_log_missing_activity_summary_fails(self, tmp_path, monkeypatch):
+        state_dir = tmp_path / "state"
+        monkeypatch.setattr(check_mod, "STATE_DIR", state_dir)
+        monkeypatch.setattr(check_mod, "ROOT", tmp_path)
+        log = _make_micro_log()
+        del log["activity_summary"]
+        _write_session_log(state_dir, "2026-04-15", log)
+        result = check_log("2026-04-15", strict=False)
+        assert result == 1, "micro log missing activity_summary should FAIL"
+
+
 class TestOnboarding:
     """ENFORCE-03: onboarding type must be recognized with correct expected fields."""
 

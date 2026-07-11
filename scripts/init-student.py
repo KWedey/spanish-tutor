@@ -218,12 +218,15 @@ def _dir_has_file(root, rel_path: str, suffix: str | None = None) -> bool:
     return False
 
 
-def has_existing_learner_data(root) -> bool:
+def has_existing_learner_data(root, state_dir=None) -> bool:
     """Detect whether the repo already holds real learner data.
 
     Canonical detector for the whole toolchain: setup.py's has_existing_state()
     delegates here so the two scripts can never disagree about what counts as
-    real data (init-student is the one that actually wipes it on reset). Returns
+    real data (init-student is the one that actually wipes it on reset).
+    `state_dir` overrides where the state tree lives (defaults to root/state);
+    callers that write to a redirected STATE_DIR must pass it so the guard
+    inspects the same directory the writer targets. Returns
     True on any of:
       - A session log in state/sessions/
       - A journal entry in journal/
@@ -243,20 +246,22 @@ def has_existing_learner_data(root) -> bool:
     last, failing safe (return True) on a corrupt-but-present file so --force
     never clobbers a recoverable one.
     """
+    state_dir = Path(state_dir) if state_dir is not None else root / "state"
+
     # Directory-level checks — no file content read.
-    if _dir_has_file(root, "state/sessions", ".yaml"):
+    if _dir_has_file(state_dir, "sessions", ".yaml"):
         return True
     if _dir_has_file(root, "journal", ".md"):
         return True
-    if _dir_has_file(root, "state/sessions/archive", ".yaml"):
+    if _dir_has_file(state_dir, "sessions/archive", ".yaml"):
         return True
-    if _dir_has_file(root, "state/summaries", ".yaml"):
+    if _dir_has_file(state_dir, "summaries", ".yaml"):
         return True
-    if _dir_has_file(root, "state/milestones", ".yaml"):
+    if _dir_has_file(state_dir, "milestones", ".yaml"):
         return True
     if _dir_has_file(root, "progress-reports", ".md"):
         return True
-    if _dir_has_file(root, "state/offline-guides"):
+    if _dir_has_file(state_dir, "offline-guides"):
         return True
 
     # Parking lot: compare against pristine template. rstrip so a trailing
@@ -273,7 +278,7 @@ def has_existing_learner_data(root) -> bool:
     # present state) must read as "state present" (return True), NOT swallowed
     # into the fall-through `return False`; otherwise --force WIPES a recoverable
     # file. Narrow the except to the parse/IO errors we expect and fail safe.
-    profile_path = root / "state" / "learner-profile.yaml"
+    profile_path = state_dir / "learner-profile.yaml"
     if profile_path.exists():
         try:
             data = yaml.safe_load(profile_path.read_text(encoding="utf-8")) or {}
@@ -287,7 +292,7 @@ def has_existing_learner_data(root) -> bool:
     # Resource tracker: any populated `resources` list counts as user data.
     # The pristine template has `resources: []`; --force would wipe anything
     # the learner added.
-    rt_path = root / "state" / "resource-tracker.yaml"
+    rt_path = state_dir / "resource-tracker.yaml"
     if rt_path.exists():
         try:
             data = yaml.safe_load(rt_path.read_text(encoding="utf-8")) or {}
@@ -693,7 +698,7 @@ def run_demo(force: bool) -> int:
     state_dir = STATE_DIR
     root = STATE_DIR.parent
 
-    if has_existing_learner_data(root):
+    if has_existing_learner_data(root, state_dir=state_dir):
         if not force:
             print(red(
                 f"Existing learner data detected under {root} — refusing to "

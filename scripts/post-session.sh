@@ -59,7 +59,7 @@ while [[ $# -gt 0 ]]; do
             fi
             SUMMARY="$2"; shift 2 ;;
         -h|--help)
-            echo "Usage: $0 [--dry-run] [--no-commit] YYYY-MM-DD"
+            echo "Usage: $0 [--dry-run] [--no-commit] [--summary TEXT] YYYY-MM-DD"
             echo ""
             echo "Automates post-session mechanical steps:"
             echo "  1. Generate/update vault content"
@@ -99,7 +99,7 @@ done
 
 if [[ -z "$DATE" ]]; then
     error "Missing required date argument (YYYY-MM-DD)"
-    echo "Usage: $0 [--dry-run] [--no-commit] YYYY-MM-DD"
+    echo "Usage: $0 [--dry-run] [--no-commit] [--summary TEXT] YYYY-MM-DD"
     exit 1
 fi
 

@@ -415,6 +415,27 @@ class TestDemoSeed:
         # The guard aborted before writing any demo state.
         assert not (state_dir / "learner-profile.yaml").exists()
 
+    def test_demo_overwrite_guard_with_non_state_named_dir(self, tmp_path, monkeypatch):
+        """Regression: the guard must inspect the SAME directory the seed writes
+        to. With TUTOR_STATE_DIR pointing at a dir not named 'state', the old
+        STATE_DIR.parent/state reconstruction checked an empty location and
+        silently clobbered real learner data."""
+        state_dir = tmp_path / "mystate"
+        (state_dir / "sessions").mkdir(parents=True)
+        (state_dir / "learner-profile.yaml").write_text(
+            "name: Real Learner\n", encoding="utf-8"
+        )
+        (state_dir / "sessions" / "2026-07-01.yaml").write_text(
+            "date: '2026-07-01'\n", encoding="utf-8"
+        )
+        monkeypatch.setattr(init_mod, "STATE_DIR", state_dir)
+
+        rc = init_mod.run_demo(force=False)
+        assert rc == 1
+        # Real data untouched.
+        profile = (state_dir / "learner-profile.yaml").read_text(encoding="utf-8")
+        assert "Real Learner" in profile
+
     def test_plain_learner_profile_template_is_blank(self):
         """Plain (non-demo) template generation is unchanged: the demo constants
         never leak into the blank templates."""

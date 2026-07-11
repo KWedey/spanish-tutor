@@ -164,19 +164,19 @@ Classify all errors as: developmental, L1 interference, fossilized, or slip. Pri
 7. Update `state/learner-profile.yaml` only if something fundamental changed.
 8. If session was interrupted, set `session_status: partial` in the session log.
 9. Update `last_session_date` in `state/schedule.yaml` to today's date (only after session log is written and partial status is set if applicable).
-10. During weekly review: write summary to `state/summaries/YYYY-WNN.yaml` (schema in `docs/system-design.md`, enforced by `schemas/*.schema.yaml` as the machine-enforced source of truth). **Maintenance-mode exception:** in maintenance mode, summaries are written monthly (not every weekly_review_day) per `maintenance-mode.md` — skip this step on weekly review days that fall mid-month.
+10. During weekly review: write summary to `state/summaries/YYYY-WNN.yaml` (schema in `docs/system-design.md` § 6 — summaries have no machine-enforced schema file; follow the doc exactly). **Maintenance-mode exception:** in maintenance mode, summaries are written monthly (not every weekly_review_day) per `maintenance-mode.md` — skip this step on weekly review days that fall mid-month.
 11. During weekly review: write progress report to `progress-reports/YYYY-WNN.md` (human-readable, following the canonical structure in `docs/progress-report-template.md`).
-12. Generate/update vault content (run `python3 scripts/generate-vault.py --session --date YYYY-MM-DD` — this handles frontmatter and Roadmap automatically. Then manually write):
+12. Generate/update vault content (`post-session.sh` runs `python3 scripts/generate-vault.py --session --date YYYY-MM-DD` automatically at its Step 1 — invoke it manually only if the script is unavailable. It handles frontmatter and Roadmap. Then manually write):
     a. Generate/update today's daily note in `vault/Daily/`
     b. During weekly review: append to `vault/Progress/Weekly Reports.md`
     c. On milestone: update `vault/Progress/Milestones.md`
 13. Include `vault/` files in session commit (if tracked by git; skip if gitignored).
 14. Session-log archiving (logs older than 60 days → `state/sessions/archive/`) runs automatically each session via `post-session.sh` Step 2 (archive-sessions.py) — no manual weekly-review action is required.
-15. Run: `python3 scripts/validate-state.py`
+15. Run: `python3 scripts/validate-state.py` (`post-session.sh` runs this automatically at its Step 3 — run it manually only if the script is unavailable)
 16. Verify `state/sessions/YYYY-MM-DD.yaml` exists and is well-formed.
 17. If validation fails or session log missing: fix before committing.
 18. Save the full session conversation to `transcripts/YYYY-MM-DD.md`.
-19. Commit state changes: `session YYYY-MM-DD: [brief summary]` — if state files are gitignored (shared setup), skip the commit; state is persisted on disk.
+19. Commit state changes: `session YYYY-MM-DD: [brief summary]` (`post-session.sh` commits automatically at its Step 6 — pass the summary via `--summary TEXT`; commit manually only if the script is unavailable). If state files are gitignored (shared setup), skip the commit; state is persisted on disk.
 
 ## Guardrails
 

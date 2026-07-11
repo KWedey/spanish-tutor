@@ -461,6 +461,26 @@ class TestApplyOperationTransform:
         with pytest.raises(KeyError):
             apply_operation({}, {"op": "transform", "file": "f", "fn": "nope"}, dry_run=False)
 
+    def test_dry_run_chain_previews_post_transform_shape(self, monkeypatch):
+        """A dry-run transform threads its (copied) output to later ops in the
+        chain, so e.g. a remove of a transform-created field previews correctly
+        while the caller's original data stays untouched."""
+        def add_flag(d: dict) -> dict:
+            d["flag"] = True
+            return d
+
+        monkeypatch.setattr(migrate_mod, "TRANSFORMS", {"add_flag": add_flag})
+        data = {"count": 3}
+        t_op = {"op": "transform", "file": "f", "fn": "add_flag"}
+        r_op = {"op": "remove", "file": "f", "path": "flag"}
+
+        threaded, changes1 = apply_operation(data, t_op, dry_run=True)
+        _, changes2 = apply_operation(threaded, r_op, dry_run=True)
+
+        assert changes1 == ["* transform add_flag"]
+        assert changes2 == ["- flag"], "dry-run must preview against post-transform shape"
+        assert data == {"count": 3}  # caller's original untouched
+
 
 class TestApplyOperationUnknown:
     def test_unknown_op_raises(self):

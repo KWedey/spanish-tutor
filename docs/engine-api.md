@@ -91,16 +91,18 @@ fluency > standard) and the row-level overrides.
 
 Specified by: `curriculum/decision-weights.yaml` (numbers) + `curriculum/tutor-guides/decision-engine.md`
 Steps 1-3 (semantics). `context` carries today's energy/motivation/parking-lot/sprint inputs.
-Output: ranked `[{concept_id, priority, dimensions: {need, gap, decay_adjusted, topic_boost,
-interest, variety_penalty}}]` — exactly the shape the session log's `decision_engine_trace`
-records, so the trace is the oracle for porting this function.
+Output: a ranked list carrying the same dimensions the session log's `decision_engine_trace`
+records — per `schemas/session-log.schema.yaml` the per-candidate trace shape is flat:
+`{id, NEED, GAP, DECAY, TOPIC, INTEREST, VARIETY, TOTAL}` (DECAY is the durability-adjusted
+value; TOTAL is the priority). Real session logs' traces are the conformance oracle for
+porting this function.
 
 ### 4. `select_focus(scored, skill_map) -> {primary, secondary, interleaved[]}`
 
 Specified by: decision-engine.md Steps 4-5b + `decision-weights.yaml` `selection`,
 `concurrent_concept_gate`, and `interleaving` blocks.
 
-### 5. `error_correction_mode(stage, phase) -> {mode, frequency, explicit_cap}`
+### 5. `error_correction_mode(stage, phase) -> {mode, timing, explicit_cap}`
 
 Specified by: `curriculum/error-correction-matrix.yaml` (extracted from
 `curriculum/activities/error-correction.md`, the pedagogical source of truth).
@@ -132,10 +134,13 @@ correction-mode consistency. FAIL aborts the post-session pipeline before persis
 
 ### 10. `derive_metrics(state, session_log) -> state'`
 
-Reference implementations: `scripts/recompute-metrics.py` (rolling error rates,
-regression_session_count), `scripts/update-fluency-tracking.py` (week-aware fluency-day
-counters), post-session recast aggregation (post-session.sh Step 5b). These are deterministic
-derivations the LLM must never hand-compute; a port runs them after every session commit.
+Reference implementations: `scripts/recompute-metrics.py` (regression_session_count,
+reteach totals, 30-day difficulty-rating counts), `scripts/update-fluency-tracking.py`
+(week-aware fluency-day counters), post-session recast aggregation (post-session.sh Step 5b).
+These are deterministic derivations the LLM must never hand-compute; a port runs them after
+every session commit. Note the boundary: per-concept `error_rate_drills`/`error_rate_production`
+are NOT derived here — they are tutor-judged skill-map fields the LLM writes during State
+Updates (CLAUDE.md step 2), on the conversational side of the boundary.
 
 ### 11. `view_model(state, manifest) -> ViewModel`
 
@@ -161,7 +166,14 @@ splits into:
 - [ ] Implement StateStore on the target backend; run migrate chain on load
 - [ ] Port engine functions 1-11 (route_session first — reference implementation exists);
       use the pytest suite's cases as the conformance oracle
-- [ ] Ship `schemas/json/` (JSON Schema exports) for client-side validation/typegen
+- [ ] Ship `schemas/json/` (JSON Schema exports) for client-side validation/typegen.
+      Two shape caveats: `skill-map.schema.json` describes per-entry *templates*
+      (`*_entry_template`), not the assembled file — apply the matching template
+      subschema to each entry under `grammar`/`vocabulary`/etc. rather than validating
+      the whole document; and micro sessions use the abbreviated log shape
+      (`activity_summary` + `concepts_practiced`, no `session_activities`/
+      `learner_observations`/`skill_map_updates` — see docs/system-design.md
+      § Micro Session Log Schema), which the full session-log schema does not model
 - [ ] Bundle curriculum data (`curriculum/manifest.yaml` + data banks + content .md) as a
       versioned content package
 - [ ] Split the prompt per the boundary above; wire LLM transport

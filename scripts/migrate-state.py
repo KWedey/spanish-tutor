@@ -157,8 +157,11 @@ def apply_operation(data: dict, op: dict, dry_run: bool) -> tuple[dict, list[str
         before = copy.deepcopy(data)
         result = fn(copy.deepcopy(data)) if dry_run else fn(data)
         changed = result != before
-        applied = data if dry_run else result
-        return applied, ([f"* transform {fn_name}"] if changed else [])
+        # Thread the transformed document through even in dry-run (it is a
+        # deep copy, never written to disk) so later ops in the same file's
+        # chain preview against the post-transform shape — otherwise dry-run
+        # under-reports ops that depend on a transform's output.
+        return result, ([f"* transform {fn_name}"] if changed else [])
 
     raise ValueError(f"unknown migration op: {kind!r}")
 

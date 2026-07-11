@@ -86,8 +86,23 @@ RETURN_EXPECTED = BASE_EXPECTED + [
     "next_session.recommended_focus",
 ]
 
-MICRO_EXPECTED = BASE_EXPECTED + [
-    "skill_map_updates",
+# Micro sessions use the ABBREVIATED log schema (docs/system-design.md
+# § Micro Session Log Schema): `activity_summary` + `concepts_practiced`
+# replace `session_activities`, and the recording policy explicitly OMITS
+# `skill_map_updates` and `learner_observations` (applied at the next full
+# session instead). Deliberately NOT built from BASE_EXPECTED — inheriting it
+# required the exact fields the micro policy omits, aborting post-session.sh
+# on every documented-shape micro log.
+MICRO_EXPECTED = [
+    "date",
+    "session_number",
+    "duration_minutes",
+    "session_type",
+    "session_status",
+    "learner_energy",
+    "activity_summary",
+    "concepts_practiced",
+    "next_session.recommended_focus",
 ]
 
 FIRST_SESSION_EXPECTED = BASE_EXPECTED + [
