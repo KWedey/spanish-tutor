@@ -1,8 +1,0 @@
-# Null study_time_budget but learner has run sessions → plan 05-02 check_study_time_budget_consistency must FAIL
-current_phase: A
-phase_balance: consolidation
-last_session_date: "2026-04-21"
-weekly_review_day: sunday
-sprint:
-  active: false
-study_time_budget: null

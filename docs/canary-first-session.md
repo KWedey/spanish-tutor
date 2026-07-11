@@ -1,5 +1,7 @@
 # Canary: First Real Tutoring Session
 
+> **Audience: developers / the implementer running the first end-to-end QA pass.** This is a one-shot infrastructure QA protocol, not learner-facing material. If you are the learner, see [STUDENT-GUIDE.md](../STUDENT-GUIDE.md).
+
 **Purpose:** v1.1 audit-fix shipped 2026-05-13. Phases 1-7 (38 plans, 622 tests passing,
 all validate-state checks green) are infrastructure that has never run end-to-end against a real
 tutoring session. The first session is a canary — its job is to exercise every code
