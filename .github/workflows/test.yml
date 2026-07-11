@@ -24,6 +24,13 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements-dev.txt
 
+      - name: Lint (ruff)
+        # Enforce the [tool.ruff.lint] config in pyproject.toml, which claims to be
+        # "repeatable in CI". ruff auto-excludes gitignored dirs (.venv etc.), so
+        # `.` covers only the project's own Python (scripts/, tests/). Runs before
+        # the test suite for fail-fast on unused imports / undefined names.
+        run: ruff check .
+
       - name: Run tests
         run: python -m pytest -q
 

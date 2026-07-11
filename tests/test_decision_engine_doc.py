@@ -18,6 +18,79 @@ def doc_content():
     return DECISION_ENGINE_PATH.read_text()
 
 
+# ---------------------------------------------------------------------------
+# Parse helpers — verify the worked examples' rules/arithmetic instead of
+# freezing the exact rendered literals, so legitimate reweighting or a benign
+# reflow keeps the tests green while a real math error or winner-flip turns
+# them red. (Mirrors the parse-and-verify style of test_regression_beats_
+# interest_math below.)
+# ---------------------------------------------------------------------------
+
+def _example(doc_content, start, end):
+    """Slice the doc to a single worked example."""
+    return doc_content[doc_content.index(start):doc_content.index(end)]
+
+
+def _sum_expression(expr):
+    """Sum a '+'/'-' operand list like '10 + 8 + 1.4 + 1 + 0 - 0'.
+
+    Tokens are parsed (not eval()'d), so only the add/subtract operand lists the
+    doc actually uses are ever evaluated.
+    """
+    total = 0.0
+    for sign, num in re.findall(r"([+-]?)\s*(\d+(?:\.\d+)?)", expr):
+        value = float(num)
+        total += -value if sign == "-" else value
+    return total
+
+
+def _single_col_priority(section):
+    """Return (computed_sum, stated_total) for a single-column PRIORITY row:
+    `| **PRIORITY** | 10 + 8 + 1.4 + 1 + 0 - 0 | **20.4** |`."""
+    m = re.search(r"\*\*PRIORITY\*\*\s*\|\s*([^|]+?)\s*\|\s*\*\*([0-9.]+)\*\*", section)
+    assert m, "single-column PRIORITY row not found"
+    return _sum_expression(m.group(1)), float(m.group(2))
+
+
+def _two_col_priorities(section):
+    """Return {column_label: priority_float} for a two-column worked example.
+
+    Reads the header row (two concept columns) and the bolded PRIORITY row, so
+    the test tracks which concept scores higher rather than a frozen number.
+    """
+    header = None
+    for line in section.splitlines():
+        if line.strip().startswith("|"):
+            cells = [c.strip() for c in line.strip().strip("|").split("|")]
+            if len(cells) == 3 and cells[0] == "" and header is None:
+                header = (cells[1], cells[2])
+                break
+    assert header, "two-column header row not found"
+    m = re.search(
+        r"\*\*PRIORITY\*\*\s*\|\s*\*\*([0-9.]+)\*\*\s*\|\s*\*\*([0-9.]+)\*\*", section
+    )
+    assert m, "two-column PRIORITY row not found"
+    return {header[0]: float(m.group(1)), header[1]: float(m.group(2))}
+
+
+def _priority_for(priorities, concept_id):
+    """Look up a column's PRIORITY by the concept id in its header label."""
+    for label, value in priorities.items():
+        if concept_id in label:
+            return value
+    raise AssertionError(f"{concept_id} column not found in {list(priorities)}")
+
+
+def _interest_row_values(section):
+    """Return the trailing INTEREST score of each column from the INTEREST row:
+    `| INTEREST | No signal → 0 | Asked unprompted → 3 |` → [0, 3]."""
+    for line in section.splitlines():
+        if line.strip().startswith("| INTEREST |"):
+            cells = [c.strip() for c in line.strip().strip("|").split("|")]
+            return [int(re.search(r"(\d+)\s*$", c).group(1)) for c in cells[1:]]
+    raise AssertionError("INTEREST row not found")
+
+
 class TestInterestDimension:
     """Verify INTEREST dimension exists in Step 2 with correct structure."""
 
@@ -145,11 +218,14 @@ class TestWorkedExamplesUpdated:
         assert "No explicit signal" in ex1
 
     def test_example1_priority_unchanged(self, doc_content):
-        """Example 1 PRIORITY is 20.4 (INTEREST=0 doesn't change total)."""
-        ex1_start = doc_content.index("### Example 1")
-        ex2_start = doc_content.index("### Example 2")
-        ex1 = doc_content[ex1_start:ex2_start]
-        assert "**20.4**" in ex1
+        """Example 1 PRIORITY equals its own operand sum (INTEREST=0 term
+        included). Verifies the doc's arithmetic rather than freezing 20.4."""
+        ex1 = _example(doc_content, "### Example 1", "### Example 2")
+        computed, stated = _single_col_priority(ex1)
+        assert computed == pytest.approx(stated), (
+            f"Example 1 PRIORITY row is internally inconsistent: "
+            f"operands sum to {computed}, stated total is {stated}"
+        )
 
     def test_example2_has_interest_row(self, doc_content):
         """Example 2 includes INTEREST row."""
@@ -160,11 +236,14 @@ class TestWorkedExamplesUpdated:
         assert "No signal" in ex2
 
     def test_example2_priority_unchanged(self, doc_content):
-        """Example 2 PRIORITY is 3.1 (INTEREST=0 doesn't change total)."""
-        ex2_start = doc_content.index("### Example 2")
-        ex3_start = doc_content.index("### Example 3")
-        ex2 = doc_content[ex2_start:ex3_start]
-        assert "**3.1**" in ex2
+        """Example 2 PRIORITY equals its own operand sum (INTEREST=0 term
+        included). Verifies the doc's arithmetic rather than freezing 3.1."""
+        ex2 = _example(doc_content, "### Example 2", "### Example 3")
+        computed, stated = _single_col_priority(ex2)
+        assert computed == pytest.approx(stated), (
+            f"Example 2 PRIORITY row is internally inconsistent: "
+            f"operands sum to {computed}, stated total is {stated}"
+        )
 
     def test_example3_c04_interest_2(self, doc_content):
         """Example 3 C-04 has INTEREST=2 (parking-lot question)."""
@@ -175,25 +254,25 @@ class TestWorkedExamplesUpdated:
         assert "2" in ex3  # INTEREST score
 
     def test_example3_c04_priority_17(self, doc_content):
-        """Example 3 C-04 PRIORITY is 17.0."""
-        ex3_start = doc_content.index("### Example 3")
-        ex4_start = doc_content.index("### Example 4")
-        ex3 = doc_content[ex3_start:ex4_start]
-        assert "**17.0**" in ex3
+        """Example 3 C-04 is the higher-scoring column (structural: winner has
+        the max PRIORITY), rather than freezing the literal 17.0."""
+        ex3 = _example(doc_content, "### Example 3", "### Example 4")
+        priorities = _two_col_priorities(ex3)
+        assert _priority_for(priorities, "C-04") == max(priorities.values())
 
     def test_example3_c01_priority_15(self, doc_content):
-        """Example 3 C-01 PRIORITY is 15.0."""
-        ex3_start = doc_content.index("### Example 3")
-        ex4_start = doc_content.index("### Example 4")
-        ex3 = doc_content[ex3_start:ex4_start]
-        assert "**15.0**" in ex3
+        """Example 3 C-01 is the lower-scoring column, rather than freezing the
+        literal 15.0."""
+        ex3 = _example(doc_content, "### Example 3", "### Example 4")
+        priorities = _two_col_priorities(ex3)
+        assert _priority_for(priorities, "C-01") == min(priorities.values())
 
     def test_example3_c04_wins(self, doc_content):
-        """Example 3 prose says C-04 wins (no longer a tie)."""
-        ex3_start = doc_content.index("### Example 3")
-        ex4_start = doc_content.index("### Example 4")
-        ex3 = doc_content[ex3_start:ex4_start]
-        assert "C-04 wins" in ex3
+        """C-04 wins on score: its column carries a strictly higher PRIORITY
+        than C-01. Checks the rule instead of the exact prose 'C-04 wins'."""
+        ex3 = _example(doc_content, "### Example 3", "### Example 4")
+        priorities = _two_col_priorities(ex3)
+        assert _priority_for(priorities, "C-04") > _priority_for(priorities, "C-01")
 
     def test_example4_exists(self, doc_content):
         """Example 4 exists (regression beats interest)."""
@@ -210,12 +289,14 @@ class TestWorkedExamplesUpdated:
         assert "A-02 wins" in ex4
 
     def test_example4_interest_values(self, doc_content):
-        """Example 4: A-02 INTEREST=0, C-05 INTEREST=3."""
-        ex4_start = doc_content.index("### Example 4")
-        ex4_end = doc_content.index("## Naturally-Acquired Concepts")
-        ex4 = doc_content[ex4_start:ex4_end]
-        assert "No signal" in ex4
-        assert "Asked unprompted" in ex4
+        """Example 4 INTEREST row: A-02 (regressed) = 0, C-05 (high interest)
+        = 3 (the documented max). Parses the row's values instead of freezing
+        the 'No signal'/'Asked unprompted' prose, and confirms C-05 respects
+        the cap of 3."""
+        ex4 = _example(doc_content, "### Example 4", "## Naturally-Acquired Concepts")
+        a02_interest, c05_interest = _interest_row_values(ex4)
+        assert a02_interest == 0
+        assert c05_interest == 3
 
 
 class TestRegressionLadder:
