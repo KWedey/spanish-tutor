@@ -19,7 +19,7 @@ Read through the week's session logs. Summarize:
 Write to `state/summaries/YYYY-WNN.yaml` following the schema in system-design.md.
 
 ### 3. Write Progress Report
-Write to `progress-reports/YYYY-WNN.md` — human-readable, motivating, specific. This is for the learner to read. Include:
+Write to `progress-reports/YYYY-WNN.md` — human-readable, motivating, specific. This is for the learner to read. Follow the canonical structure in `docs/progress-report-template.md`. Include:
 - Sessions completed, streak status
 - What improved (with specific examples)
 - What's still in progress
@@ -81,7 +81,7 @@ Review the week's `session_difficulty_rating` values. Track the `just_right_stre
 What's feeling good? What's feeling tedious? Check for plateau risk.
 
 ### 11. Maintenance
-- Archive daily session logs older than 60 days to `state/sessions/archive/` (see Session Archive section below)
+- Session-log archiving (logs older than 60 days → `state/sessions/archive/`) is automatic — post-session.sh Step 2 runs archive-sessions.py every session, so no manual action is needed here (see CLAUDE.md State Updates step 14).
 - Reset `fluency_days_this_week: 0` and increment `current_week` by 1 in schedule.yaml
 - Update `input_hours` in learner-profile.yaml (sum listening/reading minutes from this week's assignments)
 - Run `python3 scripts/validate-state.py` to catch any data inconsistencies
@@ -89,12 +89,3 @@ What's feeling good? What's feeling tedious? Check for plateau risk.
 
 ### 12. Fun Activity
 End with something enjoyable — a song, a short video, a game, casual conversation about something they care about. Weekly review should feel like a celebration, not an audit.
-
-## Session Archive
-
-During weekly review, archive session logs older than 60 days:
-
-1. Move files from `state/sessions/` to `state/sessions/archive/`.
-2. Archive = move, don't delete. Archived sessions are still accessible but not loaded at startup.
-3. The 60-day window provides buffer for monthly reviews and regression analysis.
-4. The tutor's startup protocol reads only the "3 most recent" sessions, so archiving adds no cognitive load.

@@ -523,7 +523,7 @@ receptive_skills:
 cultural_awareness:
   register_shifting:            # tú/usted/vos appropriateness
     status: unseen
-    introduced_at_phase: D
+    introduced_at_phase: B
     assessed_through: "conversation behavior, role-play scenarios"
     signs_of_acquisition: "Shifts registers appropriately without prompting in role-play"
     notes: ""
@@ -690,7 +690,7 @@ placement_validation:
 
 #### study_time_budget (top-level map, added Phase 5 / LOAD-07 / D-04)
 
-The `study_time_budget` map is a homework-only time budget. Null at initialization; populated during the first session capture (curriculum/tutor-guides/first-session.md §4). Required after session 1 — validate-state.py FAILs if `study_time_budget` is still null.
+The `study_time_budget` map is a homework-only time budget. Initialized as a map with null sub-fields (`daily_minimum`/`daily_target`/`daily_maximum`/`weekly_goal` null, `today_stretch` 0); populated during the first session capture (curriculum/tutor-guides/first-session.md §4). Required after session 1 — validate-state.py FAILs if the budget sub-fields are still null.
 
 | Sub-field | Type | Strawman default | Purpose |
 |-----------|------|------------------|---------|
@@ -853,8 +853,13 @@ learner_observations:
   self_assessment: ""           # what they said about how they're feeling about progress
   calibration_note: ""          # if self-assessment diverges from actual performance
   autonomy_readiness: ""        # observations about whether learner is ready for more control
+  notes: ""                     # free-text observation about the learner's state (used e.g. in the first-session log)
 
-# Initial assessment (session 1 only, for non-beginners)
+# Initial assessment (session 1 only). Records the placement *event*; the
+# persisted *result* is stored separately in learner-profile.yaml initial_placement.
+# Mapping: placement_decision.level -> initial_placement.level,
+# placement_decision.confidence -> initial_placement.confidence,
+# reading_check.comprehension -> initial_placement.reading_result.
 assessment:
   self_report: ""           # learner's self-assessed level before prompts
   grammar_prompts:
@@ -973,7 +978,7 @@ Invariant enforcement: `scripts/validate-state.py` runs `check_daily_target_tier
 
 **Validator rule:** `check_dialect_advisory_required(assignment, learner_profile, media_bank)` in `scripts/check-session-log.py`. Returns `True` when an advisory is required; the caller is responsible for checking that `assignment.dialect_advisory` is non-empty and matches the expected value. If `target_dialect` is unset or the resource is untracked, the function returns `False` (no-op during bootstrap).
 
-**Schema:** Defined as `item_schema.dialect_advisory` under `assignments:` in `schemas/session-log.schema.yaml`.
+**Schema:** Defined as `item_shape.dialect_advisory` under `assignments:` in `schemas/session-log.schema.yaml`.
 
 ### 6. Weekly Summaries (`state/summaries/YYYY-WNN.yaml`)
 
@@ -1057,6 +1062,8 @@ snapshot:
 Meta-metrics on whether the tutoring system itself is effective. Reviewed during weekly sessions.
 
 ```yaml
+schema_version: 1
+
 # Decision engine effectiveness
 concepts_requiring_reteach_total: 0      # high = bad sequencing or premature advancement
 average_sessions_to_acquire: 0           # trending up = something wrong
@@ -1078,6 +1085,13 @@ session_frequency_30d: 0.0              # sessions per week
 learner_initiated_topics_30d: 0          # are they bringing their own questions?
 sessions_rated_too_easy_30d: 0
 sessions_rated_too_hard_30d: 0
+
+# Session difficulty calibration (drives the too-easy/too-hard load logic)
+session_difficulty_tracking:
+  last_rating: null               # too-easy / just-right / too-hard
+  consecutive_too_easy: 0         # 2+ triggers challenge increase
+  consecutive_too_hard: 0         # 2+ triggers load reduction
+  recent_ratings: []              # last 5 ratings for trend analysis
 
 # SRS health
 # Note: anki_new_cards_per_session and anki_retirement_threshold_days moved to schedule.yaml
@@ -1102,6 +1116,15 @@ goal_tracking:
   current_acquisition_rate: 0.0   # concepts acquired per week (30-day rolling average)
   last_goal_review: null          # date of last weekly review goal check
   milestone_progress: []          # list of {goal, status: pending|achieved|at-risk, target_date, notes}
+
+# Maintenance mode (post-Phase-D only)
+maintenance_sessions_total: 0            # cumulative count of maintenance sessions
+regressions_detected_in_maintenance: 0   # concept regressions caught during maintenance
+
+# Audit trails (append-only)
+last_validation_issues: []               # issues found during last validation run
+load_adjustments: []                     # homework-load adjustment audit trail (LOAD-03/D-07/D-11); item shape in schemas/system-health.schema.yaml
+auto_fixes: []                           # validator-driven auto-repair audit trail (e.g. schedule.last_session_date corrections) written by validate-state.py; item shape {date, field, old_value, new_value, reason, detected_by}
 
 # Last reviewed
 last_system_review: null

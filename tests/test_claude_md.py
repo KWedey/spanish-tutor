@@ -244,3 +244,113 @@ class TestRoutingPrecedence:
             "without cross-reference is the bug being fixed. "
             "See .planning/phases/06-route-routing-return-session-polish/06-01-PLAN.md."
         )
+
+
+# =============================================================================
+# Overhaul D1: CLAUDE.md prose-drift locks for findings F008/F032/F062/F067/F069/F070
+# =============================================================================
+
+
+class TestStep0AuthorFirst:
+    """F032: State Updates step 0 must frame the LLM-authored writes (session log,
+    state updates, transcript) as preceding post-session.sh, because the script's
+    Step 4/4.5 abort when the session log or transcript is missing. The old
+    'run the script first, do not invoke the steps below' framing was self-
+    contradictory (it required outputs that only the later steps produce)."""
+
+    def test_author_first_framing_present(self):
+        content = CLAUDE_MD.read_text(encoding="utf-8")
+        su = content.find("## State Updates")
+        assert su != -1, "CLAUDE.md must have a State Updates section"
+        assert content.find("Author first", su) != -1, (
+            "F032: State Updates step 0 must use the author-first framing so the "
+            "LLM-authored session log / state updates / transcript precede post-session.sh."
+        )
+
+
+class TestManualFallbackDerivedSteps:
+    """F008: the step-0 manual-fallback path must enumerate the four deterministic
+    derived-state steps post-session.sh performs — recast_uptake_stats aggregation,
+    today_stretch reset, recompute-metrics.py, update-fluency-tracking.py — so that
+    running without the orchestrator does not silently re-freeze the calibration and
+    fluency counters at 0 (the QR-P1/QR-P2/C1 dead-counter bug)."""
+
+    def test_fallback_runs_recompute_metrics(self):
+        content = CLAUDE_MD.read_text(encoding="utf-8")
+        su = content.find("## State Updates")
+        assert su != -1
+        assert content.find("recompute-metrics.py", su) != -1, (
+            "F008: State Updates manual-fallback must run recompute-metrics.py so the "
+            "regression / too-easy / too-hard counters are not left frozen at 0."
+        )
+
+    def test_fallback_runs_update_fluency_tracking(self):
+        content = CLAUDE_MD.read_text(encoding="utf-8")
+        su = content.find("## State Updates")
+        assert content.find("update-fluency-tracking.py", su) != -1, (
+            "F008: State Updates manual-fallback must run update-fluency-tracking.py so "
+            "fluency_days_this_week / last_fluency_day persist without the orchestrator."
+        )
+
+    def test_fallback_covers_recast_and_today_stretch(self):
+        content = CLAUDE_MD.read_text(encoding="utf-8")
+        su = content.find("## State Updates")
+        assert content.find("recast_uptake_stats", su) != -1, (
+            "F008: manual-fallback must cover recast_uptake_stats aggregation (Step 5b)."
+        )
+        assert content.find("today_stretch", su) != -1, (
+            "F008: manual-fallback must cover the today_stretch reset (Step 5c)."
+        )
+
+
+class TestProgressReportTemplateReference:
+    """F062: State Updates step 11 must point at the canonical
+    docs/progress-report-template.md so the weekly progress report follows one
+    authoritative structure instead of drifting from the orphaned template."""
+
+    def test_step11_references_template(self):
+        content = CLAUDE_MD.read_text(encoding="utf-8")
+        assert "docs/progress-report-template.md" in content, (
+            "F062: CLAUDE.md step 11 must reference docs/progress-report-template.md."
+        )
+
+
+class TestSchemaAuthorityClarified:
+    """F067: CLAUDE.md must name schemas/*.schema.yaml as the machine-enforced source
+    of truth (docs/system-design.md is the human-readable companion) so a fresh agent
+    does not treat the prose doc as the validation contract."""
+
+    def test_enforced_schema_named(self):
+        content = CLAUDE_MD.read_text(encoding="utf-8")
+        assert "session-log.schema.yaml" in content, (
+            "F067: CLAUDE.md must cite schemas/session-log.schema.yaml as the enforced schema."
+        )
+        assert "machine-enforced source of truth" in content, (
+            "F067: CLAUDE.md must flag schemas/*.schema.yaml as the machine-enforced source of truth."
+        )
+
+
+class TestJustRightCounterDisambiguation:
+    """F069: two confusable schedule.yaml counters — consecutive_just_right_count
+    (D-11 homework-load ladder on homework_load_rating) vs just_right_streak
+    (session-difficulty calibration on session_difficulty_rating) — must be explicitly
+    distinguished in CLAUDE.md so a fresh per-session agent does not merge them."""
+
+    def test_just_right_streak_named_for_disambiguation(self):
+        content = CLAUDE_MD.read_text(encoding="utf-8")
+        assert "just_right_streak" in content, (
+            "F069: CLAUDE.md must name just_right_streak to distinguish it from "
+            "the D-11 consecutive_just_right_count counter."
+        )
+
+
+class TestMicroSessionLogging:
+    """F070: CLAUDE.md must route sub-15-min sessions to session_type: micro and the
+    abbreviated micro-session log, closing the one-directional gap to the schema enum
+    and check-session-log.py's MICRO_EXPECTED handling (which are already wired)."""
+
+    def test_micro_session_type_instructed(self):
+        content = CLAUDE_MD.read_text(encoding="utf-8")
+        assert "session_type: micro" in content, (
+            "F070: CLAUDE.md must instruct logging sub-15-min sessions as session_type: micro."
+        )

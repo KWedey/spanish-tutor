@@ -61,6 +61,35 @@ fields:
     required: false
     default: []
     description: "How yesterday's homework went"
+    item_shape:
+      task:
+        type: string
+        required: false
+        description: "The assignment being reviewed"
+      resource:
+        type: string
+        required: false
+        description: "External tool/resource used"
+      completed:
+        type: bool
+        required: false
+        description: "Whether the learner completed it"
+      learner_report:
+        type: string
+        required: false
+        description: "What the learner said about it"
+      tutor_assessment:
+        type: string
+        required: false
+        description: "What the tutor inferred"
+      verification_result:
+        type: string
+        required: false
+        description: "What the tutor observed when testing the claim"
+      skill_updates:
+        type: list
+        required: false
+        description: "Free-form skill-map deltas prompted by this review"
 
   # Agent-maintained: written by the tutor (CLAUDE.md Standard Session Flow /
   # State Updates step 3 input debrief) and read by curriculum + the LLM next
@@ -116,12 +145,95 @@ fields:
     required: false
     default: []
     description: "Live session content activities"
+    item_shape:
+      type:
+        type: string
+        required: false
+        description: "Activity type — conversation, grammar-drill, translation, fluency-drill, writing-review, etc."
+      target_concepts:
+        type: list
+        required: false
+        description: "Grammar/vocab skill-map keys being practiced"
+      duration_minutes:
+        type: int
+        required: false
+        description: "Minutes spent on this activity"
+      performance:
+        type: string
+        required: false
+        description: "strong, good, mixed, struggling"
+      errors_noted:
+        type: list
+        required: false
+        description: "Per-error records observed during the activity"
+        item_shape:
+          error:
+            type: string
+            required: false
+            description: "What the learner said"
+          correction:
+            type: string
+            required: false
+            description: "What it should have been"
+          category:
+            type: string
+            required: false
+            description: "grammar, vocabulary, pronunciation, gender, fluency, cultural"
+          concept:
+            type: string
+            required: false
+            description: "Which skill-map entry this maps to"
+          error_type:
+            type: string
+            required: false
+            description: "developmental, l1-interference, fossilized, slip"
+      observations:
+        type: string
+        required: false
+        description: "Free-text summary of what the tutor observed"
+      highlights:
+        type: string
+        required: false
+        description: "Things the learner did well"
+      l1_interference_noted:
+        type: bool
+        required: false
+        description: "Whether any L1 interference errors were observed"
+      fluency_observations:
+        type: string
+        required: false
+        description: "Pace, hesitation, risk-taking notes"
+      notes:
+        type: string
+        required: false
+        description: "Free-text activity notes"
 
   skill_map_updates:
     type: list
     required: false
     default: []
     description: "Assessment updates to apply to skill-map"
+    item_shape:
+      concept:
+        type: string
+        required: false
+        description: "Skill-map key being updated"
+      field:
+        type: string
+        required: false
+        description: "Field changed — status, error_rate_drills, error_rate_production, error_trend, etc."
+      old_value:
+        type: string
+        required: false
+        description: "Value before the update"
+      new_value:
+        type: string
+        required: false
+        description: "Value after the update"
+      evidence:
+        type: string
+        required: false
+        description: "Why this change was made"
 
   # Agent-maintained: written by the tutor (decision-engine.md interleaving)
   # and read by curriculum + the LLM next session. No Python reader.
@@ -192,6 +304,22 @@ fields:
         required: false
         default: ""
         description: "Resource title from curriculum/media-bank.yaml or resources/resource-catalog.yaml"
+      target_skill:
+        type: string
+        required: false
+        default: ""
+        description: "Which skill-map entry this assignment supports"
+      priority:
+        type: string
+        required: false
+        default: ""
+        description: "Assignment priority (required = core, recommended = should-do, bonus = optional)"
+        enum: ["required", "recommended", "bonus"]
+      retrieval_target:
+        type: string
+        required: false
+        default: ""
+        description: "Prior concept to revisit in this assignment (e.g. 'include 2 ser/estar sentences')"
       dialect_advisory:
         type: string
         required: false
@@ -201,6 +329,11 @@ fields:
           input-orchestration.md Section 1 Step 2 (mixed/neutral resource + voseo/vosotros
           target_dialect, or peninsular resource + non-es-ES target_dialect).
         enum: ["voseo", "vosotros", "voseo+vosotros"]
+      notes:
+        type: string
+        required: false
+        default: ""
+        description: "Free-text note or prompt for the assignment"
 
   # Agent-maintained: written by the tutor when a journal entry is submitted
   # (CLAUDE.md Review & Warm-up journal review) and read by the human / the LLM
@@ -263,12 +396,57 @@ fields:
         required: false
         default: ""
         description: "Observations about whether learner is ready for more control"
+      notes:
+        type: string
+        required: false
+        default: ""
+        description: "Free-text observation about the learner's state (used e.g. in the first-session log)"
 
   assessment:
     type: map
     required: false
     default: null
-    description: "Initial assessment (session 1 only, for non-beginners)"
+    description: |
+      Initial assessment (session 1 only). Records the placement *event* — what
+      was elicited and the decision reached. The persisted placement *result*
+      lives in learner-profile.yaml initial_placement (schemas/learner-profile.schema.yaml).
+      Field mapping: placement_decision.level -> initial_placement.level,
+      placement_decision.confidence -> initial_placement.confidence,
+      reading_check.comprehension -> initial_placement.reading_result.
+    children:
+      self_report:
+        type: string
+        required: false
+        description: "Learner's self-assessed level before prompts"
+      grammar_prompts:
+        type: map
+        required: false
+        description: "Elicited production per graded prompt"
+        children:
+          introduce_yourself:
+            type: map
+            required: false
+            description: "response_summary + scoring (pre-A / early-A / late-A / acquired-A-01)"
+          tell_about_yesterday:
+            type: map
+            required: false
+            description: "response_summary + scoring (below-B / early-B / mid-B / acquired-B-01-B-04)"
+          what_would_you_do:
+            type: map
+            required: false
+            description: "response_summary + scoring (below-C / early-C / mid-C / acquired-through-C)"
+      vocabulary_observation:
+        type: map
+        required: false
+        description: "level (minimal/narrow/broad/deep), domains_demonstrated, production_gap_indicators, follow_up_topic, follow_up_notes"
+      reading_check:
+        type: map
+        required: false
+        description: "passage_level + comprehension (below-expected / gets-the-gist / understands-nearly-all)"
+      placement_decision:
+        type: map
+        required: false
+        description: "level + confidence (high/medium/low) + rationale"
 
   validation_checks:
     type: list

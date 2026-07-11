@@ -18,19 +18,39 @@ session_type: first-session
 session_status: complete
 learner_energy: high
 
-# The assessment block is REQUIRED for first-session. For a true beginner it
-# records that no graded placement was run and why. For a non-beginner it holds
-# the placement result + evidence (mirror learner-profile.yaml initial_placement).
+# The assessment block is REQUIRED for first-session. It records the placement
+# *event* (what was elicited + the decision reached), using the canonical shape
+# from docs/system-design.md §5. The persisted placement *result* lives in
+# learner-profile.yaml initial_placement — the two are intentionally distinct:
+#   placement_decision.level       -> initial_placement.level
+#   placement_decision.confidence  -> initial_placement.confidence
+#   reading_check.comprehension    -> initial_placement.reading_result
+# For a true beginner no graded prompts are run (onboarding calibrates instead).
 assessment:
-  placement_run: false
-  placement_level: A-foundation
-  placement_confidence: null          # null for true beginners (onboarding calibrates)
   self_report: beginner
-  self_report_vs_actual: matches
-  grammar_production: "Complete beginner — no production attempted; entered onboarding from session 1."
-  vocabulary_observation: minimal
-  reading_comprehension: not_assessed
-  evidence: "Learner reports zero prior Spanish; skipped graded prompts per first-session.md §3."
+  grammar_prompts:
+    introduce_yourself:
+      response_summary: "Complete beginner — no production attempted; entered onboarding from session 1."
+      scoring: pre-A
+    tell_about_yesterday:
+      response_summary: ""
+      scoring: ""
+    what_would_you_do:
+      response_summary: ""
+      scoring: ""
+  vocabulary_observation:
+    level: minimal
+    domains_demonstrated: []
+    production_gap_indicators: []
+    follow_up_topic: ""
+    follow_up_notes: ""
+  reading_check:
+    passage_level: ""
+    comprehension: not_assessed
+  placement_decision:
+    level: A-foundation
+    confidence: null          # null for true beginners (onboarding calibrates)
+    rationale: "Learner reports zero prior Spanish; skipped graded prompts per first-session.md §3."
 
 session_activities:
   - type: discovery

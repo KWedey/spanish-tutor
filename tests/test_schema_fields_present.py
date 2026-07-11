@@ -5,10 +5,13 @@ Follows Phase 2.1 HOOK regression-test-locks-wiring precedent.
 """
 from pathlib import Path
 
+import yaml
+
 ROOT = Path(__file__).resolve().parent.parent
 REPO_ROOT = ROOT  # alias for Phase 5 LOAD tests
 
 SCHEMA_SESSION = ROOT / "schemas" / "session-log.schema.yaml"
+SCHEMA_SYSTEM_HEALTH = ROOT / "schemas" / "system-health.schema.yaml"
 SCHEMA_SKILL = ROOT / "schemas" / "skill-map.schema.yaml"
 SCHEMA_SCHEDULE = ROOT / "schemas" / "schedule.schema.yaml"
 SYSTEM_DESIGN = ROOT / "docs" / "system-design.md"
@@ -235,6 +238,57 @@ class TestEstimatedMinutesFieldName:
                     f"Pitfall-1 regression at line {line_no}: 'estimated_duration' appears next to 'assignments' in check-session-log.py. "
                     f"Use estimated_minutes. Line content: {line!r}"
                 )
+
+
+class TestSchemaParityFixes:
+    """Schema-parity backfills (F033/F034/F072/F075/F076): every field the
+    scripts/examples write must be declared in its schema so a port built from
+    the schemas is complete. Structural (YAML-parse) locks, not substring checks."""
+
+    def _session_fields(self):
+        return (yaml.safe_load(SCHEMA_SESSION.read_text(encoding="utf-8")) or {}).get("fields", {})
+
+    def test_system_health_declares_auto_fixes_item_shape(self):
+        """F033: validate-state.py writes auto_fixes[] entries — the schema must declare
+        the field and its item_shape (date/field/old_value/new_value/reason/detected_by)."""
+        fields = (yaml.safe_load(SCHEMA_SYSTEM_HEALTH.read_text(encoding="utf-8")) or {}).get("fields", {})
+        assert "auto_fixes" in fields, "F033: system-health.schema.yaml must declare auto_fixes"
+        spec = fields["auto_fixes"]
+        assert spec.get("type") == "list"
+        item_shape = spec.get("item_shape") or {}
+        for key in ("date", "field", "old_value", "new_value", "reason", "detected_by"):
+            assert key in item_shape, f"F033: auto_fixes.item_shape must declare '{key}' (written by validate-state.py)"
+
+    def test_assignments_item_shape_has_doc_superset(self):
+        """F034: the four fields the examples/doc use on assignments[] must be declared."""
+        item_shape = self._session_fields()["assignments"].get("item_shape") or {}
+        for key in ("target_skill", "priority", "retrieval_target", "notes"):
+            assert key in item_shape, f"F034: assignments.item_shape must declare '{key}'"
+        assert item_shape["priority"].get("enum") == ["required", "recommended", "bonus"], \
+            "F034: assignments.priority enum must match docs/system-design.md"
+
+    def test_bare_list_fields_now_declare_item_shape(self):
+        """F076: assignment_review / session_activities / skill_map_updates must carry item_shape."""
+        fields = self._session_fields()
+        for fname in ("assignment_review", "session_activities", "skill_map_updates"):
+            assert isinstance(fields[fname].get("item_shape"), dict), \
+                f"F076: {fname} must declare an item_shape"
+        # errors_noted is a nested list-of-dict inside session_activities
+        errors_noted = fields["session_activities"]["item_shape"]["errors_noted"]
+        assert isinstance(errors_noted.get("item_shape"), dict), \
+            "F076: session_activities.errors_noted must declare a nested item_shape"
+
+    def test_assessment_map_has_children(self):
+        """F072: the session-log assessment map must declare its canonical children."""
+        children = self._session_fields()["assessment"].get("children") or {}
+        for key in ("self_report", "grammar_prompts", "vocabulary_observation",
+                    "reading_check", "placement_decision"):
+            assert key in children, f"F072: assessment.children must declare '{key}'"
+
+    def test_learner_observations_declares_notes(self):
+        """F075: the first-session example uses learner_observations.notes — declare it."""
+        children = self._session_fields()["learner_observations"].get("children") or {}
+        assert "notes" in children, "F075: learner_observations.children must declare 'notes'"
 
 
 class TestConsecutiveCountersPresent:

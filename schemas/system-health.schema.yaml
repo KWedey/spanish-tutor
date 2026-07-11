@@ -151,6 +151,37 @@ fields:
         required: false
         description: "Source that wrote the entry (script:function or 'tutor')"
 
+  auto_fixes:
+    type: list
+    required: false
+    default: []
+    description: "Validator-driven auto-repair audit trail. Appended by validate-state.py when it silently corrects state drift (e.g. schedule.last_session_date disagreeing with the most recent session log)."
+    item_shape:
+      date:
+        type: string
+        required: false
+        description: "YYYY-MM-DD the fix was applied"
+      field:
+        type: string
+        required: false
+        description: "Dotted path of the field that was corrected (e.g. schedule.last_session_date)"
+      old_value:
+        type: string
+        required: false
+        description: "Value before the auto-fix"
+      new_value:
+        type: string
+        required: false
+        description: "Value written by the auto-fix"
+      reason:
+        type: string
+        required: false
+        description: "Human-readable explanation of why the fix was applied"
+      detected_by:
+        type: string
+        required: false
+        description: "Source that wrote the entry (script:function)"
+
   placement_validation_metrics:
     type: map
     required: false

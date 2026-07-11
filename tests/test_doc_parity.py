@@ -11,6 +11,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SYSTEM_DESIGN = REPO_ROOT / "docs" / "system-design.md"
 SCHEMA_SCHEDULE = REPO_ROOT / "schemas" / "schedule.schema.yaml"
 SCHEMA_SESSION = REPO_ROOT / "schemas" / "session-log.schema.yaml"
+SCHEMA_SYSTEM_HEALTH = REPO_ROOT / "schemas" / "system-health.schema.yaml"
+SKILL_MAP_TEMPLATE = REPO_ROOT / "state" / "skill-map.template.yaml"
 
 
 class TestDocParityStudyTimeBudget:
@@ -61,3 +63,56 @@ class TestDocParityHomeworkLoadRating:
             assert value in docs_text, (
                 f"LOAD-04 doc-parity: homework_load_rating enum value '{value}' must appear in docs/system-design.md"
             )
+
+
+class TestDocParitySystemHealthFields:
+    """F033/F073: the §8 System Health example block must document every field the
+    system-health schema declares (schema is authoritative). Guards against the
+    doc block drifting behind the schema again."""
+
+    # Fields declared in the schema that were previously absent from the §8 doc block.
+    BACKFILLED = (
+        "schema_version",
+        "last_validation_issues",
+        "load_adjustments",
+        "auto_fixes",
+        "session_difficulty_tracking",
+        "maintenance_sessions_total",
+        "regressions_detected_in_maintenance",
+    )
+
+    def test_backfilled_fields_declared_in_schema(self):
+        schema_text = SCHEMA_SYSTEM_HEALTH.read_text(encoding="utf-8")
+        for field in self.BACKFILLED:
+            assert f"{field}:" in schema_text, (
+                f"F033/F073: {field} must be declared in schemas/system-health.schema.yaml"
+            )
+
+    def test_backfilled_fields_documented_in_system_design(self):
+        docs_text = SYSTEM_DESIGN.read_text(encoding="utf-8")
+        for field in self.BACKFILLED:
+            assert field in docs_text, (
+                f"F033/F073 doc-parity: {field} exists in system-health.schema.yaml but NOT "
+                f"in docs/system-design.md §8 — schema and docs must stay in lockstep"
+            )
+
+
+class TestDocParityRegisterShiftingPhase:
+    """F035: cultural_awareness.register_shifting is introduced at Phase B (the field
+    means the *introduction* phase). docs/system-design.md must agree with the
+    skill-map template and CLAUDE.md's load-map (register-shifting.md at Phase B)."""
+
+    def test_docs_match_template_introduced_at_phase_b(self):
+        template_text = SKILL_MAP_TEMPLATE.read_text(encoding="utf-8")
+        if "register_shifting" not in template_text:
+            return
+        docs_text = SYSTEM_DESIGN.read_text(encoding="utf-8")
+        # Locate the register_shifting block in the doc and assert its introduced_at_phase is B.
+        lines = docs_text.splitlines()
+        idx = next((i for i, ln in enumerate(lines) if ln.strip().startswith("register_shifting:")), None)
+        assert idx is not None, "F035: register_shifting block must exist in docs/system-design.md"
+        window = "\n".join(lines[idx:idx + 4])
+        assert "introduced_at_phase: B" in window, (
+            "F035: docs/system-design.md register_shifting must be introduced_at_phase: B "
+            "(matches state/skill-map.template.yaml and curriculum/cultural/register-shifting.md)"
+        )

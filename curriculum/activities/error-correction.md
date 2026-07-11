@@ -60,7 +60,7 @@ Stage sets the correction MODE. Phase overlays FREQUENCY and the explicit-vs-rec
 |-------|---------|---------|---------|---------|
 | Stage 1-2 (controlled practice) | Explicit, immediate, no limit. L1 interference preempted. | Explicit, immediate, no limit. | Explicit when error is on current focus; recast otherwise. | Recast primarily; explicit only for fossilized risks. |
 | Stage 3 (guided production) | Explicit for focus concept; recast for everything else. | Mostly recast; explicit <= 2 per segment. | Recast; explicit <= 1 per segment. | Recast only. |
-| Stage 4 (free conversation) | Recast only (max 3 explicit per segment for meaning-blocking errors). Batch rest. | Recast; max 3 explicit per segment. Batch rest. | Recast; max 3 explicit per 10-min segment. Batch rest. | Recast; meaning-impeding only. |
+| Stage 4 (free conversation) | Recast only (max 3 explicit per segment, up to 5 for a 10-min segment, for meaning-blocking errors). Batch rest. | Recast; max 3 explicit per segment (up to 5 for a 10-min segment). Batch rest. | Recast; max 3 explicit per segment (up to 5 for a 10-min segment). Batch rest. | Recast; meaning-impeding only. |
 | Fluency activities | Meaning-impeding only, immediate. All other errors batched for post-activity review. | Same as Phase A. | Same, but batched review is entirely in Spanish. | Same, tutor intervention minimal. |
 
 **Metalinguistic mode** (third tier, above explicit) is NOT listed per cell — it is an ESCALATION triggered by 2+ failed explicit corrections on the same error in the same or consecutive sessions. See Metalinguistic Feedback Protocol below.

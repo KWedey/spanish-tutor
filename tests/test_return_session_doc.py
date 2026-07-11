@@ -127,6 +127,9 @@ class TestReturnSessionNeutralFraming:
 
     def test_neutral_framing_phrase_present(self):
         content = _read().lower()
+        # These mirror the learner-facing neutral phrases in return-session.md (the Framing
+        # Conventions section). If you reword those phrases in the doc, update this tuple in
+        # the same commit so the intent change is explicit in code review.
         neutral_phrases = (
             "see what's stuck",
             "see what stuck",
