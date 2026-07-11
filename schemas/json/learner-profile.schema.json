@@ -1,0 +1,289 @@
+{
+  "$id": "https://spanish-tutor.dev/schemas/learner-profile.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "calibration": {
+      "default": null,
+      "description": "How much to trust self-reports",
+      "properties": {
+        "self_report_accuracy": {
+          "default": null,
+          "description": "Correlation between self-reports and observed performance",
+          "type": "number"
+        },
+        "tendency": {
+          "default": "",
+          "description": "overestimates, accurate, underestimates",
+          "type": "string"
+        },
+        "trust_weight": {
+          "default": 0.5,
+          "description": "0.0-1.0, how much to weight self-reports in decisions",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "energy_pattern": {
+      "default": "",
+      "description": "e.g., high energy Mon-Wed, lower Thu-Fri",
+      "type": "string"
+    },
+    "error_correction_preference": {
+      "default": "",
+      "description": "inline, batched-at-end, or gentle-inline",
+      "type": "string"
+    },
+    "graduation_criteria": {
+      "default": "",
+      "description": "What done looks like for this learner",
+      "type": "string"
+    },
+    "grammar_preference": {
+      "default": "",
+      "description": "rules-first, examples-first, or mixed",
+      "type": "string"
+    },
+    "initial_placement": {
+      "default": null,
+      "description": "Initial placement results (populated in first session for non-beginners)",
+      "properties": {
+        "confidence": {
+          "default": "",
+          "description": "high / medium / low",
+          "type": "string"
+        },
+        "date": {
+          "default": null,
+          "description": "Date of placement assessment",
+          "type": "string"
+        },
+        "evidence_summary": {
+          "default": "",
+          "description": "Tutor's rationale for placement decision",
+          "type": "string"
+        },
+        "grammar_result": {
+          "default": "",
+          "description": "Placement level derived from grammar prompts",
+          "type": "string"
+        },
+        "level": {
+          "default": "",
+          "description": "pre-A / early-A / late-A / early-B / mid-B / early-C / mid-C",
+          "type": "string"
+        },
+        "reading_result": {
+          "default": "",
+          "description": "below-expected / at-expected / above-expected",
+          "type": "string"
+        },
+        "self_report": {
+          "default": "",
+          "description": "beginner / intermediate / advanced (learner's self-assessment)",
+          "type": "string"
+        },
+        "vocabulary_observation": {
+          "default": "",
+          "description": "minimal / narrow / broad / deep",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "input_hours": {
+      "default": null,
+      "description": "Comprehensible input tracking",
+      "properties": {
+        "last_updated": {
+          "default": null,
+          "description": "Date of last update",
+          "type": "string"
+        },
+        "listening_total": {
+          "default": 0.0,
+          "description": "Cumulative hours of Spanish listening",
+          "type": "number"
+        },
+        "reading_total": {
+          "default": 0.0,
+          "description": "Cumulative hours of Spanish reading",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "max_new_concepts_per_week": {
+      "default": 2,
+      "description": "Adjusted over time based on absorption rate",
+      "type": "integer"
+    },
+    "milestone_goals": {
+      "default": [],
+      "description": "Concrete motivations",
+      "type": "array"
+    },
+    "motivation": {
+      "default": null,
+      "description": "Motivation tracking",
+      "properties": {
+        "current_level": {
+          "default": "",
+          "description": "high, medium, low, at-risk",
+          "type": "string"
+        },
+        "days_since_last_milestone": {
+          "default": 0,
+          "description": "How long since something felt like progress",
+          "type": "integer"
+        },
+        "high_motivation_triggers": {
+          "default": [],
+          "description": "What energizes this learner",
+          "type": "array"
+        },
+        "longest_streak": {
+          "default": 0,
+          "description": "Longest consecutive session streak",
+          "type": "integer"
+        },
+        "low_motivation_triggers": {
+          "default": [],
+          "description": "What deflates them",
+          "type": "array"
+        },
+        "plateau_risk": {
+          "default": false,
+          "description": "True if no advancement in 3+ weeks",
+          "type": "boolean"
+        },
+        "preferred_recovery": {
+          "default": "",
+          "description": "What helps when motivation dips",
+          "type": "string"
+        },
+        "streak_days": {
+          "default": 0,
+          "description": "Consecutive days with a session",
+          "type": "integer"
+        },
+        "total_sessions": {
+          "default": 0,
+          "description": "Total number of sessions completed",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "motivation_style": {
+      "default": "",
+      "description": "challenge-driven, encouragement-driven, data-driven",
+      "type": "string"
+    },
+    "name": {
+      "default": "",
+      "description": "Learner name",
+      "type": "string"
+    },
+    "native_language": {
+      "default": "English",
+      "description": "Learner's native language",
+      "type": "string"
+    },
+    "notes": {
+      "default": "",
+      "description": "Anything else relevant",
+      "type": "string"
+    },
+    "preferred_session_time": {
+      "default": "",
+      "description": "morning, afternoon, evening",
+      "type": "string"
+    },
+    "primary_goal": {
+      "default": "",
+      "description": "e.g., conversational fluency for travel and social situations",
+      "type": "string"
+    },
+    "schema_version": {
+      "default": 1,
+      "description": "Schema version number",
+      "type": "integer"
+    },
+    "started": {
+      "default": "",
+      "description": "Date of first session",
+      "type": "string"
+    },
+    "target_dialect": {
+      "default": "",
+      "description": "e.g., Mexican, Colombian, Castilian \u2014 chosen in first session",
+      "type": "string"
+    },
+    "target_level": {
+      "default": "",
+      "description": "e.g., B2, C1",
+      "type": "string"
+    },
+    "tools": {
+      "default": null,
+      "description": "External tools in use",
+      "properties": {
+        "conversation_partner": {
+          "default": "",
+          "description": "e.g., italki tutor named Carlos",
+          "type": "string"
+        },
+        "listening_primary": {
+          "default": "",
+          "description": "e.g., Dreaming Spanish",
+          "type": "string"
+        },
+        "pronunciation": {
+          "default": "",
+          "description": "e.g., Speechling",
+          "type": "string"
+        },
+        "reading_current": {
+          "default": "",
+          "description": "e.g., Short Stories in Spanish (Olly Richards)",
+          "type": "string"
+        },
+        "srs": {
+          "default": "",
+          "description": "e.g., Anki",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "typical_weekday_minutes": {
+      "default": 0,
+      "description": "Total learning time including homework on weekdays",
+      "type": "integer"
+    },
+    "typical_weekend_minutes": {
+      "default": 0,
+      "description": "Total learning time including homework on weekends",
+      "type": "integer"
+    },
+    "vocabulary_retention_method": {
+      "default": "",
+      "description": "visual, contextual, auditory, kinesthetic",
+      "type": "string"
+    },
+    "weekly_review_day": {
+      "default": "",
+      "description": "e.g., Sunday",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "name",
+    "native_language",
+    "target_dialect"
+  ],
+  "title": "Learner Profile",
+  "type": "object"
+}

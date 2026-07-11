@@ -1,0 +1,146 @@
+{
+  "$id": "https://spanish-tutor.dev/schemas/resource-tracker.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "input_summary": {
+      "default": null,
+      "description": "Aggregated input tracking",
+      "properties": {
+        "current_listening_level": {
+          "default": "L1",
+          "description": "Mirrors skill-map.receptive_skills.listening.current_level",
+          "enum": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5"
+          ],
+          "type": "string"
+        },
+        "current_reading_level": {
+          "default": "R1",
+          "description": "Mirrors skill-map.receptive_skills.reading.current_level",
+          "enum": [
+            "R1",
+            "R2",
+            "R3",
+            "R4",
+            "R5"
+          ],
+          "type": "string"
+        },
+        "total_listening_hours": {
+          "default": 0,
+          "description": "Cumulative listening hours",
+          "type": "number"
+        },
+        "total_reading_hours": {
+          "default": 0,
+          "description": "Cumulative reading hours",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "resources": {
+      "default": [],
+      "description": "Active and tracked resources",
+      "items": {
+        "properties": {
+          "comprehension_trend": {
+            "default": null,
+            "description": "Comprehension direction over recent debriefs (null until enough data)",
+            "enum": [
+              "improving",
+              "stable",
+              "declining"
+            ],
+            "type": "string"
+          },
+          "hours_logged": {
+            "default": 0,
+            "description": "Cumulative hours the learner has spent with this resource",
+            "type": "number"
+          },
+          "last_assigned": {
+            "default": null,
+            "description": "Date (YYYY-MM-DD) this resource was last assigned, or null",
+            "type": "string"
+          },
+          "last_completed": {
+            "default": null,
+            "description": "Date (YYYY-MM-DD) this resource was last completed, or null",
+            "type": "string"
+          },
+          "learner_engagement": {
+            "default": null,
+            "description": "Learner's attitude toward this resource (null until observed)",
+            "enum": [
+              "enthusiastic",
+              "neutral",
+              "reluctant"
+            ],
+            "type": "string"
+          },
+          "level_range": {
+            "default": [],
+            "description": "Comprehension levels this resource spans, e.g. [L2, L4]",
+            "type": "array"
+          },
+          "name": {
+            "default": "",
+            "description": "Resource title, e.g. 'Dreaming Spanish'",
+            "type": "string"
+          },
+          "notes": {
+            "default": "",
+            "description": "Free-text observations",
+            "type": "string"
+          },
+          "sessions_assigned": {
+            "default": 0,
+            "description": "Times this resource has been assigned as homework",
+            "type": "integer"
+          },
+          "sessions_completed": {
+            "default": 0,
+            "description": "Times the learner reported completing it",
+            "type": "integer"
+          },
+          "type": {
+            "default": "listening",
+            "description": "Input modality",
+            "enum": [
+              "listening",
+              "reading",
+              "mixed"
+            ],
+            "type": "string"
+          },
+          "vocabulary_extracted": {
+            "default": 0,
+            "description": "Count of words surfaced from this resource in debriefs",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "type"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "schema_version": {
+      "default": 1,
+      "description": "Schema version number",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "schema_version"
+  ],
+  "title": "Resource Tracker",
+  "type": "object"
+}

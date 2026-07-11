@@ -1,0 +1,170 @@
+# Decision Engine Weights — machine-readable extraction of curriculum/tutor-guides/decision-engine.md
+#
+# PURPOSE: This file is the portable, machine-readable form of the concept-selection
+# algorithm. decision-engine.md remains the pedagogical guide (the WHY and the worked
+# examples); this file carries the numbers and enums a port (web/mobile app) executes
+# in code. When tuning weights, change THIS file and update the guide's tables to match —
+# tests/test_engine_data.py spot-checks load-bearing constants in both.
+#
+# Score semantics: PRIORITY = NEED + GAP + DECAY_ADJUSTED + TOPIC_BOOST + INTEREST - VARIETY_PENALTY
+
+schema_version: 1
+
+priority_formula: "NEED + GAP + DECAY_ADJUSTED + TOPIC_BOOST + INTEREST - VARIETY_PENALTY"
+
+need:                       # decision-engine.md Step 2 — NEED (0-10)
+  phase_prerequisite: 10
+  current_phase: 7
+  carryover_prior_phase: 5
+  current_phase_maintenance: 2
+  previous_phase_maintenance: 1
+  two_plus_phases_back_maintenance: 0.5
+  cultural:
+    # Non-functional cultural concepts are capped; functional ones score like grammar.
+    non_functional_cap: 5
+    non_functional_concepts: [regional_awareness, humor_and_idioms]
+    full_score_concepts: [politeness_formulas, register_shifting]
+
+gap_grammar:                # decision-engine.md Step 2 — GAP (0-10), uses error_rate_production
+  regressed: 10
+  practicing_production_error_over_30pct: 8
+  practicing_drill_production_mismatch: 7
+  practicing_error_rate_null: 7
+  practicing_production_error_15_to_30pct: 5
+  practicing_production_error_under_15pct: 3
+  acquired_not_integration_tested: 2
+  acquired_integration_tested: 0
+  # Below min observations, estimate GAP from qualitative performance fields instead:
+  min_observations_per_context: 8          # 8-10; below this error rates are unreliable
+  qualitative_fallback:
+    struggling: 8        # treat as >30%
+    developing: 5        # treat as 15-30%
+    competent: 3         # treat as <15%
+  error_trend_min_sessions: 5              # below this, error_trend: insufficient_data
+  recency_confidence:
+    full_days: 7         # <=7 days: use error rates as-is
+    moderate_days: 30    # 8-30 days: inform scoring, not sole basis for advancement
+    stale_days: 60       # 31-60 days: re-verify before any advancement decision
+
+gap_vocabulary:             # decision-engine.md — Vocabulary GAP Scoring
+  error_rate_production_over_30pct: 8
+  error_rate_production_15_to_30pct: 5
+  error_rate_production_under_15pct: 3
+  error_rate_production_null: 4
+  no_error_tracking_never_observed: 2
+  cross_category_weight: 0.7               # vocab GAP ≈ 70% of equivalent grammar GAP
+  passive_known_recent_increase_topic_boost: 2
+
+decay:                      # decision-engine.md Step 2 — DECAY (0-10) by days since last practiced
+  bands:
+    - { max_days: 1, score: 0 }
+    - { max_days: 3, score: 2 }
+    - { max_days: 7, score: 5 }
+    - { max_days: 14, score: 7 }
+    - { max_days: null, score: 9 }         # 15+
+  durability:                              # DECAY_ADJUSTED = DECAY * (1 - min(practice_count / divisor, cap))
+    divisor: 20
+    cap: 0.7
+
+topic_boost:                # decision-engine.md Step 2 — TOPIC_BOOST (0-3)
+  direct_match: 3
+  adjacent: 1
+  none: 0
+
+interest:                   # decision-engine.md Step 2 — INTEREST (0-3)
+  asked_unprompted_or_debrief_or_journal_last_2_sessions: 3
+  parking_lot_or_enthusiasm_last_2_weeks: 2
+  topical_cluster_engagement: 1
+  no_signal_or_stale: 0
+  cap: 3                                    # enforced by validate-state.py (score > 3 = FAIL)
+  stale_after_days: 28                      # last_inferred older than this → treat as 0
+
+variety_penalty:            # decision-engine.md Step 2 — VARIETY_PENALTY (0-5)
+  same_activity_type_days: 3
+  penalty: 5
+
+modifiers:                  # decision-engine.md Step 3
+  parking_lot_alignment_boost: 3
+  low_energy_gap_multiplier_challenging: 0.5
+  low_motivation_need_multiplier_fun: 2
+  just_right_streak_preserve_at: 3          # streak of session_difficulty_rating == just-right
+  # sprint.active == true → score only sprint.focus_areas concepts
+
+selection:                  # decision-engine.md Step 4
+  primary_count: 1
+  secondary_count: 1
+  secondary_prefers_different_category: true
+  tie_break: learner_interest
+
+concurrent_concept_gate:    # decision-engine.md Step 5 / CLAUDE.md guardrail
+  max_practicing_before_new: 3
+  max_practicing_with_carryover: 4
+
+acquisition_gate:           # CLAUDE.md guardrail LOAD-01 / D-02 (CORE concepts: grammar, vocabulary)
+  error_rate_drills_max: 0.10
+  error_rate_production_max: 0.10
+  performance_unscaffolded_required: competent
+  min_sessions_practiced: 3
+  placement_acquired_exempt_from_session_count: true
+
+carryover_escalation:       # decision-engine.md Step 0b
+  prerequisite:              # is_prerequisite: true
+    - { at_sessions: 6, stage: flagged }
+    - { at_sessions: 8, stage: approach_changed }
+    - { at_sessions: 10, stage: sprint }
+    - { at_sessions: 12, stage: surfaced }
+  non_prerequisite:          # is_prerequisite: false
+    - { at_sessions: 9, stage: flagged }
+    - { at_sessions: 12, stage: approach_changed }
+    - { at_sessions: 15, stage: sprint_or_deprioritize }
+    - { at_sessions: 18, stage: surfaced }
+
+regression_escalation:      # decision-engine.md Step 0c
+  prerequisite:
+    - { at_sessions: 2, stage: flagged }
+    - { at_sessions: 3, stage: approach_changed }
+    - { at_sessions: 4, stage: sprint }
+    - { at_sessions: 5, stage: surfaced }
+  non_prerequisite:
+    - { at_sessions: 3, stage: flagged }
+    - { at_sessions: 5, stage: approach_changed }
+    - { at_sessions: 7, stage: sprint_or_deprioritize }
+    - { at_sessions: 9, stage: surfaced }
+  approach_switch:           # read recast_uptake_stats at approach_changed
+    min_recasts_for_uptake_signal: 5
+    low_uptake_threshold: 0.60             # landed/given below this → escalate correction MODE
+    # low uptake → escalate mode (recast → explicit → metalinguistic)
+    # high uptake but re-erring → change context/modality
+    # insufficient data → default to context/modality change
+
+interleaving:               # decision-engine.md Step 5b
+  eligible_status: [acquired, automatic]
+  eligible_practicing_requires: { performance_unscaffolded: competent }
+  rank_by: decay_score
+  prefer_stalled_carryover: true
+  count_by_primary_stage:
+    stage_1_2_first_session: { min: 0, max: 1 }
+    stage_2_subsequent: { min: 1, max: 1 }
+    stage_3: { min: 2, max: 2 }
+    stage_4: { min: 2, max: 3 }
+  max_per_activity: 3
+  interleaving_only_trap_sessions: 5       # interleaved 5+ times w/o primary focus → elevate to primary
+
+topic_scoring:              # decision-engine.md Step 6 — weekly topic selection
+  formula: "GRAMMAR_FIT + VOCABULARY_FIT + LEARNER_INTEREST + FRESHNESS"
+  grammar_fit: { min: 0, max: 5 }
+  vocabulary_fit: { min: 0, max: 5 }
+  learner_interest: { min: 0, max: 3 }
+  freshness:
+    never_used: 3
+    four_plus_weeks: 2
+    two_to_three_weeks: 1
+    last_week: 0                            # exclude
+  tie_break: learner_interest
+
+fluency_days:               # route_session.py is authoritative; per-phase weekly targets
+  A: 0
+  B: 1
+  C: 2
+  D: 3
+  non_consecutive: true

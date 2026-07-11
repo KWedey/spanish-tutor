@@ -2,6 +2,8 @@
 
 Loaded when: Standard session (post-onboarding). Used to select today's focus concepts and route to appropriate activities.
 
+> **Machine-readable form:** the scoring weights, gates, and escalation ladders in this guide are mirrored in `curriculum/decision-weights.yaml` (the score/select/gate engine contracts) — tune the numbers there and keep this guide's tables in sync.
+
 ## Step 0b — Carryover Escalation Check
 
 Run at session start for each concept in `schedule.yaml > carryover_concepts`. Check `sessions_in_carryover` against the escalation ladder.

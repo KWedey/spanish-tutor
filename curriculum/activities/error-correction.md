@@ -1,5 +1,7 @@
 # Error Correction
 
+> **Machine-readable form:** the correction matrix below is mirrored in `curriculum/error-correction-matrix.yaml` (the `error_correction_mode(stage, phase)` engine contract) — tune the caps there and keep the tables in sync.
+
 ## Purpose
 
 Guides the tutor on WHEN and HOW to correct errors — during activities, after them, and across

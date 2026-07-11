@@ -1,0 +1,642 @@
+{
+  "$id": "https://spanish-tutor.dev/schemas/session-log.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "assessment": {
+      "default": null,
+      "description": "Initial assessment (session 1 only). Records the placement *event* \u2014 what\nwas elicited and the decision reached. The persisted placement *result*\nlives in learner-profile.yaml initial_placement (schemas/learner-profile.schema.yaml).\nField mapping: placement_decision.level -> initial_placement.level,\nplacement_decision.confidence -> initial_placement.confidence,\nreading_check.comprehension -> initial_placement.reading_result.\n",
+      "properties": {
+        "grammar_prompts": {
+          "description": "Elicited production per graded prompt",
+          "properties": {
+            "introduce_yourself": {
+              "additionalProperties": true,
+              "description": "response_summary + scoring (pre-A / early-A / late-A / acquired-A-01)",
+              "type": "object"
+            },
+            "tell_about_yesterday": {
+              "additionalProperties": true,
+              "description": "response_summary + scoring (below-B / early-B / mid-B / acquired-B-01-B-04)",
+              "type": "object"
+            },
+            "what_would_you_do": {
+              "additionalProperties": true,
+              "description": "response_summary + scoring (below-C / early-C / mid-C / acquired-through-C)",
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "placement_decision": {
+          "additionalProperties": true,
+          "description": "level + confidence (high/medium/low) + rationale",
+          "type": "object"
+        },
+        "reading_check": {
+          "additionalProperties": true,
+          "description": "passage_level + comprehension (below-expected / gets-the-gist / understands-nearly-all)",
+          "type": "object"
+        },
+        "self_report": {
+          "description": "Learner's self-assessed level before prompts",
+          "type": "string"
+        },
+        "vocabulary_observation": {
+          "additionalProperties": true,
+          "description": "level (minimal/narrow/broad/deep), domains_demonstrated, production_gap_indicators, follow_up_topic, follow_up_notes",
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "assignment_review": {
+      "default": [],
+      "description": "How yesterday's homework went",
+      "items": {
+        "properties": {
+          "completed": {
+            "description": "Whether the learner completed it",
+            "type": "boolean"
+          },
+          "learner_report": {
+            "description": "What the learner said about it",
+            "type": "string"
+          },
+          "resource": {
+            "description": "External tool/resource used",
+            "type": "string"
+          },
+          "skill_updates": {
+            "description": "Free-form skill-map deltas prompted by this review",
+            "type": "array"
+          },
+          "task": {
+            "description": "The assignment being reviewed",
+            "type": "string"
+          },
+          "tutor_assessment": {
+            "description": "What the tutor inferred",
+            "type": "string"
+          },
+          "verification_result": {
+            "description": "What the tutor observed when testing the claim",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "assignments": {
+      "default": [],
+      "description": "Homework assignments for before next session",
+      "items": {
+        "properties": {
+          "dialect_advisory": {
+            "default": "",
+            "description": "Required when the assignment matches the dialect-mismatch trigger matrix in\ninput-orchestration.md Section 1 Step 2 (mixed/neutral resource + voseo/vosotros\ntarget_dialect, or peninsular resource + non-es-ES target_dialect).\n",
+            "enum": [
+              "voseo",
+              "vosotros",
+              "voseo+vosotros"
+            ],
+            "type": "string"
+          },
+          "estimated_minutes": {
+            "default": 0,
+            "description": "Minutes the learner should expect to spend",
+            "type": "integer"
+          },
+          "narrow_topic_aligned": {
+            "default": false,
+            "description": "True if this assignment aligns with the week's narrow topic (input-orchestration.md Section 1 Step 5).",
+            "type": "boolean"
+          },
+          "notes": {
+            "default": "",
+            "description": "Free-text note or prompt for the assignment",
+            "type": "string"
+          },
+          "priority": {
+            "default": "",
+            "description": "Assignment priority (required = core, recommended = should-do, bonus = optional)",
+            "enum": [
+              "required",
+              "recommended",
+              "bonus"
+            ],
+            "type": "string"
+          },
+          "resource": {
+            "default": "",
+            "description": "Resource title from curriculum/media-bank.yaml or resources/resource-catalog.yaml",
+            "type": "string"
+          },
+          "retrieval_target": {
+            "default": "",
+            "description": "Prior concept to revisit in this assignment (e.g. 'include 2 ser/estar sentences')",
+            "type": "string"
+          },
+          "target_skill": {
+            "default": "",
+            "description": "Which skill-map entry this assignment supports",
+            "type": "string"
+          },
+          "task": {
+            "default": "",
+            "description": "Human-readable description of the assignment (input-orchestration.md Section 1 Step 5; docs/system-design.md).",
+            "type": "string"
+          },
+          "type": {
+            "default": "",
+            "description": "Assignment type \u2014 anki, writing, listening, reading, drill, journal, etc.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "estimated_minutes"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "date": {
+      "default": "",
+      "description": "Session date (YYYY-MM-DD)",
+      "type": "string"
+    },
+    "decision_engine_trace": {
+      "default": null,
+      "description": "Records why the tutor chose this session's focus \u2014 scoring details from concept selection",
+      "properties": {
+        "candidates_scored": {
+          "default": 0,
+          "description": "Number of concepts evaluated by the decision engine",
+          "type": "integer"
+        },
+        "override_reason": {
+          "default": null,
+          "description": "Null unless manual override; record reason if so",
+          "type": "string"
+        },
+        "selected_primary": {
+          "default": "",
+          "description": "Concept ID selected as primary focus",
+          "type": "string"
+        },
+        "selected_secondary": {
+          "default": "",
+          "description": "Concept ID selected as secondary focus",
+          "type": "string"
+        },
+        "top_candidates": {
+          "default": [],
+          "description": "Top-scoring candidates with individual dimension scores: {id, NEED, GAP, DECAY, TOPIC, INTEREST, VARIETY, TOTAL}",
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "duration_minutes": {
+      "default": 0,
+      "description": "Total session duration in minutes",
+      "type": "integer"
+    },
+    "gap_days": {
+      "default": 0,
+      "description": "Days since last session (0 if consecutive)",
+      "type": "integer"
+    },
+    "homework_load_rating": {
+      "default": null,
+      "description": "D-10/LOAD-04: Learner self-report on PRIOR session's homework load. Captured in Review & Warm-up (CLAUDE.md L96). Separate from session_difficulty_rating. Drives D-11 tiered daily_target adjustment via check_daily_target_tier_drift in validate-state.py.",
+      "enum": [
+        null,
+        "too-much",
+        "just-right",
+        "too-light"
+      ],
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "input_reviewed": {
+      "default": [],
+      "description": "Input comprehension debrief entries. NOTE: comprehension_assessment here (per-session debrief) feeds the running receptive_skills.comprehension_quality in skill-map (CLAUDE.md State Updates step 3) \u2014 the two are intentionally named differently (event log vs. cumulative state).",
+      "items": {
+        "properties": {
+          "comprehension_assessment": {
+            "description": "Depth of comprehension demonstrated in the debrief",
+            "enum": [
+              null,
+              "gist",
+              "main_ideas",
+              "details",
+              "inference"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "difficulty_self_report": {
+            "description": "Learner's difficulty self-report",
+            "enum": [
+              null,
+              "too_easy",
+              "just_right",
+              "too_hard"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "duration_minutes": {
+            "description": "Minutes of input reviewed",
+            "type": "integer"
+          },
+          "level_at_time": {
+            "description": "Learner's level when the input was assigned (e.g. L2)",
+            "type": "string"
+          },
+          "passes": {
+            "description": "Multi-pass count (L2-L3: recommend 2-3)",
+            "type": "integer"
+          },
+          "production_gaps_observed": {
+            "description": "Words the learner reached for but couldn't produce",
+            "type": "array"
+          },
+          "resource": {
+            "description": "Resource name (matches resource-tracker)",
+            "type": "string"
+          },
+          "type": {
+            "description": "Input modality",
+            "enum": [
+              "listening",
+              "reading"
+            ],
+            "type": "string"
+          },
+          "vocabulary_extracted": {
+            "description": "Words/phrases the learner reported acquiring",
+            "type": "array"
+          }
+        },
+        "required": [
+          "resource",
+          "type"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "interleaved_concepts": {
+      "default": [],
+      "description": "Prior concepts woven into primary concept practice",
+      "type": "array"
+    },
+    "journal_review": {
+      "default": null,
+      "description": "Journal entry review (if applicable)",
+      "properties": {
+        "entry_date": {
+          "default": "",
+          "description": "Date of journal entry reviewed",
+          "type": "string"
+        },
+        "errors_found": {
+          "default": [],
+          "description": "Errors found in journal entry",
+          "type": "array"
+        },
+        "quality_notes": {
+          "default": "",
+          "description": "Coherence, complexity, improvement from prior entries",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "learner_energy": {
+      "default": "",
+      "description": "high, medium, low (self-reported or inferred)",
+      "type": "string"
+    },
+    "learner_observations": {
+      "default": null,
+      "description": "Learner state observations",
+      "properties": {
+        "autonomy_readiness": {
+          "default": "",
+          "description": "Observations about whether learner is ready for more control",
+          "type": "string"
+        },
+        "calibration_note": {
+          "default": "",
+          "description": "If self-assessment diverges from actual performance",
+          "type": "string"
+        },
+        "emotional_state": {
+          "default": "",
+          "description": "confident, uncertain, embarrassed, breakthrough-joy, struggling",
+          "type": "string"
+        },
+        "engagement": {
+          "default": "",
+          "description": "high, medium, low",
+          "type": "string"
+        },
+        "mood": {
+          "default": "",
+          "description": "motivated, neutral, frustrated, tired, excited, anxious",
+          "type": "string"
+        },
+        "notes": {
+          "default": "",
+          "description": "Free-text observation about the learner's state (used e.g. in the first-session log)",
+          "type": "string"
+        },
+        "self_assessment": {
+          "default": "",
+          "description": "What they said about how they're feeling about progress",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "new_anki_cards": {
+      "default": 0,
+      "description": "QR-R3: Count of NEW Anki cards added this session. Reviewing or\nre-activating existing cards does NOT count. Guardrail enforced by\ncheck-session-log.py (check_new_anki_cards): a value > 10 FAILs the\ncommit. Absent/0 on pre-QR-R3 logs, which passes.\n",
+      "type": "integer"
+    },
+    "new_grammar_concepts_introduced": {
+      "default": [],
+      "description": "QR-R3: Grammar concept IDs (skill-map keys, e.g. A-02-ser-vs-estar)\nintroduced for the first time this session. Consolidation/review of\nalready-seen concepts does NOT belong here. Guardrail enforced by\ncheck-session-log.py (check_new_grammar_concepts): length > 1 FAILs the\ncommit (CLAUDE.md \"Never introduce more than 1 new grammar concept per\nsession\"). Empty/absent passes.\n",
+      "type": "array"
+    },
+    "next_session": {
+      "default": null,
+      "description": "Next session recommendation",
+      "properties": {
+        "avoid": {
+          "default": "",
+          "description": "What NOT to do tomorrow and why",
+          "type": "string"
+        },
+        "estimated_duration": {
+          "default": 0,
+          "description": "Estimated duration in minutes",
+          "type": "integer"
+        },
+        "l1_interference_to_preempt": {
+          "default": [],
+          "description": "Predicted transfer errors to address proactively",
+          "type": "array"
+        },
+        "reason": {
+          "default": "",
+          "description": "Why this focus was chosen",
+          "type": "string"
+        },
+        "recommended_focus": {
+          "default": "",
+          "description": "What to focus on next",
+          "type": "string"
+        },
+        "session_type": {
+          "default": "",
+          "description": "normal, consolidation, light-review, push-forward, fun-day",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "placement_skipped_sessions": {
+      "default": [],
+      "description": "Onboarding session numbers skipped due to placement (first-session.md \u00a77: Late-A skips 01-04; Early-B+ logs all 10). Empty/absent for a true-beginner / Early-A first session.",
+      "type": "array"
+    },
+    "recasts": {
+      "default": [],
+      "description": "D-05: per-event recast log. Empty list = positive assertion of 'no recasts occurred.' Required when session contains Stage 3/4, fluency, or conversation practice (see check-session-log.py D-06).",
+      "items": {
+        "properties": {
+          "activity_stage": {
+            "description": "Activity stage when the recast occurred",
+            "enum": [
+              "stage-1",
+              "stage-2",
+              "stage-3",
+              "stage-4",
+              "fluency"
+            ],
+            "type": "string"
+          },
+          "concept_id": {
+            "description": "Grammar concept being corrected (skill-map key)",
+            "type": "string"
+          },
+          "corrected_form": {
+            "description": "The recast the tutor provided",
+            "type": "string"
+          },
+          "error_form": {
+            "description": "What the learner said",
+            "type": "string"
+          },
+          "uptake": {
+            "description": "Whether learner incorporated the corrected form",
+            "enum": [
+              "landed",
+              "missed",
+              "partial"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "concept_id",
+          "error_form",
+          "corrected_form",
+          "uptake",
+          "activity_stage"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "session_activities": {
+      "default": [],
+      "description": "Live session content activities",
+      "items": {
+        "properties": {
+          "duration_minutes": {
+            "description": "Minutes spent on this activity",
+            "type": "integer"
+          },
+          "errors_noted": {
+            "description": "Per-error records observed during the activity",
+            "items": {
+              "properties": {
+                "category": {
+                  "description": "grammar, vocabulary, pronunciation, gender, fluency, cultural",
+                  "type": "string"
+                },
+                "concept": {
+                  "description": "Which skill-map entry this maps to",
+                  "type": "string"
+                },
+                "correction": {
+                  "description": "What it should have been",
+                  "type": "string"
+                },
+                "error": {
+                  "description": "What the learner said",
+                  "type": "string"
+                },
+                "error_type": {
+                  "description": "developmental, l1-interference, fossilized, slip",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "fluency_observations": {
+            "description": "Pace, hesitation, risk-taking notes",
+            "type": "string"
+          },
+          "highlights": {
+            "description": "Things the learner did well",
+            "type": "string"
+          },
+          "l1_interference_noted": {
+            "description": "Whether any L1 interference errors were observed",
+            "type": "boolean"
+          },
+          "notes": {
+            "description": "Free-text activity notes",
+            "type": "string"
+          },
+          "observations": {
+            "description": "Free-text summary of what the tutor observed",
+            "type": "string"
+          },
+          "performance": {
+            "description": "strong, good, mixed, struggling",
+            "type": "string"
+          },
+          "target_concepts": {
+            "description": "Grammar/vocab skill-map keys being practiced",
+            "type": "array"
+          },
+          "type": {
+            "description": "Activity type \u2014 conversation, grammar-drill, translation, fluency-drill, writing-review, etc.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "session_difficulty_rating": {
+      "default": null,
+      "description": "Learner self-report at checkout",
+      "enum": [
+        null,
+        "too-easy",
+        "just-right",
+        "too-hard"
+      ],
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "session_number": {
+      "default": 0,
+      "description": "Sequential session number",
+      "type": "integer"
+    },
+    "session_status": {
+      "default": "complete",
+      "description": "Whether session completed normally",
+      "enum": [
+        "complete",
+        "partial",
+        "aborted"
+      ],
+      "type": "string"
+    },
+    "session_type": {
+      "default": "",
+      "description": "Session type. Includes 9 base types (standard, micro, weekly-review,\nphase-transition, return, first-session, onboarding, sprint, fluency)\nplus 2 overlay strings (onboarding-with-return-overlay,\nmaintenance-with-weekly-review) and 2 router-only types (maintenance,\nplacement-validation). The 4 added values mirror scripts/route_session.py\nreturn strings so the session log can persist whatever the router\ndecided. Audit C-3: prior enum omitted these, breaking the canary doc's\n`route_session.py state/` verification step.\n",
+      "enum": [
+        "standard",
+        "micro",
+        "weekly-review",
+        "phase-transition",
+        "return",
+        "first-session",
+        "onboarding",
+        "sprint",
+        "fluency",
+        "maintenance",
+        "onboarding-with-return-overlay",
+        "maintenance-with-weekly-review",
+        "placement-validation"
+      ],
+      "type": "string"
+    },
+    "skill_map_updates": {
+      "default": [],
+      "description": "Assessment updates to apply to skill-map",
+      "items": {
+        "properties": {
+          "concept": {
+            "description": "Skill-map key being updated",
+            "type": "string"
+          },
+          "evidence": {
+            "description": "Why this change was made",
+            "type": "string"
+          },
+          "field": {
+            "description": "Field changed \u2014 status, error_rate_drills, error_rate_production, error_trend, etc.",
+            "type": "string"
+          },
+          "new_value": {
+            "description": "Value after the update",
+            "type": "string"
+          },
+          "old_value": {
+            "description": "Value before the update",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "validation_checks": {
+      "default": [],
+      "description": "Placement validation spot-checks (sessions 2-4 only)",
+      "type": "array"
+    }
+  },
+  "required": [
+    "date",
+    "session_number",
+    "duration_minutes",
+    "session_type",
+    "session_status"
+  ],
+  "title": "Session Log",
+  "type": "object"
+}

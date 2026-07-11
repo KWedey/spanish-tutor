@@ -249,3 +249,116 @@ class TestAtomicWrite:
         remaining = list(tmp_path.iterdir())
         assert len(remaining) == 1
         assert remaining[0].name == "clean.yaml"
+
+
+# ---------------------------------------------------------------------------
+# 8. StateStore — the portable storage seam (docs/engine-api.md)
+# ---------------------------------------------------------------------------
+
+class TestStateStoreDocs:
+    """load/save round-trip and missing-doc semantics for top-level documents."""
+
+    def test_load_missing_doc_returns_none(self, tmp_path):
+        store = shared.StateStore(tmp_path / "state")
+        assert store.load("schedule") is None
+
+    def test_save_then_load_round_trip(self, tmp_path):
+        store = shared.StateStore(tmp_path / "state")
+        data = {"schema_version": 1, "current_phase": "A-foundation", "week": 3}
+
+        store.save("schedule", data)
+        loaded = store.load("schedule")
+
+        assert loaded == data
+
+    def test_save_writes_expected_path(self, tmp_path):
+        state_dir = tmp_path / "state"
+        store = shared.StateStore(state_dir)
+
+        store.save("skill-map", {"grammar": {}})
+
+        assert (state_dir / "skill-map.yaml").exists()
+
+    def test_save_creates_state_dir(self, tmp_path):
+        # Constructor must not require the directory to pre-exist.
+        store = shared.StateStore(tmp_path / "does-not-exist-yet")
+        store.save("system-health", {"schema_version": 1})
+        assert store.load("system-health") == {"schema_version": 1}
+
+    def test_save_overwrites_existing(self, tmp_path):
+        store = shared.StateStore(tmp_path / "state")
+        store.save("schedule", {"week": 1})
+        store.save("schedule", {"week": 2})
+        assert store.load("schedule") == {"week": 2}
+
+    def test_save_is_atomic_no_temp_left(self, tmp_path):
+        state_dir = tmp_path / "state"
+        store = shared.StateStore(state_dir)
+
+        store.save("schedule", {"week": 1})
+
+        # Only the target file remains; the atomic-write temp file is gone.
+        remaining = sorted(p.name for p in state_dir.iterdir())
+        assert remaining == ["schedule.yaml"]
+
+    def test_string_state_dir_accepted(self, tmp_path):
+        store = shared.StateStore(str(tmp_path / "state"))
+        store.save("schedule", {"week": 1})
+        assert store.load("schedule") == {"week": 1}
+
+    def test_default_state_dir_is_repo_state(self):
+        store = shared.StateStore()
+        assert store.state_dir == shared.STATE_DIR
+        assert store.sessions_dir == shared.STATE_DIR / "sessions"
+
+
+class TestStateStoreSessions:
+    """list/load/save for per-day session logs."""
+
+    def test_list_sessions_empty_when_no_dir(self, tmp_path):
+        store = shared.StateStore(tmp_path / "state")
+        assert store.list_sessions() == []
+
+    def test_save_then_load_session_round_trip(self, tmp_path):
+        store = shared.StateStore(tmp_path / "state")
+        log = {"date": "2026-04-10", "session_number": 5, "session_type": "standard"}
+
+        store.save_session("2026-04-10", log)
+        loaded = store.load_session("2026-04-10")
+
+        assert loaded == log
+
+    def test_load_missing_session_returns_none(self, tmp_path):
+        store = shared.StateStore(tmp_path / "state")
+        store.save_session("2026-04-10", {"date": "2026-04-10"})
+        assert store.load_session("2026-04-11") is None
+
+    def test_list_sessions_sorted_ascending(self, tmp_path):
+        store = shared.StateStore(tmp_path / "state")
+        for d in ("2026-04-12", "2026-04-01", "2026-04-07"):
+            store.save_session(d, {"date": d})
+
+        assert store.list_sessions() == ["2026-04-01", "2026-04-07", "2026-04-12"]
+
+    def test_list_sessions_ignores_archive_and_stray_files(self, tmp_path):
+        state_dir = tmp_path / "state"
+        store = shared.StateStore(state_dir)
+        store.save_session("2026-04-10", {"date": "2026-04-10"})
+
+        # An archive subtree and a non-date stray file must not be reported.
+        archive = state_dir / "sessions" / "archive"
+        archive.mkdir(parents=True, exist_ok=True)
+        (archive / "2026-01-01.yaml").write_text("date: 2026-01-01\n", encoding="utf-8")
+        (state_dir / "sessions" / "index.yaml").write_text("note: not a log\n",
+                                                           encoding="utf-8")
+
+        assert store.list_sessions() == ["2026-04-10"]
+
+    def test_save_session_is_atomic_no_temp_left(self, tmp_path):
+        state_dir = tmp_path / "state"
+        store = shared.StateStore(state_dir)
+
+        store.save_session("2026-04-10", {"date": "2026-04-10"})
+
+        remaining = sorted(p.name for p in (state_dir / "sessions").iterdir())
+        assert remaining == ["2026-04-10.yaml"]

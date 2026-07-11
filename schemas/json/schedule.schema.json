@@ -1,0 +1,377 @@
+{
+  "$id": "https://spanish-tutor.dev/schemas/schedule.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "active_grammar": {
+      "default": null,
+      "description": "What grammar is being worked on right now",
+      "properties": {
+        "maintenance": {
+          "default": [],
+          "description": "Acquired concepts due for spot-check",
+          "type": "array"
+        },
+        "primary": {
+          "default": "",
+          "description": "The main concept being learned",
+          "type": "string"
+        },
+        "secondary": {
+          "default": "",
+          "description": "A reinforcement concept from a prior level",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "active_pronunciation": {
+      "default": null,
+      "description": "Current pronunciation focus",
+      "properties": {
+        "focus": {
+          "default": "",
+          "description": "Current target sound or pattern",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "active_vocabulary": {
+      "default": null,
+      "description": "What vocabulary is being worked on right now",
+      "properties": {
+        "primary": {
+          "default": "",
+          "description": "Current cluster being built",
+          "type": "string"
+        },
+        "review": {
+          "default": [],
+          "description": "Clusters in SRS maintenance",
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "active_writing": {
+      "default": null,
+      "description": "Current writing track",
+      "properties": {
+        "current_level": {
+          "default": "",
+          "description": "sentence, paragraph, structured, extended",
+          "type": "string"
+        },
+        "journal_active": {
+          "default": false,
+          "description": "Whether daily journal entries are assigned",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "adjustment_log": {
+      "default": [],
+      "description": "Log of schedule adjustments",
+      "type": "array"
+    },
+    "anki_new_cards_per_session": {
+      "default": 8,
+      "description": "SRS new cards per session",
+      "type": "integer"
+    },
+    "anki_retirement_threshold_days": {
+      "default": 60,
+      "description": "Days after which cards are retired",
+      "type": "integer"
+    },
+    "autonomy_level": {
+      "default": "guided",
+      "description": "guided, collaborative, learner-led, maintenance",
+      "enum": [
+        "guided",
+        "collaborative",
+        "learner-led",
+        "maintenance"
+      ],
+      "type": "string"
+    },
+    "carryover_concepts": {
+      "default": [],
+      "description": "Concepts from prior phase still in active practice. Read by decision-engine.md Step 0b for the carryover/regression escalation ladder; sessions_in_carryover and escalation_stage are written by CLAUDE.md State Updates step 4.",
+      "items": {
+        "properties": {
+          "concept_id": {
+            "description": "skill-map key of the carried-over concept",
+            "type": "string"
+          },
+          "current_approach": {
+            "default": "",
+            "description": "The approach currently being used for this concept (change approach on escalation, do not just intensify)",
+            "type": "string"
+          },
+          "escalation_stage": {
+            "default": "normal",
+            "description": "Current rung on the carryover escalation ladder. String stage name (the tutor writes the name, NOT an int) matching decision-engine.md Step 0b/0c and system-design.md.",
+            "enum": [
+              "normal",
+              "flagged",
+              "approach_changed",
+              "sprint",
+              "surfaced"
+            ],
+            "type": "string"
+          },
+          "is_prerequisite": {
+            "default": false,
+            "description": "True if this concept is a prerequisite for current-phase work (raises escalation urgency)",
+            "type": "boolean"
+          },
+          "sessions_in_carryover": {
+            "default": 0,
+            "description": "Count of sessions this concept has been in carryover; checked against the escalation ladder in decision-engine.md Step 0b",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "concept_id"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "consecutive_just_right_count": {
+      "default": 0,
+      "description": "D-11: For restoration logic. Maintained by the tutor agent each session (CLAUDE.md State Updates step 4): incremented on a 'just-right' rating, reset to 0 after a +10% restore or on a non-'just-right' rating. 3 consecutive 'just-right' after a reduction \u2192 +10% daily_target; validate-state.py check_just_right_restore_drift FAILs when this reaches 3 with the restore unapplied.",
+      "type": "integer"
+    },
+    "consecutive_too_much_count": {
+      "default": 0,
+      "description": "D-11: Count of consecutive 'too-much' homework_load_rating ratings. Maintained by the tutor agent each session (CLAUDE.md State Updates step 4): incremented on a 'too-much' rating, reset to 0 after a daily_target reduction or on a non-'too-much' rating. validate-state.py check_daily_target_tier_drift FAILs when this reaches 2 with the reduction unapplied.",
+      "type": "integer"
+    },
+    "current_onboarding_session": {
+      "default": 1,
+      "description": "Current onboarding session number (1-10). Agent reads this directly; incremented at end of each onboarding session.",
+      "type": "integer"
+    },
+    "current_phase": {
+      "default": "A-foundation",
+      "description": "Matches curriculum directory",
+      "enum": [
+        "A-foundation",
+        "B-conversational",
+        "C-intermediate",
+        "D-advanced"
+      ],
+      "type": "string"
+    },
+    "current_week": {
+      "default": 1,
+      "description": "Current week number",
+      "type": "integer"
+    },
+    "fluency_accuracy_balance": {
+      "default": "accuracy-leaning",
+      "description": "accuracy-leaning, balanced, fluency-leaning",
+      "enum": [
+        "accuracy-leaning",
+        "balanced",
+        "fluency-leaning"
+      ],
+      "type": "string"
+    },
+    "fluency_days_this_week": {
+      "default": 0,
+      "description": "Number of fluency days used this week",
+      "type": "integer"
+    },
+    "grammar_queue": {
+      "default": [],
+      "description": "What grammar is next when current items are acquired",
+      "type": "array"
+    },
+    "just_right_streak": {
+      "default": 0,
+      "description": "Consecutive 'just-right' session_difficulty_rating values (DISTINCT from the D-11 homework-load consecutive_just_right_count). At 3+, preserve current calibration. Maintained by the tutor per decision-engine.md L192 / weekly-review-guide.md L75; reset on a 'too-easy' or 'too-hard' rating.",
+      "type": "integer"
+    },
+    "last_fluency_day": {
+      "default": null,
+      "description": "Date of last fluency day",
+      "type": "string"
+    },
+    "last_session_date": {
+      "default": null,
+      "description": "Date of most recent session (YYYY-MM-DD). Used for gap detection.",
+      "type": "string"
+    },
+    "onboarding_complete": {
+      "default": false,
+      "description": "True after session 10 (decision engine activates)",
+      "type": "boolean"
+    },
+    "placement_validation": {
+      "default": null,
+      "description": "Placement validation state (active during sessions 2-4 for learners who skip onboarding)",
+      "properties": {
+        "active": {
+          "default": false,
+          "description": "Whether placement validation is currently active",
+          "type": "boolean"
+        },
+        "confidence": {
+          "default": null,
+          "description": "high / medium / low / validated",
+          "enum": [
+            null,
+            "high",
+            "medium",
+            "low",
+            "validated"
+          ],
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "listening_baseline_set": {
+          "default": false,
+          "description": "Whether the listening baseline has been established",
+          "type": "boolean"
+        },
+        "queue": {
+          "default": [],
+          "description": "Validation queue \u2014 populated during session 1 for Early B+ placements. Each entry: {concept_id, priority, status, checked_in_session, notes}",
+          "type": "array"
+        },
+        "sessions_completed": {
+          "default": 0,
+          "description": "Number of validation sessions completed",
+          "type": "integer"
+        },
+        "total_downgrades": {
+          "default": 0,
+          "description": "Number of concept downgrades during validation",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "schema_version": {
+      "default": 1,
+      "description": "Schema version number",
+      "type": "integer"
+    },
+    "session_number": {
+      "default": 0,
+      "description": "Current session number (sequential counter across all sessions)",
+      "type": "integer"
+    },
+    "sprint": {
+      "default": null,
+      "description": "Sprint mode - temporary reprioritization for a deadline",
+      "properties": {
+        "active": {
+          "default": false,
+          "description": "Whether sprint mode is active",
+          "type": "boolean"
+        },
+        "focus_areas": {
+          "default": [],
+          "description": "What to prioritize during sprint",
+          "type": "array"
+        },
+        "goal": {
+          "default": "",
+          "description": "e.g., travel to Mexico City",
+          "type": "string"
+        },
+        "target_date": {
+          "default": "",
+          "description": "Sprint deadline",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "study_time_budget": {
+      "default": null,
+      "description": "D-04/LOAD-07: Homework-only time budget. Null at init; populated at first-session. Required after session 1. Renamed from REQUIREMENTS.md LOAD-07 'available_daily_study_time' per D-04.",
+      "properties": {
+        "daily_maximum": {
+          "default": null,
+          "description": "D-05: Hard ceiling; check-session-log.py FAILs if homework sum > daily_maximum + today_stretch. Strawman default 60.",
+          "type": "integer"
+        },
+        "daily_minimum": {
+          "default": null,
+          "description": "D-05: Minimum daily homework minutes \u2014 SLA floor for progression. Strawman default 15.",
+          "type": "integer"
+        },
+        "daily_target": {
+          "default": null,
+          "description": "D-05: Default daily assignment budget on a normal day. Adaptive via D-11 tiered rule. Strawman default 30.",
+          "type": "integer"
+        },
+        "today_stretch": {
+          "default": 0,
+          "description": "D-04: Ephemeral per-session extension above daily_maximum. Reset to 0 by post-session.sh Step 5c. Default 0.",
+          "type": "integer"
+        },
+        "weekly_goal": {
+          "default": null,
+          "description": "D-05: Weekly total target; informs weekly review. Strawman default 180.",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "topic_history": {
+      "default": [],
+      "description": "List of {topic_id, week, date_started} \u2014 tracks which weekly narrow topics have been used and when, for FRESHNESS scoring in the decision engine",
+      "type": "array"
+    },
+    "vocabulary_queue": {
+      "default": [],
+      "description": "What vocabulary is next when current clusters are acquired",
+      "type": "array"
+    },
+    "weekly_topic": {
+      "default": null,
+      "description": "Narrow input - weekly topic for content immersion",
+      "properties": {
+        "grammar_reinforcement": {
+          "default": "",
+          "description": "Which grammar concept gets extra context",
+          "type": "string"
+        },
+        "started": {
+          "default": "",
+          "description": "Date this topic block started",
+          "type": "string"
+        },
+        "topic": {
+          "default": "",
+          "description": "e.g., immigration in Latin America",
+          "type": "string"
+        },
+        "vocabulary_cluster": {
+          "default": "",
+          "description": "Which vocab cluster this reinforces",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "current_phase",
+    "current_week",
+    "onboarding_complete",
+    "fluency_accuracy_balance"
+  ],
+  "title": "Schedule",
+  "type": "object"
+}

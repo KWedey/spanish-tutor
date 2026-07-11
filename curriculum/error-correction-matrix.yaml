@@ -1,0 +1,82 @@
+# Error-Correction Matrix — machine-readable extraction of curriculum/activities/error-correction.md
+#
+# PURPOSE: This file is the portable, machine-readable form of the Stage x Phase
+# Correction Matrix. error-correction.md remains the pedagogical source of truth (the
+# WHY, the recast-salience techniques, the exact phrasing); this file carries the caps
+# and enums a port (web/mobile app) executes in code — the engine-api.md
+# `error_correction_mode(stage, phase)` contract (#5). When tuning caps, change THIS
+# file AND update the matrix table in error-correction.md to match —
+# tests/test_engine_data.py spot-checks load-bearing constants in both and fails loudly
+# on drift.
+#
+# Lookup: matrix[stage][phase] -> cell
+#   stage ∈ {1, 2, 3, 4, fluency}   (Stage 1 and 2 share the "controlled practice" row)
+#   phase ∈ {A, B, C, D}
+#   cell  = { mode, timing, explicit_cap, explicit_cap_10min, recast_cap, notes }
+#     mode                ∈ {explicit, recast, mixed, meaning_impeding_only}
+#     timing              ∈ {immediate, batched}
+#     explicit_cap        max explicit corrections per segment; null = unlimited; 0 = disallowed
+#     explicit_cap_10min  raised explicit cap for a 10-minute segment where the cell scales;
+#                         null where the cell does not scale
+#     recast_cap          max recasts per segment; null = unlimited
+#     notes               free-text nuance carried over verbatim-in-spirit from the matrix cell
+
+schema_version: 1
+
+matrix:
+  # Stage 1 and Stage 2 share the "controlled practice" row of the matrix.
+  1: &controlled_practice
+    A: { mode: explicit, timing: immediate, explicit_cap: null, explicit_cap_10min: null, recast_cap: null,
+         notes: "No limit. L1 interference preempted." }
+    B: { mode: explicit, timing: immediate, explicit_cap: null, explicit_cap_10min: null, recast_cap: null,
+         notes: "No limit." }
+    C: { mode: mixed, timing: immediate, explicit_cap: null, explicit_cap_10min: null, recast_cap: null,
+         notes: "Explicit when the error is on the current focus; recast otherwise." }
+    D: { mode: recast, timing: immediate, explicit_cap: null, explicit_cap_10min: null, recast_cap: null,
+         notes: "Recast primarily; explicit only for fossilized risks." }
+  2: *controlled_practice
+  3:
+    A: { mode: mixed, timing: immediate, explicit_cap: null, explicit_cap_10min: null, recast_cap: null,
+         notes: "Explicit for the focus concept; recast for everything else." }
+    B: { mode: recast, timing: immediate, explicit_cap: 2, explicit_cap_10min: null, recast_cap: null,
+         notes: "Mostly recast; explicit <= 2 per segment." }
+    C: { mode: recast, timing: immediate, explicit_cap: 1, explicit_cap_10min: null, recast_cap: null,
+         notes: "Recast; explicit <= 1 per segment." }
+    D: { mode: recast, timing: immediate, explicit_cap: 0, explicit_cap_10min: null, recast_cap: null,
+         notes: "Recast only." }
+  4:
+    A: { mode: recast, timing: batched, explicit_cap: 3, explicit_cap_10min: 5, recast_cap: null,
+         notes: "Explicit reserved for meaning-blocking errors. Batch the rest." }
+    B: { mode: recast, timing: batched, explicit_cap: 3, explicit_cap_10min: 5, recast_cap: null,
+         notes: "Batch the rest." }
+    C: { mode: recast, timing: batched, explicit_cap: 3, explicit_cap_10min: 5, recast_cap: null,
+         notes: "Batch the rest." }
+    D: { mode: recast, timing: batched, explicit_cap: null, explicit_cap_10min: null, recast_cap: null,
+         notes: "Meaning-impeding only." }
+  fluency:
+    A: { mode: meaning_impeding_only, timing: immediate, explicit_cap: null, explicit_cap_10min: null, recast_cap: null,
+         notes: "Meaning-impeding only. All other errors batched for post-activity review." }
+    B: { mode: meaning_impeding_only, timing: immediate, explicit_cap: null, explicit_cap_10min: null, recast_cap: null,
+         notes: "Same as Phase A." }
+    C: { mode: meaning_impeding_only, timing: immediate, explicit_cap: null, explicit_cap_10min: null, recast_cap: null,
+         notes: "Same as Phase A, but the batched review is entirely in Spanish." }
+    D: { mode: meaning_impeding_only, timing: immediate, explicit_cap: null, explicit_cap_10min: null, recast_cap: null,
+         notes: "Same as Phase A; tutor intervention minimal." }
+
+# Metalinguistic feedback — the THIRD correction tier, above explicit. Not a matrix cell:
+# it is an escalation triggered when the same error form has received explicit correction
+# this many times (in one session, or across 2 consecutive sessions) without uptake.
+# error-correction.md § Metalinguistic Feedback Protocol.
+metalinguistic_escalation:
+  trigger_failed_explicit_corrections: 2   # 2+ failed explicit corrections on the same error
+  max_concepts_per_session: 1              # hard cap — never metalinguistically correct >1 concept/session
+  phase_ab: tutor_initiated                # tutor initiates once the trigger is met
+  phase_cd: learner_initiated              # tutor waits for a learner "¿Por qué...?" question first
+
+# Escalation Protocol — the same error recurring across N sessions (the EXECUTION side of
+# regression handling; decision-engine.md Step 0c is the DECISION side). Both can fire on
+# one concept simultaneously. error-correction.md § Escalation Protocol.
+escalation_protocol:
+  - { at_sessions: 3, stage: change_approach }          # try a different mode / dedicated drill / new context
+  - { at_sessions: 5, stage: fossilized_risk }          # log as fossilized risk in skill-map + system-health
+  - { at_sessions: 8, stage: inform_learner_directly }  # likely fossilized — tell the learner, adjust timeline

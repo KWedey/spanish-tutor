@@ -1,5 +1,6 @@
 """Shared constants and helpers used across tutoring system scripts."""
 import os
+import re
 import sys
 import tempfile
 from pathlib import Path
@@ -220,3 +221,111 @@ def yaml_value(value) -> str:
         # valid single-line YAML (e.g. {key: val, nested: {a: 1}}).
         return yaml.dump(value, default_flow_style=True, allow_unicode=True).strip()
     return str(value)
+
+
+# ---------------------------------------------------------------------------
+# StateStore — the portable storage seam (docs/engine-api.md)
+# ---------------------------------------------------------------------------
+#
+# A session-log filename is <ISO-date>.yaml; list_sessions reports only files
+# whose stem matches this pattern, so the sessions/archive/ subtree and any
+# stray files under sessions/ are never mistaken for logs.
+
+_SESSION_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+class StateStore:
+    """Filesystem-backed implementation of the engine-api StateStore interface.
+
+    This is the storage *seam* the deterministic engine reads and writes state
+    through — part of the host layer, not the engine kernel. The repo host is
+    the filesystem: the five top-level documents live at
+    ``<state_dir>/<doc>.yaml`` and per-day session logs at
+    ``<state_dir>/sessions/<date>.yaml``. Every method is a thin wrapper over
+    the module helpers already used throughout the scripts (:func:`load_yaml`,
+    :func:`atomic_write`) — it adds no new persistence logic and changes no
+    existing behavior.
+
+    **Ports supply their own backend.** A web/mobile/cloud port re-implements
+    these five methods against its own medium (SQLite, IndexedDB, a cloud KV
+    store) and the engine keeps working unchanged, because nothing above this
+    class assumes filesystem paths, a git checkout, or a working directory.
+    The contract a port must preserve (docs/engine-api.md "StateStore
+    interface")::
+
+        load(doc_name)           -> dict | None   # None if absent
+        save(doc_name, data)     -> None           # atomic write
+        list_sessions()          -> list[str]       # session-log dates, sorted
+        load_session(date)       -> dict | None
+        save_session(date, data) -> None
+
+    Args:
+        state_dir: Root of the state tree. Defaults to the repo ``state/``
+            (:data:`STATE_DIR`, itself redirectable via ``TUTOR_STATE_DIR``).
+    """
+
+    #: The five top-level state documents (docs/engine-api.md "State model").
+    #: The per-day session log is the sixth document, reached through the
+    #: session methods rather than by name.
+    DOCS = (
+        "learner-profile",
+        "skill-map",
+        "schedule",
+        "resource-tracker",
+        "system-health",
+    )
+
+    def __init__(self, state_dir: Path | str | None = None) -> None:
+        self.state_dir = Path(state_dir) if state_dir is not None else STATE_DIR
+        self.sessions_dir = self.state_dir / "sessions"
+
+    # -- top-level documents -------------------------------------------------
+
+    def _doc_path(self, doc_name: str) -> Path:
+        return self.state_dir / f"{doc_name}.yaml"
+
+    def load(self, doc_name: str) -> dict | None:
+        """Return the parsed document, or None if the file is absent."""
+        return load_yaml(self._doc_path(doc_name))
+
+    def save(self, doc_name: str, data: dict) -> None:
+        """Serialize *data* to ``<state_dir>/<doc_name>.yaml`` atomically."""
+        self._write(self._doc_path(doc_name), data)
+
+    # -- per-day session logs ------------------------------------------------
+
+    def _session_path(self, session_date: str) -> Path:
+        return self.sessions_dir / f"{session_date}.yaml"
+
+    def list_sessions(self) -> list[str]:
+        """Return session-log dates (ISO ``YYYY-MM-DD`` strings), sorted ascending.
+
+        Only direct children of ``sessions/`` whose stem is a bare ISO date are
+        reported — the ``archive/`` subtree and any stray files are ignored.
+        Returns an empty list when the sessions directory does not exist yet.
+        """
+        if not self.sessions_dir.exists():
+            return []
+        return sorted(
+            p.stem for p in self.sessions_dir.glob("*.yaml")
+            if _SESSION_DATE_RE.match(p.stem)
+        )
+
+    def load_session(self, session_date: str) -> dict | None:
+        """Return the session log for *session_date*, or None if absent."""
+        return load_yaml(self._session_path(session_date))
+
+    def save_session(self, session_date: str, data: dict) -> None:
+        """Serialize the session log for *session_date* atomically."""
+        self._write(self._session_path(session_date), data)
+
+    # -- internal ------------------------------------------------------------
+
+    @staticmethod
+    def _write(path: Path, data: dict) -> None:
+        """Atomically write *data* as YAML in the repo's serialization style."""
+        atomic_write(
+            path,
+            yaml.dump(data, default_flow_style=False, allow_unicode=True,
+                      sort_keys=False),
+        )

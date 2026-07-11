@@ -1,0 +1,602 @@
+# Curriculum Manifest — machine-readable index of every teachable concept.
+#
+# GENERATED FILE — do not edit by hand. Regenerate with:
+#   .venv/bin/python scripts/build-manifest.py
+#
+# One entry per teachable concept across the grammar, vocabulary, pronunciation, and
+# cultural tracks. Consumed as the curriculum package index (see docs/engine-api.md). Ids
+# align with state/skill-map.template.yaml concept keys for grammar and cultural. Entries are
+# emitted in a fixed category order (grammar, vocabulary, pronunciation, cultural), sorted by
+# id within each category, so regeneration is diff-stable.
+schema_version: 1
+concepts:
+- id: A-00-communication-repair
+  category: grammar
+  phase: A
+  title: Communication Repair Phrases
+  path: curriculum/grammar/A-foundation/00-communication-repair.md
+  prerequisites: []
+  l1_interference: []
+- id: A-01-present-regular
+  category: grammar
+  phase: A
+  title: Present Tense — Regular Conjugation
+  path: curriculum/grammar/A-foundation/01-present-regular.md
+  prerequisites: []
+  l1_interference:
+  - subject-pronoun-overuse
+- id: A-02-ser-vs-estar
+  category: grammar
+  phase: A
+  title: Ser vs Estar — The Two "To Be" Verbs
+  path: curriculum/grammar/A-foundation/02-ser-vs-estar.md
+  prerequisites:
+  - A-01-present-regular
+  l1_interference:
+  - ser-estar-confusion
+- id: A-03-gender-agreement
+  category: grammar
+  phase: A
+  title: Gender, Number, and Adjective Agreement
+  path: curriculum/grammar/A-foundation/03-gender-agreement.md
+  prerequisites: []
+  l1_interference:
+  - adjective-placement
+- id: A-04-articles-prepositions
+  category: grammar
+  phase: A
+  title: Articles, Prepositions, Contractions, and Personal 'a'
+  path: curriculum/grammar/A-foundation/04-articles-prepositions.md
+  prerequisites:
+  - A-03-gender-agreement
+  l1_interference:
+  - personal-a-omission
+  - preposition-mapping
+- id: A-05-basic-questions
+  category: grammar
+  phase: A
+  title: Basic Questions, Negation, and Double Negatives
+  path: curriculum/grammar/A-foundation/05-basic-questions.md
+  prerequisites:
+  - A-01-present-regular
+  l1_interference:
+  - english-question-word-order
+  - negative-double-negative
+- id: A-06-gustar-type-verbs
+  category: grammar
+  phase: A
+  title: Gustar-Type Verbs — Reversed Sentence Structure
+  path: curriculum/grammar/A-foundation/06-gustar-type-verbs.md
+  prerequisites:
+  - A-01-present-regular
+  l1_interference:
+  - gustar-construction
+- id: A-07-present-irregular-common
+  category: grammar
+  phase: A
+  title: Common Irregular Present Tense — The Verbs You Can't Avoid
+  path: curriculum/grammar/A-foundation/07-present-irregular-common.md
+  prerequisites:
+  - A-01-present-regular
+  l1_interference: []
+- id: A-08-numbers-quantifiers
+  category: grammar
+  phase: A
+  title: Numbers and Quantifiers
+  path: curriculum/grammar/A-foundation/08-numbers-quantifiers.md
+  prerequisites:
+  - A-03-gender-agreement
+  l1_interference:
+  - quantifier-agreement
+  - tener-for-age
+- id: A-09-accent-stress-rules
+  category: grammar
+  phase: A
+  title: Accent Marks and Stress Rules
+  path: curriculum/grammar/A-foundation/09-accent-stress-rules.md
+  prerequisites: []
+  l1_interference:
+  - english-stress-patterns
+- id: B-01-preterite-regular
+  category: grammar
+  phase: B
+  title: Preterite Tense — Regular Conjugation
+  path: curriculum/grammar/B-conversational/01-preterite-regular.md
+  prerequisites:
+  - A-01-present-regular
+  l1_interference: []
+- id: B-02-preterite-irregular
+  category: grammar
+  phase: B
+  title: Preterite Tense — Irregular Verbs
+  path: curriculum/grammar/B-conversational/02-preterite-irregular.md
+  prerequisites:
+  - B-01-preterite-regular
+  l1_interference: []
+- id: B-03-imperfect
+  category: grammar
+  phase: B
+  title: Imperfect Tense
+  path: curriculum/grammar/B-conversational/03-imperfect.md
+  prerequisites:
+  - A-01-present-regular
+  l1_interference: []
+- id: B-04-preterite-vs-imperfect
+  category: grammar
+  phase: B
+  title: Preterite vs Imperfect — Aspect Distinction
+  path: curriculum/grammar/B-conversational/04-preterite-vs-imperfect.md
+  prerequisites:
+  - B-01-preterite-regular
+  - B-02-preterite-irregular
+  - B-03-imperfect
+  l1_interference:
+  - preterite-imperfect-overuse
+- id: B-05-reflexive-verbs
+  category: grammar
+  phase: B
+  title: Reflexive Verbs
+  path: curriculum/grammar/B-conversational/05-reflexive-verbs.md
+  prerequisites:
+  - A-01-present-regular
+  l1_interference:
+  - reflexive-pronoun-omission
+- id: B-06-direct-object-pronouns
+  category: grammar
+  phase: B
+  title: Direct Object Pronouns
+  path: curriculum/grammar/B-conversational/06-direct-object-pronouns.md
+  prerequisites:
+  - A-01-present-regular
+  - A-04-articles-prepositions
+  l1_interference: []
+- id: B-07-indirect-object-pronouns
+  category: grammar
+  phase: B
+  title: Indirect Object Pronouns
+  path: curriculum/grammar/B-conversational/07-indirect-object-pronouns.md
+  prerequisites:
+  - B-06-direct-object-pronouns
+  l1_interference: []
+- id: B-08-estar-gerund-progressive
+  category: grammar
+  phase: B
+  title: Estar + Gerund (Progressive)
+  path: curriculum/grammar/B-conversational/08-estar-gerund-progressive.md
+  prerequisites:
+  - A-01-present-regular
+  - A-02-ser-vs-estar
+  l1_interference:
+  - progressive-overuse
+  - ser-in-progressive
+- id: B-09-imperatives
+  category: grammar
+  phase: B
+  title: Imperatives (Commands)
+  path: curriculum/grammar/B-conversational/09-imperatives.md
+  prerequisites:
+  - A-01-present-regular
+  - A-07-present-irregular-common
+  l1_interference:
+  - imperative-pronoun-placement
+- id: B-10-comparatives-superlatives
+  category: grammar
+  phase: B
+  title: Comparatives and Superlatives
+  path: curriculum/grammar/B-conversational/10-comparatives-superlatives.md
+  prerequisites:
+  - A-03-gender-agreement
+  l1_interference:
+  - comparative-de-vs-que
+- id: B-11-future-ir-a
+  category: grammar
+  phase: B
+  title: Future with Ir + A
+  path: curriculum/grammar/B-conversational/11-future-ir-a.md
+  prerequisites:
+  - A-01-present-regular
+  l1_interference: []
+- id: C-01-present-subjunctive
+  category: grammar
+  phase: C
+  title: Present Subjunctive — A New Mood
+  path: curriculum/grammar/C-intermediate/01-present-subjunctive.md
+  prerequisites:
+  - A-01-present-regular
+  - A-07-present-irregular-common
+  l1_interference:
+  - subjunctive-avoidance
+- id: C-02-subjunctive-triggers
+  category: grammar
+  phase: C
+  title: Subjunctive Triggers — The Decision System
+  path: curriculum/grammar/C-intermediate/02-subjunctive-triggers.md
+  prerequisites:
+  - C-01-present-subjunctive
+  l1_interference: []
+- id: C-03-formal-future
+  category: grammar
+  phase: C
+  title: Formal Future Tense — Predictions and Probability
+  path: curriculum/grammar/C-intermediate/03-formal-future.md
+  prerequisites:
+  - A-01-present-regular
+  l1_interference: []
+- id: C-04-conditional
+  category: grammar
+  phase: C
+  title: Conditional — Hypotheticals and Politeness
+  path: curriculum/grammar/C-intermediate/04-conditional.md
+  prerequisites:
+  - C-03-formal-future
+  l1_interference: []
+- id: C-05-por-vs-para
+  category: grammar
+  phase: C
+  title: Por vs Para — Two Words for "For"
+  path: curriculum/grammar/C-intermediate/05-por-vs-para.md
+  prerequisites:
+  - A-04-articles-prepositions
+  l1_interference:
+  - por-para-confusion
+- id: C-06-compound-tenses
+  category: grammar
+  phase: C
+  title: Present Perfect and Compound Tenses — Building with Haber
+  path: curriculum/grammar/C-intermediate/06-compound-tenses.md
+  prerequisites:
+  - B-01-preterite-regular
+  l1_interference: []
+- id: C-07-relative-clauses
+  category: grammar
+  phase: C
+  title: Relative Clauses — Connecting Ideas
+  path: curriculum/grammar/C-intermediate/07-relative-clauses.md
+  prerequisites:
+  - C-01-present-subjunctive
+  l1_interference: []
+- id: C-08-indirect-speech
+  category: grammar
+  phase: C
+  title: Indirect Speech — Reporting What Others Said
+  path: curriculum/grammar/C-intermediate/08-indirect-speech.md
+  prerequisites:
+  - C-01-present-subjunctive
+  - C-02-subjunctive-triggers
+  - B-04-preterite-vs-imperfect
+  l1_interference:
+  - indirect-speech-subjunctive
+- id: C-09-diminutives-augmentatives
+  category: grammar
+  phase: C
+  title: Diminutives and Augmentatives — The Emotional Layer of Spanish
+  path: curriculum/grammar/C-intermediate/09-diminutives-augmentatives.md
+  prerequisites:
+  - A-03-gender-agreement
+  l1_interference:
+  - diminutive-underuse
+- id: D-01-past-subjunctive
+  category: grammar
+  phase: D
+  title: Past Subjunctive (Imperfect Subjunctive) — Wishes, Hypotheticals, and the Past
+  path: curriculum/grammar/D-advanced/01-past-subjunctive.md
+  prerequisites:
+  - C-01-present-subjunctive
+  - B-03-imperfect
+  l1_interference: []
+- id: D-02-si-clauses
+  category: grammar
+  phase: D
+  title: Si Clauses (If...Then) — The Architecture of Hypothetical Speech
+  path: curriculum/grammar/D-advanced/02-si-clauses.md
+  prerequisites:
+  - C-04-conditional
+  - D-01-past-subjunctive
+  l1_interference:
+  - conditional-in-si-clause
+- id: D-03-subjunctive-all-tenses
+  category: grammar
+  phase: D
+  title: Subjunctive Across All Tenses — The Complete System
+  path: curriculum/grammar/D-advanced/03-subjunctive-all-tenses.md
+  prerequisites:
+  - D-01-past-subjunctive
+  - C-06-compound-tenses
+  l1_interference: []
+- id: D-04-passive-voice
+  category: grammar
+  phase: D
+  title: Passive Voice and Se Constructions — Multiple Faces of "Se"
+  path: curriculum/grammar/D-advanced/04-passive-voice.md
+  prerequisites:
+  - B-01-preterite-regular
+  l1_interference:
+  - passive-overuse
+- id: D-05-register-shifting
+  category: grammar
+  phase: D
+  title: Register Shifting — Tu, Usted, Vos, and Social Context
+  path: curriculum/grammar/D-advanced/05-register-shifting.md
+  prerequisites: []
+  l1_interference: []
+- id: D-06-nuanced-connectors
+  category: grammar
+  phase: D
+  title: Nuanced Connectors — Elevating Speech from Functional to Fluent
+  path: curriculum/grammar/D-advanced/06-nuanced-connectors.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t1-basic-descriptions
+  category: vocabulary
+  tier: 1
+  title: Basic Descriptions
+  path: curriculum/vocabulary/tier1-survival/basic-descriptions.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t1-directions-transportation
+  category: vocabulary
+  tier: 1
+  title: Directions and Transportation
+  path: curriculum/vocabulary/tier1-survival/directions-transportation.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t1-food-restaurant
+  category: vocabulary
+  tier: 1
+  title: Food and Restaurant
+  path: curriculum/vocabulary/tier1-survival/food-restaurant.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t1-greetings-introductions
+  category: vocabulary
+  tier: 1
+  title: Greetings and Introductions
+  path: curriculum/vocabulary/tier1-survival/greetings-introductions.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t1-numbers-time-dates
+  category: vocabulary
+  tier: 1
+  title: Numbers, Time, and Dates
+  path: curriculum/vocabulary/tier1-survival/numbers-time-dates.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t2-family-relationships
+  category: vocabulary
+  tier: 2
+  title: Family and Relationships
+  path: curriculum/vocabulary/tier2-daily-life/family-relationships.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t2-health-body
+  category: vocabulary
+  tier: 2
+  title: Health and the Body
+  path: curriculum/vocabulary/tier2-daily-life/health-body.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t2-home-household
+  category: vocabulary
+  tier: 2
+  title: Home and Household
+  path: curriculum/vocabulary/tier2-daily-life/home-household.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t2-shopping-money
+  category: vocabulary
+  tier: 2
+  title: Shopping and Money
+  path: curriculum/vocabulary/tier2-daily-life/shopping-money.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t2-weather-seasons
+  category: vocabulary
+  tier: 2
+  title: Weather and Seasons
+  path: curriculum/vocabulary/tier2-daily-life/weather-seasons.md
+  prerequisites: []
+  l1_interference:
+  - hacer-for-weather
+- id: vocab-t2-work-office
+  category: vocabulary
+  tier: 2
+  title: Work and Office
+  path: curriculum/vocabulary/tier2-daily-life/work-office.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t3-emotions-feelings
+  category: vocabulary
+  tier: 3
+  title: Emotions and Feelings
+  path: curriculum/vocabulary/tier3-social/emotions-feelings.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t3-hobbies-interests
+  category: vocabulary
+  tier: 3
+  title: Hobbies and Interests
+  path: curriculum/vocabulary/tier3-social/hobbies-interests.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t3-opinions-agreement
+  category: vocabulary
+  tier: 3
+  title: Opinions and Agreement
+  path: curriculum/vocabulary/tier3-social/opinions-agreement.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t3-plans-future
+  category: vocabulary
+  tier: 3
+  title: Plans and Future
+  path: curriculum/vocabulary/tier3-social/plans-future.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t3-storytelling-narration
+  category: vocabulary
+  tier: 3
+  title: Storytelling and Narration
+  path: curriculum/vocabulary/tier3-social/storytelling-narration.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t3-travel-culture
+  category: vocabulary
+  tier: 3
+  title: Travel and Culture
+  path: curriculum/vocabulary/tier3-social/travel-culture.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t4-humor-idioms
+  category: vocabulary
+  tier: 4
+  title: Humor, Idioms, and Slang
+  path: curriculum/vocabulary/tier4-abstract/humor-idioms.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t4-hypotheticals-debate
+  category: vocabulary
+  tier: 4
+  title: Hypotheticals and Debate
+  path: curriculum/vocabulary/tier4-abstract/hypotheticals-debate.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t4-philosophy-ideas
+  category: vocabulary
+  tier: 4
+  title: Philosophy and Big Ideas
+  path: curriculum/vocabulary/tier4-abstract/philosophy-ideas.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t4-politics-society
+  category: vocabulary
+  tier: 4
+  title: Politics and Society
+  path: curriculum/vocabulary/tier4-abstract/politics-society.md
+  prerequisites: []
+  l1_interference: []
+- id: vocab-t4-professional-specialized
+  category: vocabulary
+  tier: 4
+  title: Professional Communication
+  path: curriculum/vocabulary/tier4-abstract/professional-specialized.md
+  prerequisites: []
+  l1_interference: []
+- id: b-v-equivalence
+  category: pronunciation
+  phase: B
+  title: 'B and V: One Sound, Two Letters'
+  path: curriculum/pronunciation/b-v-equivalence.md
+  prerequisites: []
+  l1_interference: []
+- id: d-soft
+  category: pronunciation
+  phase: B
+  title: The Soft D Between Vowels
+  path: curriculum/pronunciation/d-soft.md
+  prerequisites: []
+  l1_interference: []
+- id: g-soft
+  category: pronunciation
+  phase: C
+  title: Soft G (Before E and I)
+  path: curriculum/pronunciation/g-soft.md
+  prerequisites: []
+  l1_interference: []
+- id: intonation
+  category: pronunciation
+  phase: C
+  title: Intonation Patterns
+  path: curriculum/pronunciation/intonation.md
+  prerequisites: []
+  l1_interference: []
+- id: j-sound
+  category: pronunciation
+  phase: C
+  title: The Jota (J Sound)
+  path: curriculum/pronunciation/j-sound.md
+  prerequisites: []
+  l1_interference: []
+- id: linking
+  category: pronunciation
+  phase: B
+  title: 'Linking: Connected Speech Across Words'
+  path: curriculum/pronunciation/linking.md
+  prerequisites: []
+  l1_interference: []
+- id: ll-y-sound
+  category: pronunciation
+  phase: C
+  title: LL and Y (Yeísmo and Regional Variation)
+  path: curriculum/pronunciation/ll-y-sound.md
+  prerequisites: []
+  l1_interference: []
+- id: ny-sound
+  category: pronunciation
+  phase: C
+  title: The Palatal Nasal (Ñ)
+  path: curriculum/pronunciation/ny-sound.md
+  prerequisites: []
+  l1_interference: []
+- id: r-single
+  category: pronunciation
+  phase: B
+  title: The Single Tap R
+  path: curriculum/pronunciation/r-single.md
+  prerequisites: []
+  l1_interference: []
+- id: rr-trill
+  category: pronunciation
+  phase: B
+  title: The Alveolar Trill (RR)
+  path: curriculum/pronunciation/rr-trill.md
+  prerequisites: []
+  l1_interference: []
+- id: stress-rules
+  category: pronunciation
+  phase: A
+  title: Stress Rules
+  path: curriculum/pronunciation/stress-rules.md
+  prerequisites: []
+  l1_interference: []
+- id: vowel-sounds
+  category: pronunciation
+  phase: A
+  title: Vowel Sounds
+  path: curriculum/pronunciation/vowel-sounds.md
+  prerequisites: []
+  l1_interference: []
+- id: conversational_rhythm
+  category: cultural
+  phase: C
+  title: Conversational Rhythm
+  path: curriculum/cultural/conversational-rhythm.md
+  prerequisites: []
+  l1_interference: []
+- id: humor_and_idioms
+  category: cultural
+  phase: C
+  title: Humor and Idioms
+  path: curriculum/cultural/humor-and-idioms.md
+  prerequisites: []
+  l1_interference: []
+- id: politeness_formulas
+  category: cultural
+  phase: B
+  title: Politeness Formulas
+  path: curriculum/cultural/politeness-formulas.md
+  prerequisites: []
+  l1_interference: []
+- id: regional_awareness
+  category: cultural
+  phase: B
+  title: Regional Awareness
+  path: curriculum/cultural/regional-awareness.md
+  prerequisites: []
+  l1_interference: []
+- id: register_shifting
+  category: cultural
+  phase: B
+  title: Register Shifting — Social Judgment and Contextual Awareness
+  path: curriculum/cultural/register-shifting.md
+  prerequisites: []
+  l1_interference: []

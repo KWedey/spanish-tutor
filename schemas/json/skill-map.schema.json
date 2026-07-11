@@ -1,0 +1,642 @@
+{
+  "$id": "https://spanish-tutor.dev/schemas/skill-map.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "cultural_awareness_entry_template": {
+      "properties": {
+        "assessed_through": {
+          "default": "",
+          "description": "How this concept is assessed",
+          "type": "string"
+        },
+        "introduced_at_phase": {
+          "default": "B",
+          "description": "Phase when this concept is introduced",
+          "type": "string"
+        },
+        "learner_interest": {
+          "default": null,
+          "description": "D-01/D-03: tutor-inferred interest score with provenance. Stale after 28 days.",
+          "properties": {
+            "last_inferred": {
+              "default": null,
+              "description": "YYYY-MM-DD of last inference. Stale decay: > 28 days ago treated as 0.",
+              "type": "string"
+            },
+            "score": {
+              "default": 0,
+              "description": "0-3 interest score. Out-of-range = validator FAIL.",
+              "type": "integer"
+            },
+            "signal_source": {
+              "default": null,
+              "description": "Why this score was set",
+              "enum": [
+                null,
+                "parking-lot",
+                "debrief",
+                "spontaneous-q",
+                "engagement",
+                "stale"
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "notes": {
+          "default": "",
+          "description": "Free-text notes",
+          "type": "string"
+        },
+        "signs_of_acquisition": {
+          "default": "",
+          "description": "Observable indicators of acquisition",
+          "type": "string"
+        },
+        "status": {
+          "default": "unseen",
+          "description": "Current mastery status",
+          "enum": [
+            "unseen",
+            "introduced",
+            "practicing",
+            "acquired"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "introduced_at_phase"
+      ],
+      "type": "object"
+    },
+    "fluency_metrics": {
+      "properties": {
+        "circumlocution": {
+          "default": "",
+          "description": "How often they talk around words they don't know",
+          "type": "string"
+        },
+        "hesitation_frequency": {
+          "default": "",
+          "description": "frequent, occasional, rare",
+          "type": "string"
+        },
+        "self_correction_rate": {
+          "default": "",
+          "description": "high (good awareness), low (automatic or unaware)",
+          "type": "string"
+        },
+        "speaking_pace": {
+          "default": "",
+          "description": "slow-deliberate, moderate, natural-flow",
+          "type": "string"
+        },
+        "thinking_language": {
+          "default": "",
+          "description": "Still translating from English, or starting to think in Spanish",
+          "type": "string"
+        },
+        "willingness_to_risk": {
+          "default": "",
+          "description": "Avoids unfamiliar structures vs tries and fails",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "grammar_entry_template": {
+      "properties": {
+        "error_rate_drills": {
+          "default": null,
+          "description": "Rolling avg over last 5 drill instances",
+          "type": "number"
+        },
+        "error_rate_production": {
+          "default": null,
+          "description": "Rolling avg over last 5 free production instances",
+          "type": "number"
+        },
+        "error_trend": {
+          "default": null,
+          "description": "improving, stable, declining (based on production rate)",
+          "enum": [
+            null,
+            "improving",
+            "stable",
+            "declining"
+          ],
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "integration_tested_with": {
+          "default": [],
+          "description": "List of concept IDs tested in combination",
+          "type": "array"
+        },
+        "introduced_date": {
+          "default": null,
+          "description": "Date concept was first introduced",
+          "type": "string"
+        },
+        "last_practiced": {
+          "default": null,
+          "description": "Date of most recent practice",
+          "type": "string"
+        },
+        "learner_interest": {
+          "default": null,
+          "description": "D-01/D-03: tutor-inferred interest score with provenance. Stale after 28 days.",
+          "properties": {
+            "last_inferred": {
+              "default": null,
+              "description": "YYYY-MM-DD of last inference. Stale decay: > 28 days ago treated as 0.",
+              "type": "string"
+            },
+            "score": {
+              "default": 0,
+              "description": "0-3 interest score. Out-of-range = validator FAIL.",
+              "type": "integer"
+            },
+            "signal_source": {
+              "default": null,
+              "description": "Why this score was set",
+              "enum": [
+                null,
+                "parking-lot",
+                "debrief",
+                "spontaneous-q",
+                "engagement",
+                "stale"
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "notes": {
+          "default": "",
+          "description": "Free-text notes",
+          "type": "string"
+        },
+        "performance_scaffolded": {
+          "default": null,
+          "description": "null (untested), struggling, competent",
+          "enum": [
+            null,
+            "struggling",
+            "competent"
+          ],
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "performance_unscaffolded": {
+          "default": null,
+          "description": "null (untested), struggling, competent",
+          "enum": [
+            null,
+            "struggling",
+            "competent"
+          ],
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "practice_count": {
+          "default": 0,
+          "description": "Total times actively practiced",
+          "type": "integer"
+        },
+        "prerequisites": {
+          "default": [],
+          "description": "Concept IDs that must be acquired first",
+          "type": "array"
+        },
+        "recast_uptake_stats": {
+          "default": null,
+          "description": "D-07: aggregate of recasts[] entries from session logs. Invariant: landed + missed + partial <= recasts_given.",
+          "properties": {
+            "landed": {
+              "default": 0,
+              "description": "Recasts where learner incorporated corrected form",
+              "type": "integer"
+            },
+            "last_updated": {
+              "default": null,
+              "description": "YYYY-MM-DD of last aggregation from session logs",
+              "type": "string"
+            },
+            "missed": {
+              "default": 0,
+              "description": "Recasts where learner did not incorporate corrected form",
+              "type": "integer"
+            },
+            "partial": {
+              "default": 0,
+              "description": "Recasts where learner partially incorporated corrected form",
+              "type": "integer"
+            },
+            "recasts_given": {
+              "default": 0,
+              "description": "Total recasts issued for this concept across sessions",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "regression_session_count": {
+          "default": 0,
+          "description": "D-09/ENGINE-05: consecutive sessions in regression since last acquired/automatic status. Incremented by post-session.sh. Used by Step 0c regression escalation ladder to determine escalation stage.",
+          "type": "integer"
+        },
+        "status": {
+          "default": "unseen",
+          "description": "Current mastery status",
+          "enum": [
+            "unseen",
+            "introduced",
+            "practicing",
+            "acquired",
+            "automatic",
+            "regressed"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "practice_count",
+        "prerequisites"
+      ],
+      "type": "object"
+    },
+    "overall_estimates": {
+      "properties": {
+        "cefr_estimate": {
+          "default": "A0",
+          "description": "Current CEFR estimate",
+          "type": "string"
+        },
+        "estimated_active_vocabulary": {
+          "default": 0,
+          "description": "Words the learner can produce",
+          "type": "integer"
+        },
+        "estimated_passive_vocabulary": {
+          "default": 0,
+          "description": "Words the learner can recognize (always >= active)",
+          "type": "integer"
+        },
+        "last_formal_assessment": {
+          "default": null,
+          "description": "Date of last placement test or equivalent",
+          "type": "string"
+        },
+        "production_gap": {
+          "default": 0,
+          "description": "passive - active; large gap = needs more output practice",
+          "type": "integer"
+        },
+        "strongest_skill": {
+          "default": null,
+          "description": "listening, reading, speaking, writing",
+          "type": "string"
+        },
+        "weakest_skill": {
+          "default": null,
+          "description": "listening, reading, speaking, writing",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "pronunciation_entry_template": {
+      "properties": {
+        "external_feedback": {
+          "default": "",
+          "description": "Latest from Speechling or conversation partner",
+          "type": "string"
+        },
+        "last_practiced": {
+          "default": null,
+          "description": "Date of most recent practice",
+          "type": "string"
+        },
+        "notes": {
+          "default": "",
+          "description": "Free-text notes",
+          "type": "string"
+        },
+        "status": {
+          "default": "unseen",
+          "description": "Current mastery status",
+          "enum": [
+            "unseen",
+            "introduced",
+            "practicing",
+            "acquired",
+            "automatic",
+            "regressed"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "type": "object"
+    },
+    "receptive_skills": {
+      "properties": {
+        "listening": {
+          "default": null,
+          "description": "Listening comprehension tracking",
+          "properties": {
+            "comprehension_quality": {
+              "default": null,
+              "description": "gist / main_ideas / details / inference",
+              "enum": [
+                null,
+                "gist",
+                "main_ideas",
+                "details",
+                "inference"
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "current_level": {
+              "default": "L1",
+              "description": "L1-L5 scale",
+              "enum": [
+                "L1",
+                "L2",
+                "L3",
+                "L4",
+                "L5"
+              ],
+              "type": "string"
+            },
+            "hours_at_level": {
+              "default": 0,
+              "description": "Hours of input at current level",
+              "type": "number"
+            },
+            "hours_total": {
+              "default": 0,
+              "description": "Cumulative listening input hours",
+              "type": "number"
+            },
+            "level_history": {
+              "default": [],
+              "description": "History of level changes",
+              "type": "array"
+            },
+            "level_up_evidence": {
+              "default": [],
+              "description": "Dated observations supporting level advancement",
+              "type": "array"
+            }
+          },
+          "type": "object"
+        },
+        "reading": {
+          "default": null,
+          "description": "Reading comprehension tracking",
+          "properties": {
+            "comprehension_quality": {
+              "default": null,
+              "description": "gist / main_ideas / details / inference",
+              "enum": [
+                null,
+                "gist",
+                "main_ideas",
+                "details",
+                "inference"
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "current_level": {
+              "default": "R1",
+              "description": "R1-R5 scale",
+              "enum": [
+                "R1",
+                "R2",
+                "R3",
+                "R4",
+                "R5"
+              ],
+              "type": "string"
+            },
+            "hours_at_level": {
+              "default": 0,
+              "description": "Hours of input at current level",
+              "type": "number"
+            },
+            "hours_total": {
+              "default": 0,
+              "description": "Cumulative reading input hours",
+              "type": "number"
+            },
+            "level_history": {
+              "default": [],
+              "description": "History of level changes",
+              "type": "array"
+            },
+            "level_up_evidence": {
+              "default": [],
+              "description": "Dated observations supporting level advancement",
+              "type": "array"
+            },
+            "lookup_frequency": {
+              "default": "frequent",
+              "description": "frequent / occasional / rare / none",
+              "enum": [
+                "frequent",
+                "occasional",
+                "rare",
+                "none"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "schema_version": {
+      "default": 1,
+      "description": "Schema version number",
+      "type": "integer"
+    },
+    "vocabulary_entry_template": {
+      "properties": {
+        "active_known": {
+          "default": 0,
+          "description": "Can produce in speaking/writing",
+          "type": "integer"
+        },
+        "error_tracking": {
+          "default": null,
+          "description": "Production error tracking for this cluster",
+          "properties": {
+            "common_errors": {
+              "default": [],
+              "description": "e.g., gender: el mano -> la mano",
+              "type": "array"
+            },
+            "error_rate_production": {
+              "default": null,
+              "description": "Rolling avg, last 5 in-session observations",
+              "type": "number"
+            },
+            "last_observed": {
+              "default": null,
+              "description": "Date of last in-session production observation",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "last_practiced": {
+          "default": null,
+          "description": "Date of most recent practice",
+          "type": "string"
+        },
+        "learner_interest": {
+          "default": null,
+          "description": "D-01/D-03: tutor-inferred interest score with provenance. Stale after 28 days.",
+          "properties": {
+            "last_inferred": {
+              "default": null,
+              "description": "YYYY-MM-DD of last inference. Stale decay: > 28 days ago treated as 0.",
+              "type": "string"
+            },
+            "score": {
+              "default": 0,
+              "description": "0-3 interest score. Out-of-range = validator FAIL.",
+              "type": "integer"
+            },
+            "signal_source": {
+              "default": null,
+              "description": "Why this score was set",
+              "enum": [
+                null,
+                "parking-lot",
+                "debrief",
+                "spontaneous-q",
+                "engagement",
+                "stale"
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "notes": {
+          "default": "",
+          "description": "Free-text notes",
+          "type": "string"
+        },
+        "passive_known": {
+          "default": 0,
+          "description": "Can recognize in reading/listening",
+          "type": "integer"
+        },
+        "status": {
+          "default": "unseen",
+          "description": "Current mastery status",
+          "enum": [
+            "unseen",
+            "introduced",
+            "practicing",
+            "acquired",
+            "automatic",
+            "regressed"
+          ],
+          "type": "string"
+        },
+        "weak_production": {
+          "default": [],
+          "description": "Recognize but cannot produce",
+          "type": "array"
+        },
+        "weak_recognition": {
+          "default": [],
+          "description": "Cannot recognize at all",
+          "type": "array"
+        },
+        "words_introduced": {
+          "default": 0,
+          "description": "Number of words introduced so far",
+          "type": "integer"
+        },
+        "words_total": {
+          "default": 0,
+          "description": "Populated from curriculum file",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "type": "object"
+    },
+    "writing_entry_template": {
+      "properties": {
+        "last_practiced": {
+          "default": null,
+          "description": "Date of most recent practice",
+          "type": "string"
+        },
+        "notes": {
+          "default": "",
+          "description": "Free-text notes",
+          "type": "string"
+        },
+        "status": {
+          "default": "unseen",
+          "description": "Current mastery status",
+          "enum": [
+            "unseen",
+            "introduced",
+            "practicing",
+            "acquired"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version"
+  ],
+  "title": "Skill Map",
+  "type": "object"
+}

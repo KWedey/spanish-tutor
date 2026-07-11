@@ -1,0 +1,330 @@
+{
+  "$id": "https://spanish-tutor.dev/schemas/system-health.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "anki_estimated_daily_review_minutes": {
+      "default": 0,
+      "description": "Estimated daily Anki review time in minutes",
+      "type": "integer"
+    },
+    "anki_estimated_deck_size": {
+      "default": 0,
+      "description": "Estimated total Anki deck size",
+      "type": "integer"
+    },
+    "assignment_skip_patterns": {
+      "default": [],
+      "description": "Which assignment types get skipped most",
+      "type": "array"
+    },
+    "auto_fixes": {
+      "default": [],
+      "description": "Validator-driven auto-repair audit trail. Appended by validate-state.py when it silently corrects state drift (e.g. schedule.last_session_date disagreeing with the most recent session log).",
+      "items": {
+        "properties": {
+          "date": {
+            "description": "YYYY-MM-DD the fix was applied",
+            "type": "string"
+          },
+          "detected_by": {
+            "description": "Source that wrote the entry (script:function)",
+            "type": "string"
+          },
+          "field": {
+            "description": "Dotted path of the field that was corrected (e.g. schedule.last_session_date)",
+            "type": "string"
+          },
+          "new_value": {
+            "description": "Value written by the auto-fix",
+            "type": "string"
+          },
+          "old_value": {
+            "description": "Value before the auto-fix",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Human-readable explanation of why the fix was applied",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "average_session_duration_30d": {
+      "default": 0,
+      "description": "Average session duration in minutes over 30 days",
+      "type": "integer"
+    },
+    "average_sessions_to_acquire": {
+      "default": 0,
+      "description": "Trending up = something wrong",
+      "type": "integer"
+    },
+    "concepts_acquired_per_month": {
+      "default": 0,
+      "description": "Trending down = plateau or pacing issue",
+      "type": "integer"
+    },
+    "concepts_in_practicing_simultaneously": {
+      "default": 0,
+      "description": "Soft comfort target ~2; new-concept introduction is blocked at 3+ (4 with carryover) per the CLAUDE.md consolidation guardrail (validate-state check_consolidation_cap).",
+      "type": "integer"
+    },
+    "concepts_requiring_reteach_total": {
+      "default": 0,
+      "description": "High value = bad sequencing or premature advancement",
+      "type": "integer"
+    },
+    "days_in_current_phase": {
+      "default": 0,
+      "description": "Days spent in current phase",
+      "type": "integer"
+    },
+    "goal_tracking": {
+      "default": null,
+      "description": "Goal progress tracking",
+      "properties": {
+        "concepts_remaining_for_next_phase": {
+          "default": 0,
+          "description": "Number of concepts still needed before phase transition",
+          "type": "integer"
+        },
+        "concepts_remaining_for_target_level": {
+          "default": 0,
+          "description": "Number of concepts still needed to reach target CEFR level",
+          "type": "integer"
+        },
+        "current_acquisition_rate": {
+          "default": 0.0,
+          "description": "Concepts acquired per week (30-day rolling average)",
+          "type": "number"
+        },
+        "estimated_weeks_remaining": {
+          "default": null,
+          "description": "Rough estimate based on current acquisition rate and remaining concepts",
+          "type": "integer"
+        },
+        "last_goal_review": {
+          "default": null,
+          "description": "Date of last weekly review goal check",
+          "type": "string"
+        },
+        "milestone_progress": {
+          "default": [],
+          "description": "List of {goal, status: pending|achieved|at-risk, target_date, notes}",
+          "type": "array"
+        },
+        "primary_goal_progress": {
+          "default": "",
+          "description": "Qualitative: on-track / behind / ahead / at-risk",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "homework_completion_rate_30d": {
+      "default": 0.0,
+      "description": "Below 60% = overloaded or wrong type",
+      "type": "number"
+    },
+    "homework_reported_difficulty_avg": {
+      "default": 0.0,
+      "description": "Should hover around 3/5",
+      "type": "number"
+    },
+    "last_system_review": {
+      "default": null,
+      "description": "Date of last weekly review",
+      "type": "string"
+    },
+    "last_validation_issues": {
+      "default": [],
+      "description": "Issues found during last validation run",
+      "type": "array"
+    },
+    "learner_initiated_topics_30d": {
+      "default": 0,
+      "description": "Are they bringing their own questions?",
+      "type": "integer"
+    },
+    "load_adjustments": {
+      "default": [],
+      "description": "Homework-load adjustment audit trail (LOAD-03/D-07/D-11). Appended by check-session-log.py on WARN-tier budget events and by the tutor on D-11 daily_target reductions; surfaced at weekly review for triage.",
+      "items": {
+        "properties": {
+          "daily_maximum": {
+            "description": "daily_maximum at the time of the event",
+            "type": "integer"
+          },
+          "daily_target": {
+            "description": "daily_target at the time of the event",
+            "type": "integer"
+          },
+          "date": {
+            "description": "YYYY-MM-DD of the event",
+            "type": "string"
+          },
+          "detected_by": {
+            "description": "Source that wrote the entry (script:function or 'tutor')",
+            "type": "string"
+          },
+          "homework_sum": {
+            "description": "Summed estimated_minutes of the session's assignments",
+            "type": "integer"
+          },
+          "level": {
+            "description": "WARN (over daily_target) or the adjustment type (e.g. daily_target-reduction)",
+            "type": "string"
+          },
+          "message": {
+            "description": "Human-readable explanation",
+            "type": "string"
+          },
+          "today_stretch": {
+            "description": "today_stretch at the time of the event",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "maintenance_sessions_total": {
+      "default": 0,
+      "description": "Maintenance-mode only (post-Phase-D): cumulative count of maintenance sessions. Written by the tutor per maintenance-mode.md.",
+      "type": "integer"
+    },
+    "placement_validation_metrics": {
+      "default": null,
+      "description": "Placement validation effectiveness (populated after validation period closes)",
+      "properties": {
+        "final_assessment": {
+          "default": null,
+          "description": "placement-confirmed / placement-adjusted",
+          "enum": [
+            null,
+            "placement-confirmed",
+            "placement-adjusted"
+          ],
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "initial_confidence": {
+          "default": null,
+          "description": "high / medium / low",
+          "type": "string"
+        },
+        "placement_level": {
+          "default": null,
+          "description": "Where the learner was placed",
+          "type": "string"
+        },
+        "total_concepts_validated": {
+          "default": 0,
+          "description": "Number of concepts validated during placement",
+          "type": "integer"
+        },
+        "total_downgrades": {
+          "default": 0,
+          "description": "Number of concept downgrades during validation",
+          "type": "integer"
+        },
+        "validation_completed": {
+          "default": null,
+          "description": "Date validation period closed",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "regressions_detected_in_maintenance": {
+      "default": 0,
+      "description": "Maintenance-mode only: count of concept regressions caught during maintenance. Written by the tutor per maintenance-mode.md.",
+      "type": "integer"
+    },
+    "reteach_rate_30d": {
+      "default": 0.0,
+      "description": "Percent of concepts that regressed after being acquired",
+      "type": "number"
+    },
+    "schema_version": {
+      "default": 1,
+      "description": "Schema version number",
+      "type": "integer"
+    },
+    "session_difficulty_tracking": {
+      "default": null,
+      "description": "Tracks recent session difficulty ratings for calibration logic",
+      "properties": {
+        "consecutive_too_easy": {
+          "default": 0,
+          "description": "Count of consecutive too-easy ratings (2+ triggers challenge increase)",
+          "type": "integer"
+        },
+        "consecutive_too_hard": {
+          "default": 0,
+          "description": "Count of consecutive too-hard ratings (2+ triggers load reduction)",
+          "type": "integer"
+        },
+        "last_rating": {
+          "default": null,
+          "description": "Most recent session difficulty rating",
+          "enum": [
+            null,
+            "too-easy",
+            "just-right",
+            "too-hard"
+          ],
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "recent_ratings": {
+          "default": [],
+          "description": "Last 5 session difficulty ratings for trend analysis",
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "session_frequency_30d": {
+      "default": 0.0,
+      "description": "Sessions per week",
+      "type": "number"
+    },
+    "sessions_rated_too_easy_30d": {
+      "default": 0,
+      "description": "Sessions rated too-easy in last 30 days",
+      "type": "integer"
+    },
+    "sessions_rated_too_hard_30d": {
+      "default": 0,
+      "description": "Sessions rated too-hard in last 30 days",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "schema_version",
+    "concepts_requiring_reteach_total",
+    "average_sessions_to_acquire",
+    "reteach_rate_30d",
+    "homework_completion_rate_30d",
+    "homework_reported_difficulty_avg",
+    "days_in_current_phase",
+    "concepts_acquired_per_month",
+    "concepts_in_practicing_simultaneously",
+    "average_session_duration_30d",
+    "session_frequency_30d",
+    "learner_initiated_topics_30d",
+    "sessions_rated_too_easy_30d",
+    "sessions_rated_too_hard_30d",
+    "anki_estimated_deck_size",
+    "anki_estimated_daily_review_minutes"
+  ],
+  "title": "System Health",
+  "type": "object"
+}
