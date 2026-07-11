@@ -46,11 +46,18 @@ step()  { printf "%s\n" "${DIM}---${RESET} $1"; }
 DRY_RUN=false
 NO_COMMIT=false
 DATE=""
+SUMMARY=""
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --dry-run)  DRY_RUN=true; shift ;;
         --no-commit) NO_COMMIT=true; shift ;;
+        --summary)
+            if [[ $# -lt 2 ]]; then
+                error "--summary requires a value"
+                exit 1
+            fi
+            SUMMARY="$2"; shift 2 ;;
         -h|--help)
             echo "Usage: $0 [--dry-run] [--no-commit] YYYY-MM-DD"
             echo ""
@@ -68,9 +75,10 @@ while [[ $# -gt 0 ]]; do
             echo "  6. Git commit all changes"
             echo ""
             echo "Options:"
-            echo "  --dry-run     Show what would be done without executing"
-            echo "  --no-commit   Run all steps except the git commit"
-            echo "  -h, --help    Show this help message"
+            echo "  --dry-run       Show what would be done without executing"
+            echo "  --no-commit     Run all steps except the git commit"
+            echo "  --summary TEXT  Commit message summary (default: auto-committed placeholder)"
+            echo "  -h, --help      Show this help message"
             exit 0
             ;;
         *)
@@ -238,21 +246,31 @@ else
     SESSION_NUMBER=$(python3 - "$SESSION_LOG" <<'PYEOF'
 import sys, yaml
 with open(sys.argv[1]) as f:
-    data = yaml.safe_load(f)
-# `or 1`: a null session_number would yield "None" and the bash `-gt` compare
-# would silently treat it as session 1, skipping the transcript gate (audit LOW).
-print(data.get('session_number') or 1)
+    data = yaml.safe_load(f) or {}
+# Emit 0 as an explicit "absent/invalid" sentinel. A missing, null, or
+# non-integer session_number (e.g. the schema default of 0) must NOT be
+# silently coerced to the transcript-exempt session 1 — the bash gate below
+# hard-fails on the 0 sentinel instead of skipping the transcript check (F081).
+sn = data.get('session_number')
+try:
+    print(int(sn) if sn is not None else 0)
+except (TypeError, ValueError):
+    print(0)
 PYEOF
     )
 
     if [[ ! -f "$TRANSCRIPT" ]]; then
-        if [[ "$SESSION_NUMBER" -gt 1 ]]; then
+        if [[ "$SESSION_NUMBER" == "1" ]]; then
+            warn "Transcript file not found: transcripts/$DATE.md (session 1 — exempt)"
+        elif [[ "$SESSION_NUMBER" -gt 1 ]]; then
             error "Transcript file not found: transcripts/$DATE.md"
             error "Session number is $SESSION_NUMBER (>1) — transcript is required."
             error "Save the session conversation to transcripts/$DATE.md before re-running."
             exit 1
         else
-            warn "Transcript file not found: transcripts/$DATE.md (session 1 — exempt)"
+            error "session_number is missing, null, or non-positive ($SESSION_NUMBER) — cannot verify the transcript gate."
+            error "Populate a valid session_number (>=1) in state/sessions/$DATE.yaml before re-running."
+            exit 1
         fi
     else
         info "Transcript found: transcripts/$DATE.md"
@@ -293,29 +311,13 @@ step "Step 5b/8: Aggregating recast_uptake_stats into skill-map"
 if $DRY_RUN; then
     printf "${YELLOW}[dry-run]${RESET} Would aggregate recasts from %s\n" "$SESSION_LOG"
 else
-    if ! python3 - "$SESSION_LOG" "$ROOT/state/skill-map.yaml" "$DATE" <<'PYEOF'
-import yaml, sys, os
+    if ! python3 - "$SESSION_LOG" "$ROOT/state/skill-map.yaml" "$DATE" "$ROOT/scripts" <<'PYEOF'
+import yaml, sys
 from pathlib import Path
 
 LOG  = Path(sys.argv[1])
 SM   = Path(sys.argv[2])
 DATE = sys.argv[3]
-
-def _leading_header(text):
-    """Return the top comment/blank-line block (the schema-pointer header)."""
-    out = []
-    for ln in text.splitlines(keepends=True):
-        if ln.lstrip().startswith("#") or not ln.strip():
-            out.append(ln)
-        else:
-            break
-    return "".join(out)
-
-def _atomic_write_yaml(path, data, header):
-    body = yaml.safe_dump(data, sort_keys=False, allow_unicode=True)
-    tmp = path.with_name(path.name + ".tmp")
-    tmp.write_text(header + body, encoding="utf-8")
-    os.replace(tmp, path)
 
 with LOG.open() as f:
     session = yaml.safe_load(f) or {}
@@ -324,7 +326,14 @@ if not recasts:
     print("No recasts to aggregate")
     sys.exit(0)
 
-_sm_header = _leading_header(SM.read_text(encoding="utf-8"))
+# Share the header-preservation + atomic-write helpers with the rest of the
+# toolchain instead of re-declaring byte-identical copies (F077). Imported here,
+# AFTER the no-op early exit, so the no-recasts path never needs shared on the
+# path. sys.argv[4] is "$ROOT/scripts".
+sys.path.insert(0, sys.argv[4])
+from shared import leading_header, atomic_write
+
+_sm_header = leading_header(SM.read_text(encoding="utf-8"))
 with SM.open() as f:
     sm = yaml.safe_load(f) or {}
 grammar = sm.setdefault("grammar", {})
@@ -346,7 +355,7 @@ for r in recasts:
     stats["last_updated"] = DATE
     aggregated += 1
 
-_atomic_write_yaml(SM, sm, _sm_header)
+atomic_write(SM, _sm_header + yaml.safe_dump(sm, sort_keys=False, allow_unicode=True))
 print(f"Aggregated {aggregated} recasts into skill-map")
 PYEOF
     then
@@ -368,36 +377,33 @@ step "Step 5c/8: Resetting study_time_budget.today_stretch to 0"
 if $DRY_RUN; then
     printf "${YELLOW}[dry-run]${RESET} Would reset today_stretch in schedule.yaml\n"
 else
-    if ! python3 - "$ROOT/state/schedule.yaml" <<'PYEOF'
-import yaml, sys, os
+    if ! python3 - "$ROOT/state/schedule.yaml" "$ROOT/scripts" <<'PYEOF'
+import yaml, sys
 from pathlib import Path
 SCHED = Path(sys.argv[1])
 if not SCHED.exists():
     print("No schedule.yaml found - skipping today_stretch reset")
     sys.exit(0)
 
-def _leading_header(text):
-    out = []
-    for ln in text.splitlines(keepends=True):
-        if ln.lstrip().startswith("#") or not ln.strip():
-            out.append(ln)
-        else:
-            break
-    return "".join(out)
-
-_header = _leading_header(SCHED.read_text(encoding="utf-8"))
 with SCHED.open() as f:
     sched = yaml.safe_load(f) or {}
 stb = sched.get("study_time_budget")
 if not isinstance(stb, dict):
     print("No study_time_budget configured - skipping today_stretch reset")
     sys.exit(0)
+
+# Share the header-preservation + atomic-write helpers with the rest of the
+# toolchain instead of re-declaring byte-identical copies (F077). Imported here,
+# AFTER the no-op early exits, so a missing/unconfigured schedule never needs
+# shared on the path. sys.argv[2] is "$ROOT/scripts".
+sys.path.insert(0, sys.argv[2])
+from shared import leading_header, atomic_write
+
 prev = stb.get("today_stretch", 0) or 0
 stb["today_stretch"] = 0
+_header = leading_header(SCHED.read_text(encoding="utf-8"))
 _body = yaml.safe_dump(sched, sort_keys=False, allow_unicode=True)
-_tmp = SCHED.with_name(SCHED.name + ".tmp")
-_tmp.write_text(_header + _body, encoding="utf-8")
-os.replace(_tmp, SCHED)
+atomic_write(SCHED, _header + _body)
 print(f"today_stretch reset: {prev} -> 0")
 PYEOF
     then
@@ -473,7 +479,11 @@ else
         if git -C "$ROOT" diff --cached --quiet; then
             warn "No staged changes to commit"
         else
-            git -C "$ROOT" commit -m "session $DATE: [auto-committed by post-session.sh]"
+            # Use the caller-supplied --summary when present; otherwise fall back
+            # to the placeholder (the tutor authors the human summary via
+            # --summary; bash cannot synthesize one) (F042).
+            MSG="session $DATE: ${SUMMARY:-[auto-committed by post-session.sh]}"
+            git -C "$ROOT" commit -m "$MSG"
             info "Changes committed"
         fi
     fi

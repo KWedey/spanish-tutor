@@ -14,8 +14,10 @@ Requirements covered: ENFORCE-01 (Step 0 snapshot), ENFORCE-09 (transcript FAIL)
 A2 (commit-phase failures must not roll back validated state).
 """
 import os
+import re
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -310,13 +312,28 @@ class TestTodayStretchReset:
             "Step 5c Python invocation must fail-fast with exit 1 on error (set -e compliance)"
         )
 
-    def test_step_count_renumbered_to_8(self):
-        """After adding Step 5c, all Step N/7 labels must become Step N/8."""
+    def test_step_headers_consistent_and_contiguous(self):
+        """Step 'N/M:' headers must share ONE denominator M, and the integer step
+        numbers must be contiguous (no gaps).
+
+        Replaces the stale one-time /7->/8 migration guard (which only asserted
+        that no '/7:' label survived): that check was permanently green and
+        would have forced a manual test edit on every future step-count change.
+        This invariant is denominator-agnostic — add or remove a step and it
+        still passes as long as the labels stay internally consistent (F086)."""
         script = _read_script()
-        # Filter out comment-only lines; look for real "/7:" references in step headers/printfs
-        real_lines = [l for l in script.splitlines() if not l.lstrip().startswith("#") and "/7:" in l]
-        assert not real_lines, (
-            f"Step count not renumbered: {len(real_lines)} line(s) still reference /7: {real_lines[:3]}"
+        headers = re.findall(r"Step\s+(\d+(?:\.\d+)?[a-z]?)/(\d+):", script)
+        assert headers, "no 'Step N/M:' headers found in post-session.sh"
+        denominators = {m for _, m in headers}
+        assert len(denominators) == 1, (
+            f"Step headers disagree on the total step count: {sorted(denominators)}"
+        )
+        integer_steps = sorted({int(label) for label, _ in headers
+                                if re.fullmatch(r"\d+", label)})
+        expected = list(range(integer_steps[0], integer_steps[-1] + 1))
+        assert integer_steps == expected, (
+            f"Integer step numbers are not contiguous: {integer_steps} "
+            f"(expected {expected})"
         )
 
 
@@ -461,3 +478,286 @@ class TestCommitPhaseRollback:
             "A2 regression: a pre-commit-phase failure did NOT roll back. "
             f"stdout={result.stdout!r} stderr={result.stderr!r}"
         )
+
+
+# ---------------------------------------------------------------------------
+# Runtime helpers for the execute-the-real-script tests below
+# ---------------------------------------------------------------------------
+
+_PEDAGOGY_STUBS = (
+    "generate-vault.py",
+    "archive-sessions.py",
+    "validate-state.py",
+    "check-session-log.py",
+    "recompute-metrics.py",
+    "update-fluency-tracking.py",
+)
+
+
+def _runtime_env() -> dict:
+    """Env where `python3` resolves to the interpreter running the tests (so the
+    script's real inline heredocs can ``import yaml``) and system git config is
+    ignored for deterministic behavior."""
+    env = dict(os.environ)
+    env["PATH"] = os.path.dirname(sys.executable) + os.pathsep + env.get("PATH", "")
+    env.setdefault("GIT_CONFIG_NOSYSTEM", "1")
+    return env
+
+
+def _init_git_repo(root: Path) -> None:
+    env = _runtime_env()
+    subprocess.run(["git", "init", "-q"], cwd=root, check=True, env=env)
+    subprocess.run(["git", "config", "user.email", "test@example.com"],
+                   cwd=root, check=True, env=env)
+    subprocess.run(["git", "config", "user.name", "Test"],
+                   cwd=root, check=True, env=env)
+
+
+def _stub_root(tmp_path: Path, date: str, session_log_body: str) -> Path:
+    """Temp ROOT with the real post-session.sh + all-succeed pedagogy stubs and a
+    git repo (no failing hook, so Step 6 commits succeed).
+
+    Used by the transcript-gate and commit-summary runtime tests, which exercise
+    the script's OWN argv/gate/commit logic — the real sub-scripts are irrelevant
+    to those seams, and with session_number 1 + no recasts + no schedule.yaml the
+    real Steps 5b/5c take their no-op early-exit (so shared.py is not needed)."""
+    root = tmp_path / "root"
+    scripts = root / "scripts"
+    scripts.mkdir(parents=True)
+    shutil.copy(SCRIPT_PATH, scripts / "post-session.sh")
+    (scripts / "snapshot-state.py").write_text("import sys; sys.exit(0)\n",
+                                               encoding="utf-8")
+    for name in _PEDAGOGY_STUBS:
+        (scripts / name).write_text("import sys; sys.exit(0)\n", encoding="utf-8")
+    sessions = root / "state" / "sessions"
+    sessions.mkdir(parents=True)
+    (sessions / f"{date}.yaml").write_text(session_log_body, encoding="utf-8")
+    for d in ("vault", "transcripts", "progress-reports", "journal"):
+        (root / d).mkdir(parents=True, exist_ok=True)
+        (root / d / ".gitkeep").write_text("", encoding="utf-8")
+    _init_git_repo(root)
+    return root
+
+
+# ---------------------------------------------------------------------------
+# F081: a missing / null / zero session_number must NOT skip the transcript gate
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.skipif(
+    shutil.which("bash") is None or shutil.which("git") is None,
+    reason="runtime transcript-gate test requires bash and git",
+)
+class TestSessionNumberGate:
+    """F081: `session_number: 0` / null / absent must HARD-FAIL the Step 4.5
+    transcript gate rather than being silently coerced to the transcript-exempt
+    session 1 (the schema default is 0, so a log left at the default would
+    otherwise skip the gate for a real non-first session). session_number 1 stays
+    exempt — covered by TestTranscriptWarn."""
+
+    DATE = "2026-05-02"
+
+    def _run(self, root: Path) -> subprocess.CompletedProcess:
+        return subprocess.run(
+            ["bash", str(root / "scripts" / "post-session.sh"),
+             "--no-commit", self.DATE],
+            cwd=root, capture_output=True, text=True, env=_runtime_env(),
+        )
+
+    def test_session_number_zero_hard_fails_without_transcript(self, tmp_path):
+        root = _stub_root(tmp_path, self.DATE,
+                          f"date: {self.DATE}\nsession_number: 0\n")
+        result = self._run(root)
+        assert result.returncode != 0, (
+            "session_number 0 with no transcript must hard-fail the gate; "
+            f"stdout={result.stdout!r} stderr={result.stderr!r}"
+        )
+        assert "missing, null, or non-positive" in result.stderr, (
+            f"expected the non-positive session_number error; stderr={result.stderr!r}"
+        )
+
+    def test_missing_session_number_hard_fails_without_transcript(self, tmp_path):
+        root = _stub_root(tmp_path, self.DATE, f"date: {self.DATE}\n")
+        result = self._run(root)
+        assert result.returncode != 0, (
+            "absent session_number with no transcript must hard-fail the gate; "
+            f"stdout={result.stdout!r} stderr={result.stderr!r}"
+        )
+        assert "missing, null, or non-positive" in result.stderr, (
+            f"expected the non-positive session_number error; stderr={result.stderr!r}"
+        )
+
+
+# ---------------------------------------------------------------------------
+# F042: optional --summary flag on the auto-commit
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.skipif(
+    shutil.which("bash") is None or shutil.which("git") is None,
+    reason="commit-summary runtime test requires bash and git",
+)
+class TestCommitSummary:
+    """F042: the Step 6 auto-commit accepts an optional --summary, falling back
+    to the placeholder subject when the flag is omitted."""
+
+    DATE = "2026-05-03"
+
+    def _log_body(self) -> str:
+        # session_number 1 => transcript-exempt; no recasts / no schedule.yaml
+        # => Steps 5b/5c no-op; every stub succeeds => the commit runs.
+        return f"date: {self.DATE}\nsession_number: 1\n"
+
+    def _last_subject(self, root: Path) -> str:
+        r = subprocess.run(["git", "log", "-1", "--pretty=%s"], cwd=root,
+                           capture_output=True, text=True, env=_runtime_env())
+        return r.stdout.strip()
+
+    def test_summary_flag_sets_commit_message(self, tmp_path):
+        root = _stub_root(tmp_path, self.DATE, self._log_body())
+        result = subprocess.run(
+            ["bash", str(root / "scripts" / "post-session.sh"),
+             "--summary", "introduced preterite", self.DATE],
+            cwd=root, capture_output=True, text=True, env=_runtime_env(),
+        )
+        assert result.returncode == 0, (
+            f"stdout={result.stdout!r} stderr={result.stderr!r}"
+        )
+        assert self._last_subject(root) == (
+            f"session {self.DATE}: introduced preterite"
+        )
+
+    def test_default_commit_message_is_placeholder(self, tmp_path):
+        root = _stub_root(tmp_path, self.DATE, self._log_body())
+        result = subprocess.run(
+            ["bash", str(root / "scripts" / "post-session.sh"), self.DATE],
+            cwd=root, capture_output=True, text=True, env=_runtime_env(),
+        )
+        assert result.returncode == 0, (
+            f"stdout={result.stdout!r} stderr={result.stderr!r}"
+        )
+        assert self._last_subject(root) == (
+            f"session {self.DATE}: [auto-committed by post-session.sh]"
+        )
+
+
+# ---------------------------------------------------------------------------
+# F041: end-to-end lifecycle through the REAL sub-script chain
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.skipif(shutil.which("bash") is None,
+                    reason="end-to-end lifecycle test requires bash")
+class TestEndToEndLifecycle:
+    """F041: exercise the REAL sub-script chain end to end — init-student, then a
+    schema-valid first-session log, then the real post-session.sh --no-commit —
+    against an isolated tmp ROOT.
+
+    This is the only test that runs post-session.sh with every REAL pedagogy
+    sub-script (not stubs), so it catches argv / exit-code / schema-drift wiring
+    defects that the structural and stubbed-rollback tests cannot.
+
+    Isolation: the subtrees init-student.py depends on are copied into tmp so the
+    copied script's ROOT (= Path(__file__).parent.parent) resolves to tmp. It is
+    NEVER run against the real repo — doing so would clobber gitignored local
+    learner state."""
+
+    DATE = "2026-06-03"
+
+    @staticmethod
+    def _leading_header(text: str) -> str:
+        out = []
+        for ln in text.splitlines(keepends=True):
+            if ln.lstrip().startswith("#") or not ln.strip():
+                out.append(ln)
+            else:
+                break
+        return "".join(out)
+
+    def _run(self, cmd, cwd) -> subprocess.CompletedProcess:
+        return subprocess.run(cmd, cwd=cwd, capture_output=True, text=True,
+                              env=_runtime_env())
+
+    def _build_root(self, tmp_path: Path) -> Path:
+        root = tmp_path / "root"
+        root.mkdir(parents=True)
+        # Ignore transient atomic-write temp files (a concurrent writer may leave
+        # a *.tmp mid-rename) and Python caches.
+        ignore = shutil.ignore_patterns("*.tmp*", "__pycache__", "*.pyc")
+        for sub in ("scripts", "schemas", "curriculum"):
+            shutil.copytree(REPO_ROOT / sub, root / sub, ignore=ignore)
+        # init-student bootstraps skill-map from this tracked template.
+        (root / "state").mkdir(parents=True)
+        shutil.copy(REPO_ROOT / "state" / "skill-map.template.yaml",
+                    root / "state" / "skill-map.template.yaml")
+        return root
+
+    def _patch_yaml_preserving_header(self, path: Path, mutate) -> None:
+        import yaml
+        text = path.read_text(encoding="utf-8")
+        data = yaml.safe_load(text) or {}
+        mutate(data)
+        path.write_text(
+            self._leading_header(text)
+            + yaml.safe_dump(data, sort_keys=False, allow_unicode=True),
+            encoding="utf-8",
+        )
+
+    def test_init_then_session_then_post_session(self, tmp_path):
+        example = REPO_ROOT / "docs" / "first-session-log-example.yaml"
+        assert f'date: "{self.DATE}"' in example.read_text(encoding="utf-8"), (
+            "first-session-log-example.yaml date changed — update "
+            "TestEndToEndLifecycle.DATE to match."
+        )
+
+        root = self._build_root(tmp_path)
+        py = sys.executable
+
+        # 1. init-student (fresh-install path: no prior learner data in tmp).
+        r = self._run([py, str(root / "scripts" / "init-student.py"), "--force"], root)
+        assert r.returncode == 0, f"init-student failed: {r.stdout!r} {r.stderr!r}"
+        assert (root / "state" / "skill-map.yaml").exists()
+        assert (root / "state" / "schedule.yaml").exists()
+
+        # 2. Record the study_time_budget + learner identity the tutor captures in
+        #    session 1 (the schema initializes them empty; the homework-load
+        #    guardrail needs a non-zero ceiling, and validate-state warns on an
+        #    empty name/target_dialect once a session exists).
+        self._patch_yaml_preserving_header(
+            root / "state" / "schedule.yaml",
+            lambda d: d.__setitem__("study_time_budget", {
+                "daily_minimum": 15, "daily_target": 30, "daily_maximum": 60,
+                "weekly_goal": 180, "today_stretch": 0,
+            }),
+        )
+
+        def _set_identity(d):
+            d["name"] = "Test Learner"
+            d["target_dialect"] = "Mexican"
+
+        self._patch_yaml_preserving_header(
+            root / "state" / "learner-profile.yaml", _set_identity)
+
+        # 3. Schema-valid first-session log (session_number 1 => transcript exempt).
+        (root / "state" / "sessions").mkdir(parents=True, exist_ok=True)
+        shutil.copy(example, root / "state" / "sessions" / f"{self.DATE}.yaml")
+
+        # 4. Real check-session-log.py must PASS on that log.
+        r = self._run([py, str(root / "scripts" / "check-session-log.py"), self.DATE], root)
+        assert r.returncode == 0, f"check-session-log failed: {r.stdout!r} {r.stderr!r}"
+
+        # 5. Real post-session.sh --no-commit runs the entire real sub-script
+        #    chain (snapshot, generate-vault, archive, validate, check-session-log,
+        #    recast aggregation, today_stretch reset, recompute-metrics, fluency
+        #    tracking) — skipping only the Step 6 git commit.
+        r = self._run(["bash", str(root / "scripts" / "post-session.sh"),
+                       "--no-commit", self.DATE], root)
+        assert r.returncode == 0, f"post-session.sh failed: {r.stdout!r} {r.stderr!r}"
+
+        # 6. Vault artifacts were generated.
+        assert (root / "vault" / "Home.md").exists(), "vault/Home.md not generated"
+        assert (root / "vault" / "Roadmap.md").exists(), "vault/Roadmap.md not generated"
+
+        # 7. Real validate-state.py reports zero failures against the tmp state.
+        r = self._run([py, str(root / "scripts" / "validate-state.py")], root)
+        assert r.returncode == 0, f"validate-state failed: {r.stdout!r} {r.stderr!r}"

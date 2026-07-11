@@ -231,6 +231,44 @@ class TestAcquiredZeroPractice:
 
         assert not any("A-01-present-regular" in w for w in _warns())
 
+    def test_early_b_placement_exempts_a_phase_concept(self, skill_map_data):
+        """Hyphenated placement level "early-B" parses to phase B, so an acquired
+        A-phase concept below placement is exempt from the 3-session floor.
+        Regression: placement_level[0] would misread "early-B" as phase "E"."""
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["status"] = "acquired"
+        sm["grammar"]["A-01-present-regular"]["practice_count"] = 1
+
+        profile = {"initial_placement": {"level": "early-B"}}
+        check_acquired_zero_practice(sm, profile, results)
+
+        assert not any("A-01-present-regular" in w for w in _warns())
+        assert any("A-01-present-regular" in p and "placement-exempt" in p
+                   for p in _passes())
+
+    def test_plain_letter_placement_exempts_a_phase_concept(self, skill_map_data):
+        """A bare phase letter ("B") parses correctly and exempts below-level concepts."""
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["status"] = "acquired"
+        sm["grammar"]["A-01-present-regular"]["practice_count"] = 2
+
+        profile = {"initial_placement": {"level": "B"}}
+        check_acquired_zero_practice(sm, profile, results)
+
+        assert not any("A-01-present-regular" in w for w in _warns())
+
+    def test_pre_a_placement_exempts_nothing(self, skill_map_data):
+        """"pre-A" parses to phase A (no phase is below A), so an acquired A-phase
+        concept with practice_count < 3 is NOT exempt and must WARN."""
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["status"] = "acquired"
+        sm["grammar"]["A-01-present-regular"]["practice_count"] = 1
+
+        profile = {"initial_placement": {"level": "pre-A"}}
+        check_acquired_zero_practice(sm, profile, results)
+
+        assert any("A-01-present-regular" in w and "< 3" in w for w in _warns())
+
 
 # ---------------------------------------------------------------------------
 # 4. receptive_skills invalid listening level
@@ -495,6 +533,23 @@ class TestSessionFilenameNonDate:
 
 class TestCarryoverAcquiredWarns:
     def test_acquired_in_carryover_warns(self, skill_map_data):
+        """Schema-correct dict shape ({concept_id, ...} per schedule.schema.yaml)
+        must be accepted and an acquired carryover concept must WARN."""
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["status"] = "acquired"
+
+        sched = {"carryover_concepts": [{"concept_id": "A-01-present-regular",
+                                         "sessions_in_carryover": 2,
+                                         "escalation_stage": "flagged"}]}
+
+        check_carryover_concepts(sched, sm, results)
+
+        warns = _warns()
+        assert len(warns) >= 1
+        assert any("acquired" in w for w in warns)
+
+    def test_legacy_string_shape_still_tolerated(self, skill_map_data):
+        """Bare-string entries (legacy) still resolve without crashing."""
         sm = skill_map_data
         sm["grammar"]["A-01-present-regular"]["status"] = "acquired"
 
@@ -502,9 +557,29 @@ class TestCarryoverAcquiredWarns:
 
         check_carryover_concepts(sched, sm, results)
 
-        warns = _warns()
-        assert len(warns) >= 1
-        assert any("acquired" in w for w in warns)
+        assert any("acquired" in w for w in _warns())
+
+    def test_dict_shape_practicing_does_not_crash(self, skill_map_data):
+        """A dict-shaped carryover entry pointing at a practicing concept passes
+        cleanly (regression: dict entries used to raise TypeError on membership)."""
+        sm = skill_map_data
+        sm["grammar"]["A-01-present-regular"]["status"] = "practicing"
+
+        sched = {"carryover_concepts": [{"concept_id": "A-01-present-regular",
+                                         "sessions_in_carryover": 1}]}
+
+        check_carryover_concepts(sched, sm, results)
+
+        assert not _fails()
+        assert not any("acquired" in w for w in _warns())
+
+    def test_dict_missing_concept_id_fails(self, skill_map_data):
+        """A malformed dict entry lacking concept_id FAILs loudly."""
+        sched = {"carryover_concepts": [{"sessions_in_carryover": 1}]}
+
+        check_carryover_concepts(sched, skill_map_data, results)
+
+        assert any("concept_id" in f for f in _fails())
 
 
 # ---------------------------------------------------------------------------

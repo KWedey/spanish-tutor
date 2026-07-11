@@ -274,6 +274,60 @@ class TestReinitSafety:
         (archive / "2025-01-01.yaml").write_text("date: '2025-01-01'\n", encoding="utf-8")
         assert init_mod.has_existing_learner_data(tmp_path) is True
 
+    def test_dirty_parking_lot_is_prior_data(self, tmp_path):
+        """F078: consolidating onto setup's broader scope means parking-lot drift
+        (with an empty profile name and no session logs) now counts as prior data —
+        previously init's detector ignored it and --force wiped it with no snapshot."""
+        (tmp_path / "state").mkdir(parents=True)
+        (tmp_path / "state" / "learner-profile.yaml").write_text('name: ""\n', encoding="utf-8")
+        (tmp_path / "parking-lot.md").write_text(
+            init_mod.TEMPLATES["parking-lot.md"] + "\n- Ask about the subjunctive\n",
+            encoding="utf-8",
+        )
+        assert init_mod.has_existing_learner_data(tmp_path) is True
+
+    def test_pristine_parking_lot_is_not_prior_data(self, tmp_path):
+        """F078 control: a parking-lot.md that still matches the pristine template
+        (plus an empty profile name) must NOT be treated as prior data."""
+        (tmp_path / "state").mkdir(parents=True)
+        (tmp_path / "state" / "learner-profile.yaml").write_text('name: ""\n', encoding="utf-8")
+        (tmp_path / "parking-lot.md").write_text(
+            init_mod.TEMPLATES["parking-lot.md"], encoding="utf-8"
+        )
+        assert init_mod.has_existing_learner_data(tmp_path) is False
+
+    def test_resource_tracker_entries_is_prior_data(self, tmp_path):
+        """F078: resource-tracker.yaml with a populated `resources` list (empty
+        profile name, no session logs) now counts as prior data — init's detector
+        previously ignored the file it wipes in TEMPLATES."""
+        (tmp_path / "state").mkdir(parents=True)
+        (tmp_path / "state" / "learner-profile.yaml").write_text('name: ""\n', encoding="utf-8")
+        (tmp_path / "state" / "resource-tracker.yaml").write_text(
+            "schema_version: 1\nresources:\n  - id: dreaming-spanish\n", encoding="utf-8"
+        )
+        assert init_mod.has_existing_learner_data(tmp_path) is True
+
+    def test_corrupt_profile_is_prior_data(self, tmp_path):
+        """F078: a corrupt learner-profile.yaml must fail safe to prior-data=True
+        so --force snapshots before clobbering a recoverable-but-unparseable file.
+        init previously used load_yaml (returns None on YAMLError) → treated as no
+        data → wiped with no snapshot."""
+        (tmp_path / "state").mkdir(parents=True)
+        (tmp_path / "state" / "learner-profile.yaml").write_text(
+            "name: [unclosed\n  : : :\n", encoding="utf-8"
+        )
+        assert init_mod.has_existing_learner_data(tmp_path) is True
+
+    def test_corrupt_resource_tracker_is_prior_data(self, tmp_path):
+        """F078: same fail-safe for a corrupt resource-tracker.yaml. Profile is kept
+        pristine so the corrupt tracker is the only signal."""
+        (tmp_path / "state").mkdir(parents=True)
+        (tmp_path / "state" / "learner-profile.yaml").write_text('name: ""\n', encoding="utf-8")
+        (tmp_path / "state" / "resource-tracker.yaml").write_text(
+            "resources: [\n  - id: x\n    : broken\n", encoding="utf-8"
+        )
+        assert init_mod.has_existing_learner_data(tmp_path) is True
+
     def test_force_help_mentions_snapshot(self, capsys):
         """D-10: --help text for --force mentions snapshot is always taken."""
         import argparse

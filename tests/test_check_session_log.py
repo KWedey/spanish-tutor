@@ -689,6 +689,20 @@ class TestHomeworkLoadRatingEnforcement:
         data = {"session_type": "sprint", "session_number": 3}
         assert check_homework_load_rating_required(data) is True
 
+    def test_maintenance_with_weekly_review_overlay_required(self):
+        """F080: the maintenance-with-weekly-review router overlay inherits its
+        PRIMARY homework-bearing base (maintenance), NOT the exempt weekly-review
+        sibling — so at session_number>=2 the rating is still required."""
+        data = {"session_type": "maintenance-with-weekly-review", "session_number": 2}
+        assert check_homework_load_rating_required(data) is True
+
+    def test_onboarding_with_return_overlay_required(self):
+        """F080: the onboarding-with-return-overlay router overlay inherits its
+        PRIMARY homework-bearing base (onboarding), NOT the exempt return
+        sibling — so at session_number>=2 the rating is still required."""
+        data = {"session_type": "onboarding-with-return-overlay", "session_number": 2}
+        assert check_homework_load_rating_required(data) is True
+
 
 # =============================================================================
 # C9 / CC-3: dialect taxonomy is sourced from curriculum/dialects.yaml

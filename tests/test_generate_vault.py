@@ -5,6 +5,7 @@ import re
 import sys
 from pathlib import Path
 
+import pytest
 import yaml
 
 # scripts/ is placed on sys.path by tests/conftest.py — no per-file bootstrap.
@@ -476,3 +477,66 @@ class TestNullReceptiveGuard:
         run_full(skill_map, schedule)  # must not raise AttributeError
         assert (tmp_path / "vault" / "Home.md").exists()
         assert (tmp_path / "vault" / "Roadmap.md").exists()
+
+
+# ---------------------------------------------------------------------------
+# 8. Corrupt-but-present state fails loud (F037)
+# ---------------------------------------------------------------------------
+
+class TestCorruptStateFailsLoud:
+    """F037: main() and run_session must fail loud (clean stderr + nonzero exit)
+    when a present-but-corrupt skill-map/schedule makes the loader raise, instead
+    of letting a later None.get(...) surface as an AttributeError traceback.
+    Covers all three load sites: main() skill-map, main() schedule, run_session
+    schedule (the path post-session.sh --session actually executes)."""
+
+    CORRUPT_YAML = "grammar: [unclosed\n  bad: :\n"
+
+    def test_main_exits_on_corrupt_skill_map(self, tmp_path, monkeypatch, capsys):
+        skill_map = tmp_path / "skill-map.yaml"
+        skill_map.write_text(self.CORRUPT_YAML, encoding="utf-8")
+        monkeypatch.setattr(gv, "SKILL_MAP_PATH", skill_map)
+        monkeypatch.setattr(gv, "SCHEDULE_PATH", tmp_path / "schedule.yaml")
+        monkeypatch.setattr(gv, "VAULT_DIR", tmp_path / "vault")
+        monkeypatch.setattr(sys, "argv", ["generate-vault.py", "--full"])
+
+        with pytest.raises(SystemExit) as exc:
+            gv.main()
+
+        assert exc.value.code == 1
+        err = capsys.readouterr().err
+        assert err.startswith("Error:")
+        assert str(skill_map) in err  # message points at the offending file
+
+    def test_main_exits_on_corrupt_schedule(self, tmp_path, monkeypatch, capsys):
+        skill_map = tmp_path / "skill-map.yaml"
+        with open(skill_map, "w", encoding="utf-8") as f:
+            yaml.dump(copy.deepcopy(MINIMAL_SKILL_MAP), f)
+        schedule = tmp_path / "schedule.yaml"
+        schedule.write_text(self.CORRUPT_YAML, encoding="utf-8")
+        monkeypatch.setattr(gv, "SKILL_MAP_PATH", skill_map)
+        monkeypatch.setattr(gv, "SCHEDULE_PATH", schedule)
+        monkeypatch.setattr(gv, "VAULT_DIR", tmp_path / "vault")
+        monkeypatch.setattr(sys, "argv", ["generate-vault.py", "--full"])
+
+        with pytest.raises(SystemExit) as exc:
+            gv.main()
+
+        assert exc.value.code == 1
+        err = capsys.readouterr().err
+        assert err.startswith("Error:")
+        assert str(schedule) in err
+
+    def test_run_session_exits_on_corrupt_schedule(self, tmp_path, monkeypatch, capsys):
+        """The --session route (post-session.sh) reloads schedule inside
+        run_session; a corrupt schedule there must also fail loud."""
+        schedule = tmp_path / "schedule.yaml"
+        schedule.write_text(self.CORRUPT_YAML, encoding="utf-8")
+        monkeypatch.setattr(gv, "SCHEDULE_PATH", schedule)
+        monkeypatch.setattr(gv, "VAULT_DIR", tmp_path / "vault")
+
+        with pytest.raises(SystemExit) as exc:
+            gv.run_session(copy.deepcopy(MINIMAL_SKILL_MAP), "2026-04-10")
+
+        assert exc.value.code == 1
+        assert str(schedule) in capsys.readouterr().err

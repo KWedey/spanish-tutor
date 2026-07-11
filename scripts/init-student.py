@@ -201,27 +201,101 @@ def clear_directory(rel_path: str) -> int:
     return count
 
 
-def has_existing_learner_data(root) -> bool:
-    """True if ANY real learner data exists — a populated profile name, session
-    logs, or journal entries. Broader than a name-only check so `--force` always
-    snapshots before wiping real data (P2-c: a crash or hand-edit can leave session
-    logs behind an empty profile name; setup.py's has_existing_state detects the
-    same case)."""
-    profile = load_yaml(root / "state" / "learner-profile.yaml") or {}
-    pname = profile.get("name")
-    if pname and str(pname).strip():
-        return True
-    # Mirror the destruction scope of the clear_directory list in main() — including
-    # state/sessions/archive (caught by rglob) — so --force never wipes any of these
-    # without a snapshot first (A2: archived-only history was the gap).
-    cleared_dirs = [
-        "state/sessions", "state/summaries", "state/milestones",
-        "state/offline-guides", "journal", "progress-reports",
-    ]
-    for rel in cleared_dirs:
-        d = root / rel
-        if d.exists() and any(f.is_file() and f.name != ".gitkeep" for f in d.rglob("*")):
+def _dir_has_file(root, rel_path: str, suffix: str | None = None) -> bool:
+    """True if root/rel_path contains any non-.gitkeep file.
+
+    If `suffix` is given, only files with that extension count.
+    """
+    d = root / rel_path
+    if not d.exists():
+        return False
+    for f in d.iterdir():
+        if not f.is_file() or f.name == ".gitkeep":
+            continue
+        if suffix is None or f.suffix == suffix:
             return True
+    return False
+
+
+def has_existing_learner_data(root) -> bool:
+    """Detect whether the repo already holds real learner data.
+
+    Canonical detector for the whole toolchain: setup.py's has_existing_state()
+    delegates here so the two scripts can never disagree about what counts as
+    real data (init-student is the one that actually wipes it on reset). Returns
+    True on any of:
+      - A session log in state/sessions/
+      - A journal entry in journal/
+      - An archived session in state/sessions/archive/
+      - A weekly summary in state/summaries/
+      - A milestone in state/milestones/
+      - A progress report in progress-reports/
+      - Any file in state/offline-guides/
+      - parking-lot.md modified from its pristine template
+      - state/learner-profile.yaml with a populated name
+      - state/resource-tracker.yaml with any entries in `resources`
+
+    main() wipes all of these on --force, so any one of them must trigger a
+    recovery snapshot first (P2-c: a crash or hand-edit can leave session logs
+    behind an empty profile name; A2: archived-only history was the gap). Cheap
+    directory iteration runs first; YAML parses are the most expensive and run
+    last, failing safe (return True) on a corrupt-but-present file so --force
+    never clobbers a recoverable one.
+    """
+    # Directory-level checks — no file content read.
+    if _dir_has_file(root, "state/sessions", ".yaml"):
+        return True
+    if _dir_has_file(root, "journal", ".md"):
+        return True
+    if _dir_has_file(root, "state/sessions/archive", ".yaml"):
+        return True
+    if _dir_has_file(root, "state/summaries", ".yaml"):
+        return True
+    if _dir_has_file(root, "state/milestones", ".yaml"):
+        return True
+    if _dir_has_file(root, "progress-reports", ".md"):
+        return True
+    if _dir_has_file(root, "state/offline-guides"):
+        return True
+
+    # Parking lot: compare against pristine template. rstrip so a trailing
+    # newline drift between platforms doesn't trigger a false positive.
+    parking_lot = root / "parking-lot.md"
+    if parking_lot.exists():
+        try:
+            if parking_lot.read_text(encoding="utf-8").rstrip() != TEMPLATES["parking-lot.md"].rstrip():
+                return True
+        except OSError:
+            pass
+
+    # YAML parses — most expensive checks go last. A parse failure (corrupt-but-
+    # present state) must read as "state present" (return True), NOT swallowed
+    # into the fall-through `return False`; otherwise --force WIPES a recoverable
+    # file. Narrow the except to the parse/IO errors we expect and fail safe.
+    profile_path = root / "state" / "learner-profile.yaml"
+    if profile_path.exists():
+        try:
+            data = yaml.safe_load(profile_path.read_text(encoding="utf-8")) or {}
+            name = data.get("name")
+            if name and str(name).strip():
+                return True
+        except (OSError, yaml.YAMLError):
+            # Corrupt or unreadable — refuse to clobber it.
+            return True
+
+    # Resource tracker: any populated `resources` list counts as user data.
+    # The pristine template has `resources: []`; --force would wipe anything
+    # the learner added.
+    rt_path = root / "state" / "resource-tracker.yaml"
+    if rt_path.exists():
+        try:
+            data = yaml.safe_load(rt_path.read_text(encoding="utf-8")) or {}
+            if data.get("resources"):
+                return True
+        except (OSError, yaml.YAMLError):
+            # Corrupt or unreadable — refuse to clobber it.
+            return True
+
     return False
 
 

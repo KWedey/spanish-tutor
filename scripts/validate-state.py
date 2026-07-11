@@ -482,7 +482,13 @@ def check_carryover_concepts(sched: dict, sm: dict,
         res.pass_("No carryover concepts to check")
         return
     grammar = sm.get("grammar", {})
-    for cid in carryover:
+    for item in carryover:
+        # Schema shape is a map ({concept_id, sessions_in_carryover, escalation_stage, ...}
+        # per schemas/schedule.schema.yaml); tolerate legacy bare-string entries.
+        cid = item.get("concept_id") if isinstance(item, dict) else item
+        if not cid:
+            res.fail("Carryover concept entry missing 'concept_id'")
+            continue
         if cid not in grammar:
             res.fail(f"Carryover concept '{cid}' not found in skill-map grammar section")
         else:
@@ -730,12 +736,19 @@ def check_acquired_zero_practice(sm: dict, profile: dict,
     placement_level = None
     if isinstance(profile, dict):
         placement_level = (profile.get("initial_placement") or {}).get("level") or None
-    # Extract the phase letter from a placement level string like "B-conversational" or just "B"
+    phase_order = {"A": 0, "B": 1, "C": 2, "D": 3}
+
+    # Extract the phase letter from a placement level string. Documented formats
+    # (docs/system-design.md:330): pre-A / early-A / late-A / early-B / mid-B /
+    # early-C / mid-C, plus a bare letter ("B") or "B-conversational". Tokenize on
+    # "-" and pick the token naming a phase — placement_level[0] would misread
+    # "early-B" as phase "E" and "pre-A" as phase "P".
     placement_phase: str | None = None
     if placement_level:
-        placement_phase = placement_level[0].upper() if placement_level else None
-
-    phase_order = {"A": 0, "B": 1, "C": 2, "D": 3}
+        for token in str(placement_level).split("-"):
+            if token.upper() in phase_order:
+                placement_phase = token.upper()
+                break
 
     for cid, entry in grammar.items():
         if not isinstance(entry, dict): continue

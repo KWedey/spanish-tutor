@@ -227,6 +227,13 @@ def check_homework_load_rating_required(data: dict) -> bool:
 
     Also exempts special session types (weekly-review, phase-transition, return,
     micro) — these have their own purpose and are not budget-gated daily sessions.
+
+    The router overlay types (maintenance-with-weekly-review,
+    onboarding-with-return-overlay) are deliberately NOT exempt: each layers a
+    review/diagnostic pass on top of a PRIMARY homework-bearing base
+    (maintenance / onboarding), so at session_number>=2 the rating is still
+    required. They inherit their homework-bearing base, not their exempt
+    review/diagnostic sibling.
     """
     stype = (data.get("session_type") or "").lower()
     if stype in ("first-session", "weekly-review", "phase-transition", "return", "micro"):
@@ -254,9 +261,10 @@ def _load_schedule() -> dict | None:
     return load_yaml(STATE_DIR / "schedule.yaml")
 
 
-def _coerce_minutes(value) -> int:
-    """Coerce a minutes value to a non-negative int, tolerating tutor typos.
+def _coerce_nonneg_int(value) -> int:
+    """Coerce a value to a non-negative int, tolerating tutor typos.
 
+    Used for both homework minutes and small counts (e.g. new_anki_cards).
     A non-numeric estimated_minutes (e.g. "15 min") previously crashed the
     budget check with an uncaught ValueError, which post-session.sh surfaced
     as a misleading "missing fields" commit block (audit M3). We degrade to 0
@@ -285,7 +293,7 @@ def compute_assignment_budget_total(data: dict) -> int:
     total = 0
     for a in data.get("assignments") or []:
         if isinstance(a, dict):
-            total += _coerce_minutes(a.get("estimated_minutes"))
+            total += _coerce_nonneg_int(a.get("estimated_minutes"))
     return total
 
 
@@ -320,9 +328,9 @@ def check_assignment_budget(data: dict, schedule: dict | None) -> tuple[str, str
                 "(required after first-session per D-06)",
                 total)
 
-    d_max = _coerce_minutes(budget.get("daily_maximum"))
-    stretch = _coerce_minutes(budget.get("today_stretch"))
-    d_tgt = _coerce_minutes(budget.get("daily_target"))
+    d_max = _coerce_nonneg_int(budget.get("daily_maximum"))
+    stretch = _coerce_nonneg_int(budget.get("today_stretch"))
+    d_tgt = _coerce_nonneg_int(budget.get("daily_target"))
 
     ceiling = d_max + stretch
     if total > ceiling:
@@ -543,7 +551,7 @@ def check_new_anki_cards(data: dict) -> tuple[str, str]:
     """QR-R3: ≤10 new Anki cards per session. Returns (level, message) where
     level is 'OK' or 'FAIL'. A non-numeric value degrades to 0 (same tolerance
     as the budget check, audit M3) rather than crashing the post-session run."""
-    count = _coerce_minutes(data.get("new_anki_cards", 0))  # generic non-neg int coercion
+    count = _coerce_nonneg_int(data.get("new_anki_cards", 0))
     if count > MAX_NEW_ANKI_CARDS:
         return ("FAIL", f"new_anki_cards={count} exceeds the {MAX_NEW_ANKI_CARDS}-"
                         f"new-cards-per-session guardrail (CLAUDE.md). Split the new "

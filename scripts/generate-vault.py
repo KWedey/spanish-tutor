@@ -20,7 +20,7 @@ except ImportError:
 
 from shared import (ROOT, STATE_DIR, CURRICULUM_DIR, VAULT_DIR,
                      PHASE_DIRS, TIER_DIRS as TIER_DIR_MAP,
-                     load_yaml, atomic_write, yaml_value as _yaml_value)
+                     load_yaml_strict, atomic_write, yaml_value as _yaml_value)
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -64,6 +64,22 @@ GENERATED_BANNER = "%%Auto-generated from tutor state. Edits will be overwritten
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
+def load_state_or_exit(path: Path) -> dict:
+    """Load a present state file, exiting cleanly on corrupt YAML.
+
+    Callers guard existence separately (a missing skill-map/schedule has its
+    own handling), so this only runs on files that exist. ``load_yaml_strict``
+    raises ``yaml.YAMLError`` on unparseable YAML; translate that into a clear
+    stderr message and a nonzero exit instead of letting a later
+    ``None.get(...)`` surface as an AttributeError traceback.
+    """
+    try:
+        return load_yaml_strict(path)
+    except yaml.YAMLError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        sys.exit(1)
+
 
 def today_str() -> str:
     return date.today().isoformat()
@@ -1035,7 +1051,7 @@ def run_session(skill_map: dict, session_date: str) -> None:
 
     # Regenerate Home and Roadmap
     if SCHEDULE_PATH.exists():
-        schedule = load_yaml(SCHEDULE_PATH)
+        schedule = load_state_or_exit(SCHEDULE_PATH)
     else:
         schedule = {}
     path, content = generate_home(schedule, skill_map)
@@ -1080,10 +1096,10 @@ def main():
         print(f"Error: skill-map not found at {SKILL_MAP_PATH}", file=sys.stderr)
         sys.exit(1)
 
-    skill_map = load_yaml(SKILL_MAP_PATH)
+    skill_map = load_state_or_exit(SKILL_MAP_PATH)
 
     if SCHEDULE_PATH.exists():
-        schedule = load_yaml(SCHEDULE_PATH)
+        schedule = load_state_or_exit(SCHEDULE_PATH)
     else:
         schedule = {}
 

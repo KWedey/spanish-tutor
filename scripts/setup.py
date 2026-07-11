@@ -64,7 +64,9 @@ def configure_git_hooks():
 
 # Pristine parking-lot.md contents. Must match TEMPLATES["parking-lot.md"] in
 # scripts/init-student.py — the sync is guarded by
-# tests/test_setup.py::test_parking_lot_template_matches_init_student.
+# tests/test_setup.py::test_parking_lot_template_matches_init_student. Kept as a
+# test-facing mirror (the pristine layout the tests seed against); the live
+# drift check runs inside init-student.has_existing_learner_data.
 PARKING_LOT_TEMPLATE = (
     "# Parking Lot — Things I Want to Learn\n\n"
     "Add anything here between sessions. Your tutor will review this at the\n"
@@ -74,99 +76,29 @@ PARKING_LOT_TEMPLATE = (
 )
 
 
-def _dir_has_file(rel_path: str, suffix: str | None = None) -> bool:
-    """True if ROOT/rel_path contains any non-.gitkeep file.
+def _load_init_student():
+    """Load scripts/init-student.py (dashed filename) as a module.
 
-    If `suffix` is given, only files with that extension count.
+    scripts/ is on sys.path — that's how `from shared import ...` above
+    resolves — so import_module resolves the dashed name directly. Cached in
+    sys.modules after the first call.
     """
-    d = ROOT / rel_path
-    if not d.exists():
-        return False
-    for f in d.iterdir():
-        if not f.is_file() or f.name == ".gitkeep":
-            continue
-        if suffix is None or f.suffix == suffix:
-            return True
-    return False
+    import importlib
+    return importlib.import_module("init-student")
 
 
 def has_existing_state():
     """Detect whether the repo already holds real learner data.
 
-    Returns True on any of:
-      - A session log in state/sessions/
-      - A journal entry in journal/
-      - An archived session in state/sessions/archive/
-      - A weekly summary in state/summaries/
-      - A milestone in state/milestones/
-      - A progress report in progress-reports/
-      - Any file in state/offline-guides/
-      - parking-lot.md modified from its pristine template
-      - state/learner-profile.yaml with a populated name
-      - state/resource-tracker.yaml with any entries in `resources`
-
-    init-student.py wipes all of these on reset, so any one of them
-    counts as user data that must be preserved. Cheap directory iteration
-    runs first; YAML parses are the most expensive checks and run last.
+    Thin wrapper over the canonical detector,
+    init-student.has_existing_learner_data(), so setup and init-student can
+    never disagree about what counts as real data — init-student is the script
+    that actually wipes it on reset. See that function for the full list of
+    signals (session logs, journal, archives, summaries, milestones, progress
+    reports, offline guides, parking-lot drift, a populated profile name, and
+    resource-tracker entries), plus the corrupt-YAML fail-safe.
     """
-    # Directory-level checks — no file content read.
-    if _dir_has_file("state/sessions", ".yaml"):
-        return True
-    if _dir_has_file("journal", ".md"):
-        return True
-    if _dir_has_file("state/sessions/archive", ".yaml"):
-        return True
-    if _dir_has_file("state/summaries", ".yaml"):
-        return True
-    if _dir_has_file("state/milestones", ".yaml"):
-        return True
-    if _dir_has_file("progress-reports", ".md"):
-        return True
-    if _dir_has_file("state/offline-guides"):
-        return True
-
-    # Parking lot: compare against pristine template. rstrip so a trailing
-    # newline drift between platforms doesn't trigger a false positive.
-    parking_lot = ROOT / "parking-lot.md"
-    if parking_lot.exists():
-        try:
-            if parking_lot.read_text(encoding="utf-8").rstrip() != PARKING_LOT_TEMPLATE.rstrip():
-                return True
-        except OSError:
-            pass
-
-    # YAML parses — most expensive checks go last.
-    # A1 fail-safe: a parse failure (corrupt-but-present state) must read as
-    # "state present" (return True), NOT swallowed into the fall-through
-    # `return False`. Otherwise setup proceeds to `init-student --force` and
-    # WIPES a recoverable file. Narrow the except to the parse/IO errors we
-    # expect and fail safe on them.
-    import yaml
-    profile_path = ROOT / "state" / "learner-profile.yaml"
-    if profile_path.exists():
-        try:
-            data = yaml.safe_load(profile_path.read_text(encoding="utf-8")) or {}
-            name = data.get("name")
-            if name and str(name).strip():
-                return True
-        except (OSError, yaml.YAMLError):
-            # Corrupt or unreadable — refuse to clobber it.
-            return True
-
-    # Resource tracker: any populated `resources` list counts as user data.
-    # The pristine template has `resources: []`; init-student would wipe
-    # anything the learner added.
-    rt_path = ROOT / "state" / "resource-tracker.yaml"
-    if rt_path.exists():
-        try:
-            data = yaml.safe_load(rt_path.read_text(encoding="utf-8")) or {}
-            if data.get("resources"):
-                return True
-        except (OSError, yaml.YAMLError):
-            # Corrupt or unreadable — refuse to clobber it.
-            return True
-
-    return False
+    return _load_init_student().has_existing_learner_data(ROOT)
 
 
 def main():
