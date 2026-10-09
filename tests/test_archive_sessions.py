@@ -205,13 +205,14 @@ class TestKeep:
         assert (sessions_dir / f"{kept.isoformat()}.yaml").exists()
         assert not (sessions_dir / "archive").exists()
 
-    def test_keep_rejects_a_malformed_date(self, monkeypatch):
+    def test_keep_rejects_a_malformed_date(self, monkeypatch, capsys):
         monkeypatch.setattr("sys.argv", ["archive-sessions.py", "--keep", "2026-02-31"])
 
         with pytest.raises(SystemExit) as exc:
             archive_sessions.main()
 
         assert exc.value.code == 2
+        assert "argument --keep: invalid" in capsys.readouterr().err
 
 
 # ---------------------------------------------------------------------------
