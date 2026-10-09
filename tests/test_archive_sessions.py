@@ -179,6 +179,42 @@ class TestThresholdAndFiltering:
 
 
 # ---------------------------------------------------------------------------
+# 5b. --keep spares the session post-session.sh is processing
+# ---------------------------------------------------------------------------
+
+class TestKeep:
+    def test_kept_session_stays_while_other_old_sessions_move(self, sessions_dir):
+        kept = date.today() - timedelta(days=200)
+        other = date.today() - timedelta(days=100)
+        _write_session(sessions_dir, kept)
+        _write_session(sessions_dir, other)
+
+        moved = archive_sessions.archive_sessions(keep=kept)
+
+        assert moved == 1
+        assert (sessions_dir / f"{kept.isoformat()}.yaml").exists()
+        assert (sessions_dir / "archive" / f"{other.isoformat()}.yaml").exists()
+
+    def test_keep_flag_on_the_command_line(self, sessions_dir, monkeypatch):
+        kept = date.today() - timedelta(days=200)
+        _write_session(sessions_dir, kept)
+        monkeypatch.setattr("sys.argv", ["archive-sessions.py", "--keep", kept.isoformat()])
+
+        archive_sessions.main()
+
+        assert (sessions_dir / f"{kept.isoformat()}.yaml").exists()
+        assert not (sessions_dir / "archive").exists()
+
+    def test_keep_rejects_a_malformed_date(self, monkeypatch):
+        monkeypatch.setattr("sys.argv", ["archive-sessions.py", "--keep", "2026-02-31"])
+
+        with pytest.raises(SystemExit) as exc:
+            archive_sessions.main()
+
+        assert exc.value.code == 2
+
+
+# ---------------------------------------------------------------------------
 # 6. parse_session_date filename parsing
 # ---------------------------------------------------------------------------
 
