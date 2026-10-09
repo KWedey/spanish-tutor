@@ -92,6 +92,25 @@ class TestSystemHealthCounters:
         assert h["sessions_rated_too_easy_30d"] == 1
         assert h["sessions_rated_too_hard_30d"] == 1
 
+    def test_difficulty_window_counts_archived_logs(self, tmp_path):
+        state = _seed(tmp_path,
+            skill_map={"grammar": {}},
+            health={"concepts_requiring_reteach_total": 0,
+                    "sessions_rated_too_easy_30d": 0, "sessions_rated_too_hard_30d": 0},
+            sessions={"2026-06-03": {"session_difficulty_rating": "too-easy"}})
+        archive = state / "sessions" / "archive"
+        archive.mkdir()
+        (archive / "2026-05-20.yaml").write_text(
+            yaml.safe_dump({"session_difficulty_rating": "too-easy"}), encoding="utf-8")
+        (archive / "2026-05-21.yaml").write_text(
+            yaml.safe_dump({"session_difficulty_rating": "too-hard"}), encoding="utf-8")
+
+        rm.recompute(state, date(2026, 6, 3))
+
+        h = yaml.safe_load((state / "system-health.yaml").read_text())
+        assert h["sessions_rated_too_easy_30d"] == 2
+        assert h["sessions_rated_too_hard_30d"] == 1
+
     def test_missing_state_files_no_crash(self, tmp_path):
         state = tmp_path / "state"
         (state / "sessions").mkdir(parents=True)
