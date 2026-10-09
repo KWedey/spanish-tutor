@@ -8,6 +8,7 @@ Usage:
   python3 scripts/archive-sessions.py              # archive files > 60 days old
   python3 scripts/archive-sessions.py --days 30    # override threshold
   python3 scripts/archive-sessions.py --dry-run    # show what would be moved
+  python3 scripts/archive-sessions.py --keep 2026-03-15  # never move this session
 """
 import argparse
 import re
@@ -45,8 +46,8 @@ def parse_session_date(filename: str) -> date | None:
         return None
 
 
-def find_archivable_sessions(days: int) -> list[tuple[Path, date]]:
-    """Find session files older than `days` days.
+def find_archivable_sessions(days: int, keep: date | None = None) -> list[tuple[Path, date]]:
+    """Find session files older than `days` days, except the one dated `keep`.
 
     Returns a list of (file_path, session_date) tuples sorted oldest-first.
     Only considers .yaml files directly in state/sessions/ (not archive/).
@@ -61,18 +62,18 @@ def find_archivable_sessions(days: int) -> list[tuple[Path, date]]:
         if not f.is_file() or f.name.startswith("."):
             continue
         session_date = parse_session_date(f.name)
-        if session_date is not None and session_date < cutoff:
+        if session_date is not None and session_date < cutoff and session_date != keep:
             archivable.append((f, session_date))
 
     return archivable
 
 
-def archive_sessions(days: int = DEFAULT_DAYS, dry_run: bool = False) -> int:
+def archive_sessions(days: int = DEFAULT_DAYS, dry_run: bool = False, keep: date | None = None) -> int:
     """Move session files older than `days` days to the archive directory.
 
     Returns the number of files moved (or that would be moved in dry-run).
     """
-    archivable = find_archivable_sessions(days)
+    archivable = find_archivable_sessions(days, keep)
 
     if not archivable:
         print(green(f"No session files older than {days} days. Nothing to archive."))
@@ -108,12 +109,15 @@ def main() -> None:
                         help=f"Archive sessions older than this many days (default: {DEFAULT_DAYS})")
     parser.add_argument("--dry-run", action="store_true",
                         help="Show what would be moved without making changes")
+    parser.add_argument("--keep", type=date.fromisoformat, metavar="YYYY-MM-DD",
+                        help="Never archive this session, however old (post-session.sh "
+                             "passes the session it is processing; later steps read it)")
     args = parser.parse_args()
 
     if args.days < 1:
         parser.error("--days must be at least 1")
 
-    archive_sessions(days=args.days, dry_run=args.dry_run)
+    archive_sessions(days=args.days, dry_run=args.dry_run, keep=args.keep)
 
 
 if __name__ == "__main__":

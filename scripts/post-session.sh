@@ -174,9 +174,9 @@ fi
 
 step "Step 2/8: Archiving session logs older than 60 days"
 if $DRY_RUN; then
-    printf "${YELLOW}[dry-run]${RESET} Would run: archive-sessions.py\n"
+    printf "${YELLOW}[dry-run]${RESET} Would run: archive-sessions.py --keep %s\n" "$DATE"
 else
-    if ! python3 "$ROOT/scripts/archive-sessions.py"; then
+    if ! python3 "$ROOT/scripts/archive-sessions.py" --keep "$DATE"; then
         error "Session archival failed"
         exit 1
     fi
