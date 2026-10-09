@@ -378,7 +378,8 @@ class TestRouteSessionRows:
                 except locale.Error:
                     continue
             if chosen is None:
-                pytest.skip("no non-English LC_TIME locale installed on this host")
+                pytest.fail("no non-English LC_TIME locale installed; on Debian/Ubuntu run "
+                            "`sudo locale-gen es_ES.UTF-8` (CI does this before the tests)")
 
             # Sanity: under this locale strftime('%A') for a Wednesday is NOT
             # the English 'Wednesday' — i.e. the trap is genuinely armed here.
