@@ -78,12 +78,18 @@ def count_reteach(skill_map: dict) -> int:
 
 
 def count_difficulty_ratings(sessions_dir: Path, today: date) -> tuple[int, int]:
-    """(too_easy, too_hard) over session logs within _WINDOW_DAYS of `today`."""
+    """(too_easy, too_hard) over session logs within _WINDOW_DAYS of `today`.
+
+    Includes archive/: archiving is by age from the real date, so a backfilled
+    `today` can have its whole window there already.
+    """
     if not sessions_dir.exists():
         return (0, 0)
     cutoff = today - timedelta(days=_WINDOW_DAYS)
     too_easy = too_hard = 0
-    for f in sessions_dir.glob("*.yaml"):
+    logs = {f.stem: f for f in (sessions_dir / "archive").glob("*.yaml")}
+    logs.update({f.stem: f for f in sessions_dir.glob("*.yaml")})
+    for f in logs.values():
         # window by filename date (YYYY-MM-DD) — cheap and avoids parsing all logs
         try:
             log_date = date.fromisoformat(f.stem)
